@@ -2,6 +2,7 @@ import prettier from 'eslint-config-prettier';
 import js from '@eslint/js';
 import { includeIgnoreFile } from '@eslint/compat';
 import svelte from 'eslint-plugin-svelte';
+import drizzlePlugin from 'eslint-plugin-drizzle';
 import globals from 'globals';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript-eslint';
@@ -24,11 +25,19 @@ export default ts.config(
   },
   {
     files: ['**/*.svelte'],
-
     languageOptions: {
       parserOptions: {
         parser: ts.parser
       }
+    }
+  },
+  {
+    plugins: {
+      drizzle: drizzlePlugin
+    },
+    rules: {
+      'drizzle/enforce-delete-with-where': 'error',
+      'drizzle/enforce-update-with-where': 'error'
     }
   },
   {
