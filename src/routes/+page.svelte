@@ -5,8 +5,8 @@
   const { data } = $props();
 </script>
 
-{#if data?.user}
-  <h1>Bienvenue sur Aquapreneur {data.user.email} !</h1>
+{#if data?.utilisateur}
+  <h1>Bienvenue sur Aquapreneur {data.utilisateur.courriel} !</h1>
   <form method="post" action="/auth/logout/proconnect" use:enhance>
     <button class="fr-btn">Se deconnecter</button>
   </form>

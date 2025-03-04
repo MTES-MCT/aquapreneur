@@ -16,7 +16,7 @@ import {
   setSessionTokenCookie
 } from '$lib/server/auth/session';
 import { db } from '$lib/server/db';
-import { usersTable, type User } from '$lib/server/db/schema/auth';
+import { utilisateurs, type Utilisateur } from '$lib/server/db/schema/auth';
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,35 +64,40 @@ export const load = async ({ url, cookies }) => {
     sameSite: 'lax'
   });
 
-  const userResponse = await fetch(`https://${PROCONNECT_DOMAIN}${PROCONNECT_USERINFO_ENDPOINT}`, {
-    headers: {
-      Authorization: `Bearer ${tokens.accessToken()}`
+  const userInfoResponse = await fetch(
+    `https://${PROCONNECT_DOMAIN}${PROCONNECT_USERINFO_ENDPOINT}`,
+    {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken()}`
+      }
     }
-  });
+  );
 
-  const payload = decodeIdToken(await userResponse.text());
-  if (!('email' in payload && typeof payload.email === 'string')) return error(400);
-
-  const existingUsers = await db
+  const payload = decodeIdToken(await userInfoResponse.text());
+  if (!('email' in payload && typeof payload.email === 'string')) {
+    return error(400);
+  }
+  const query = await db
     .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, payload.email));
+    .from(utilisateurs)
+    .where(eq(utilisateurs.courriel, payload.email));
 
-  let user: User;
-  if (existingUsers.length) {
-    user = existingUsers[0];
+  let utilisateur: Utilisateur;
+  if (query.length) {
+    utilisateur = query[0];
   } else {
-    const users = await db
-      .insert(usersTable)
+    const query = await db
+      .insert(utilisateurs)
       .values({
-        email: payload.email
+        courriel: payload.email
       })
       .returning();
-    user = users[0];
+    utilisateur = query[0];
   }
+
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, user.id);
-  setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
+  const session = await createSession(sessionToken, utilisateur.id);
+  setSessionTokenCookie(cookies, sessionToken, session.dateExpiration);
 
   // eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
   cookies.delete(OIDC_STATE_COOKIE_NAME, { path: '/' });

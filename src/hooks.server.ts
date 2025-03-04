@@ -10,19 +10,19 @@ export const handle = async ({ event, resolve }) => {
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
-    event.locals.user = null;
+    event.locals.utilisateur = null;
     event.locals.session = null;
     return resolve(event);
   }
 
-  const { session, user } = await validateSessionToken(token);
+  const { session, utilisateur } = await validateSessionToken(token);
   if (session !== null) {
-    setSessionTokenCookie(event.cookies, token, session.expiresAt);
+    setSessionTokenCookie(event.cookies, token, session.dateExpiration);
   } else {
     deleteSessionTokenCookie(event.cookies);
   }
 
   event.locals.session = session;
-  event.locals.user = user;
+  event.locals.utilisateur = utilisateur;
   return resolve(event);
 };
