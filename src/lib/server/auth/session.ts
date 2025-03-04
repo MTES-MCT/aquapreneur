@@ -1,13 +1,14 @@
-import { eq } from 'drizzle-orm';
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
+import { eq } from 'drizzle-orm';
+
+import type { Cookies } from '@sveltejs/kit';
 
 import { db } from '$lib/server/db';
 import { sessions, utilisateurs } from '$lib/server/db/schema/auth';
-import { SESSION_COOKIE_NAME } from '$lib/constants';
+import type { Session, Utilisateur } from '$lib/server/db/schema/auth';
 
-import type { Cookies } from '@sveltejs/kit';
-import type { Utilisateur, Session } from '$lib/server/db/schema/auth';
+import { SESSION_COOKIE_NAME } from '$lib/constants';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Gestion des sessions

@@ -1,4 +1,4 @@
-import { decodeIdToken, type OAuth2Tokens } from 'arctic';
+import { type OAuth2Tokens, decodeIdToken } from 'arctic';
 import { eq } from 'drizzle-orm';
 
 import { error, redirect } from '@sveltejs/kit';
@@ -16,7 +16,8 @@ import {
   setSessionTokenCookie
 } from '$lib/server/auth/session';
 import { db } from '$lib/server/db';
-import { utilisateurs, type Utilisateur } from '$lib/server/db/schema/auth';
+import { type Utilisateur, utilisateurs } from '$lib/server/db/schema/auth';
+
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

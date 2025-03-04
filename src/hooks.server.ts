@@ -1,9 +1,10 @@
-import { SESSION_COOKIE_NAME } from '$lib/constants';
 import {
-  validateSessionToken,
+  deleteSessionTokenCookie,
   setSessionTokenCookie,
-  deleteSessionTokenCookie
+  validateSessionToken
 } from '$lib/server/auth/session';
+
+import { SESSION_COOKIE_NAME } from '$lib/constants';
 
 export const handle = async ({ event, resolve }) => {
   // Validation de la session

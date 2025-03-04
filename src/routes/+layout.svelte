@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import '../app.css';
+
   import Header from '$lib/header.svelte';
+
+  import '../app.css';
 
   onMount(async () => {
     // @ts-expect-error -- pas de type disponible

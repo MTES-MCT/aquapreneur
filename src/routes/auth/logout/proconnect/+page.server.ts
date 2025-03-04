@@ -9,6 +9,7 @@ import {
 } from '$env/static/private';
 
 import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth/session';
+
 import { OIDC_ID_TOKEN_COOKIE_NAME } from '$lib/constants';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

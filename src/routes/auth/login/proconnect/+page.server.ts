@@ -2,9 +2,10 @@ import { generateState } from 'arctic';
 
 import { redirect } from '@sveltejs/kit';
 
-import { PROCONNECT_DOMAIN, PROCONNECT_AUTHORIZATION_ENDPOINT } from '$env/static/private';
+import { PROCONNECT_AUTHORIZATION_ENDPOINT, PROCONNECT_DOMAIN } from '$env/static/private';
 
 import { proconnect } from '$lib/server/auth/proconnect';
+
 import { OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

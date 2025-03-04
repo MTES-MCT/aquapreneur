@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+
   import ProconnectButton from '$lib/components/proconnect-button.svelte';
 
   const { data } = $props();

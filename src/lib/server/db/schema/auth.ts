@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, integer } from 'drizzle-orm/pg-core';
 import { type InferSelectModel } from 'drizzle-orm';
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 // Basé sur https://lucia-auth.com/sessions/basic-api/drizzle-orm
 export const utilisateurs = pgTable('utilisateurs', {

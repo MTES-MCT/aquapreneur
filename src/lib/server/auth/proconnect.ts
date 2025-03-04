@@ -1,4 +1,5 @@
 import * as arctic from 'arctic';
+
 import {
   PROCONNECT_CLIENT_ID,
   PROCONNECT_CLIENT_SECRET,
