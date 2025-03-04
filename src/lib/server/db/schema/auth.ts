@@ -1,10 +1,9 @@
-import { pgTable, text, timestamp, serial, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, integer } from 'drizzle-orm/pg-core';
 import { type InferSelectModel } from 'drizzle-orm';
 
 // Basé sur https://lucia-auth.com/sessions/basic-api/drizzle-orm
-
 export const utilisateurs = pgTable('utilisateurs', {
-  id: serial().primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   courriel: text()
 });
 
