@@ -1,0 +1,19 @@
+#!/bin/env bash
+# Solution de contournement temporaire pour la commande `drizzle-kit push` 
+# qui ne fonctionne pas dans la cli Scalingo.
+
+while true; do
+  read -rsn1 key
+  case "$key" in
+    $'\x1b')  # Handle escape sequences (arrows start with ESC)
+      read -rsn2 -t 0.1 key2
+      case "$key2" in
+        "[A") printf '\033[A' ;; # Up arrow
+        "[B") printf '\033[B' ;; # Down arrow
+        "[C") printf '\033[C' ;; # Right arrow
+        "[D") printf '\033[D' ;; # Left arrow
+      esac
+      ;;
+    "") printf '\r' ;;  # Enter key
+  esac
+done | npm run db:push
