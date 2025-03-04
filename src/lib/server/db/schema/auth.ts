@@ -1,18 +1,17 @@
-import { pgTable, text, timestamp, serial, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { type InferSelectModel } from 'drizzle-orm';
 
 // Basé sur https://lucia-auth.com/sessions/basic-api/drizzle-orm
-
 export const utilisateurs = pgTable('utilisateurs', {
-  id: serial().primaryKey(),
+  id: uuid().primaryKey().defaultRandom(),
   courriel: text()
 });
 
 export const sessions = pgTable('sessions', {
   id: text().primaryKey(),
-  idUtilisateur: integer()
+  idUtilisateur: uuid()
     .notNull()
-    .references(() => utilisateurs.id),
+    .references(() => utilisateurs.id, { onDelete: 'cascade' }),
   dateExpiration: timestamp({
     withTimezone: true,
     mode: 'date'
