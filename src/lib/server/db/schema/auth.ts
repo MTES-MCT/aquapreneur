@@ -11,7 +11,7 @@ export const sessions = pgTable('sessions', {
   id: text().primaryKey(),
   idUtilisateur: integer()
     .notNull()
-    .references(() => utilisateurs.id),
+    .references(() => utilisateurs.id, { onDelete: 'cascade' }),
   dateExpiration: timestamp({
     withTimezone: true,
     mode: 'date'
