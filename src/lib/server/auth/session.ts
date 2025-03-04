@@ -85,6 +85,7 @@ export function setSessionTokenCookie(cookies: Cookies, token: string, expiresAt
 }
 
 export function deleteSessionTokenCookie(cookies: Cookies): void {
+  // eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
   cookies.delete(SESSION_COOKIE_NAME, {
     path: '/'
   });

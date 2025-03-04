@@ -28,6 +28,7 @@ export const actions = {
     deleteSessionTokenCookie(event.cookies);
 
     if (idToken !== null) {
+      // eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
       event.cookies.delete(OIDC_ID_TOKEN_COOKIE_NAME, { path: '/' });
       // On prépare l’URL de déconnexion ProConnect
       const state = generateState();

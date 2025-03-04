@@ -1,7 +1,7 @@
 import { decodeIdToken, type OAuth2Tokens } from 'arctic';
 import { eq } from 'drizzle-orm';
 
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 import {
   PROCONNECT_DOMAIN,
@@ -48,16 +48,16 @@ export const load = async ({ url, cookies }) => {
     );
   } catch (e) {
     // `code` ou client_id/client_secret incorrects
+    console.log(e);
     return error(400);
   }
 
   const tokenId = tokens.idToken();
-  const decoded = decodeIdToken(tokenId);
 
   // On stocke le tokenId pour pouvoir déconnecter l’utilisateurice de ProConnect
   // Les sessions ProConnect durent 12h par défaut
   // https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md#237-authentification-de-lutilisateur
-  https: cookies.set(OIDC_ID_TOKEN_COOKIE_NAME, tokenId, {
+  cookies.set(OIDC_ID_TOKEN_COOKIE_NAME, tokenId, {
     path: '/',
     httpOnly: true,
     maxAge: 3600 * 12,
@@ -94,6 +94,7 @@ export const load = async ({ url, cookies }) => {
   const session = await createSession(sessionToken, user.id);
   setSessionTokenCookie(cookies, sessionToken, session.expiresAt);
 
+  // eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
   cookies.delete(OIDC_STATE_COOKIE_NAME, { path: '/' });
 
   return redirect(302, '/');

@@ -4,7 +4,7 @@
   import Header from '$lib/header.svelte';
 
   onMount(async () => {
-    // @ts-ignore
+    // @ts-expect-error -- pas de type disponible
     await import('@gouvfr/dsfr/dist/dsfr.module.js');
   });
 
