@@ -43,7 +43,7 @@ export default ts.config(
   },
   {
     rules: {
-      'no-irregular-whitespace': ['warn', { skipComments: true }]
+      'no-irregular-whitespace': ['warn', { skipComments: true, skipTemplates: true }]
     }
   }
 );

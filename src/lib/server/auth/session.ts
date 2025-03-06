@@ -29,14 +29,13 @@ export function generateSessionToken(): string {
 export async function createSession(token: string, idUtilisateur: number): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
-  const session: Session = {
+  const data = {
     id: sessionId,
     idUtilisateur,
     // Expiration à 30 jours
     dateExpiration: new Date(Date.now() + 1000 * 3600 * 24 * 30)
   };
-  await db.insert(sessions).values(session);
-  return session;
+  return (await db.insert(sessions).values(data).returning())[0];
 }
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
