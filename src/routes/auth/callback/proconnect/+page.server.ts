@@ -9,14 +9,16 @@ import {
   PROCONNECT_USERINFO_ENDPOINT
 } from '$env/static/private';
 
+import { db } from '$db';
+
+import { type Utilisateur, utilisateurs } from '$db/schema/auth';
+
 import { proconnect } from '$lib/server/auth/proconnect';
 import {
   createSession,
   generateSessionToken,
   setSessionTokenCookie
 } from '$lib/server/auth/session';
-import { db } from '$lib/server/db';
-import { type Utilisateur, utilisateurs } from '$lib/server/db/schema/auth';
 
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 

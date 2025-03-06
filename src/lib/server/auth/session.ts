@@ -4,9 +4,10 @@ import { eq } from 'drizzle-orm';
 
 import type { Cookies } from '@sveltejs/kit';
 
-import { db } from '$lib/server/db';
-import { sessions, utilisateurs } from '$lib/server/db/schema/auth';
-import type { Session, Utilisateur } from '$lib/server/db/schema/auth';
+import { db } from '$db';
+
+import { sessions, utilisateurs } from '$db/schema/auth';
+import type { Session, Utilisateur } from '$db/schema/auth';
 
 import { SESSION_COOKIE_NAME } from '$lib/constants';
 
