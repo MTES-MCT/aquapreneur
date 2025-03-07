@@ -1,9 +1,11 @@
+// Ce fichier peut être appelé hors du contexte Vite (scripts, tests E2E), on
+// ne peut pas compter sur la gestion habituelle des variables d’environnement
+// (`$env/static/private` ou `$env/dynamic/private` de SvelteKit, ni
+// import.meta.env de Vite). On passe donc directement par process.env
+import '@dotenvx/dotenvx/config';
 import { drizzle } from 'drizzle-orm/postgres-js';
 
-// La variable d’environnement peut venir de contextes différents,
-// selon que ce fichier est appelé dans un contexte Vite (serveur de développement
-// ou de production), ou dans un contexte dotEnv (scripts, tests E2E)
-const DATABASE_URL = process.env.DATABASE_URL || import.meta.env.VITE_DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
   throw new Error('La variable d’environnement DATABASE_URL n’est pas renseignée');
 }
@@ -14,4 +16,4 @@ export const db = drizzle({
   // logger: true
 });
 
-console.log('Base de donnée utilisée : ', db.$client.options.database);
+console.log(`Base de donnée utilisée : ${db.$client.options.database}`);
