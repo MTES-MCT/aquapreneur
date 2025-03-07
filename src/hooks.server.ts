@@ -1,3 +1,13 @@
+import * as Sentry from '@sentry/sveltekit';
+
+import { sequence } from '@sveltejs/kit/hooks';
+
+import {
+  PUBLIC_SENTRY_DSN,
+  PUBLIC_SENTRY_ENVIRONMENT,
+  PUBLIC_SENTRY_TRACE_SAMPLE_RATE
+} from '$env/static/public';
+
 import {
   deleteSessionTokenCookie,
   setSessionTokenCookie,
@@ -6,7 +16,13 @@ import {
 
 import { SESSION_COOKIE_NAME } from '$lib/constants';
 
-export const handle = async ({ event, resolve }) => {
+Sentry.init({
+  dsn: PUBLIC_SENTRY_DSN,
+  tracesSampleRate: Number(PUBLIC_SENTRY_TRACE_SAMPLE_RATE || 0),
+  environment: PUBLIC_SENTRY_ENVIRONMENT
+});
+
+export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
@@ -26,4 +42,5 @@ export const handle = async ({ event, resolve }) => {
   event.locals.session = session;
   event.locals.utilisateur = utilisateur;
   return resolve(event);
-};
+});
+export const handleError = Sentry.handleErrorWithSentry();
