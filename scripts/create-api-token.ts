@@ -2,7 +2,7 @@ import { input } from '@inquirer/prompts';
 
 import { db } from '$db';
 
-import { jetonsAPI } from '$db/schema/auth';
+import { jetonsApi } from '$db/schema/auth';
 
 import { generateApiToken } from '$utils';
 
@@ -25,7 +25,7 @@ const siret = await input({
 
 const { token, digest } = generateApiToken();
 
-await db.insert(jetonsAPI).values({
+await db.insert(jetonsApi).values({
   hachage: digest,
   nomPartenaire: nom.trim(),
   siretPartenaire: cleanSiret(siret)

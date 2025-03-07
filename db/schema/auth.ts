@@ -1,5 +1,5 @@
-import { type InferSelectModel } from 'drizzle-orm';
-import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { type InferSelectModel, sql } from 'drizzle-orm';
+import { check, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { timestampCreation, timestamps } from '.';
 
@@ -25,13 +25,18 @@ export const sessions = pgTable('sessions', {
 });
 
 // Authentification pour l’API
-export const jetonsAPI = pgTable('jetons_api', {
-  hachage: text().primaryKey(),
-  ...timestampCreation,
+export const jetonsApi = pgTable(
+  'jetons_api',
+  {
+    hachage: text().primaryKey(),
+    ...timestampCreation,
 
-  nomPartenaire: text().notNull(),
-  siretPartenaire: text().notNull()
-});
+    nomPartenaire: text().notNull(),
+
+    siretPartenaire: text().notNull()
+  },
+  (table) => [check('siret_check', sql`${table.siretPartenaire} ~ '^\\d{14}$'`)]
+);
 
 export type Utilisateur = InferSelectModel<typeof utilisateurs>;
 export type Session = InferSelectModel<typeof sessions>;

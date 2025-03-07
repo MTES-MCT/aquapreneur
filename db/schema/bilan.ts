@@ -1,23 +1,21 @@
-import {
-  date,
-  integer,
-  json,
-  pgTable,
-  smallint,
-  text,
-  timestamp,
-  varchar
-} from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { check, date, integer, json, pgTable, smallint, text, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 
 import { timestampCreation, timestamps } from '.';
 
-export const bilansBruts = pgTable('bilans_bruts', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  ...timestampCreation,
-  dateSoumission: timestamp().defaultNow().notNull(),
-  bilan: json().notNull()
-});
+export const bilansBruts = pgTable(
+  'bilans_bruts',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    ...timestampCreation,
+    nomPartenaire: text().notNull(),
+    siretPartenaire: text().notNull(),
+    versionApi: integer().notNull(),
+    bilan: json().notNull()
+  },
+  (table) => [check('siret_check', sql`${table.siretPartenaire} ~ '^\\d{14}$'`)]
+);
 
 export const bilans = pgTable('bilans', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

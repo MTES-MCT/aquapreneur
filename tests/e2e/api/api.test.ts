@@ -1,3 +1,4 @@
+import { desc } from 'drizzle-orm';
 import { reset } from 'drizzle-seed';
 
 import { expect, test } from '@playwright/test';
@@ -35,8 +36,12 @@ test.beforeAll(async () => {
     nomPartenaire: 'partenaire test',
     siretPartenaire: '12345678901234'
   };
-  await db.insert(authSchema.jetonsAPI).values(values);
+  await db.insert(authSchema.jetonsApi).values(values);
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tests d’autorisation
+//
 
 test('401 pour les requêtes non authentifiées', async ({ request }) => {
   const response = await request.post('/api/v0/bilan/cgo/1234', {
@@ -53,10 +58,59 @@ test('401 pour les jetons invalides', async ({ request }) => {
   expect(response.status()).toBe(401);
 });
 
+test('400 pour les en-têtes d’autorisation mal formés', async ({ request }) => {
+  let response = await request.post('/api/v0/bilan/cgo/1234', {
+    headers: { Authorization: `XXX` },
+    data: {}
+  });
+  expect(response.status()).toBe(400);
+  response = await request.post('/api/v0/bilan/cgo/1234', {
+    headers: { Authorization: `Bearer` },
+    data: {}
+  });
+  expect(response.status()).toBe(400);
+});
+
 test('204 en cas de succès', async ({ request }) => {
   const response = await request.post('/api/v0/bilan/cgo/1234', {
     headers: { Authorization: `Bearer ${validAuthToken}` },
     data: {}
   });
   expect(response.status()).toBe(204);
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tests de sauvegarde des bilans bruts
+//
+
+test('Le bilan brut est enregistré', async ({ request }) => {
+  const data = {
+    foo: 'foo'
+  };
+  const response = await request.post('/api/v0/bilan/cgo/1234', {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data
+  });
+  expect(response.status()).toBe(204);
+  const inserted = (
+    await db
+      .select()
+      .from(bilanSchema.bilansBruts)
+      .orderBy(desc(bilanSchema.bilansBruts.id))
+      .limit(1)
+  )[0];
+
+  expect(Date.now() - inserted.dateCreation.getTime()).toBeGreaterThan(0);
+  expect(Date.now() - inserted.dateCreation.getTime()).toBeLessThan(100);
+  expect(inserted.nomPartenaire === 'partenaire test');
+  expect(inserted.siretPartenaire === '12345678901234');
+  expect(inserted.versionApi).toBe(0);
+  expect(inserted.bilan).toEqual(data);
+});
+
+test('400 en l’absence de JSON dans la requête', async ({ request }) => {
+  const response = await request.post('/api/v0/bilan/cgo/1234', {
+    headers: { Authorization: `Bearer ${validAuthToken}` }
+  });
+  expect(response.status()).toBe(400);
 });
