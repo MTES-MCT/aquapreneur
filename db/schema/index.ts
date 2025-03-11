@@ -5,7 +5,7 @@ export const timestampCreation = {
 };
 
 export const timestampModification = {
-  dateMaj: timestamp({ withTimezone: true, mode: 'date' })
+  dateMaj: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull()
 };
 
 export const timestamps = {
