@@ -6,6 +6,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
   plugins: [
     sentrySvelteKit({
+      autoUploadSourceMaps:
+        !!process.env.ENVIRONMENT && ['staging', 'production'].includes(process.env.ENVIRONMENT),
       sourceMapsUploadOptions: {
         org: 'betagouv',
         project: 'aquapreneur',
