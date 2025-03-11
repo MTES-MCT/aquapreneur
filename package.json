@@ -18,12 +18,12 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "db:push": "drizzle-kit push",
-    "db:push-test": "dotenvx run -f .env.test -- drizzle-kit push",
+    "db:push-test": "dotenvx -q run -f .env.test -- drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "test:e2e": "dotenvx run -f .env.test -- playwright test",
+    "test:e2e": "dotenvx -q run -f .env.test -- playwright test",
     "test": "npm run test:e2e",
-    "create-api-token": "dotenvx run -- tsx scripts/create-api-token.ts"
+    "create-api-token": "dotenvx -q run -- tsx scripts/create-api-token.ts"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
