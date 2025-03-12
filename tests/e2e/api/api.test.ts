@@ -60,7 +60,8 @@ test.beforeAll(async () => {
   const values = {
     hachage: digest,
     nomPartenaire: 'partenaire test',
-    siretPartenaire: '12345678901234'
+    siretPartenaire: '12345678901234',
+    courrielPartenaire: 'test@test.com'
   };
   await db.insert(authSchema.jetonsApi).values(values);
 });

@@ -1,8 +1,6 @@
 import * as Sentry from '@sentry/sveltekit';
 import camelcaseKeys from 'camelcase-keys';
-import decamelize from 'decamelize';
 import { eq } from 'drizzle-orm';
-import type { ZodError } from 'zod';
 
 import { error } from '@sveltejs/kit';
 
@@ -17,19 +15,10 @@ import {
   dirigeantEsInsertSchema
 } from '$db/schema/bilan';
 
-import { sha256Digest } from '$utils';
+import { formatZodError, sha256Digest } from '$utils';
 
 // TODO : utiliser l’algorithme de vérification complet
 const siretIsValid = (siret: string) => siret.match(/^\d{14}$/);
-
-const formatZodError = (err: ZodError) => {
-  return err.issues
-    .map((issue) => {
-      const paths = issue.path.map((path) => decamelize(path.toString())).join(',');
-      return `${paths}: ${issue.message}`;
-    })
-    .join('\n');
-};
 
 const getApiVersion = (url: URL): number => {
   // Les appels api sont de la forme /api/v12/<...>
