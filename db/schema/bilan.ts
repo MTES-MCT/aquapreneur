@@ -7,6 +7,7 @@ import {
   json,
   numeric,
   pgTable,
+  smallint,
   text
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
@@ -385,11 +386,11 @@ export const bilans = pgTable(
 
 export const dirigeantEs = pgTable('dirigeant_es', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  nom: text(),
-  prenom: text(),
-  anneeNaissance: text(),
+  nom: text().notNull(),
+  prenom: text().notNull(),
+  anneeNaissance: smallint(),
   genre: text(),
-  anneeEntree: text(),
+  anneeEntree: smallint(),
   diplome: text(),
   diplomeAquacole: text(),
   regimeSocial: text(),
@@ -402,6 +403,9 @@ export const dirigeantEs = pgTable('dirigeant_es', {
 
 export const bilansInsertSchema = createInsertSchema(bilans, {
   siret: (s) => s.regex(/^\d{14}$/, 'Le SIRET doit être composé de 14 chiffres'),
+  debutExercice: (schema) => schema.date(),
+  finExercice: (schema) => schema.date(),
+  dateBilan: (schema) => schema.date(),
   // Les champs `numeric` de drizzle sont considérées comme des chaines de caractères
   // Le code ci-dessous permet :
   // 1. d’accepter une valeur numérique dans le json (sinon Zod les rejette)
@@ -421,4 +425,5 @@ export const bilansInsertSchema = createInsertSchema(bilans, {
       ])
   )
 });
+
 export const dirigeantEsInsertSchema = createInsertSchema(dirigeantEs, {});

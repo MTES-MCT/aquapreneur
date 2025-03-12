@@ -295,3 +295,88 @@ test('400 si un champ monétaire est invalide', async ({ request }) => {
   expect(response.status()).toBe(400);
   expect((await response.json()).message).toBe('stck_val_h_nais_mi: Invalid input');
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tests de validation des champs dirigeant_es
+
+test('400 si le champ dirigeant_es n’est pas un tableau', async ({ request }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { dirigeant_es, ...dummyBilanNoDir } = dummyBilan;
+  let response;
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: dummyBilanNoDir
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('Clé `dirigeant_es` manquantes, ou pas un tableau');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilanNoDir, dirigeant_es: 'notAnArray' }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('Clé `dirigeant_es` manquantes, ou pas un tableau');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilanNoDir, dirigeant_es: [] }
+  });
+  expect(response.status()).toBe(204);
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tests de validation des champs date
+
+test('400 si un champ date n’est pas au bon format', async ({ request }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let response;
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: '' }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Invalid date');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: null }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Expected string, received null');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: undefined }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Required');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: '12/31/2020' }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Invalid date');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: '31/12/2020' }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Invalid date');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: '2020-31-12' }
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toBe('debut_exercice: Invalid date');
+
+  response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, debut_exercice: '2020-12-31' }
+  });
+  expect(response.status()).toBe(204);
+});

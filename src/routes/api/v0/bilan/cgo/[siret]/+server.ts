@@ -113,14 +113,17 @@ export const POST = async ({ params, url, request }) => {
       ...bilanData['donnees_economiques']
     };
 
-    const parsingResult = bilansInsertSchema.safeParse(flatBilan);
+    const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
     if (parsingResult.success === false) {
       error(400, formatZodError(parsingResult.error));
     }
 
     const inserted = (await tx.insert(bilans).values(parsingResult.data).returning())[0];
+    if (!Array.isArray(bilanData['dirigeant_es'])) {
+      error(400, 'Clé `dirigeant_es` manquantes, ou pas un tableau');
+    }
     for (const dir of bilanData['dirigeant_es']) {
-      const parsingResult = dirigeantEsInsertSchema.safeParse({
+      const parsingResult = dirigeantEsInsertSchema.strict().safeParse({
         ...camelcaseKeys(dir),
         idBilan: inserted.id
       });
