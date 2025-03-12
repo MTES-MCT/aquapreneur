@@ -1,5 +1,6 @@
-import { sql } from 'drizzle-orm';
+import { type InferSelectModel, sql } from 'drizzle-orm';
 import {
+  boolean,
   check,
   date,
   doublePrecision,
@@ -18,28 +19,53 @@ import { timestampCreation, timestamps } from '.';
 const money = () => numeric({ precision: 15, scale: 2 });
 const qty = () => doublePrecision();
 
-// La table des bilans bruts : on stocke les données json postées à l’API
-// telles quelles afin de pouvoir auditer les envois, et éventuellement
-// les rejouer
-export const bilansBruts = pgTable(
-  'bilans_bruts',
+// Authentification pour l’API
+export const jetonsApi = pgTable(
+  'jetons_api',
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     ...timestampCreation,
+
+    hachage: text().notNull().unique(),
+    valide: boolean().notNull().default(true),
     nomPartenaire: text().notNull(),
     siretPartenaire: text().notNull(),
-    versionApi: integer().notNull(),
-    bilan: json().notNull()
+    courrielPartenaire: text().notNull()
   },
   (table) => [check('siret_check', sql`${table.siretPartenaire} ~ '^\\d{14}$'`)]
 );
 
-// La table des bilans : où on stocke les données comptables parsées.
+export const jetonsApiInsertSchema = createInsertSchema(jetonsApi, {
+  siretPartenaire: (s) => s.regex(/^\d{14}$/, 'Le SIRET doit être composé de 14 chiffres'),
+  courrielPartenaire: (schema) => schema.email().toLowerCase()
+});
+
+export const evtsJournalReqs = pgTable('journal_requetes', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  idJeton: integer()
+    .notNull()
+    .references(() => jetonsApi.id, { onDelete: 'restrict' }),
+  ...timestampCreation,
+
+  versionApi: integer().notNull(),
+  pathname: text().notNull(),
+  href: text().notNull(),
+  methode: text().notNull(),
+  data: json().notNull(),
+  status: integer()
+});
+
+export type EvtJournalReqs = InferSelectModel<typeof evtsJournalReqs>;
+
 export const bilans = pgTable(
   'bilans',
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    idEvtJournalReqs: integer()
+      .notNull()
+      .references(() => evtsJournalReqs.id, { onDelete: 'restrict' }),
     ...timestamps,
+
     siret: text().notNull(),
     nom: text().notNull(),
     debutExercice: date().notNull(),
@@ -384,23 +410,6 @@ export const bilans = pgTable(
   (table) => [check('siret_check', sql`${table.siret} ~ '^\\d{14}$'`)]
 );
 
-export const dirigeantEs = pgTable('dirigeant_es', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  nom: text().notNull(),
-  prenom: text().notNull(),
-  anneeNaissance: smallint(),
-  genre: text(),
-  anneeEntree: smallint(),
-  diplome: text(),
-  diplomeAquacole: text(),
-  regimeSocial: text(),
-  tauxTravail: integer(),
-
-  idBilan: integer()
-    .notNull()
-    .references(() => bilans.id, { onDelete: 'cascade' })
-});
-
 export const bilansInsertSchema = createInsertSchema(bilans, {
   siret: (s) => s.regex(/^\d{14}$/, 'Le SIRET doit être composé de 14 chiffres'),
   debutExercice: (schema) => schema.date(),
@@ -426,4 +435,21 @@ export const bilansInsertSchema = createInsertSchema(bilans, {
   )
 });
 
-export const dirigeantEsInsertSchema = createInsertSchema(dirigeantEs, {});
+export const dirigeantEs = pgTable('dirigeant_es', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  idBilan: integer()
+    .notNull()
+    .references(() => bilans.id, { onDelete: 'cascade' }),
+
+  nom: text().notNull(),
+  prenom: text().notNull(),
+  anneeNaissance: smallint(),
+  genre: text(),
+  anneeEntree: smallint(),
+  diplome: text(),
+  diplomeAquacole: text(),
+  regimeSocial: text(),
+  tauxTravail: integer()
+});
+
+export const dirigeantEsInsertSchema = createInsertSchema(dirigeantEs);

@@ -1,6 +1,5 @@
-import { type InferSelectModel, sql } from 'drizzle-orm';
-import { check, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { createInsertSchema } from 'drizzle-zod';
+import { type InferSelectModel } from 'drizzle-orm';
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { timestampCreation, timestamps } from '.';
 
@@ -16,11 +15,11 @@ export type Utilisateur = InferSelectModel<typeof utilisateurs>;
 
 export const sessions = pgTable('sessions', {
   id: text().primaryKey(),
-  ...timestampCreation,
-
   idUtilisateur: integer()
     .notNull()
     .references(() => utilisateurs.id, { onDelete: 'cascade' }),
+  ...timestampCreation,
+
   dateExpiration: timestamp({
     withTimezone: true,
     mode: 'date'
@@ -28,22 +27,3 @@ export const sessions = pgTable('sessions', {
 });
 
 export type Session = InferSelectModel<typeof sessions>;
-
-// Authentification pour l’API
-export const jetonsApi = pgTable(
-  'jetons_api',
-  {
-    hachage: text().primaryKey(),
-    ...timestampCreation,
-
-    nomPartenaire: text().notNull(),
-    siretPartenaire: text().notNull(),
-    courrielPartenaire: text().notNull()
-  },
-  (table) => [check('siret_check', sql`${table.siretPartenaire} ~ '^\\d{14}$'`)]
-);
-
-export const jetonsApiInsertSchema = createInsertSchema(jetonsApi, {
-  siretPartenaire: (s) => s.regex(/^\d{14}$/, 'Le SIRET doit être composé de 14 chiffres'),
-  courrielPartenaire: (schema) => schema.email().toLowerCase()
-});

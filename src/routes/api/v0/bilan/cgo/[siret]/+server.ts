@@ -6,16 +6,17 @@ import { error } from '@sveltejs/kit';
 
 import { db } from '$db';
 
-import { jetonsApi } from '$db/schema/auth';
 import {
+  type EvtJournalReqs,
   bilans,
-  bilansBruts,
   bilansInsertSchema,
   dirigeantEs,
-  dirigeantEsInsertSchema
-} from '$db/schema/bilan';
+  dirigeantEsInsertSchema,
+  evtsJournalReqs
+} from '$db/schema/api';
+import { getJetonApiFromToken } from '$db/utils';
 
-import { formatZodError, sha256Digest } from '$utils';
+import { formatZodError } from '$utils';
 
 // TODO : utiliser l’algorithme de vérification complet
 const siretIsValid = (siret: string) => siret.match(/^\d{14}$/);
@@ -31,14 +32,14 @@ const getApiVersion = (url: URL): number => {
   error(500, 'URL incorrecte');
 };
 
+const setLogEntryStatus = async (logEntry: EvtJournalReqs, status: number) => {
+  await db.update(evtsJournalReqs).set({ status }).where(eq(evtsJournalReqs.id, logEntry.id));
+};
+
 export const POST = async ({ params, url, request }) => {
   // Validation des préconditions
   const { siret } = params;
   const apiVersion = getApiVersion(url);
-
-  if (!siretIsValid(siret)) {
-    error(400, 'Code SIRET de l’URL incorrect');
-  }
 
   const bearerToken = request.headers.get('Authorization');
   if (!bearerToken) {
@@ -54,15 +55,16 @@ export const POST = async ({ params, url, request }) => {
     error(400, 'En-tête `Authorization` incorrect. La valeur attendue est : `Bearer <YOUR TOKEN>`');
   }
 
-  const hashedToken = sha256Digest(key);
-  const req = await db.select().from(jetonsApi).where(eq(jetonsApi.hachage, hashedToken));
-  if (!req.length) {
+  const jeton = await getJetonApiFromToken(key);
+
+  if (!jeton) {
     error(401, 'Jeton d’authentification invalide');
   }
 
+  if (!jeton.valide) {
+    error(401, 'Jeton d’authentification désactivé');
+  }
   // Parsing
-  const { nomPartenaire, siretPartenaire } = req[0];
-
   let bilanData;
   try {
     bilanData = await request.json();
@@ -71,15 +73,28 @@ export const POST = async ({ params, url, request }) => {
     error(400, 'Contenu JSON invalide');
   }
 
-  // Sauvegarde du bilan brut
-  await db.insert(bilansBruts).values({
-    nomPartenaire,
-    siretPartenaire,
-    versionApi: apiVersion,
-    bilan: bilanData
-  });
+  // Sauvegarde de la requête pour audit
+  const auditLogEntry = (
+    await db
+      .insert(evtsJournalReqs)
+      .values({
+        idJeton: jeton.id,
+        versionApi: apiVersion,
+        href: url.href,
+        pathname: url.pathname,
+        methode: request.method,
+        data: bilanData
+      })
+      .returning()
+  )[0];
+
+  if (!siretIsValid(siret)) {
+    await setLogEntryStatus(auditLogEntry, 400);
+    error(400, 'Code SIRET de l’URL incorrect');
+  }
 
   if (bilanData['siret'] !== siret) {
+    await setLogEntryStatus(auditLogEntry, 400);
     error(400, 'Numéros SIRET inconsistents');
   }
 
@@ -95,6 +110,7 @@ export const POST = async ({ params, url, request }) => {
     };
 
     const flatBilan = {
+      idEvtJournalReqs: auditLogEntry.id,
       ...bilanInfo,
       ...bilanData['stock'],
       ...bilanData['production'],
@@ -104,11 +120,13 @@ export const POST = async ({ params, url, request }) => {
 
     const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
     if (parsingResult.success === false) {
+      await setLogEntryStatus(auditLogEntry, 400);
       error(400, formatZodError(parsingResult.error));
     }
 
     const inserted = (await tx.insert(bilans).values(parsingResult.data).returning())[0];
     if (!Array.isArray(bilanData['dirigeant_es'])) {
+      await setLogEntryStatus(auditLogEntry, 400);
       error(400, 'Clé `dirigeant_es` manquantes, ou pas un tableau');
     }
     for (const dir of bilanData['dirigeant_es']) {
@@ -117,12 +135,13 @@ export const POST = async ({ params, url, request }) => {
         idBilan: inserted.id
       });
       if (!parsingResult.success) {
+        await setLogEntryStatus(auditLogEntry, 400);
         error(400, formatZodError(parsingResult.error));
       }
 
       await tx.insert(dirigeantEs).values(parsingResult.data);
     }
   });
-
+  await setLogEntryStatus(auditLogEntry, 204);
   return new Response(null, { status: 204 });
 };

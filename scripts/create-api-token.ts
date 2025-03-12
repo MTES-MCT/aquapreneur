@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { db } from '$db';
 
-import { jetonsApi, jetonsApiInsertSchema } from '$db/schema/auth';
+import { jetonsApi, jetonsApiInsertSchema } from '$db/schema/api';
 
 import { formatZodError, generateApiToken } from '$utils';
 

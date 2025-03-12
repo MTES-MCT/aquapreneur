@@ -6,8 +6,9 @@ import { expect, test } from '@playwright/test';
 
 import { db } from '$db';
 
-import * as authSchema from '$db/schema/auth';
-import * as bilanSchema from '$db/schema/bilan';
+import { bilans, dirigeantEs, evtsJournalReqs, jetonsApi } from '$db/schema/api';
+import { sessions, utilisateurs } from '$db/schema/auth';
+import { getJetonApiFromToken } from '$db/utils';
 
 import { generateApiToken } from '$utils';
 
@@ -52,7 +53,14 @@ test.beforeAll(async () => {
     throw new Error('Les tests doivent utiliser une BDD dédiée');
   }
   // Remise à zero de la DBB de test
-  await reset(db, { ...authSchema, ...bilanSchema });
+  await reset(db, {
+    bilans,
+    dirigeantEs,
+    jetonsApi,
+    journalRequetes: evtsJournalReqs,
+    sessions,
+    utilisateurs
+  });
 
   // Génération d’un token d’authentification
   const { token, digest } = generateApiToken();
@@ -63,7 +71,7 @@ test.beforeAll(async () => {
     siretPartenaire: '12345678901234',
     courrielPartenaire: 'test@test.com'
   };
-  await db.insert(authSchema.jetonsApi).values(values);
+  await db.insert(jetonsApi).values(values);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,13 +86,33 @@ test('401 pour les requêtes non authentifiées', async ({ request }) => {
   expect((await response.json()).message).toBe('En-tête `Authorization` absent');
 });
 
-test('401 pour les jetons invalides', async ({ request }) => {
+test('401 pour les jetons inexistants', async ({ request }) => {
   const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer XXX` },
     data: dummyBilan
   });
   expect(response.status()).toBe(401);
   expect((await response.json()).message).toBe('Jeton d’authentification invalide');
+});
+
+test('401 pour les jetons desactivés', async ({ request }) => {
+  const { token, digest } = generateApiToken();
+  const disabledAuthToken = token;
+  const values = {
+    hachage: digest,
+    nomPartenaire: 'partenaire test',
+    siretPartenaire: '12345678901234',
+    courrielPartenaire: 'test@test.com',
+    valide: false
+  };
+  await db.insert(jetonsApi).values(values);
+
+  const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
+    headers: { Authorization: `Bearer ${disabledAuthToken}` },
+    data: dummyBilan
+  });
+  expect(response.status()).toBe(401);
+  expect((await response.json()).message).toBe('Jeton d’authentification désactivé');
 });
 
 test('400 pour les en-têtes d’autorisation mal formés', async ({ request }) => {
@@ -116,24 +144,55 @@ test('204 en cas de succès', async ({ request }) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tests de sauvegarde des bilans bruts
+// Tests de sauvegarde du journal de requêtes
 //
 
-test('Le bilan brut est enregistré', async ({ request }) => {
+test('Une entrée est ajoutée au journal de requêtes', async ({ request }) => {
   const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
     data: dummyBilan
   });
   expect(response.status()).toBe(204);
 
-  const inserted = await getLastById(bilanSchema.bilansBruts);
+  const inserted = await getLastById(evtsJournalReqs);
+  const jeton = await getJetonApiFromToken(validAuthToken);
+  expect(jeton).not.toBeNull();
+  expect(jeton!.valide).toBe(true);
 
+  expect(inserted.idJeton).toBe(jeton!.id);
+  expect(inserted.versionApi).toBe(0);
+  expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/${dummySiret}`);
+  expect(inserted.href).toBe(response.url());
+  expect(inserted.methode).toBe('POST');
+  expect(inserted.data).toEqual(dummyBilan);
+  expect(inserted.status).toBe(204);
   expect(Date.now() - inserted.dateCreation.getTime()).toBeGreaterThan(0);
   expect(Date.now() - inserted.dateCreation.getTime()).toBeLessThan(100);
-  expect(inserted.nomPartenaire === 'partenaire test');
-  expect(inserted.siretPartenaire === '12345678901234');
+});
+
+test('Une entrée est ajoutée au journal de requêtes, même si la requête échoue', async ({
+  request
+}) => {
+  const response = await request.post(`/api/v0/bilan/cgo/123`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: { ...dummyBilan, siret: '123' }
+  });
+  expect(response.status()).toBe(400);
+
+  const inserted = await getLastById(evtsJournalReqs);
+  const jeton = await getJetonApiFromToken(validAuthToken);
+  expect(jeton).not.toBeNull();
+  expect(jeton!.valide).toBe(true);
+
+  expect(inserted.idJeton).toBe(jeton!.id);
   expect(inserted.versionApi).toBe(0);
-  expect(inserted.bilan).toEqual(dummyBilan);
+  expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/123`);
+  expect(inserted.href).toBe(response.url());
+  expect(inserted.methode).toBe('POST');
+  expect(inserted.data).toEqual({ ...dummyBilan, siret: '123' });
+  expect(inserted.status).toBe(400);
+  expect(Date.now() - inserted.dateCreation.getTime()).toBeGreaterThan(0);
+  expect(Date.now() - inserted.dateCreation.getTime()).toBeLessThan(100);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +296,7 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
     data: { ...dummyBilan, stock: {} }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -245,7 +304,7 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
     data: { ...dummyBilan, stock: { StckValHNaisMi: null } }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -253,7 +312,7 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
     data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -261,7 +320,7 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
     data: { ...dummyBilan, stock: { StckValHNaisMi: '' } }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBeNull();
 });
 
@@ -276,7 +335,7 @@ test('204 si un champ monétaire est un nombre', async ({ request }) => {
     data: { ...dummyBilan, stock: { StckValHNaisMi: '12345.67' } }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBe('12345.67');
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -284,7 +343,7 @@ test('204 si un champ monétaire est un nombre', async ({ request }) => {
     data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } }
   });
   expect(response.status()).toBe(204);
-  inserted = await getLastById(bilanSchema.bilans);
+  inserted = await getLastById(bilans);
   expect(inserted.StckValHNaisMi).toBe('12345.67');
 });
 
@@ -330,7 +389,6 @@ test('400 si le champ dirigeant_es n’est pas un tableau', async ({ request }) 
 // Tests de validation des champs date
 
 test('400 si un champ date n’est pas au bon format', async ({ request }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let response;
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {

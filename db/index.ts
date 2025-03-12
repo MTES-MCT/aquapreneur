@@ -17,5 +17,3 @@ export const db = drizzle({
   casing: 'snake_case'
   // logger: true
 });
-
-console.log(`Base de donnée utilisée : ${db.$client.options.database}`);
