@@ -10,6 +10,7 @@ export const GET = async () => {
   try {
     await db.select().from(utilisateurs).limit(1);
   } catch (err) {
+    console.error(err);
     Sentry.captureException(err);
     return new Response('La base de données n’est pas accessible');
   }

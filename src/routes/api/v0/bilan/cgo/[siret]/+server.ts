@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/sveltekit';
 import camelcaseKeys from 'camelcase-keys';
 import { eq } from 'drizzle-orm';
 
-import { error } from '@sveltejs/kit';
+import { error, isHttpError } from '@sveltejs/kit';
 
 import { db } from '$db';
 
@@ -69,6 +69,7 @@ export const POST = async ({ params, url, request }) => {
   try {
     bilanData = await request.json();
   } catch (err) {
+    console.error(err);
     Sentry.captureException(err);
     error(400, 'Contenu JSON invalide');
   }
@@ -88,60 +89,67 @@ export const POST = async ({ params, url, request }) => {
       .returning()
   )[0];
 
-  if (!siretIsValid(siret)) {
-    await setLogEntryStatus(auditLogEntry, 400);
-    error(400, 'Code SIRET de l’URL incorrect');
-  }
-
-  if (bilanData['siret'] !== siret) {
-    await setLogEntryStatus(auditLogEntry, 400);
-    error(400, 'Numéros SIRET inconsistents');
-  }
-
-  // Parsing du bilan, et écriture en BDD
-  await db.transaction(async (tx) => {
-    const bilanInfo = {
-      siret: bilanData['siret'],
-      nom: bilanData['nom'],
-      debutExercice: bilanData['debut_exercice'],
-      finExercice: bilanData['fin_exercice'],
-      version: bilanData['version'],
-      dateBilan: bilanData['date_bilan']
-    };
-
-    const flatBilan = {
-      idEvtJournalReqs: auditLogEntry.id,
-      ...bilanInfo,
-      ...bilanData['stock'],
-      ...bilanData['production'],
-      ...bilanData['destination'],
-      ...bilanData['donnees_economiques']
-    };
-
-    const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
-    if (parsingResult.success === false) {
-      await setLogEntryStatus(auditLogEntry, 400);
-      error(400, formatZodError(parsingResult.error));
+  try {
+    if (!siretIsValid(siret)) {
+      error(400, 'Code SIRET de l’URL incorrect');
     }
 
-    const inserted = (await tx.insert(bilans).values(parsingResult.data).returning())[0];
-    if (!Array.isArray(bilanData['dirigeant_es'])) {
-      await setLogEntryStatus(auditLogEntry, 400);
-      error(400, 'Clé `dirigeant_es` manquantes, ou pas un tableau');
+    if (bilanData['siret'] !== siret) {
+      error(400, 'Numéros SIRET inconsistents');
     }
-    for (const dir of bilanData['dirigeant_es']) {
-      const parsingResult = dirigeantEsInsertSchema.strict().safeParse({
-        ...camelcaseKeys(dir),
-        idBilan: inserted.id
-      });
-      if (!parsingResult.success) {
-        await setLogEntryStatus(auditLogEntry, 400);
+
+    // Parsing du bilan, et écriture en BDD
+    await db.transaction(async (tx) => {
+      const bilanInfo = {
+        siret: bilanData['siret'],
+        nom: bilanData['nom'],
+        debutExercice: bilanData['debut_exercice'],
+        finExercice: bilanData['fin_exercice'],
+        version: bilanData['version'],
+        dateBilan: bilanData['date_bilan']
+      };
+
+      const flatBilan = {
+        idEvtJournalReqs: auditLogEntry.id,
+        ...bilanInfo,
+        ...bilanData['stock'],
+        ...bilanData['production'],
+        ...bilanData['destination'],
+        ...bilanData['donnees_economiques']
+      };
+
+      const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
+      if (parsingResult.success === false) {
         error(400, formatZodError(parsingResult.error));
       }
 
-      await tx.insert(dirigeantEs).values(parsingResult.data);
+      const inserted = (await tx.insert(bilans).values(parsingResult.data).returning())[0];
+
+      if (!Array.isArray(bilanData['dirigeant_es'])) {
+        error(400, 'Clé `dirigeant_es` manquantes, ou pas un tableau');
+      }
+      for (const dir of bilanData['dirigeant_es']) {
+        const parsingResult = dirigeantEsInsertSchema.strict().safeParse({
+          ...camelcaseKeys(dir),
+          idBilan: inserted.id
+        });
+        if (!parsingResult.success) {
+          error(400, formatZodError(parsingResult.error));
+        }
+
+        await tx.insert(dirigeantEs).values(parsingResult.data);
+      }
+    });
+    await setLogEntryStatus(auditLogEntry, 204);
+    return new Response(null, { status: 204 });
+  } catch (err) {
+    if (isHttpError(err)) {
+      await setLogEntryStatus(auditLogEntry, err.status);
+      throw err;
     }
-  });
-  await setLogEntryStatus(auditLogEntry, 204);
-  return new Response(null, { status: 204 });
+    console.error(err);
+    Sentry.captureException(err);
+    await setLogEntryStatus(auditLogEntry, 500);
+    throw err;
+  }
 };

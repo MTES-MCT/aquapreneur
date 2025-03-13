@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/sveltekit';
 import { type OAuth2Tokens, decodeIdToken } from 'arctic';
 import { eq } from 'drizzle-orm';
 
@@ -34,11 +35,11 @@ export const load = async ({ url, cookies }) => {
   const state = url.searchParams.get('state');
   const storedState = cookies.get(OIDC_STATE_COOKIE_NAME) ?? null;
   if (code === null || state === null || storedState === null) {
-    return error(400);
+    error(400);
   }
 
   if (state !== storedState) {
-    return error(400);
+    error(400);
   }
 
   let tokens: OAuth2Tokens;
@@ -49,10 +50,11 @@ export const load = async ({ url, cookies }) => {
       code,
       null
     );
-  } catch (e) {
+  } catch (err) {
     // `code` ou client_id/client_secret incorrects
-    console.log(e);
-    return error(400);
+    console.error(err);
+    Sentry.captureException(err);
+    error(400);
   }
 
   const tokenId = tokens.idToken();
@@ -78,7 +80,7 @@ export const load = async ({ url, cookies }) => {
 
   const payload = decodeIdToken(await userInfoResponse.text());
   if (!('email' in payload && typeof payload.email === 'string')) {
-    return error(400);
+    error(400);
   }
   const query = await db
     .select()
