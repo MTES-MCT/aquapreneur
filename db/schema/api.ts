@@ -115,6 +115,13 @@ export const bilans = pgTable(
 
     // #region Production
     VolVtHNaissFr: qty(),
+    CAHNaissFr: money(),
+    VolVtHNaissUE: qty(),
+    CAHNaissUE: money(),
+    VolVtHNaissAu: qty(),
+    CAHNaissAu: money(),
+    VolVtHDElvFr: qty(),
+    CAHDElvFr: money(),
     VolVtHDElvUE: qty(),
     CAHDElvUE: money(),
     VolVtHDElvAu: qty(),
