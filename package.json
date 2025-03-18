@@ -44,8 +44,6 @@
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "pino": "^9.6.0",
-    "pino-pretty": "^13.0.0",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.3",
     "svelte": "^5.0.0",
@@ -67,7 +65,9 @@
     "drizzle-zod": "^0.7.0",
     "postgres": "^3.4.5",
     "tsx": "^4.19.3",
-    "yoctocolors": "^2.1.1"
+    "yoctocolors": "^2.1.1",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0"
   },
   "overrides": {
     "cookie": "^1.0.2",
