@@ -10,7 +10,7 @@
   "scripts": {
     "build": "vite build",
     "start": "node build",
-    "dev": "vite dev",
+    "dev": "vite dev | pino-pretty",
     "preview": "vite preview",
     "prepare": "husky && (svelte-kit sync || echo '')",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -44,6 +44,8 @@
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.3",
     "svelte": "^5.0.0",

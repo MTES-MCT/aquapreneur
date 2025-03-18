@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/sveltekit';
+import logger from 'pino';
 
 import { sequence } from '@sveltejs/kit/hooks';
 
@@ -25,6 +26,9 @@ Sentry.init({
 export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
+  console.log('hooks.server', event.url.pathname);
+  console.info('hello console');
+  logger().info('hello pino');
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
     event.locals.utilisateur = null;

@@ -1,9 +1,13 @@
 <script lang="ts">
+  import logger from 'pino';
+
   import { enhance } from '$app/forms';
 
   import ProconnectButton from '$lib/components/proconnect-button.svelte';
 
   const { data } = $props();
+  console.info('hello console frontend');
+  logger().info('hello pino frontend');
 </script>
 
 {#if data?.utilisateur}
