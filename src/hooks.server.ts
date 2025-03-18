@@ -28,7 +28,15 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
   console.log('hooks.server', event.url.pathname);
   console.info('hello console');
-  logger({ transport: { target: 'pino-pretty' } }).info('hello pino');
+  console.info('[INFO] hello console 2');
+  logger({
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        ignore: 'time,pid,hostname'
+      }
+    }
+  }).info('hello pino');
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
     event.locals.utilisateur = null;
