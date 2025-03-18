@@ -1,5 +1,5 @@
 import { Column, desc } from 'drizzle-orm';
-import type { PgTable } from 'drizzle-orm/pg-core';
+import type { AnyPgTable } from 'drizzle-orm/pg-core';
 import { reset } from 'drizzle-seed';
 
 import { expect, test } from '@playwright/test';
@@ -21,9 +21,10 @@ import { generateApiToken } from '$utils';
 
 let validAuthToken: string;
 
-async function getLastById<T extends PgTable>(table: T) {
+async function getLastById<T extends AnyPgTable>(table: T) {
   if ('id' in table) {
     const id = table.id as Column;
+    //@ts-expect-error TODO: corriger le type de `table`
     return (await db.select().from(table).orderBy(desc(id)).limit(1))[0];
   } else {
     throw Error('This table doesn’t have an `id` field');
