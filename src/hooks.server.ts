@@ -8,7 +8,6 @@ import {
   PUBLIC_SENTRY_TRACE_SAMPLE_RATE
 } from '$env/static/public';
 
-import audit from '$utils/audit';
 import * as logger from '$utils/logger';
 
 import {
@@ -25,6 +24,10 @@ Sentry.init({
   environment: PUBLIC_SENTRY_ENVIRONMENT
 });
 
+const audit = (msg: string, auditContext = {}) => {
+  console.log('[AUDIT]', msg, logger.stringify(auditContext));
+};
+
 export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
@@ -37,14 +40,18 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   //     }
   //   }
   // }
+  const startTime = new Date().getTime();
+  console.log(event);
   const r = event.request;
   const h = r.headers;
   const logContext = {
-    requestId: h.get('x-request-id'),
-    ipAddress: h.get('x-real-ip') || event.getClientAddress(),
     method: r.method,
-    userAgent: h.get('user-agent'),
-    url: r.url
+    host: event.url.host,
+    request_id: h.get('x-request-id'),
+    from: h.get('x-real-ip') || event.getClientAddress(),
+    protocol: event.url.protocol,
+    referer: h.get('referer'),
+    user_agent: h.get('user-agent')
   };
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
@@ -77,8 +84,13 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
     userId: utilisateur?.id
   };
   event.locals.audit = (msg) => audit(msg, auditContext);
-
-  logger.canonical(auditContext);
-  return resolve(event);
+  const response = await resolve(event);
+  logger.canonical({
+    status: response.status,
+    duration: ((new Date().getTime() - startTime) / 1000).toString() + 's',
+    // bytes
+    ...auditContext
+  });
+  return response;
 });
 export const handleError = Sentry.handleErrorWithSentry();
