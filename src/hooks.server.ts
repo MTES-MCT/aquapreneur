@@ -41,7 +41,7 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   //   }
   // }
   const startTime = new Date().getTime();
-  console.log(event);
+  // console.log(event);
   const r = event.request;
   const h = r.headers;
   const logContext = {
