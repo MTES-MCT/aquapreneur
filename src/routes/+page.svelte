@@ -1,11 +1,13 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import { enhance } from '$app/forms';
 
   import ProconnectButton from '$lib/components/proconnect-button.svelte';
 
   const { data } = $props();
   console.log('data in page.svelte', data);
-  console.info('hello console frontend');
+  if (browser) console.info('hello console frontend');
+  else console.info('hello console ssr');
 </script>
 
 {#if data?.utilisateur}
