@@ -46,7 +46,7 @@ export const canonical = (
   duration: string
 ) => {
   const r = event.request;
-  const h = event.request.headers;
+  const h = r.headers;
   const u = event.url;
   const data = {
     request_id: getRequestId(),
@@ -55,14 +55,14 @@ export const canonical = (
     method: r.method,
     status,
     duration,
-    host: event.url.host,
+    host: u.host,
     path: u.pathname + u.search,
     from: h.get('x-real-ip'),
     protocol: u.protocol.substring(0, u.protocol.length - 1),
     referer: h.get('referer'),
     user_agent: h.get('user-agent')
   };
-  console.log(`[CANON]`, stringify(data));
+  console.log(`[CANONICAL]`, stringify(data));
 };
 
 export const debug = (msg: string, extra: object = {}) => {

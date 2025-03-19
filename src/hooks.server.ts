@@ -25,10 +25,6 @@ Sentry.init({
   environment: PUBLIC_SENTRY_ENVIRONMENT
 });
 
-const audit = (msg: string, auditContext = {}) => {
-  console.log('[AUDIT]', msg, logger.stringify(auditContext));
-};
-
 const handleAuth = async (event: RequestEvent) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
