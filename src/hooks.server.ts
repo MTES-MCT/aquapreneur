@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/sveltekit';
 
+import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 import {
@@ -28,75 +29,46 @@ const audit = (msg: string, auditContext = {}) => {
   console.log('[AUDIT]', msg, logger.stringify(auditContext));
 };
 
-export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
+const handleAuth = async (event: RequestEvent) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
 
-  // logger.info('hello logger', { test: 'value' });
-  //   {
-  //   transport: {
-  //     options: {
-  //       ignore: 'time,pid,hostname'
-  //     }
-  //   }
-  // }
-  const startTime = new Date().getTime();
-  const r = event.request;
-  const h = r.headers;
-  const u = event.url;
-  const logContext = {
-    method: r.method,
-    host: event.url.host,
-    path: u.pathname + u.search,
-    request_id: h.get('x-request-id'),
-    from: h.get('x-real-ip'),
-    protocol: u.protocol.substring(0, u.protocol.length - 1),
-    referer: h.get('referer'),
-    user_agent: h.get('user-agent')
-  };
-  const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
-  if (token === null) {
-    event.locals.utilisateur = null;
-    event.locals.session = null;
-    const auditContext = {
-      // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-      ...logContext,
-      sessionId: null,
-      userId: null
-    };
-    event.locals.audit = (msg) => audit(msg, auditContext);
-    const response = await resolve(event);
-    logger.canonical({
-      status: response.status,
-      duration: ((new Date().getTime() - startTime) / 1000).toString() + 's',
-      // bytes
-      ...auditContext
-    });
-    return response;
-  }
+  let session = null;
+  let utilisateur = null;
 
-  const { session, utilisateur } = await validateSessionToken(token);
-  if (session !== null) {
-    setSessionTokenCookie(event.cookies, token, session.dateExpiration);
-  } else {
-    deleteSessionTokenCookie(event.cookies);
+  const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
+  if (token !== null) {
+    ({ session, utilisateur } = await validateSessionToken(token));
+    if (session !== null) {
+      setSessionTokenCookie(event.cookies, token, session.dateExpiration);
+    } else {
+      deleteSessionTokenCookie(event.cookies);
+    }
   }
+  return { session, utilisateur };
+};
+
+export const appHandle: Handle = async ({ event, resolve }) => {
+  const startTime = new Date().getTime();
+
+  const { session, utilisateur } = await handleAuth(event);
+
   event.locals.utilisateur = utilisateur;
   event.locals.session = session;
-  const auditContext = {
-    // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-    ...logContext,
-    sessionId: session?.id,
-    userId: utilisateur?.id
-  };
-  event.locals.audit = (msg) => audit(msg, auditContext);
+
   const response = await resolve(event);
-  logger.canonical({
-    status: response.status,
-    duration: ((new Date().getTime() - startTime) / 1000).toString() + 's',
-    // bytes
-    ...auditContext
-  });
+
+  logger.canonical(
+    event,
+    event.locals.utilisateur?.id,
+    event.locals.session?.id,
+    response.status,
+    ((new Date().getTime() - startTime) / 1000).toString() + 's'
+  );
+
   return response;
-});
+};
+
+export const handle = sequence(Sentry.sentryHandle(), appHandle);
+
 export const handleError = Sentry.handleErrorWithSentry();

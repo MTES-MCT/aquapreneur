@@ -8,7 +8,7 @@ declare global {
     interface Locals {
       utilisateur: Utilisateur | null;
       session: Session | null;
-      audit: (str) => void;
+      requestId: string | null;
     }
     // interface PageData {}
     // interface PageState {}

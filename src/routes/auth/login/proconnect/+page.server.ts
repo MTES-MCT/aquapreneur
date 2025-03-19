@@ -4,6 +4,8 @@ import { redirect } from '@sveltejs/kit';
 
 import { PROCONNECT_AUTHORIZATION_ENDPOINT, PROCONNECT_DOMAIN } from '$env/static/private';
 
+import * as logger from '$utils/logger';
+
 import { proconnect } from '$lib/server/auth/proconnect';
 
 import { OIDC_STATE_COOKIE_NAME } from '$lib/constants';
@@ -37,6 +39,14 @@ export const actions = {
         'idp_id'
       ]
     );
+
+    logger.debug('debug message');
+
+    logger.info('info message');
+
+    logger.warn('warn message');
+
+    logger.error('error message');
 
     event.cookies.set(OIDC_STATE_COOKIE_NAME, state, {
       path: '/',

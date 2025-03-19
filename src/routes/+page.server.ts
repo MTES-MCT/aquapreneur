@@ -1,5 +1,7 @@
+import * as logger from '$utils/logger';
+
 export const load = (event) => {
-  event.locals.audit('audit msg from +page.server.ts');
+  logger.audit('audit msg from +page.server.ts');
 
   return {
     utilisateur: event.locals.utilisateur
