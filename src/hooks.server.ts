@@ -44,13 +44,15 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   // console.log(event);
   const r = event.request;
   const h = r.headers;
+  const u = event.url;
   const logContext = {
     method: r.method,
     host: event.url.host,
+    path: u.pathname + u.search,
     request_id: h.get('x-request-id'),
     from: h.get('x-real-ip') || event.getClientAddress(),
-    protocol: event.url.protocol,
-    referer: h.get('referer'),
+    protocol: u.protocol.substring(0, u.protocol.length - 1),
+    referer: h.get('http-referer') || '-',
     user_agent: h.get('user-agent')
   };
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
@@ -64,9 +66,14 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
       userId: null
     };
     event.locals.audit = (msg) => audit(msg, auditContext);
-
-    logger.canonical(auditContext);
-    return resolve(event);
+    const response = await resolve(event);
+    logger.canonical({
+      status: response.status,
+      duration: ((new Date().getTime() - startTime) / 1000).toString() + 's',
+      // bytes
+      ...auditContext
+    });
+    return response;
   }
 
   const { session, utilisateur } = await validateSessionToken(token);
