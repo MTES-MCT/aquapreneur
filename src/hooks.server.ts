@@ -25,7 +25,8 @@ Sentry.init({
 });
 
 export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
-  // console.log(event);
+  console.log(event);
+  console.log(event.request.headers);
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
   // console.log(event);
