@@ -43,10 +43,19 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   //     }
   //   }
   // }
+
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
     event.locals.utilisateur = null;
     event.locals.session = null;
+    event.locals.auditContext = {
+      // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
+      requestId: event.request.headers.get('x-request-id'),
+      sessionId: null,
+      userId: null,
+      ipAddress: event.getClientAddress()
+    };
+    logger.canonical(event.locals.auditContext);
     return resolve(event);
   }
 
@@ -58,8 +67,6 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   }
   event.locals.session = session;
   event.locals.utilisateur = utilisateur;
-  console.log(event.request.headers);
-  console.log(event.request.headers.get('x-request-id'));
   event.locals.auditContext = {
     // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
     requestId: event.request.headers.get('x-request-id'),
@@ -67,9 +74,8 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
     userId: utilisateur?.id,
     ipAddress: event.getClientAddress()
   };
-  console.log('before canonical');
+
   logger.canonical(event.locals.auditContext);
-  console.log('after canonical');
   return resolve(event);
 });
 export const handleError = Sentry.handleErrorWithSentry();

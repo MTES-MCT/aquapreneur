@@ -5,9 +5,6 @@
   import ProconnectButton from '$lib/components/proconnect-button.svelte';
 
   const { data } = $props();
-  console.log('data in page.svelte', data);
-  if (browser) console.info('hello console frontend');
-  else console.info('hello console ssr');
 </script>
 
 {#if data?.utilisateur}
