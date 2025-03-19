@@ -54,10 +54,16 @@ export const appHandle: Handle = async ({ event, resolve }) => {
 
   const response = await resolve(event);
 
+  // session.id est un hachage sha256, donc non réversible. On préfère cependant
+  // ne faire apparaitre que ses premiers caractères dans les logs.
+  const shortSessionId = event.locals.session?.id
+    ? event.locals.session.id.substring(0, 7)
+    : undefined;
+
   logger.canonical(
     event,
     event.locals.utilisateur?.id,
-    event.locals.session?.id,
+    shortSessionId,
     response.status,
     ((new Date().getTime() - startTime) / 1000).toString() + 's'
   );

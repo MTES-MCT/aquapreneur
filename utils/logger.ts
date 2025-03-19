@@ -41,7 +41,7 @@ export const log = (level: logLevels, msg: string, extra: object = {}) => {
 export const canonical = (
   event: RequestEvent,
   userId: number | undefined,
-  sessionId: string | undefined,
+  shortSessionId: string | undefined,
   status: number,
   duration: string
 ) => {
@@ -51,7 +51,7 @@ export const canonical = (
   const data = {
     request_id: getRequestId(),
     user_id: userId,
-    session_id: sessionId,
+    session_id: shortSessionId,
     method: r.method,
     status,
     duration,
