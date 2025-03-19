@@ -1,11 +1,7 @@
-import audit from '$utils/audit';
-
 export const load = (event) => {
-  console.log('auditContext', event.locals.auditContext);
-  audit('audit msg from +page.server.ts', event.locals.auditContext);
+  event.locals.audit('audit msg from +page.server.ts');
 
   return {
-    utilisateur: event.locals.utilisateur,
-    auditContext: event.locals.auditContext
+    utilisateur: event.locals.utilisateur
   };
 };

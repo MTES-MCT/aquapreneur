@@ -8,6 +8,7 @@ import {
   PUBLIC_SENTRY_TRACE_SAMPLE_RATE
 } from '$env/static/public';
 
+import audit from '$utils/audit';
 import * as logger from '$utils/logger';
 
 import {
@@ -25,17 +26,10 @@ Sentry.init({
 });
 
 export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
-  // console.log(event);
-  // console.log(event.request.headers);
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
-  // console.log(event);
-  // console.log(event.getClientAddress());
-  // audit('my audit msg');
-  // console.log('hooks.server', event.url.pathname);
-  // console.info('hello console');
-  // console.info('[INFO] hello console 2');
-  logger.info('hello logger', { test: 'value' });
+
+  // logger.info('hello logger', { test: 'value' });
   //   {
   //   transport: {
   //     options: {
@@ -43,19 +37,28 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   //     }
   //   }
   // }
-
+  const r = event.request;
+  const h = r.headers;
+  const logContext = {
+    requestId: h.get('x-request-id'),
+    ipAddress: h.get('x-real-ip') || event.getClientAddress(),
+    method: r.method,
+    userAgent: h.get('user-agent'),
+    url: r.url
+  };
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
     event.locals.utilisateur = null;
     event.locals.session = null;
-    event.locals.auditContext = {
+    const auditContext = {
       // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-      requestId: event.request.headers.get('x-request-id'),
+      ...logContext,
       sessionId: null,
-      userId: null,
-      ipAddress: event.getClientAddress()
+      userId: null
     };
-    logger.canonical(event.locals.auditContext);
+    event.locals.audit = (msg) => audit(msg, auditContext);
+
+    logger.canonical(auditContext);
     return resolve(event);
   }
 
@@ -65,17 +68,17 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   } else {
     deleteSessionTokenCookie(event.cookies);
   }
-  event.locals.session = session;
   event.locals.utilisateur = utilisateur;
-  event.locals.auditContext = {
+  event.locals.session = session;
+  const auditContext = {
     // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-    requestId: event.request.headers.get('x-request-id'),
+    ...logContext,
     sessionId: session?.id,
-    userId: utilisateur?.id,
-    ipAddress: event.getClientAddress()
+    userId: utilisateur?.id
   };
+  event.locals.audit = (msg) => audit(msg, auditContext);
 
-  logger.canonical(event.locals.auditContext);
+  logger.canonical(auditContext);
   return resolve(event);
 });
 export const handleError = Sentry.handleErrorWithSentry();
