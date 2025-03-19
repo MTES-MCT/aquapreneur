@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/sveltekit';
-import logger from 'pino';
 
 import { sequence } from '@sveltejs/kit/hooks';
 
@@ -8,6 +7,8 @@ import {
   PUBLIC_SENTRY_ENVIRONMENT,
   PUBLIC_SENTRY_TRACE_SAMPLE_RATE
 } from '$env/static/public';
+
+import * as logger from '$utils/logger';
 
 import {
   deleteSessionTokenCookie,
@@ -24,19 +25,23 @@ Sentry.init({
 });
 
 export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
+  // console.log(event);
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
-  console.log('hooks.server', event.url.pathname);
-  console.info('hello console');
-  console.info('[INFO] hello console 2');
-  logger({
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        ignore: 'time,pid,hostname'
-      }
-    }
-  }).info('hello pino');
+  // console.log(event);
+  // console.log(event.getClientAddress());
+  // audit('my audit msg');
+  // console.log('hooks.server', event.url.pathname);
+  // console.info('hello console');
+  // console.info('[INFO] hello console 2');
+  logger.info('hello logger', { test: 'value' });
+  //   {
+  //   transport: {
+  //     options: {
+  //       ignore: 'time,pid,hostname'
+  //     }
+  //   }
+  // }
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
   if (token === null) {
     event.locals.utilisateur = null;
@@ -50,9 +55,16 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   } else {
     deleteSessionTokenCookie(event.cookies);
   }
-
   event.locals.session = session;
   event.locals.utilisateur = utilisateur;
+  event.locals.auditContext = {
+    // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
+    requestId: event.request.headers.get('x-request-id'),
+    sessionId: session?.id,
+    userId: utilisateur?.id,
+    ipAddress: event.getClientAddress()
+  };
+  logger.canonical(event.locals.auditContext);
   return resolve(event);
 });
 export const handleError = Sentry.handleErrorWithSentry();
