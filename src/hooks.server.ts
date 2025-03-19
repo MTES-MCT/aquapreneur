@@ -41,7 +41,6 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
   //   }
   // }
   const startTime = new Date().getTime();
-  // console.log(event);
   const r = event.request;
   const h = r.headers;
   const u = event.url;
@@ -50,9 +49,9 @@ export const handle = sequence(Sentry.sentryHandle(), async ({ event, resolve })
     host: event.url.host,
     path: u.pathname + u.search,
     request_id: h.get('x-request-id'),
-    from: h.get('x-real-ip') || event.getClientAddress(),
+    from: h.get('x-real-ip'),
     protocol: u.protocol.substring(0, u.protocol.length - 1),
-    referer: h.get('http-referer') || '-',
+    referer: h.get('referer'),
     user_agent: h.get('user-agent')
   };
   const token = event.cookies.get(SESSION_COOKIE_NAME) ?? null;
