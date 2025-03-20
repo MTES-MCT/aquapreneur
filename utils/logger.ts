@@ -60,6 +60,7 @@ export const canonical = (
     status,
     user_id: userId,
     session_id: shortSessionId,
+    request_start: startTime,
     duration,
     from: h.get('x-real-ip'),
     protocol: h.get('x-forwarded-proto'),
