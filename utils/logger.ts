@@ -48,10 +48,11 @@ export const canonical = (
   const h = r.headers;
   const u = event.url;
 
-  const startTime = h.get('x-request-start');
-  const duration = startTime
-    ? ((new Date().getTime() - Number.parseFloat(startTime)) / 1000).toString() + 's'
+  const requestStartHeader = h.get('x-request-start');
+  const startTimeMs = requestStartHeader
+    ? Number.parseFloat(requestStartHeader.substring(2)) * 1000
     : null;
+  const duration = startTimeMs ? (new Date().getTime() - startTimeMs).toString() + 's' : null;
 
   const data = {
     request_id: getRequestId(),
@@ -60,7 +61,8 @@ export const canonical = (
     status,
     user_id: userId,
     session_id: shortSessionId,
-    request_start: startTime,
+    request_start: requestStartHeader,
+    start_time_ms: startTimeMs,
     duration,
     from: h.get('x-real-ip'),
     protocol: h.get('x-forwarded-proto'),
