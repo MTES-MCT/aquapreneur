@@ -45,8 +45,6 @@ const handleAuth = async (event: RequestEvent) => {
 };
 
 export const appHandle: Handle = async ({ event, resolve }) => {
-  const startTime = new Date().getTime();
-
   const { session, utilisateur } = await handleAuth(event);
 
   event.locals.utilisateur = utilisateur;
@@ -60,13 +58,7 @@ export const appHandle: Handle = async ({ event, resolve }) => {
     ? event.locals.session.id.substring(0, 7)
     : undefined;
 
-  logger.canonical(
-    event,
-    event.locals.utilisateur?.id,
-    shortSessionId,
-    response.status,
-    ((new Date().getTime() - startTime) / 1000).toString() + 's'
-  );
+  logger.canonical(event, event.locals.utilisateur?.id, shortSessionId, response.status);
 
   return response;
 };
