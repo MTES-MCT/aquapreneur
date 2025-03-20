@@ -42,25 +42,31 @@ export const canonical = (
   event: RequestEvent,
   userId: number | undefined,
   shortSessionId: string | undefined,
-  status: number,
-  duration: string
+  status: number
 ) => {
   const r = event.request;
   const h = r.headers;
   const u = event.url;
+
+  const requestStartHeader = h.get('x-request-start');
+  const startTimeMs = requestStartHeader
+    ? Number.parseFloat(requestStartHeader.substring(2)) * 1000
+    : null;
+  const duration = startTimeMs ? (new Date().getTime() - startTimeMs).toString() + 'ms' : null;
+
   const data = {
     request_id: getRequestId(),
-    user_id: userId,
-    session_id: shortSessionId,
+    path: u.pathname + u.search,
     method: r.method,
     status,
+    user_id: userId,
+    session_id: shortSessionId,
     duration,
-    host: u.host,
-    path: u.pathname + u.search,
     from: h.get('x-real-ip'),
-    protocol: u.protocol.substring(0, u.protocol.length - 1),
-    referer: h.get('referer'),
-    user_agent: h.get('user-agent')
+    protocol: h.get('x-forwarded-proto'),
+    host: u.host,
+    user_agent: h.get('user-agent'),
+    referer: h.get('referer')
   };
   console.log(`[CANONICAL]`, stringify(data));
 };
