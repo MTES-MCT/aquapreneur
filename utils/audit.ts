@@ -7,7 +7,7 @@ export default (msg: string, extra: object = {}, exception: unknown = undefined)
     ? isHttpError(exception)
       ? { error_status: exception.status, error_message: exception.body.message }
       : { error: (exception as Error).toString() }
-    : undefined;
+    : {};
   log('AUDIT', msg, {
     ...parsedExc,
     ...extra

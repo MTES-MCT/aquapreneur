@@ -28,7 +28,7 @@ export const stringify = function (data: object) {
 
     line += key + '=' + value + ' ';
   }
-  return line.substring(0, line.length - 1);
+  return line.substring(0, line.length - 1).replaceAll('\n', '\\n');
 };
 
 export const getRequestId = () => {
