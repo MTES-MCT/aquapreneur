@@ -1,5 +1,3 @@
-import { sha256 } from '@oslojs/crypto/sha2';
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import { eq } from 'drizzle-orm';
 
 import type { Cookies } from '@sveltejs/kit';
@@ -8,6 +6,10 @@ import { db } from '$db';
 
 import { sessions, utilisateurs } from '$db/schema/auth';
 import type { Session, Utilisateur } from '$db/schema/auth';
+
+import { getSecureRandomString, getSha256Digest, getShortId } from '$utils';
+
+import audit from '$utils/audit';
 
 import { SESSION_COOKIE_NAME } from '$lib/constants';
 
@@ -19,15 +21,11 @@ export type SessionValidationResult =
   | { session: Session; utilisateur: Utilisateur }
   | { session: null; utilisateur: null };
 
-export function generateSessionToken(): string {
-  const bytes = new Uint8Array(20);
-  crypto.getRandomValues(bytes);
-  const token = encodeBase32LowerCaseNoPadding(bytes);
-  return token;
-}
-
-export async function createSession(token: string, idUtilisateur: number): Promise<Session> {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+export async function createSession(
+  idUtilisateur: number
+): Promise<{ sessionToken: string; session: Session }> {
+  const sessionToken = getSecureRandomString(20);
+  const sessionId = getSha256Digest(sessionToken);
 
   const data = {
     id: sessionId,
@@ -35,11 +33,14 @@ export async function createSession(token: string, idUtilisateur: number): Promi
     // Expiration à 30 jours
     dateExpiration: new Date(Date.now() + 1000 * 3600 * 24 * 30)
   };
-  return (await db.insert(sessions).values(data).returning())[0];
+  return {
+    sessionToken,
+    session: (await db.insert(sessions).values(data).returning())[0]
+  };
 }
 
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const sessionId = getSha256Digest(token);
   const result = await db
     .select({ utilisateur: utilisateurs, session: sessions })
     .from(sessions)
@@ -51,9 +52,17 @@ export async function validateSessionToken(token: string): Promise<SessionValida
   const { utilisateur, session } = result[0];
   if (Date.now() >= session.dateExpiration.getTime()) {
     await db.delete(sessions).where(eq(sessions.id, session.id));
+
+    audit('Suppression d’une session expirée', {
+      user_id: utilisateur.id,
+      session_id: getShortId(session.id),
+      session_expiration: session.dateExpiration.toISOString()
+    });
+
     return { session: null, utilisateur: null };
   }
   if (Date.now() >= session.dateExpiration.getTime() - 1000 * 3600 * 24 * 15) {
+    const originalDate = session.dateExpiration;
     session.dateExpiration = new Date(Date.now() + 1000 * 3600 * 24 * 30);
     await db
       .update(sessions)
@@ -61,16 +70,19 @@ export async function validateSessionToken(token: string): Promise<SessionValida
         dateExpiration: session.dateExpiration
       })
       .where(eq(sessions.id, session.id));
+
+    audit('Prolongation d’une session expirant dans moins de 15 jours', {
+      user_id: utilisateur.id,
+      session_id: getShortId(session.id),
+      previous_session_expiration: originalDate.toISOString(),
+      new_session_expiration: session.dateExpiration.toISOString()
+    });
   }
   return { session, utilisateur };
 }
 
-export async function invalidateSession(idSession: string): Promise<void> {
+export async function invalidateSession(idSession: string) {
   await db.delete(sessions).where(eq(sessions.id, idSession));
-}
-
-export async function invalidateAllSessions(idUtilisateur: number): Promise<void> {
-  await db.delete(sessions).where(eq(sessions.idUtilisateur, idUtilisateur));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

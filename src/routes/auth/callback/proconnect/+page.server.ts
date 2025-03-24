@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/sveltekit';
 import { type OAuth2Tokens, decodeIdToken } from 'arctic';
 import { eq } from 'drizzle-orm';
 
@@ -14,12 +13,13 @@ import { db } from '$db';
 
 import { type Utilisateur, utilisateurs } from '$db/schema/auth';
 
+import { getShortId } from '$utils';
+
+import audit from '$utils/audit';
+import * as logger from '$utils/logger';
+
 import { proconnect } from '$lib/server/auth/proconnect';
-import {
-  createSession,
-  generateSessionToken,
-  setSessionTokenCookie
-} from '$lib/server/auth/session';
+import { createSession, setSessionTokenCookie } from '$lib/server/auth/session';
 
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
@@ -35,10 +35,12 @@ export const load = async ({ url, cookies }) => {
   const state = url.searchParams.get('state');
   const storedState = cookies.get(OIDC_STATE_COOKIE_NAME) ?? null;
   if (code === null || state === null || storedState === null) {
+    logger.error('`code` ou `state` ou `storedState` manquants');
     error(400);
   }
 
   if (state !== storedState) {
+    logger.error('`state` différent de  `storedState`');
     error(400);
   }
 
@@ -51,9 +53,7 @@ export const load = async ({ url, cookies }) => {
       null
     );
   } catch (err) {
-    // `code` ou client_id/client_secret incorrects
-    console.error(err);
-    Sentry.captureException(err);
+    logger.exception(err, '`code` ou `client_id/client_secret` incorrects');
     error(400);
   }
 
@@ -80,6 +80,7 @@ export const load = async ({ url, cookies }) => {
 
   const payload = decodeIdToken(await userInfoResponse.text());
   if (!('email' in payload && typeof payload.email === 'string')) {
+    logger.error('IdToken OIDC invalide');
     error(400);
   }
   const query = await db
@@ -100,10 +101,13 @@ export const load = async ({ url, cookies }) => {
     utilisateur = query[0];
   }
 
-  const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, utilisateur.id);
-  setSessionTokenCookie(cookies, sessionToken, session.dateExpiration);
+  const { sessionToken, session } = await createSession(utilisateur.id);
 
+  setSessionTokenCookie(cookies, sessionToken, session.dateExpiration);
+  audit('Nouvelle session créée ', {
+    user_id: utilisateur.id,
+    session_id: getShortId(session.id)
+  });
   // eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
   cookies.delete(OIDC_STATE_COOKIE_NAME, { path: '/' });
 

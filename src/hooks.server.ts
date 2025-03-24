@@ -9,6 +9,9 @@ import {
   PUBLIC_SENTRY_TRACE_SAMPLE_RATE
 } from '$env/static/public';
 
+import { getShortId } from '$utils';
+
+import audit from '$utils/audit';
 import * as logger from '$utils/logger';
 
 import {
@@ -28,7 +31,6 @@ Sentry.init({
 const handleAuth = async (event: RequestEvent) => {
   // Validation de la session
   // Basé sur https://lucia-auth.com/sessions/cookies/sveltekit
-
   let session = null;
   let utilisateur = null;
 
@@ -38,6 +40,7 @@ const handleAuth = async (event: RequestEvent) => {
     if (session !== null) {
       setSessionTokenCookie(event.cookies, token, session.dateExpiration);
     } else {
+      audit('Suppression d’un cookie de session invalide');
       deleteSessionTokenCookie(event.cookies);
     }
   }
@@ -47,6 +50,10 @@ const handleAuth = async (event: RequestEvent) => {
 export const appHandle: Handle = async ({ event, resolve }) => {
   const { session, utilisateur } = await handleAuth(event);
 
+  if (utilisateur?.id !== session?.idUtilisateur) {
+    logger.error('Utilisateur et session inconsistents');
+  }
+
   event.locals.utilisateur = utilisateur;
   event.locals.session = session;
 
@@ -54,9 +61,7 @@ export const appHandle: Handle = async ({ event, resolve }) => {
 
   // session.id est un hachage sha256, donc non réversible. On préfère cependant
   // ne faire apparaitre que ses premiers caractères dans les logs.
-  const shortSessionId = event.locals.session?.id
-    ? event.locals.session.id.substring(0, 7)
-    : undefined;
+  const shortSessionId = getShortId(event.locals.session?.id);
 
   logger.canonical(event, event.locals.utilisateur?.id, shortSessionId, response.status);
 

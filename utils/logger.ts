@@ -1,8 +1,10 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import * as Sentry from '@sentry/sveltekit';
+
+import { type RequestEvent } from '@sveltejs/kit';
 
 import { getRequestEvent } from '$app/server';
 
-type logLevels = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'AUDIT';
+type logLevels = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'EXCEPTION' | 'AUDIT';
 
 // Adapté de https://github.com/csquared/node-logfmt/blob/master/lib/stringify.js
 export const stringify = function (data: object) {
@@ -34,8 +36,22 @@ export const getRequestId = () => {
   return getRequestEvent().request.headers.get('x-request-id');
 };
 
+export const getRequestPath = () => {
+  // https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
+  const url = getRequestEvent().url;
+  return url.pathname; //+ url.search;
+};
+
 export const log = (level: logLevels, msg: string, extra: object = {}) => {
-  console.log(`[${level}]`, msg, stringify({ request_id: getRequestId(), ...extra }));
+  console.log(
+    stringify({
+      level,
+      path: getRequestPath(),
+      msg,
+      ...extra,
+      request_id: getRequestId()
+    })
+  );
 };
 
 export const canonical = (
@@ -55,8 +71,9 @@ export const canonical = (
   const duration = startTimeMs ? (new Date().getTime() - startTimeMs).toString() + 'ms' : null;
 
   const data = {
-    request_id: getRequestId(),
-    path: u.pathname + u.search,
+    level: 'CANONICAL',
+    path: getRequestPath(),
+
     method: r.method,
     status,
     user_id: userId,
@@ -66,9 +83,10 @@ export const canonical = (
     protocol: h.get('x-forwarded-proto'),
     host: u.host,
     user_agent: h.get('user-agent'),
-    referer: h.get('referer')
+    referer: h.get('referer'),
+    request_id: getRequestId()
   };
-  console.log(`[CANONICAL]`, stringify(data));
+  console.log(stringify(data));
 };
 
 export const debug = (msg: string, extra: object = {}) => {
@@ -86,8 +104,10 @@ export const warn = (msg: string, extra: object = {}) => {
 
 export const error = (msg: string, extra: object = {}) => {
   log('ERROR', msg, extra);
+  Sentry.captureException(new Error(msg));
 };
 
-export const audit = (msg: string, extra: object = {}) => {
-  log('AUDIT', msg, extra);
+export const exception = (ex: unknown, msg: string = '', extra: object = {}) => {
+  log('EXCEPTION', msg, { error: (ex as Error).toString(), ...extra });
+  Sentry.captureException(ex);
 };

@@ -1,21 +1,8 @@
-import { encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
+import { sha256 } from '@oslojs/crypto/sha2';
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import crypto from 'crypto';
 import decamelize from 'decamelize';
 import type { ZodError } from 'zod';
-
-export const sha256Digest = (str: string) => {
-  const hash = crypto.createHash('sha256');
-  hash.update(str);
-  return hash.digest('hex');
-};
-
-export const generateApiToken = (numBytes = 32) => {
-  const token = encodeBase32LowerCaseNoPadding(crypto.randomBytes(numBytes));
-  return {
-    token,
-    digest: sha256Digest(token)
-  };
-};
 
 export const formatZodError = (err: ZodError) => {
   return err.issues
@@ -24,4 +11,29 @@ export const formatZodError = (err: ZodError) => {
       return `${paths}: ${issue.message}`;
     })
     .join('\n');
+};
+
+export const getShortId = (sessionId: string | undefined) => {
+  return sessionId ? sessionId.substring(0, 7) : undefined;
+};
+
+export const getSecureRandomString = (size: number): string => {
+  // https://lucia-auth.com/sessions/basic-api/drizzle-orm
+  const bytes = new Uint8Array(size);
+  crypto.getRandomValues(bytes);
+  const token = encodeBase32LowerCaseNoPadding(bytes);
+  return token;
+};
+
+export const getSha256Digest = (token: string): string => {
+  // https://lucia-auth.com/sessions/basic-api/drizzle-orm
+  return encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+};
+
+export const generateApiToken = (numBytes = 32) => {
+  const token = getSecureRandomString(numBytes);
+  return {
+    token,
+    digest: getSha256Digest(token)
+  };
 };
