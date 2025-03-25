@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  import { page } from '$app/state';
+
   import Footer from '$lib/components/footer.svelte';
   import Header from '$lib/components/header.svelte';
 
@@ -13,6 +15,10 @@
 
   let { children } = $props();
 </script>
+
+<svelte:head>
+  <title>{page.data.title}</title>
+</svelte:head>
 
 <Header></Header>
 
