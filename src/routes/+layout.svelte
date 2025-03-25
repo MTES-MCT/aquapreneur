@@ -17,8 +17,10 @@
 <Header></Header>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
-<main role="main" id="content" class="fr-container">
-  {@render children()}
+<main role="main" id="content">
+  <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-2v fr-mb-md-8v">
+    {@render children()}
+  </div>
 </main>
 
 <Footer></Footer>
