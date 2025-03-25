@@ -3,6 +3,8 @@
 
   import Header from '$lib/header.svelte';
 
+  import Footer from '$lib/components/footer.svelte';
+
   import '../app.css';
 
   onMount(async () => {
@@ -19,3 +21,5 @@
 <main role="main" id="content" class="fr-container">
   {@render children()}
 </main>
+
+<Footer></Footer>
