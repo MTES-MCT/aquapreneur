@@ -60,17 +60,17 @@
       </div>
     </div>
     <div class="fr-footer__bottom">
-      <!-- <ul class="fr-footer__bottom-list">
+      <ul class="fr-footer__bottom-list">
         <li class="fr-footer__bottom-item">
-          <a class="fr-footer__bottom-link" href="#">Accessibilité : non conforme</a>
+          <a class="fr-footer__bottom-link" href="/accessibilite">Accessibilité : non conforme</a>
         </li>
-        <li class="fr-footer__bottom-item">
+        <!-- <li class="fr-footer__bottom-item">
           <a class="fr-footer__bottom-link" href="#">Mentions légales</a>
         </li>
         <li class="fr-footer__bottom-item">
           <a class="fr-footer__bottom-link" href="#">Données personnelles</a>
-        </li>
-      </ul> -->
+        </li> -->
+      </ul>
       <div class="fr-footer__bottom-copy">
         <p>
           Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de
