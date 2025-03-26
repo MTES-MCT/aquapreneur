@@ -1,5 +1,11 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
+
+  import type { Utilisateur } from '$db/schema/auth';
+
   import LogoAP from '$lib/assets/logo-aquapreneur.svg';
+
+  const { utilisateur }: { utilisateur: Utilisateur | null } = $props();
 </script>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
@@ -47,7 +53,19 @@
           <div class="fr-header__tools-links">
             <ul class="fr-btns-group">
               <li>
-                <a class="fr-btn fr-icon-lock-line" href="/"> Se connecter </a>
+                {#if utilisateur}
+                  <form method="post" action="/auth/logout/proconnect" use:enhance>
+                    <button class="fr-btn fr-btn--sm fr-icon-lock-unlock-line fr-btn--tertiary"
+                      >Se deconnecter</button
+                    >
+                  </form>
+                {:else}
+                  <form method="post" action="/auth/login/proconnect" use:enhance>
+                    <button class="fr-btn fr-btn--sm fr-icon-lock-line fr-btn--tertiary"
+                      >Se connecter</button
+                    >
+                  </form>
+                {/if}
               </li>
             </ul>
           </div>
