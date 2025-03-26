@@ -18,7 +18,9 @@
 </script>
 
 <svelte:head>
-  <title>{page.data.title}</title>
+  {#if page.data.title}
+    <title>{page.data.title}</title>
+  {/if}
 </svelte:head>
 
 <Skiplink></Skiplink>
@@ -27,7 +29,7 @@
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
 <main role="main" id="contenu">
-  <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-2v fr-mb-md-8v">
+  <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-8v">
     {@render children()}
   </div>
 </main>
