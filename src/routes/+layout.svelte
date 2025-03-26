@@ -13,14 +13,14 @@
     await import('@gouvfr/dsfr/dist/dsfr.module.js');
   });
 
-  let { children } = $props();
+  let { data, children } = $props();
 </script>
 
 <svelte:head>
   <title>{page.data.title}</title>
 </svelte:head>
 
-<Header></Header>
+<Header utilisateur={data.utilisateur}></Header>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
 <main role="main" id="content">

@@ -1,6 +1,5 @@
-export const load = ({ data }) => {
+export const load = () => {
   return {
-    utilisateur: data.utilisateur,
     title: 'Aquapreneur'
   };
 };
