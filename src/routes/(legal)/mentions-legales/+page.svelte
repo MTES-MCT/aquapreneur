@@ -11,19 +11,26 @@
     <h2>Éditeur de la plateforme</h2>
 
     <p>
-      La plateforme « Aquapreneur » est éditée par la Fabrique numérique et la Direction générale
-      des affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) du ministère de la Transition
-      écologique et de la Cohésion des territoires, située :
+      La plateforme « Aquapreneur » est éditée par <span class="hl">
+        la Fabrique numérique et la Direction générale des affaires maritimes, de la pêche et de
+        l’aquaculture (DGAMPA) du ministère de la Transition écologique et de la Cohésion des
+        territoires
+      </span>, située :
     </p>
     <p>
-      1 place Carpeaux <br />
+      <span class="li">1 place Carpeaux</span> <br />
       92800 Puteaux<br />
       France
     </p>
 
     <h2>Directeur de la publication</h2>
 
-    <p>Éric BANEL, Directeur général des affaires maritimes, de la pêche et de l’aquaculture.</p>
+    <p>
+      <span class="hl"
+        >Éric BANEL, Directeur général des affaires maritimes, de la pêche et de l’aquaculture. (si
+        c’est la Fabrique qui édite, le dir.pub. doit sans doute faire partie de la Fabrique)</span
+      >
+    </p>
 
     <h2>Hébergement de la plateforme</h2>
 
@@ -32,7 +39,8 @@
       Scalingo<br />
       13 rue Jacques Peirotes <br />
       67000 Strasbourg<br />
-      France
+      France<br />
+      <ExternalLink href="https://scalingo.com/fr" title="Scalingo">Scalingo</ExternalLink>
     </p>
 
     <h2>Accessibilité</h2>
@@ -47,7 +55,7 @@
     <p>
       Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une
       fonctionnalité du site, merci de nous en faire part : <a href="mailto:aquapreneur@mer.gouv.fr"
-        >aquapreneur@mer.gouv.fr</a
+        ><span class="hl">aquapreneur@mer.gouv.fr</span></a
       >.
     </p>
     <p>
