@@ -67,9 +67,14 @@
         <li class="fr-footer__bottom-item">
           <a class="fr-footer__bottom-link" href="/mentions-legales">Mentions légales</a>
         </li>
-        <!--<li class="fr-footer__bottom-item">
-          <a class="fr-footer__bottom-link" href="#">Données personnelles</a>
-        </li> -->
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="/cgu">Conditions générales d’utilisation</a>
+        </li>
+        <li class="fr-footer__bottom-item">
+          <a class="fr-footer__bottom-link" href="/politique-de-confidentialite"
+            >Données personnelles</a
+          >
+        </li>
       </ul>
       <div class="fr-footer__bottom-copy">
         <p>

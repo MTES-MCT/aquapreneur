@@ -1,2 +1,10 @@
 @import '@gouvfr/dsfr/dist/dsfr.min';
 @import '@gouvfr/dsfr/dist/utility/utility.min';
+
+/* 
+  Le DSFR ne définit pas de marge autour des listes, ce qui est gênant
+  quand une liste est suivie d’un titre.
+*/
+ul + :is(h1, h2, h3, h4, h5, h6) {
+  margin-top: 1.5rem;
+}
