@@ -36,7 +36,7 @@
 
     <p>
       « Administration » : le Ministère de la transition écologique et de la cohésion des
-      territoires qui édite et gère le Service.
+      territoires qui édite et gère le Service. <span class="hl">+ MASA ?</span>
     </p>
     <p>« Agent Public » : personnel de l’Administration.</p>
     <p>
@@ -57,8 +57,8 @@
     <p>Le Visiteur peut :</p>
     <ul>
       <li>
-        Connaître l’état des concessions aquacoles sur le territoire français (trois catégories «
-        disponible », « indisponible » et « état inconnu ») ;
+        Connaître l’état des concessions aquacoles sur le territoire français (trois catégories
+        « disponible », « indisponible » et « état inconnu ») ;
       </li>
       <li>
         Consulter les informations administratives et techniques publiques relatives aux titres
@@ -75,12 +75,18 @@
 
     <p>
       Pendant sa phase d’expérimentation les fonctionnalités du Service ne sont accessibles qu’aux
-      titulaires d’une concession aquacole dans les départements de la Charente Maritime, de
-      l’Hérault, de la Manche et du Finistère. Le Service est également accessible aux agents
-      publics qui créeront une entreprise fictive afin d’expérimenter la plateforme.
+      titulaires d’une concession aquacole dans les départements de la <span class="hl">
+        Charente Maritime, de l’Hérault, de la Manche et du Finistère
+      </span>. Le Service est également accessible aux agents publics qui créeront une entreprise
+      fictive afin d’expérimenter la plateforme.
     </p>
 
-    <p>En plus des fonctionnalités Visiteur, tout Utilisateur peut :</p>
+    <p>
+      En plus des fonctionnalités Visiteur, tout Utilisateur peut :
+      <span class="hl"
+        >(ici on a un mix de fonctionnalités prévues à court-terme / à plus long-terme)</span
+      >
+    </p>
 
     <h4>a. Modifier les informations de l’entreprise</h4>
 
@@ -88,7 +94,7 @@
       La création d’une entreprise et l’assignation à un utilisateur est réalisé par les
       administrateurs. Ensuite l’utilisateur peut renseigner/modifier les informations suivantes :
       nom de l’entreprise, numéro de SIREN, numéro de TVA intracommunautaire, adresse de
-      l’entreprise, numéro de téléphone, adresse électronique et non et prénom.
+      l’entreprise, numéro de téléphone, adresse électronique et nom et prénom.
     </p>
     <p>
       L’Utilisateur titulaire du compte peut inviter d’autres Utilisateurs pour gérer tout ou partie
@@ -106,13 +112,15 @@
       l’article R. 923-11 du code rural et de la pêche maritime et son acte de concession.
     </p>
     <p>
-      L’Utilisateur peut depuis l’onglet « mon entreprise » déterminer le flux des notifications
-      afin d’être informé de ses obligations télédéclaratives.
+      <span class="hl">
+        L’Utilisateur peut depuis l’onglet « mon entreprise » déterminer le flux des notifications
+        afin d’être informé de ses obligations télédéclaratives.
+      </span>
     </p>
     <h4>c. Déposer une demande de concession aquacole</h4>
     <p>
       L’Utilisateur peut soumettre une demande de concession aquacole pour instruction des services
-      de l’Etat. Cette fonctionnalité n’est pas effective dans la phase d’expérimentation.
+      de l’État. Cette fonctionnalité n’est pas effective dans la phase d’expérimentation.
     </p>
 
     <h4>d. Données économiques de l’entreprise</h4>
@@ -120,15 +128,18 @@
     <p>
       L’Utilisateur peut renseigner diverses données économiques relatives à son entreprise
       (caractéristiques de l’entreprise, revenus, dépenses, capital et investissement, bilan
-      économique et statistiques). Cette fonctionnalité n’est pas effective dans la phase
-      d’expérimentation.
+      économique et statistiques). <span class="hl">
+        Cette fonctionnalité n’est pas effective dans la phase d’expérimentation.
+      </span>
     </p>
 
     <h4>e. Aide</h4>
 
     <p>
-      L’Utilisateur dispose d’une page « Aide » pour l’assister dans l’utilisation du Service. Cette
-      fonctionnalité n’est pas effective dans la phase d’expérimentation.
+      <span class="hl">
+        L’Utilisateur dispose d’une page « Aide » pour l’assister dans l’utilisation du Service.
+        Cette fonctionnalité n’est pas effective dans la phase d’expérimentation.
+      </span>
     </p>
 
     <h4>f. Informations réglementaires</h4>
@@ -142,14 +153,18 @@
 
     <p>
       Tout Agent Public en charge de l’instruction des concessions et des contrôles des
-      exploitations aquacoles peut créer gratuitement un compte sur le Service. Dans la phase
-      d’expérimentation, l’Agent Public ne pourra administrer l’outil mais simplement se mettre à la
-      place d’un exploitant aquacole.
+      exploitations aquacoles peut créer gratuitement un compte sur le Service. <span class="hl">
+        Dans la phase d’expérimentation, l’Agent Public ne pourra administrer l’outil mais
+        simplement se mettre à la place d’un exploitant aquacole.
+      </span>
     </p>
     <p>
-      Le Service est accessible au moyen d’un identifiant et d’un mot de passe librement déterminé
-      par l’Agent Public. Tout Agent Public inscrit peut se désinscrire depuis les paramètres de son
-      compte. Celle-ci est effective dans un délai deux mois suivant la demande.
+      <span class="hl">
+        Le Service est accessible au moyen d’un identifiant et d’un mot de passe librement déterminé
+        par l’Agent Public. Tout Agent Public inscrit peut se désinscrire depuis les paramètres de
+        son compte. Celle-ci est effective dans un délai deux mois suivant la demande. (remplacer ça
+        par un texte spécifique à ProConnect)
+      </span>
     </p>
 
     <h2>Article 5. Qualité des données publiées</h2>
@@ -167,9 +182,12 @@
       des erreurs ou omissions.
     </p>
     <p>
-      Toute personne qui constate une erreur ou omission parmi ces données peut la signaler à l’aide
-      du bouton « signaler une erreur » disponible pour chacune des fiches du titre minier concerné.
-      Cette fonctionnalité n’est pas disponible dans la phase d’expérimentation.
+      <span class="hl">
+        Toute personne qui constate une erreur ou omission parmi ces données peut la signaler à
+        l’aide du bouton « signaler une erreur » disponible pour chacune des fiches du titre minier
+        concerné. Cette fonctionnalité n’est pas disponible dans la phase d’expérimentation. (vient
+        sans doute de Camino. À adapter ?)
+      </span>
     </p>
     <p>
       Si un titre est manquant, toute personne peut le signaler à
@@ -183,9 +201,11 @@
     <h3>6.1 L’Utilisateur</h3>
 
     <p>
-      L’Utilisateur s’assure de garder son mot de passe secret. Toute divulgation du mot de passe,
-      quelle que soit sa forme, est interdite. Il assume les risques liés à l’utilisation de son
-      identifiant et mot de passe.
+      <span class="hl">
+        L’Utilisateur s’assure de garder son mot de passe secret. Toute divulgation du mot de passe,
+        quelle que soit sa forme, est interdite. Il assume les risques liés à l’utilisation de son
+        identifiant et mot de passe. (pertinent avec ProConnect ?)
+      </span>
     </p>
     <p>
       Il s’engage à ne pas commercialiser les données reçues et à ne pas les communiquer à des tiers
@@ -202,14 +222,18 @@
       des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
     </p>
     <p>
-      Pendant la phase d’expérimentation, les utilisateurs sont autorisés à saisir des informations
-      de manière libre. Il est important de noter que les données ainsi saisies sont destinées à des
-      fins de test, d’apprentissage, et de validation des hypothèses de valeur. Cependant, il est
-      impératif de souligner que ces déclarations ne remplacent en aucun cas les obligations
-      réglementaires liées à la concession, telles que l’obligation de déclaration de production
-      envers les DDTM (conformément à l’article R. 923-11 du code rural et de la pêche maritime et
-      son acte de concession). De plus, ces déclarations ne se substituent pas aux exigences de
-      l’enquête statistique du SSP.
+      <span class="hl">
+        Pendant la phase d’expérimentation, les utilisateurs sont autorisés à saisir des
+        informations de manière libre. Il est important de noter que les données ainsi saisies sont
+        destinées à des fins de test, d’apprentissage, et de validation des hypothèses de valeur.
+        Cependant, il est impératif de souligner que ces déclarations ne remplacent en aucun cas les
+        obligations réglementaires liées à la concession
+      </span>, telles que l’obligation de déclaration de production envers les DDTM (conformément à
+      l’article R. 923-11 du code rural et de la pêche maritime et son acte de concession).
+      <span class="hl">
+        De plus, ces déclarations ne se substituent pas aux exigences de l’enquête statistique du
+        SSP.
+      </span>
     </p>
     <p>
       L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux
@@ -242,9 +266,11 @@
     <h3>6.3 L’Agent Public</h3>
 
     <p>
-      L’Agent public s’assure de garder son mot de passe secret. Toute divulgation du mot de passe,
-      quelle que soit sa forme, est interdite. Il assume les risques liés à l’utilisation de son
-      identifiant et mot de passe.
+      <span class="hl">
+        L’Agent public s’assure de garder son mot de passe secret. Toute divulgation du mot de
+        passe, quelle que soit sa forme, est interdite. Il assume les risques liés à l’utilisation
+        de son identifiant et mot de passe. (ProConnect ?)
+      </span>
     </p>
     <p>
       L’Agent Public s’engage à respecter les présentes CGU et leurs éventuelles modifications. La

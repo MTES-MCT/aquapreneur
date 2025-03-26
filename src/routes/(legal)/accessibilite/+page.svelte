@@ -7,7 +7,7 @@
     <h1>Déclaration d’accessibilité</h1>
     <p class="fr-text--xs">Établie le 25 mars 2025.</p>
     <p>
-      <span>La Fabrique numérique du MTE</span>
+      La <span class="hl">Fabrique numérique du MTE</span>
       s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du
       11 février 2005.
     </p>
@@ -20,11 +20,12 @@
         >
           Schéma pluriannuel
         </ExternalLink>
+        <span class="hl">(trouver de quel schéma pluriannuel nous dépendons)</span>
       </li>
     </ul>
     <p></p>
     <p>
-      Cette déclaration d’accessibilité s’applique à
+      Cette déclaration d’accessibilité s’applique à :<br />
       <strong>Aquapreneur</strong> (https://aquapreneur.beta.gouv.fr).
     </p>
     <h2>État de conformité</h2>
@@ -51,6 +52,7 @@
       <li>CSS</li>
       <li>JavaScript</li>
     </ul>
+
     <h2>Amélioration et contact</h2>
     <p>
       Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le
@@ -60,8 +62,9 @@
     <ul>
       <li>
         Courriel&nbsp;:
-        <a href="mailto:aquapreneur@beta.gouv.fr">aquapreneur@beta.gouv.fr</a>
+        <a href="mailto:aquapreneur@mer.gouv.fr"><span class="hl">aquapreneur@mer.gouv.fr</span></a>
       </li>
+      <li><span class="hl">idéalement ajouter a minima également une adresse postale</span></li>
     </ul>
     <h2>Voie de recours</h2>
     <p>
