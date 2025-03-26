@@ -19,7 +19,7 @@
 
 <svelte:head>
   {#if page.data.title}
-    <title>{page.data.title}</title>
+    <title>{page.data.title} | Aquapreneur</title>
   {/if}
 </svelte:head>
 
