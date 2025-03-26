@@ -30,6 +30,20 @@ export default ts.config(
       parserOptions: {
         parser: ts.parser
       }
+    },
+    rules: {
+      // eslint va également détecter les espaces insécables dans la partie HTML
+      // des fichiers .svelte, où ils sont légitimes
+      'no-irregular-whitespace': ['off']
+    }
+  },
+  {
+    files: ['**/*.ts'],
+
+    rules: {
+      // eslint va également détecter les espaces insécables dans la partie HTML
+      // des fichiers .svelte, où ils sont légitimes
+      'no-irregular-whitespace': ['warn', { skipComments: true, skipTemplates: true }]
     }
   },
   {
@@ -39,11 +53,6 @@ export default ts.config(
     rules: {
       'drizzle/enforce-delete-with-where': 'error',
       'drizzle/enforce-update-with-where': 'error'
-    }
-  },
-  {
-    rules: {
-      'no-irregular-whitespace': ['warn', { skipComments: true, skipTemplates: true }]
     }
   }
 );

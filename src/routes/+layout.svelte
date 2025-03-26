@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import Header from '$lib/header.svelte';
+  import { page } from '$app/state';
+
+  import Footer from '$lib/components/footer.svelte';
+  import Header from '$lib/components/header.svelte';
+  import Skiplink from '$lib/components/skiplink.svelte';
 
   import '../app.css';
 
@@ -10,12 +14,24 @@
     await import('@gouvfr/dsfr/dist/dsfr.module.js');
   });
 
-  let { children } = $props();
+  let { data, children } = $props();
 </script>
 
-<Header></Header>
+<svelte:head>
+  {#if page.data.title}
+    <title>{page.data.title} | Aquapreneur</title>
+  {/if}
+</svelte:head>
+
+<Skiplink></Skiplink>
+
+<Header utilisateur={data.utilisateur}></Header>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
-<main role="main" id="content" class="fr-container">
-  {@render children()}
+<main role="main" id="contenu">
+  <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-8v">
+    {@render children()}
+  </div>
 </main>
+
+<Footer></Footer>
