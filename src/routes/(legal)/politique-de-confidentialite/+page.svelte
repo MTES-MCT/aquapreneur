@@ -9,8 +9,8 @@
 
     <p>
       Le responsable de traitement s’engage à ce que la collecte et le traitement de vos données
-      personnelles, effectués à partir du site soient conformes au règlement européen n° 2016/679
-      général sur la protection des données du 27 avril 2016 dit « RGPD » et à la loi n° 78-17
+      personnelles, effectués à partir du site soient conformes au règlement européen n° 2016/679
+      général sur la protection des données du 27 avril 2016 dit « RGPD » et à la loi n° 78-17
       relative à l’informatique, aux fichiers et aux libertés dite « LIL ».
     </p>
 
@@ -30,16 +30,18 @@
 
     <h2>I - Responsable de traitement</h2>
     <p>
-      Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche et
-      de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
-      Territoires, représenté par son directeur général, Eric Banel.
+      <span class="hl">
+        Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche
+        et de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
+        Territoires, représenté par son directeur général, Eric Banel.
+      </span>
     </p>
 
     <h2>II - Finalités</h2>
 
     <p>
       Aquapreneur est un service numérique qui traite des données à caractère personnel pour les
-      raisons suivantes :
+      raisons suivantes : <span class="hl">à synchroniser avec l’article 2 des CGU ?</span>
     </p>
     <ul>
       <li>Créer d’un compte et connexion au Service ;</li>
@@ -68,13 +70,20 @@
         affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) par l’article 9 du décret n°
         2008-680, l’article 9.1.1 de l’arrêté du 9 juillet 2008 portant organisation des
         administrations centrales des ministères chargés de la transition écologique, de la cohésion
-        des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime.
+        des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime. <span
+          class="hl">et MASA ?</span
+        >
       </li>
     </ul>
 
     <h2>IV - Catégories de données</h2>
 
-    <p>Aquapreneur traite les données à caractère personnel suivantes :</p>
+    <p>
+      Aquapreneur traite les données à caractère personnel suivantes : <span class="hl"
+        >(sans doute à préciser/finaliser. Manque les données comptables. Est-ce que tout ça rentre
+        dans “données à caractère personnel” ?)</span
+      >
+    </p>
 
     <ul>
       <li>
@@ -100,6 +109,7 @@
 
     <h2>V - Durée de conservation</h2>
 
+    <p><span class="hl">À revoir</span></p>
     <div
       class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
       id="table-sm-component"
@@ -130,10 +140,10 @@
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
-                    2 ans en base active puis archivage intermédiaire jusqu’au terme de la durée de
-                    la concession avant archivage définitif (article R. 923-10 du code rural et de
-                    la pêche administrative prévoit que la durée maximum d’une concession est de 35
-                    ans)</td
+                    <span class="hl">2 ans en base active (on exploite les 5 dernières années)</span
+                    > puis archivage intermédiaire jusqu’au terme de la durée de la concession avant
+                    archivage définitif (article R. 923-10 du code rural et de la pêche administrative
+                    prévoit que la durée maximum d’une concession est de 35 ans)</td
                   >
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
@@ -159,7 +169,7 @@
     </ul>
     <p>
       Pour les exercer, contactez-nous à : <a href="mailto:aquapreneur@mer.gouv.fr"
-        >aquapreneur@mer.gouv.fr</a
+        ><span class="hl">aquapreneur@mer.gouv.fr</span></a
       >.
     </p>
 
@@ -187,8 +197,9 @@
     <p>Les accès aux données sont strictement encadrés et juridiquement justifiés.</p>
 
     <p>
-      Durant la phase d’expérimentation, seuls les agents publics de l’équipe Aquapreneur (DGAMPA et
-      SSP) ont accès aux données.
+      Durant la phase d’expérimentation, seuls <span class="hl"
+        >les agents publics (ajouter les presta)</span
+      > de l’équipe Aquapreneur (DGAMPA et SSP) ont accès aux données.
     </p>
     <p>Suite à l’expérimentation, les personnes suivantes vont avoir accès aux données :</p>
 
@@ -210,13 +221,13 @@
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données de création de compte et de connexion </td>
                   <td>
-                    Agents publics et personnels habilités des services déconcentrés de l’Etat</td
+                    Agents publics et personnels habilités des services déconcentrés de l’État</td
                   >
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données d’entreprise </td>
                   <td>
-                    Agents publics et personnels habilités des services déconcentrés de l’Etat<br />
+                    Agents publics et personnels habilités des services déconcentrés de l’État<br />
                     Les personnels habilités de l’Agence Française pour le développement et la promotion
                     de l’agriculture biologique (Agence Bio)</td
                   >
@@ -224,13 +235,13 @@
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données relatives aux demandes d’une concession aquacole </td>
                   <td>
-                    Agents publics et personnels habilités des services déconcentrés de l’Etat
+                    Agents publics et personnels habilités des services déconcentrés de l’État
                   </td>
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
-                    Agents publics et personnels habilités des services déconcentrés de l’Etat.</td
+                    Agents publics et personnels habilités des services déconcentrés de l’État</td
                   >
                 </tr>
               </tbody>
@@ -248,6 +259,8 @@
 
     <h2>VIII - Mesures de sécurité</h2>
 
+    <p><span class="hl">à vérifier/compléter</span></p>
+
     <p>Nous mettons en place plusieurs mesures pour sécuriser les données :</p>
     <ul>
       <li>Stockage des données en base de données ;</li>
@@ -262,11 +275,12 @@
 
     <h2>IX - Qui nous aide à traiter les données ?</h2>
     <p>
-      Certaines des données sont envoyées à d’autres acteurs, appelés “sous-traitants de données”,
+      Certaines des données sont envoyées à d’autres acteurs, appelés « sous-traitants de données »,
       pour qu’ils nous aident à les manipuler. Nous nous assurons qu’ils respectent strictement le
       RGPD et qu’ils apportent des garanties suffisantes en matière de sécurité.
     </p>
 
+    <p><span class="hl">À mettre à jour</span></p>
     <div
       class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
       id="table-sm-component"
@@ -343,6 +357,7 @@
       la libre circulation des données.
     </p>
 
+    <p><span class="hl">À mettre à jour</span></p>
     <div
       class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
       id="table-sm-component"
@@ -364,7 +379,7 @@
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> _ga_BBLE8XKC73 </td>
                   <td> Mesure d’audience pour la cartographie</td>
-                  <td> Etats-Unis </td>
+                  <td> États-Unis </td>
                   <td> Aucune donnée à caractère personnel</td>
                 </tr>
               </tbody>
@@ -377,7 +392,10 @@
     <p>
       À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre
       ordinateur en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment
-      sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
+      sur <span class="hl"
+        >Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera
+        (mettre à jour !)</span
+      >).
     </p>
     <p>
       Pour aller plus loin, vous pouvez consulter les fiches proposées par la Commission Nationale
