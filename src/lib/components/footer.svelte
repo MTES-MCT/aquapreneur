@@ -1,5 +1,5 @@
 <!-- svelte-ignore a11y_no_redundant_roles -->
-<footer class="fr-footer" role="contentinfo" id="footer-7475">
+<footer class="fr-footer" role="contentinfo" id="footer">
   <div class="fr-container">
     <div class="fr-footer__body">
       <div class="fr-footer__brand fr-enlarge-link">
