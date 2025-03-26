@@ -1,0 +1,2460 @@
+{
+  "id": "7b648116-f8a1-4221-b4a6-a3d111edf970",
+  "prevId": "bb6d8b84-c7d1-4820-aa08-c5c096ad1152",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.bilans": {
+      "name": "bilans",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "name": "bilans_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
+          }
+        },
+        "id_evt_journal_reqs": {
+          "name": "id_evt_journal_reqs",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_creation": {
+          "name": "date_creation",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "date_maj": {
+          "name": "date_maj",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "siret": {
+          "name": "siret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nom": {
+          "name": "nom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "debut_exercice": {
+          "name": "debut_exercice",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fin_exercice": {
+          "name": "fin_exercice",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_bilan": {
+          "name": "date_bilan",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stck_vol_h_nais_mi": {
+          "name": "stck_vol_h_nais_mi",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_h_nais_mi": {
+          "name": "stck_val_h_nais_mi",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_h_nais_kg": {
+          "name": "stck_vol_h_nais_kg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_h_nais_kg": {
+          "name": "stck_val_h_nais_kg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_hd_elv": {
+          "name": "stck_vol_hd_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_hd_elv": {
+          "name": "stck_val_hd_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_h_elv": {
+          "name": "stck_vol_h_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_h_elv": {
+          "name": "stck_val_h_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_h_conso": {
+          "name": "stck_vol_h_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_h_conso": {
+          "name": "stck_val_h_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_m_naiss": {
+          "name": "stck_vol_m_naiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_m_naiss": {
+          "name": "stck_val_m_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_md_elv": {
+          "name": "stck_vol_md_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_md_elv": {
+          "name": "stck_val_md_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_m_conso": {
+          "name": "stck_vol_m_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_m_conso": {
+          "name": "stck_val_m_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_p_naiss": {
+          "name": "stck_vol_p_naiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_p_naiss": {
+          "name": "stck_val_p_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_pd_elv": {
+          "name": "stck_vol_pd_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_pd_elv": {
+          "name": "stck_val_pd_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_p_conso": {
+          "name": "stck_vol_p_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_p_conso": {
+          "name": "stck_val_p_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_g_larv": {
+          "name": "stck_vol_g_larv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_g_larv": {
+          "name": "stck_val_g_larv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_g_preg": {
+          "name": "stck_vol_g_preg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_g_preg": {
+          "name": "stck_val_g_preg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_g_conso": {
+          "name": "stck_vol_g_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_g_conso": {
+          "name": "stck_val_g_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lib_pois": {
+          "name": "lib_pois",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_pois": {
+          "name": "stck_vol_pois",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_pois": {
+          "name": "stck_val_pois",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lib_a_coq": {
+          "name": "lib_a_coq",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_a_coq": {
+          "name": "stck_vol_a_coq",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_a_coq": {
+          "name": "stck_val_a_coq",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lib_ap_aqua": {
+          "name": "lib_ap_aqua",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_vol_ap_aqua": {
+          "name": "stck_vol_ap_aqua",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stck_val_ap_aqua": {
+          "name": "stck_val_ap_aqua",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_naiss_fr": {
+          "name": "vol_vt_h_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_naiss_fr": {
+          "name": "cah_naiss_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_naiss_ue": {
+          "name": "vol_vt_h_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_naiss_ue": {
+          "name": "cah_naiss_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_naiss_au": {
+          "name": "vol_vt_h_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_naiss_au": {
+          "name": "cah_naiss_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_hd_elv_fr": {
+          "name": "vol_vt_hd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cahd_elv_fr": {
+          "name": "cahd_elv_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_hd_elv_ue": {
+          "name": "vol_vt_hd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cahd_elv_ue": {
+          "name": "cahd_elv_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_hd_elv_au": {
+          "name": "vol_vt_hd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cahd_elv_au": {
+          "name": "cahd_elv_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_elv_fr": {
+          "name": "vol_vt_h_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_elv_fr": {
+          "name": "cah_elv_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_elv_ue": {
+          "name": "vol_vt_h_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_elv_ue": {
+          "name": "cah_elv_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_elv_au": {
+          "name": "vol_vt_h_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_elv_au": {
+          "name": "cah_elv_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_pro": {
+          "name": "vol_vt_h_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_pro": {
+          "name": "cah_co_fr_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_det": {
+          "name": "vol_vt_h_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_det": {
+          "name": "cah_co_fr_det",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_gros": {
+          "name": "vol_vt_h_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_gros": {
+          "name": "cah_co_fr_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_pce": {
+          "name": "vol_vt_h_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_pce": {
+          "name": "cah_co_fr_pce",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_pgms": {
+          "name": "vol_vt_h_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_pgms": {
+          "name": "cah_co_fr_pgms",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_fr_deg": {
+          "name": "vol_vt_h_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_fr_deg": {
+          "name": "cah_co_fr_deg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_ue_pro": {
+          "name": "vol_vt_h_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_ue_pro": {
+          "name": "cah_co_ue_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_ue_gros": {
+          "name": "vol_vt_h_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_ue_gros": {
+          "name": "cah_co_ue_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_au_pro": {
+          "name": "vol_vt_h_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_au_pro": {
+          "name": "cah_co_au_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_co_au_gros": {
+          "name": "vol_vt_h_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_co_au_gros": {
+          "name": "cah_co_au_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_h_fr_n_cat": {
+          "name": "vol_vt_h_fr_n_cat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cah_fr_n_cat": {
+          "name": "cah_fr_n_cat",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_naiss_fr": {
+          "name": "vol_vt_m_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_naiss_fr": {
+          "name": "cam_naiss_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_naiss_ue": {
+          "name": "vol_vt_m_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_naiss_ue": {
+          "name": "cam_naiss_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_naiss_au": {
+          "name": "vol_vt_m_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_naiss_au": {
+          "name": "cam_naiss_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_md_elv_fr": {
+          "name": "vol_vt_md_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "camd_elv_fr": {
+          "name": "camd_elv_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_md_elv_ue": {
+          "name": "vol_vt_md_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "camd_elv_ue": {
+          "name": "camd_elv_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_md_elv_au": {
+          "name": "vol_vt_md_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "camd_elv_au": {
+          "name": "camd_elv_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_pro": {
+          "name": "vol_vt_m_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_pro": {
+          "name": "cam_co_fr_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_det": {
+          "name": "vol_vt_m_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_det": {
+          "name": "cam_co_fr_det",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_gros": {
+          "name": "vol_vt_m_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_gros": {
+          "name": "cam_co_fr_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_pce": {
+          "name": "vol_vt_m_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_pce": {
+          "name": "cam_co_fr_pce",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_pgms": {
+          "name": "vol_vt_m_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_pgms": {
+          "name": "cam_co_fr_pgms",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_fr_deg": {
+          "name": "vol_vt_m_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_fr_deg": {
+          "name": "cam_co_fr_deg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_ue_pro": {
+          "name": "vol_vt_m_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_ue_pro": {
+          "name": "cam_co_ue_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_ue_gros": {
+          "name": "vol_vt_m_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_ue_gros": {
+          "name": "cam_co_ue_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_au_pro": {
+          "name": "vol_vt_m_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_au_pro": {
+          "name": "cam_co_au_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_co_au_gros": {
+          "name": "vol_vt_m_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_co_au_gros": {
+          "name": "cam_co_au_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_m_fr_n_cat": {
+          "name": "vol_vt_m_fr_n_cat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cam_fr_n_cat": {
+          "name": "cam_fr_n_cat",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_naiss_fr": {
+          "name": "vol_vt_p_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_naiss_fr": {
+          "name": "cap_naiss_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_naiss_ue": {
+          "name": "vol_vt_p_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_naiss_ue": {
+          "name": "cap_naiss_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_naiss_au": {
+          "name": "vol_vt_p_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_naiss_au": {
+          "name": "cap_naiss_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_pd_elv_fr": {
+          "name": "vol_vt_pd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capd_elv_fr": {
+          "name": "capd_elv_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_pd_elv_ue": {
+          "name": "vol_vt_pd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capd_elv_ue": {
+          "name": "capd_elv_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_pd_elv_au": {
+          "name": "vol_vt_pd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capd_elv_au": {
+          "name": "capd_elv_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_pro": {
+          "name": "vol_vt_p_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_pro": {
+          "name": "cap_co_fr_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_det": {
+          "name": "vol_vt_p_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_det": {
+          "name": "cap_co_fr_det",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_gros": {
+          "name": "vol_vt_p_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_gros": {
+          "name": "cap_co_fr_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_pce": {
+          "name": "vol_vt_p_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_pce": {
+          "name": "cap_co_fr_pce",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_pgms": {
+          "name": "vol_vt_p_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_pgms": {
+          "name": "cap_co_fr_pgms",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_fr_deg": {
+          "name": "vol_vt_p_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_fr_deg": {
+          "name": "cap_co_fr_deg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_ue_pro": {
+          "name": "vol_vt_p_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_ue_pro": {
+          "name": "cap_co_ue_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_ue_gros": {
+          "name": "vol_vt_p_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_ue_gros": {
+          "name": "cap_co_ue_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_au_pro": {
+          "name": "vol_vt_p_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_au_pro": {
+          "name": "cap_co_au_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_co_au_gros": {
+          "name": "vol_vt_p_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_co_au_gros": {
+          "name": "cap_co_au_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_p_fr_n_cat": {
+          "name": "vol_vt_p_fr_n_cat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cap_fr_n_cat": {
+          "name": "cap_fr_n_cat",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_naiss_fr": {
+          "name": "vol_vt_g_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_naiss_fr": {
+          "name": "cag_naiss_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_naiss_ue": {
+          "name": "vol_vt_g_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_naiss_ue": {
+          "name": "cag_naiss_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_naiss_au": {
+          "name": "vol_vt_g_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_naiss_au": {
+          "name": "cag_naiss_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_gd_elv_fr": {
+          "name": "vol_vt_gd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cagd_elv_fr": {
+          "name": "cagd_elv_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_gd_elv_ue": {
+          "name": "vol_vt_gd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cagd_elv_ue": {
+          "name": "cagd_elv_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_gd_elv_au": {
+          "name": "vol_vt_gd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cagd_elv_au": {
+          "name": "cagd_elv_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_pro": {
+          "name": "vol_vt_g_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_pro": {
+          "name": "cag_co_fr_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_det": {
+          "name": "vol_vt_g_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_det": {
+          "name": "cag_co_fr_det",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_gros": {
+          "name": "vol_vt_g_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_gros": {
+          "name": "cag_co_fr_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_pce": {
+          "name": "vol_vt_g_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_pce": {
+          "name": "cag_co_fr_pce",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_pgms": {
+          "name": "vol_vt_g_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_pgms": {
+          "name": "cag_co_fr_pgms",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_fr_deg": {
+          "name": "vol_vt_g_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_fr_deg": {
+          "name": "cag_co_fr_deg",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_ue_pro": {
+          "name": "vol_vt_g_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_ue_pro": {
+          "name": "cag_co_ue_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_ue_gros": {
+          "name": "vol_vt_g_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_ue_gros": {
+          "name": "cag_co_ue_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_au_pro": {
+          "name": "vol_vt_g_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_au_pro": {
+          "name": "cag_co_au_pro",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_co_au_gros": {
+          "name": "vol_vt_g_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_co_au_gros": {
+          "name": "cag_co_au_gros",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_g_fr_n_cat": {
+          "name": "vol_vt_g_fr_n_cat",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cag_fr_n_cat": {
+          "name": "cag_fr_n_cat",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_pois_fr": {
+          "name": "vol_vt_pois_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ca_pois_fr": {
+          "name": "ca_pois_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_a_coq_fr": {
+          "name": "vol_vt_a_coq_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caa_coq_fr": {
+          "name": "caa_coq_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_a_coq_ue": {
+          "name": "vol_vt_a_coq_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caa_coq_ue": {
+          "name": "caa_coq_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_a_coq_au": {
+          "name": "vol_vt_a_coq_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caa_coq_au": {
+          "name": "caa_coq_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_ap_aqua_fr": {
+          "name": "vol_vt_ap_aqua_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caap_aqua_fr": {
+          "name": "caap_aqua_fr",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_ap_aqua_ue": {
+          "name": "vol_vt_ap_aqua_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caap_aqua_ue": {
+          "name": "caap_aqua_ue",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_vt_ap_aqua_au": {
+          "name": "vol_vt_ap_aqua_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "caap_aqua_au": {
+          "name": "caap_aqua_au",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_naiss_fr": {
+          "name": "pct_cah_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_naiss_ue": {
+          "name": "pct_cah_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_naiss_au": {
+          "name": "pct_cah_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cahd_elv_fr": {
+          "name": "pct_cahd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cahd_elv_ue": {
+          "name": "pct_cahd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cahd_elv_au": {
+          "name": "pct_cahd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_elv_fr": {
+          "name": "pct_cah_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_elv_ue": {
+          "name": "pct_cah_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_elv_au": {
+          "name": "pct_cah_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_pro": {
+          "name": "pct_cah_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_det": {
+          "name": "pct_cah_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_gros": {
+          "name": "pct_cah_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_pce": {
+          "name": "pct_cah_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_pgms": {
+          "name": "pct_cah_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_fr_deg": {
+          "name": "pct_cah_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_ue_pro": {
+          "name": "pct_cah_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_ue_gros": {
+          "name": "pct_cah_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_au_pro": {
+          "name": "pct_cah_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cah_co_au_gros": {
+          "name": "pct_cah_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_naiss_fr": {
+          "name": "pct_cam_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_naiss_ue": {
+          "name": "pct_cam_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_naiss_au": {
+          "name": "pct_cam_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_camd_elv_fr": {
+          "name": "pct_camd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_camd_elv_ue": {
+          "name": "pct_camd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_camd_elv_au": {
+          "name": "pct_camd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_pro": {
+          "name": "pct_cam_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_det": {
+          "name": "pct_cam_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_gros": {
+          "name": "pct_cam_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_pce": {
+          "name": "pct_cam_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_pgms": {
+          "name": "pct_cam_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_fr_deg": {
+          "name": "pct_cam_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_ue_pro": {
+          "name": "pct_cam_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_ue_gros": {
+          "name": "pct_cam_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_au_pro": {
+          "name": "pct_cam_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cam_co_au_gros": {
+          "name": "pct_cam_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_naiss_fr": {
+          "name": "pct_cap_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_naiss_ue": {
+          "name": "pct_cap_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_naiss_au": {
+          "name": "pct_cap_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_capd_elv_fr": {
+          "name": "pct_capd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_capd_elv_ue": {
+          "name": "pct_capd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_capd_elv_au": {
+          "name": "pct_capd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_pro": {
+          "name": "pct_cap_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_det": {
+          "name": "pct_cap_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_gros": {
+          "name": "pct_cap_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_pce": {
+          "name": "pct_cap_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_pgms": {
+          "name": "pct_cap_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_fr_deg": {
+          "name": "pct_cap_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_ue_pro": {
+          "name": "pct_cap_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_ue_gros": {
+          "name": "pct_cap_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_au_pro": {
+          "name": "pct_cap_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cap_co_au_gros": {
+          "name": "pct_cap_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_naiss_fr": {
+          "name": "pct_cag_naiss_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_naiss_ue": {
+          "name": "pct_cag_naiss_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_naiss_au": {
+          "name": "pct_cag_naiss_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cagd_elv_fr": {
+          "name": "pct_cagd_elv_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cagd_elv_ue": {
+          "name": "pct_cagd_elv_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cagd_elv_au": {
+          "name": "pct_cagd_elv_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_pro": {
+          "name": "pct_cag_co_fr_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_det": {
+          "name": "pct_cag_co_fr_det",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_gros": {
+          "name": "pct_cag_co_fr_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_pce": {
+          "name": "pct_cag_co_fr_pce",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_pgms": {
+          "name": "pct_cag_co_fr_pgms",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_fr_deg": {
+          "name": "pct_cag_co_fr_deg",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_ue_pro": {
+          "name": "pct_cag_co_ue_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_ue_gros": {
+          "name": "pct_cag_co_ue_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_au_pro": {
+          "name": "pct_cag_co_au_pro",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_cag_co_au_gros": {
+          "name": "pct_cag_co_au_gros",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_ca_pois_fr": {
+          "name": "pct_ca_pois_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caa_coq_fr": {
+          "name": "pct_caa_coq_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caa_coq_ue": {
+          "name": "pct_caa_coq_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caa_coq_au": {
+          "name": "pct_caa_coq_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caap_aqua_fr": {
+          "name": "pct_caap_aqua_fr",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caap_aqua_ue": {
+          "name": "pct_caap_aqua_ue",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_caap_aqua_au": {
+          "name": "pct_caap_aqua_au",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ca_tot": {
+          "name": "ca_tot",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ca_ach_rev": {
+          "name": "ca_ach_rev",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arev_d": {
+          "name": "arev_d",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subv": {
+          "name": "subv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sub_invest": {
+          "name": "sub_invest",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "salaire": {
+          "name": "salaire",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mo_ext": {
+          "name": "mo_ext",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ch_soc_non_sal": {
+          "name": "ch_soc_non_sal",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "non_sal": {
+          "name": "non_sal",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "energie": {
+          "name": "energie",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_h_naiss": {
+          "name": "ach_h_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_h_naiss": {
+          "name": "vol_ach_h_naiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_hd_elv": {
+          "name": "ach_hd_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_hd_elv": {
+          "name": "vol_ach_hd_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_h_elv": {
+          "name": "ach_h_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_h_elv": {
+          "name": "vol_ach_h_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_h_conso": {
+          "name": "ach_h_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_h_conso": {
+          "name": "vol_ach_h_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_m_naiss": {
+          "name": "ach_m_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_mnaiss": {
+          "name": "vol_ach_mnaiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_md_elv": {
+          "name": "ach_md_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_md_elv": {
+          "name": "vol_ach_md_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_m_conso": {
+          "name": "ach_m_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_m_conso": {
+          "name": "vol_ach_m_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_p_naiss": {
+          "name": "ach_p_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_pnaiss": {
+          "name": "vol_ach_pnaiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_pd_elv": {
+          "name": "ach_pd_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_pd_elv": {
+          "name": "vol_ach_pd_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_p_conso": {
+          "name": "ach_p_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_p_conso": {
+          "name": "vol_ach_p_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_g_naiss": {
+          "name": "ach_g_naiss",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_gnaiss": {
+          "name": "vol_ach_gnaiss",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_gd_elv": {
+          "name": "ach_gd_elv",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_gd_elv": {
+          "name": "vol_ach_gd_elv",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_g_conso": {
+          "name": "ach_g_conso",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_g_conso": {
+          "name": "vol_ach_g_conso",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_acoq": {
+          "name": "ach_acoq",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_acoq": {
+          "name": "vol_ach_acoq",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ach_ap_aqua": {
+          "name": "ach_ap_aqua",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vol_ach_ap_aqua": {
+          "name": "vol_ach_ap_aqua",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ct_alim": {
+          "name": "ct_alim",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ct_op": {
+          "name": "ct_op",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "repar": {
+          "name": "repar",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amort": {
+          "name": "amort",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ct_fi": {
+          "name": "ct_fi",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prod_fi": {
+          "name": "prod_fi",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capito": {
+          "name": "capito",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ct_excp": {
+          "name": "ct_excp",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prod_excp": {
+          "name": "prod_excp",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "actif": {
+          "name": "actif",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invest": {
+          "name": "invest",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acqui_immo": {
+          "name": "acqui_immo",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cess_immo": {
+          "name": "cess_immo",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dettes": {
+          "name": "dettes",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "emprunts": {
+          "name": "emprunts",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ca_compt": {
+          "name": "ca_compt",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tot_prod": {
+          "name": "tot_prod",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tot_charge": {
+          "name": "tot_charge",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "va": {
+          "name": "va",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ebe": {
+          "name": "ebe",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resultat_courant": {
+          "name": "resultat_courant",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resultat_net": {
+          "name": "resultat_net",
+          "type": "numeric(15, 2)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bilans_id_evt_journal_reqs_journal_requetes_id_fk": {
+          "name": "bilans_id_evt_journal_reqs_journal_requetes_id_fk",
+          "tableFrom": "bilans",
+          "columnsFrom": ["id_evt_journal_reqs"],
+          "tableTo": "journal_requetes",
+          "columnsTo": ["id"],
+          "onUpdate": "no action",
+          "onDelete": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "siret_check": {
+          "name": "siret_check",
+          "value": "\"bilans\".\"siret\" ~ '^\\d{14}$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.dirigeant_es": {
+      "name": "dirigeant_es",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "name": "dirigeant_es_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
+          }
+        },
+        "id_bilan": {
+          "name": "id_bilan",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nom": {
+          "name": "nom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prenom": {
+          "name": "prenom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "annee_naissance": {
+          "name": "annee_naissance",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "genre": {
+          "name": "genre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "annee_entree": {
+          "name": "annee_entree",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diplome": {
+          "name": "diplome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diplome_aquacole": {
+          "name": "diplome_aquacole",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "regime_social": {
+          "name": "regime_social",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taux_travail": {
+          "name": "taux_travail",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dirigeant_es_id_bilan_bilans_id_fk": {
+          "name": "dirigeant_es_id_bilan_bilans_id_fk",
+          "tableFrom": "dirigeant_es",
+          "columnsFrom": ["id_bilan"],
+          "tableTo": "bilans",
+          "columnsTo": ["id"],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.journal_requetes": {
+      "name": "journal_requetes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "name": "journal_requetes_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
+          }
+        },
+        "id_jeton": {
+          "name": "id_jeton",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_creation": {
+          "name": "date_creation",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "version_api": {
+          "name": "version_api",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pathname": {
+          "name": "pathname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "href": {
+          "name": "href",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "methode": {
+          "name": "methode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "journal_requetes_id_jeton_jetons_api_id_fk": {
+          "name": "journal_requetes_id_jeton_jetons_api_id_fk",
+          "tableFrom": "journal_requetes",
+          "columnsFrom": ["id_jeton"],
+          "tableTo": "jetons_api",
+          "columnsTo": ["id"],
+          "onUpdate": "no action",
+          "onDelete": "restrict"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.jetons_api": {
+      "name": "jetons_api",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "name": "jetons_api_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
+          }
+        },
+        "date_creation": {
+          "name": "date_creation",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "hachage": {
+          "name": "hachage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valide": {
+          "name": "valide",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "nom_partenaire": {
+          "name": "nom_partenaire",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "siret_partenaire": {
+          "name": "siret_partenaire",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "courriel_partenaire": {
+          "name": "courriel_partenaire",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "jetons_api_hachage_unique": {
+          "name": "jetons_api_hachage_unique",
+          "columns": ["hachage"],
+          "nullsNotDistinct": false
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "siret_check": {
+          "name": "siret_check",
+          "value": "\"jetons_api\".\"siret_partenaire\" ~ '^\\d{14}$'"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.sessions": {
+      "name": "sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id_utilisateur": {
+          "name": "id_utilisateur",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date_creation": {
+          "name": "date_creation",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "date_expiration": {
+          "name": "date_expiration",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sessions_id_utilisateur_utilisateurs_id_fk": {
+          "name": "sessions_id_utilisateur_utilisateurs_id_fk",
+          "tableFrom": "sessions",
+          "columnsFrom": ["id_utilisateur"],
+          "tableTo": "utilisateurs",
+          "columnsTo": ["id"],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.utilisateurs": {
+      "name": "utilisateurs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "name": "utilisateurs_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
+          }
+        },
+        "date_creation": {
+          "name": "date_creation",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "date_maj": {
+          "name": "date_maj",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "courriel": {
+          "name": "courriel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "views": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

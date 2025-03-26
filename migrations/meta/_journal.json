@@ -15,6 +15,13 @@
       "when": 1741871731635,
       "tag": "0001_conscious_storm",
       "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1743010409959,
+      "tag": "0002_silent_apocalypse",
+      "breakpoints": false
     }
   ]
 }
