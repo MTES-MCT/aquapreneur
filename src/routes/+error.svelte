@@ -32,7 +32,7 @@
           <a class="fr-btn" href="/"> Page d'accueil </a>
         </li>
         <li>
-          <a class="fr-btn fr-btn--secondary" href="mailto:aquapreneur@mer.gouv.fr">
+          <a class="fr-btn fr-btn--secondary" href="mailto:aquapreneur@beta.gouv.fr">
             Contactez-nous
           </a>
         </li>
@@ -74,7 +74,7 @@
       </p>
       <ul class="fr-btns-group fr-btns-group--inline-md">
         <li>
-          <a class="fr-btn fr-btn--secondary" href="mailto:aquapreneur@mer.gouv.fr">
+          <a class="fr-btn fr-btn--secondary" href="mailto:aquapreneur@beta.gouv.fr">
             Contactez-nous
           </a>
         </li>

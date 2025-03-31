@@ -54,8 +54,8 @@
 
     <p>
       Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une
-      fonctionnalité du site, merci de nous en faire part : <a href="mailto:aquapreneur@mer.gouv.fr"
-        ><span class="hl">aquapreneur@mer.gouv.fr</span></a
+      fonctionnalité du site, merci de nous en faire part : <a
+        href="mailto:aquapreneur@beta.gouv.fr">aquapreneur@beta.gouv.fr</a
       >.
     </p>
     <p>

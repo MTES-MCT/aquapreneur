@@ -62,7 +62,7 @@
     <ul>
       <li>
         Courriel&nbsp;:
-        <a href="mailto:aquapreneur@mer.gouv.fr"><span class="hl">aquapreneur@mer.gouv.fr</span></a>
+        <a href="mailto:aquapreneur@beta.gouv.fr">aquapreneur@beta.gouv.fr</a>
       </li>
       <li><span class="hl">idéalement ajouter a minima également une adresse postale</span></li>
     </ul>

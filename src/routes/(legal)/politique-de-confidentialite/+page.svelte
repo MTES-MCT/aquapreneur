@@ -168,8 +168,8 @@
       <li>D’un droit à la limitation du traitement.</li>
     </ul>
     <p>
-      Pour les exercer, contactez-nous à : <a href="mailto:aquapreneur@mer.gouv.fr"
-        ><span class="hl">aquapreneur@mer.gouv.fr</span></a
+      Pour les exercer, contactez-nous à : <a href="mailto:aquapreneur@beta.gouv.fr"
+        >aquapreneur@beta.gouv.fr</a
       >.
     </p>
 
