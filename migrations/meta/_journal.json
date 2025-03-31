@@ -6,21 +6,21 @@
       "idx": 0,
       "version": "7",
       "when": 1741801059894,
-      "tag": "0000_fine_meteorite",
+      "tag": "0000_initial_migration",
       "breakpoints": false
     },
     {
       "idx": 1,
       "version": "7",
       "when": 1741871731635,
-      "tag": "0001_conscious_storm",
+      "tag": "0001_add_missing_bilan_fields",
       "breakpoints": false
     },
     {
       "idx": 2,
       "version": "7",
       "when": 1743010409959,
-      "tag": "0002_silent_apocalypse",
+      "tag": "0002_add_postgis",
       "breakpoints": false
     }
   ]
