@@ -1,3 +1,2 @@
--- Custom SQL migration file, put your code below! --
-CREATE EXTENSION POSTGIS;
+CREATE EXTENSION IF NOT EXISTS POSTGIS;
  
