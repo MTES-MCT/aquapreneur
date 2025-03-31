@@ -14,34 +14,34 @@
       relative à l’informatique, aux fichiers et aux libertés dite « LIL ».
     </p>
 
-    <p>Aquapreneur est un service numérique qui permet de :</p>
+    <p>Aquapreneur est un service numérique qui a pour objectifs de :</p>
 
     <ul>
       <li>
-        Permettre aux titulaires d’une concession d’exploitation aquacole de télédéclarer leurs
-        productions dans les conditions prévues par les textes réglementaires ;
+        Permettre aux titulaires d’une concession d’exploitation aquacole de télévalider leurs
+        productions pré-saisies si les données sont accessibles ou de télédéclarer leurs productions
+        dans les conditions prévues par les textes réglementaires ;
       </li>
       <li>
-        Mettre à disposition des informations administratives et techniques publiques relatives aux
-        concessions des exploitations aquacoles ;
+        Mettre à disposition des informations administratives et techniques partiellement publiques
+        relatives aux concessions des exploitations aquacoles ;
       </li>
-      <li>Proposer une carte interactive des concessions d’exploitation aquacoles.</li>
+      <li>À terme de proposer une carte interactive des concessions d’exploitation aquacoles ;</li>
+      <li>Accompagner les entreprises face aux aléas et aux pertes de production.</li>
     </ul>
 
     <h2>I - Responsable de traitement</h2>
     <p>
-      <span class="hl">
-        Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche
-        et de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
-        Territoires, représenté par son directeur général, Eric Banel.
-      </span>
+      Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche et
+      de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
+      Territoires, représenté par son directeur général, Eric Banel.
     </p>
 
     <h2>II - Finalités</h2>
 
     <p>
       Aquapreneur est un service numérique qui traite des données à caractère personnel pour les
-      raisons suivantes : <span class="hl">à synchroniser avec l’article 2 des CGU ?</span>
+      raisons suivantes :
     </p>
     <ul>
       <li>Créer d’un compte et connexion au Service ;</li>
@@ -70,20 +70,13 @@
         affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) par l’article 9 du décret n°
         2008-680, l’article 9.1.1 de l’arrêté du 9 juillet 2008 portant organisation des
         administrations centrales des ministères chargés de la transition écologique, de la cohésion
-        des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime. <span
-          class="hl">et MASA ?</span
-        >
+        des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime.
       </li>
     </ul>
 
     <h2>IV - Catégories de données</h2>
 
-    <p>
-      Aquapreneur traite les données à caractère personnel suivantes : <span class="hl"
-        >(sans doute à préciser/finaliser. Manque les données comptables. Est-ce que tout ça rentre
-        dans “données à caractère personnel” ?)</span
-      >
-    </p>
+    <p>Aquapreneur traite les données à caractère personnel suivantes :</p>
 
     <ul>
       <li>
@@ -109,7 +102,6 @@
 
     <h2>V - Durée de conservation</h2>
 
-    <p><span class="hl">À revoir</span></p>
     <div
       class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
       id="table-sm-component"
@@ -131,7 +123,7 @@
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données d’entreprise </td>
-                  <td> 3 ans à compter de la dernière activité</td>
+                  <td> 5 ans à compter de la dernière activité</td>
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données relatives aux demandes d’une concession aquacole </td>
@@ -140,15 +132,15 @@
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
-                    <span class="hl">2 ans en base active (on exploite les 5 dernières années)</span
-                    > puis archivage intermédiaire jusqu’au terme de la durée de la concession avant
-                    archivage définitif (article R. 923-10 du code rural et de la pêche administrative
-                    prévoit que la durée maximum d’une concession est de 35 ans)</td
+                    5 ans en base active puis archivage intermédiaire jusqu’au terme de la durée de
+                    la concession avant archivage définitif (article R. 923-10 du code rural et de
+                    la pêche administrative prévoit que la durée maximum d’une concession est de 35
+                    ans)</td
                   >
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
                   <td> Cookies </td>
-                  <td> 13 mois</td>
+                  <td> 30 jours</td>
                 </tr>
               </tbody>
             </table>
@@ -197,9 +189,8 @@
     <p>Les accès aux données sont strictement encadrés et juridiquement justifiés.</p>
 
     <p>
-      Durant la phase d’expérimentation, seuls <span class="hl"
-        >les agents publics (ajouter les presta)</span
-      > de l’équipe Aquapreneur (DGAMPA et SSP) ont accès aux données.
+      Durant la phase d’expérimentation, seuls les agents publics et prestataires de l’équipe
+      Aquapreneur (DGAMPA et SSP) ont accès aux données.
     </p>
     <p>Suite à l’expérimentation, les personnes suivantes vont avoir accès aux données :</p>
 
@@ -259,15 +250,12 @@
 
     <h2>VIII - Mesures de sécurité</h2>
 
-    <p><span class="hl">à vérifier/compléter</span></p>
-
     <p>Nous mettons en place plusieurs mesures pour sécuriser les données :</p>
     <ul>
       <li>Stockage des données en base de données ;</li>
       <li>Cloisonnement des données ;</li>
       <li>Mesures de traçabilité ;</li>
       <li>Surveillance ;</li>
-      <li>Protection contre les virus, malwares et logiciels espions ;</li>
       <li>Protection des réseaux ;</li>
       <li>Sauvegarde ;</li>
       <li>Mesures restrictives limitant l’accès physique aux données à caractère personnel.</li>
@@ -280,7 +268,6 @@
       RGPD et qu’ils apportent des garanties suffisantes en matière de sécurité.
     </p>
 
-    <p><span class="hl">À mettre à jour</span></p>
     <div
       class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
       id="table-sm-component"
@@ -299,21 +286,21 @@
               </thead>
               <tbody>
                 <tr id="table-sm-row-key-1" data-row-key="1">
-                  <td>Au Carré </td>
-                  <td> France</td>
-                  <td> Administration de la plateforme</td>
-                  <td> </td>
-                </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
-                  <td> ScaleWay</td>
+                  <td> Scalingo</td>
                   <td> France</td>
                   <td> Hébergement</td>
-                  <td> </td>
+                  <td>
+                    <ExternalLink
+                      href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles"
+                      title="Contrat de Gestion des Traitements de Données Personnelles"
+                      >Contrat de Gestion des Traitements de Données Personnelles</ExternalLink
+                    ></td
+                  >
                 </tr>
                 <tr id="table-sm-row-key-1" data-row-key="1">
-                  <td> Ksaar</td>
+                  <td> Boscop</td>
                   <td> France</td>
-                  <td> Support</td>
+                  <td> Monitorage</td>
                   <td> </td>
                 </tr>
               </tbody>
@@ -357,45 +344,10 @@
       la libre circulation des données.
     </p>
 
-    <p><span class="hl">À mettre à jour</span></p>
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
-      <div class="fr-table__wrapper">
-        <div class="fr-table__container">
-          <div class="fr-table__content">
-            <table id="table-sm">
-              <caption> Cookies recensés sur Aquapreneur </caption>
-              <thead>
-                <tr>
-                  <th scope="col"> Nom du cookie </th>
-                  <th scope="col"> Finalités </th>
-                  <th scope="col"> Pays hébergement </th>
-                  <th scope="col"> Garanties </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
-                  <td> _ga_BBLE8XKC73 </td>
-                  <td> Mesure d’audience pour la cartographie</td>
-                  <td> États-Unis </td>
-                  <td> Aucune donnée à caractère personnel</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <p>
       À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre
       ordinateur en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment
-      sur <span class="hl"
-        >Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera
-        (mettre à jour !)</span
-      >).
+      sur Microsoft Edge, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
     </p>
     <p>
       Pour aller plus loin, vous pouvez consulter les fiches proposées par la Commission Nationale

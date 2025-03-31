@@ -11,26 +11,19 @@
     <h2>Éditeur de la plateforme</h2>
 
     <p>
-      La plateforme « Aquapreneur » est éditée par <span class="hl">
-        la Fabrique numérique et la Direction générale des affaires maritimes, de la pêche et de
-        l’aquaculture (DGAMPA) du ministère de la Transition écologique et de la Cohésion des
-        territoires
-      </span>, située :
+      La plateforme « Aquapreneur » est éditée par la Fabrique numérique et la Direction générale
+      des affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) du ministère de la Transition
+      écologique et de la Cohésion des territoires, située :
     </p>
     <p>
-      <span class="li">1 place Carpeaux</span> <br />
+      1 place Carpeaux<br />
       92800 Puteaux<br />
       France
     </p>
 
     <h2>Directeur de la publication</h2>
 
-    <p>
-      <span class="hl"
-        >Éric BANEL, Directeur général des affaires maritimes, de la pêche et de l’aquaculture. (si
-        c’est la Fabrique qui édite, le dir.pub. doit sans doute faire partie de la Fabrique)</span
-      >
-    </p>
+    <p>Éric BANEL, Directeur général des affaires maritimes, de la pêche et de l’aquaculture.</p>
 
     <h2>Hébergement de la plateforme</h2>
 

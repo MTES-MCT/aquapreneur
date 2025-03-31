@@ -7,26 +7,12 @@
     <h1>Déclaration d’accessibilité</h1>
     <p class="fr-text--xs">Établie le 25 mars 2025.</p>
     <p>
-      La <span class="hl">Fabrique numérique du MTE</span>
-      s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du
-      11 février 2005.
+      La Direction générale des affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) du
+      ministère de la Transition écologique et de la Cohésion des territoires s’engage à rendre son
+      service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
     </p>
-    <p>À cette fin, nous mettons en œuvre la stratégie et les actions suivantes&nbsp;:</p>
-    <ul>
-      <li>
-        <ExternalLink
-          href="https://beta.gouv.fr/accessibilite/schema-pluriannuel"
-          title="Schéma pluriannuel"
-        >
-          Schéma pluriannuel
-        </ExternalLink>
-        <span class="hl">(trouver de quel schéma pluriannuel nous dépendons)</span>
-      </li>
-    </ul>
-    <p></p>
     <p>
-      Cette déclaration d’accessibilité s’applique à :<br />
-      <strong>Aquapreneur</strong> (https://aquapreneur.beta.gouv.fr).
+      Cette déclaration d’accessibilité s’applique à : <strong>Aquapreneur</strong> (https://aquapreneur.beta.gouv.fr).
     </p>
     <h2>État de conformité</h2>
     <p>
@@ -64,7 +50,6 @@
         Courriel&nbsp;:
         <a href="mailto:aquapreneur@beta.gouv.fr">aquapreneur@beta.gouv.fr</a>
       </li>
-      <li><span class="hl">idéalement ajouter a minima également une adresse postale</span></li>
     </ul>
     <h2>Voie de recours</h2>
     <p>
