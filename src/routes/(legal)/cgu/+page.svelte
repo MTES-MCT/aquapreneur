@@ -191,7 +191,7 @@
     </p>
     <p>
       Si un titre est manquant, toute personne peut le signaler à
-      <a href="mailto:aquapreneur@mer.gouv.fr">aquapreneur@mer.gouv.fr</a>
+      <a href="mailto:aquapreneur@beta.gouv.fr">aquapreneur@beta.gouv.fr</a>
       en précisant ses coordonnées et en joignant les éventuels documents utiles l’identification du
       titre.
     </p>
