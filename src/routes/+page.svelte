@@ -3,8 +3,6 @@
 
   import IllustrationAccueil from '$lib/assets/illustration-page-accueil.svg';
   import ProconnectButton from '$lib/components/proconnect-button.svelte';
-
-  const { data } = $props();
 </script>
 
 <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters">
@@ -16,14 +14,8 @@
       Aquapreneur, le portail qui accompagne les entrepreneurs et entrepreneuses aquacoles
     </h1>
 
-    {#if data?.utilisateur}
-      <form method="post" action="/auth/logout/proconnect" use:enhance>
-        <button class="fr-btn">Se deconnecter</button>
-      </form>
-    {:else}
-      <form method="post" action="/auth/login/proconnect" use:enhance>
-        <ProconnectButton />
-      </form>
-    {/if}
+    <form method="post" action="/auth/login/proconnect" use:enhance>
+      <ProconnectButton />
+    </form>
   </div>
 </div>

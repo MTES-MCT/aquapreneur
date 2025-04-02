@@ -1,4 +1,4 @@
-tests/test-results
+tests/**/_results
 node_modules
 
 # Output
