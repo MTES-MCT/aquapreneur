@@ -13,7 +13,7 @@
 <svg
   aria-hidden="true"
   class="fr-artwork"
-  viewBox="0 0 {width} {height}"
+  viewBox="0 0 80 80"
   width="{width}px"
   height="{height}px"
 >

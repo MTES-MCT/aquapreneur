@@ -5,8 +5,8 @@
   import Pictogram from '$lib/components/pictogram.svelte';
 </script>
 
-<Pictogram pict={CityHallPict} width={124} height={124}></Pictogram>,
+<Pictogram pict={CityHallPict} width={124} height={124}></Pictogram>
 
-<h2 class="fr-h5">Nous allons commencer par vérifier vos informations d’entreprise</h2>
+<h2 class="fr-h5 fr-mt-6v">Nous allons commencer par vérifier vos informations d’entreprise</h2>
 
 <NavigationLinks nextHref="2" />
