@@ -15,7 +15,7 @@
     <MenuDeclaration step={page.data.step} baseUrl="/declarations/{data.year}"></MenuDeclaration>
   </div>
 
-  <div class="fr-col-8">
+  <div class="fr-col-8 fr-mt-7w">
     {@render children()}
   </div>
 </div>

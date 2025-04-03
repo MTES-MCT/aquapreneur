@@ -1,6 +1,7 @@
 <script lang="ts">
   import CommunityPict from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/community.svg';
 
+  import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
 </script>
 
@@ -10,4 +11,4 @@
   Pour terminer, veuillez répondre à ces dernières questions afin de compléter votre déclaration
 </h2>
 
-<a href="2" class="fr-link fr-icon-arrow-right-line fr-link--icon-right"> Suivant </a>
+<NavigationLinks nextHref="2" />
