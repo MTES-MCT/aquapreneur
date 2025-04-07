@@ -5,9 +5,9 @@ export const load = async ({ parent }) => {
 
   if (!utilisateur) redirect(307, '/');
 
-  if (!utilisateur.valide) redirect(307, '/validation');
+  if (utilisateur.valide) redirect(307, '/');
 
   return {
-    title: 'Mon espace'
+    title: 'Compte non validé'
   };
 };

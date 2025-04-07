@@ -14,7 +14,7 @@ import { db } from '$db';
 
 import { type Utilisateur, utilisateurs } from '$db/schema/auth';
 
-import { getShortId } from '$utils';
+import { formatZodError, getShortId } from '$utils';
 
 import audit from '$utils/audit';
 import * as logger from '$utils/logger';
@@ -31,9 +31,9 @@ const proConnectPayload = z.object({
   usual_name: z.string(),
   email: z.string().email().toLowerCase(),
   siret: z.string(),
-  phone_number: z.string(),
-  organizational_unit: z.string(),
-  belonging_population: z.string()
+  phone_number: z.string().optional(),
+  organizational_unit: z.string().optional(),
+  belonging_population: z.string().optional()
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ export const load = async ({ url, cookies }) => {
   const payload = decodeIdToken(await userInfoResponse.text());
   const parsedResult = proConnectPayload.safeParse(payload);
   if (parsedResult.success === false) {
-    logger.error('IdToken OIDC invalide', parsedResult.error);
+    logger.error('IdToken OIDC invalide', { zod_err: formatZodError(parsedResult.error) });
     error(400);
   }
   const userData = parsedResult.data;

@@ -6,6 +6,8 @@ export const load = async ({ params, parent }) => {
   const { utilisateur } = await parent();
   if (!utilisateur) redirect(307, '/');
 
+  if (!utilisateur.valide) redirect(307, '/validation');
+
   const safeYear = Number.parseInt(year);
 
   if (![2020, 2021, 2022, 2023, 2024].includes(safeYear)) {

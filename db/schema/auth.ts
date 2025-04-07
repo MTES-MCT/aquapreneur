@@ -1,5 +1,5 @@
 import { type InferSelectModel } from 'drizzle-orm';
-import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { timestampCreation, timestamps } from '.';
 
@@ -20,7 +20,9 @@ export const utilisateurs = pgTable('utilisateurs', {
   statut: text(),
 
   derniereConnexion: timestamp({ withTimezone: true, mode: 'date' }),
-  dernierAcces: timestamp({ withTimezone: true, mode: 'date' })
+  dernierAcces: timestamp({ withTimezone: true, mode: 'date' }),
+
+  valide: boolean().default(false)
 });
 
 export type Utilisateur = InferSelectModel<typeof utilisateurs>;
