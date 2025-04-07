@@ -31,10 +31,11 @@ export const actions = {
         'uid',
         'address',
         'siret',
-        'organizational_unit',
-        'belonging_population',
+        // 'organizational_unit',
+        // 'belonging_population',
         'phone',
-        'idp_id'
+        'idp_id',
+        'custom'
       ]
     );
 
