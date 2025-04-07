@@ -5,7 +5,7 @@
       <div class="fr-footer__brand fr-enlarge-link">
         <p class="fr-logo">
           République
-          <br />Française
+          <br />française
         </p>
       </div>
       <div class="fr-footer__content">

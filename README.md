@@ -15,7 +15,7 @@
 
 ## Tests
 
-- copier le ficher `.env.example` vers un fichier `.env.test`.
+- copier le ficher `.env.test.example` vers un fichier `.env.test`.
 - renseignez les valeurs des variables d’environnement **spécifiques aux tests**  
   La base de donnée renseignée sera remise à zéro à chaque lancement.
 - lancez les tests en exécutant `npm run test`

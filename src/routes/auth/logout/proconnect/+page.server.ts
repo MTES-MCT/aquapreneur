@@ -1,6 +1,6 @@
 import { generateState } from 'arctic';
 
-import { fail, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 import {
   PROCONNECT_DOMAIN,
@@ -30,7 +30,7 @@ export const actions = {
 
     if (event.locals.session === null) {
       logger.error('Tentative de deconnexion de proconnect avec une session vide');
-      return fail(401);
+      redirect(302, '/');
     }
     const idToken = event.cookies.get(OIDC_ID_TOKEN_COOKIE_NAME) ?? null;
 

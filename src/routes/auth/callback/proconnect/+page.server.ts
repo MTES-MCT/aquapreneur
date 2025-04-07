@@ -1,5 +1,6 @@
 import { type OAuth2Tokens, decodeIdToken } from 'arctic';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
 
 import { error, redirect } from '@sveltejs/kit';
 
@@ -13,7 +14,7 @@ import { db } from '$db';
 
 import { type Utilisateur, utilisateurs } from '$db/schema/auth';
 
-import { getShortId } from '$utils';
+import { formatZodError, getShortId } from '$utils';
 
 import audit from '$utils/audit';
 import * as logger from '$utils/logger';
@@ -22,6 +23,18 @@ import { proconnect } from '$lib/server/auth/proconnect';
 import { createSession, setSessionTokenCookie } from '$lib/server/auth/session';
 
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
+
+// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/donnees_fournies.md
+const proConnectPayload = z.object({
+  sub: z.string(),
+  given_name: z.string(),
+  usual_name: z.string(),
+  email: z.string().email().toLowerCase(),
+  siret: z.string(),
+  phone_number: z.string().optional(),
+  organizational_unit: z.string().optional(),
+  belonging_population: z.string().optional()
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Implémentation du flux OIDC, callback de validation
@@ -77,28 +90,49 @@ export const load = async ({ url, cookies }) => {
       }
     }
   );
-
   const payload = decodeIdToken(await userInfoResponse.text());
-  if (!('email' in payload && typeof payload.email === 'string')) {
-    logger.error('IdToken OIDC invalide');
+  const parsedResult = proConnectPayload.safeParse(payload);
+  if (parsedResult.success === false) {
+    logger.error('IdToken OIDC invalide', { zod_err: formatZodError(parsedResult.error) });
     error(400);
   }
+  const userData = parsedResult.data;
   const query = await db
     .select()
     .from(utilisateurs)
-    .where(eq(utilisateurs.courriel, payload.email));
+    .where(eq(utilisateurs.idProConnect, userData.sub));
 
   let utilisateur: Utilisateur;
   if (query.length) {
     utilisateur = query[0];
+    // Le compte correspondant au `sub` existe déjà, on le met à jour.
+    // TODO gérer le changement d’adresse email, de service, etc ?
+    await db
+      .update(utilisateurs)
+      .set({ derniereConnexion: new Date() })
+      .where(eq(utilisateurs.id, utilisateur.id));
+    audit('Connexion ProConnect d’un utilisateur existant', {
+      user_id: utilisateur.id
+    });
   } else {
     const query = await db
       .insert(utilisateurs)
       .values({
-        courriel: payload.email
+        idProConnect: userData['sub'],
+        courriel: userData['email'],
+        prenom: userData['given_name'],
+        nom: userData['usual_name'],
+        siret: userData['siret'],
+        telephone: userData['phone_number'],
+        service: userData['organizational_unit'],
+        statut: userData['belonging_population'],
+        derniereConnexion: new Date()
       })
       .returning();
     utilisateur = query[0];
+    audit('Nouveau compte utilisateur créé via ProConnect', {
+      user_id: utilisateur.id
+    });
   }
 
   const { sessionToken, session } = await createSession(utilisateur.id);

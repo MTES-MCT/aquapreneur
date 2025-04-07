@@ -22,6 +22,20 @@
       "when": 1743010409959,
       "tag": "0002_add_postgis",
       "breakpoints": false
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1744021705238,
+      "tag": "0003_add_proconnect_fields",
+      "breakpoints": false
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744023608369,
+      "tag": "0004_add_user_account_validation",
+      "breakpoints": false
     }
   ]
 }
