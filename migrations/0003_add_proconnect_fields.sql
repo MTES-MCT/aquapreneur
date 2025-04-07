@@ -1,0 +1,12 @@
+ALTER TABLE "utilisateurs" ALTER COLUMN "courriel" SET NOT NULL;
+ALTER TABLE "utilisateurs" ADD COLUMN "id_pro_connect" text NOT NULL;
+ALTER TABLE "utilisateurs" ADD COLUMN "prenom" text NOT NULL;
+ALTER TABLE "utilisateurs" ADD COLUMN "nom" text NOT NULL;
+ALTER TABLE "utilisateurs" ADD COLUMN "siret" text NOT NULL;
+ALTER TABLE "utilisateurs" ADD COLUMN "telephone" text;
+ALTER TABLE "utilisateurs" ADD COLUMN "service" text;
+ALTER TABLE "utilisateurs" ADD COLUMN "statut" text;
+ALTER TABLE "utilisateurs" ADD COLUMN "derniere_connexion" timestamp with time zone;
+ALTER TABLE "utilisateurs" ADD COLUMN "dernier_acces" timestamp with time zone;
+ALTER TABLE "utilisateurs" ADD CONSTRAINT "utilisateurs_idProConnect_unique" UNIQUE("id_pro_connect");
+ALTER TABLE "utilisateurs" ADD CONSTRAINT "utilisateurs_courriel_unique" UNIQUE("courriel");

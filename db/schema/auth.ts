@@ -8,7 +8,19 @@ export const utilisateurs = pgTable('utilisateurs', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   ...timestamps,
 
-  courriel: text()
+  idProConnect: text().notNull().unique(),
+  courriel: text().notNull().unique(),
+
+  prenom: text().notNull(),
+  nom: text().notNull(),
+  siret: text().notNull(),
+
+  telephone: text(),
+  service: text(),
+  statut: text(),
+
+  derniereConnexion: timestamp({ withTimezone: true, mode: 'date' }),
+  dernierAcces: timestamp({ withTimezone: true, mode: 'date' })
 });
 
 export type Utilisateur = InferSelectModel<typeof utilisateurs>;

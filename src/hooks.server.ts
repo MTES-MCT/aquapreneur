@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/sveltekit';
+import { eq } from 'drizzle-orm';
 
 import type { Handle, HandleServerError, RequestEvent } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -8,6 +9,10 @@ import {
   PUBLIC_SENTRY_ENVIRONMENT,
   PUBLIC_SENTRY_TRACE_SAMPLE_RATE
 } from '$env/static/public';
+
+import { db } from '$db';
+
+import { utilisateurs } from '$db/schema/auth';
 
 import { getShortId } from '$utils';
 
@@ -44,15 +49,23 @@ const handleAuth = async (event: RequestEvent) => {
       deleteSessionTokenCookie(event.cookies);
     }
   }
+
+  if (utilisateur?.id !== session?.idUtilisateur) {
+    logger.error('Utilisateur et session inconsistents');
+  }
+
+  if (utilisateur) {
+    await db
+      .update(utilisateurs)
+      .set({ dernierAcces: new Date() })
+      .where(eq(utilisateurs.id, utilisateur.id));
+  }
+
   return { session, utilisateur };
 };
 
 export const appHandle: Handle = async ({ event, resolve }) => {
   const { session, utilisateur } = await handleAuth(event);
-
-  if (utilisateur?.id !== session?.idUtilisateur) {
-    logger.error('Utilisateur et session inconsistents');
-  }
 
   event.locals.utilisateur = utilisateur;
   event.locals.session = session;
