@@ -16,7 +16,10 @@
         <div class="fr-header__brand fr-enlarge-link">
           <div class="fr-header__brand-top">
             <div class="fr-header__logo">
-              <p class="fr-logo">Gouvernement</p>
+              <p class="fr-logo">
+                République<br />
+                française
+              </p>
             </div>
             <div class="fr-header__operator">
               <a href="/" title="Retour à l'accueil du site">
