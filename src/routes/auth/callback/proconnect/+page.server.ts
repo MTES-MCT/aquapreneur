@@ -31,9 +31,7 @@ const proConnectPayload = z.object({
   usual_name: z.string(),
   email: z.string().email().toLowerCase(),
   siret: z.string(),
-  phone_number: z.string().optional(),
-  organizational_unit: z.string().optional(),
-  belonging_population: z.string().optional()
+  phone_number: z.string().optional().nullable()
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,8 +122,6 @@ export const load = async ({ url, cookies }) => {
         nom: userData['usual_name'],
         siret: userData['siret'],
         telephone: userData['phone_number'],
-        service: userData['organizational_unit'],
-        statut: userData['belonging_population'],
         derniereConnexion: new Date()
       })
       .returning();

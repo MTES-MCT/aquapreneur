@@ -28,14 +28,8 @@ export const actions = {
         'given_name',
         'usual_name',
         'email',
-        'uid',
-        'address',
         'siret',
-        // 'organizational_unit',
-        // 'belonging_population',
-        'phone',
-        'idp_id',
-        'custom'
+        'phone'
       ]
     );
 

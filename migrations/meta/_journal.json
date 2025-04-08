@@ -36,6 +36,13 @@
       "when": 1744023608369,
       "tag": "0004_add_user_account_validation",
       "breakpoints": false
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1744108617564,
+      "tag": "0005_suppression_champs_nonrenseignes_proconnect",
+      "breakpoints": false
     }
   ]
 }
