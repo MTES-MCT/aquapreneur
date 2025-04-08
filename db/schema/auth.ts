@@ -10,14 +10,10 @@ export const utilisateurs = pgTable('utilisateurs', {
 
   idProConnect: text().notNull().unique(),
   courriel: text().notNull().unique(),
-
   prenom: text().notNull(),
   nom: text().notNull(),
   siret: text().notNull(),
-
   telephone: text(),
-  service: text(),
-  statut: text(),
 
   derniereConnexion: timestamp({ withTimezone: true, mode: 'date' }),
   dernierAcces: timestamp({ withTimezone: true, mode: 'date' }),
