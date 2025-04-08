@@ -32,9 +32,9 @@
 
     <h2>I - Responsable de traitement</h2>
     <p>
-      Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche et
-      de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
-      Territoires, représenté par son directeur général, Eric Banel.
+      Le responsable de traitement est la direction générale des Affaires maritimes, de la Pêche et
+      de l’Aquaculture (DGAMPA) du ministère de la Transition écologique, de la Biodiversité, de la
+      Forêt, de la Mer et de la Pêche, représentée par son directeur général, Eric Banel.
     </p>
 
     <h2>II - Finalités</h2>
@@ -66,8 +66,8 @@
         dont est investi le responsable de traitement au sens de l’article 6-1 e) du RPGD ;
       </li>
       <li>
-        Cette mission d’intérêt public découle des attributions confiées à la Direction générale des
-        affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) par l’article 9 du décret n°
+        Cette mission d’intérêt public découle des attributions confiées à la direction générale des
+        Affaires maritimes, de la Pêche et de l’Aquaculture (DGAMPA) par l’article 9 du décret n°
         2008-680, l’article 9.1.1 de l’arrêté du 9 juillet 2008 portant organisation des
         administrations centrales des ministères chargés de la transition écologique, de la cohésion
         des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime.

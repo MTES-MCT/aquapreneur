@@ -9,12 +9,20 @@
         </p>
       </div>
       <div class="fr-footer__content">
-        <p class="fr-footer__content-desc">
-          Aquapreneur est porté par la Fabrique Numérique de l’Écologie (MTE-MCT), et sponsorisé par
-          le Ministère de l’Agriculture et de la Souveraineté alimentaire et par la Direction
-          générale des Affaires maritimes, de la Pêche et de l’Aquaculture du Ministère de la
-          Transition écologique.
-        </p>
+        <p class="fr-footer__content-desc">Aquapreneur est une startup d’État coportée par :</p>
+        <ul class="fr-footer__content-desc fr-list">
+          <li>
+            le ministère de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et
+            de la Pêche (DGAMPA, direction générale des Affaires maritimes, de la Pêche et de
+            l’Aquaculture),
+          </li>
+          <li>
+            le ministère de l’Agriculture et de la Souveraineté alimentaire (SSP, Service de la
+            statistique et de la prospective),
+          </li>
+        </ul>
+        <p class="fr-footer__content-desc">avec l’appui de la Fabrique Numérique de l’Écologie.</p>
+
         <ul class="fr-footer__content-list">
           <li class="fr-footer__content-item">
             <a

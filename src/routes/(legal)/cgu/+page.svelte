@@ -36,8 +36,8 @@
     <h2>Article 3 - Définitions</h2>
 
     <p>
-      « Administration » : le Ministère de la transition écologique et de la cohésion des
-      territoires qui édite et gère le Service.
+      « Administration » : le ministère de la Transition écologique, de la Biodiversité, de la
+      Forêt, de la Mer et de la Pêche qui édite et gère le Service.
     </p>
     <p>« Agent Public » : personnel de l’Administration.</p>
     <p>
