@@ -11,7 +11,7 @@ export default defineConfig({
   },
   migrations: {
     table: 'migrations',
-    schema: 'public'
+    schema: 'drizzle'
   },
   verbose: true,
   strict: true,
