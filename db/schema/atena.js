@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Données ATENA de la DGAMPA
+// Données de concessions ATENA de la DGAMPA
 //
 // Schéma initialement généré via drizzle-kit pull, après l’import initial ATENA
 // fait via data-tools/R/import-atena.R
@@ -9,14 +9,16 @@ import {
   doublePrecision,
   geometry,
   index,
-  pgTable,
+  pgSchema,
   serial,
   timestamp,
   varchar
 } from 'drizzle-orm/pg-core';
 
-export const atena = pgTable(
-  'atena',
+export const atena = pgSchema('atena');
+
+export const concessions = atena.table(
+  'concessions',
   {
     id: serial().primaryKey().notNull(),
     nom: varchar(),
@@ -106,9 +108,12 @@ export const atena = pgTable(
     codeExploitation: doublePrecision('code_exploitation'),
     exploitation: varchar(),
     familleExploitation: varchar('famille_exploitation'),
-    geom: geometry('geom', { type: 'multipolygon', srid: 4326 })
+    geom: geometry({ type: 'multipolygon', srid: 4326 })
   },
   (table) => [
-    index('atena_geom_idx').using('gist', table.geom.asc().nullsLast().op('gist_geometry_ops_2d'))
+    index('concessions_geom_geom_idx').using(
+      'gist',
+      table.geom.asc().nullsLast().op('gist_geometry_ops_2d')
+    )
   ]
 );

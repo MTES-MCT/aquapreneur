@@ -27,7 +27,7 @@
 - renseignez le nom et le siret du partenaire
 - transmettez-lui le jeton renvoyé
 
-## Importer les données ATENA en BDD
+## Importer les données de concessions ATENA en BDD
 
 - éditer les noms de chemin dans le fichier `data-tools/R/import-atena.R`
 - dans le répertoire `data-tools`, lancer la commande `make atena`

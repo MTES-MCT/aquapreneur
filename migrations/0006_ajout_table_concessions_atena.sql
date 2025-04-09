@@ -1,4 +1,6 @@
-CREATE TABLE "atena" (
+CREATE SCHEMA "atena";
+
+CREATE TABLE "atena"."concessions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"nom" varchar,
 	"siren" varchar,
@@ -90,4 +92,4 @@ CREATE TABLE "atena" (
 	"geom" geometry(point)
 );
 
-CREATE INDEX "atena_geom_idx" ON "atena" USING gist ("geom" gist_geometry_ops_2d);
+CREATE INDEX "concessions_geom_geom_idx" ON "atena"."concessions" USING gist ("geom" gist_geometry_ops_2d);

@@ -2361,9 +2361,9 @@
       },
       "isRLSEnabled": false
     },
-    "public.atena": {
-      "name": "atena",
-      "schema": "",
+    "atena.concessions": {
+      "name": "concessions",
+      "schema": "atena",
       "columns": {
         "id": {
           "name": "id",
@@ -2901,8 +2901,8 @@
         }
       },
       "indexes": {
-        "atena_geom_idx": {
-          "name": "atena_geom_idx",
+        "concessions_geom_geom_idx": {
+          "name": "concessions_geom_geom_idx",
           "columns": [
             {
               "expression": "geom",

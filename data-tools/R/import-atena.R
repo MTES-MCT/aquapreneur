@@ -19,7 +19,7 @@ poly_geoms_filename = "data/Charente/bassin_LR_MN_region.shp"
 ################################
 # Chargement des fichiers source
 
-atena = read_excel(atena_filename) |>
+concessions = read_excel(atena_filename) |>
   clean_names() |>
   # La colonne "NUM_VERSION" est en double dans la source
   select(-num_version_70) |>
@@ -45,7 +45,7 @@ all_geoms = linear_geoms |>
   summarise(.groups = "drop") |>
   st_cast("MULTIPOLYGON")
 
-geo_atena = atena |>
+concessions_geo = concessions |>
   left_join(
     all_geoms,
     by = c("code_quartier_parcelle" = "quartier", "numero_parcelle" = "cm1par")
@@ -59,7 +59,7 @@ geo_atena = atena |>
 # Envoi à la base de donnée
 
 tmp_filename = tempfile(fileext = ".geojson")
-st_write(geo_atena, tmp_filename, delete_dsn = TRUE)
+st_write(concessions_geo, tmp_filename, delete_dsn = TRUE)
 
 dotenv::load_dot_env("../.env")
 gdalUtilities::ogr2ogr(
@@ -67,7 +67,7 @@ gdalUtilities::ogr2ogr(
   str_glue(
     "Pg:{Sys.getenv('DATABASE_URL')}&application_name=ogr2ogr"
   ),
-  nln = "atena",
+  nln = "atena.concessions",
   overwrite = TRUE,
   update = TRUE,
   lco = c("FID=id", "-lco", "GEOMETRY_NAME=geom")

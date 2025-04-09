@@ -16,5 +16,6 @@ export default defineConfig({
   verbose: true,
   strict: true,
   casing: 'snake_case',
-  breakpoints: false
+  breakpoints: false,
+  schemaFilter: ['public', 'atena']
 });
