@@ -12,7 +12,8 @@
 
 <div class="fr-grid-row fr-grid-row--top">
   <div class="fr-col-md-3 fr-col-12">
-    <MenuDeclaration step={page.data.step} baseUrl="/declarations/{data.year}"></MenuDeclaration>
+    <MenuDeclaration step={page.data.step} baseUrl="/mon-espace/declarations/{data.year}"
+    ></MenuDeclaration>
   </div>
 
   <div class="fr-col-8 fr-mt-7w">

@@ -10,26 +10,26 @@ test.describe('entreprise', () => {
 
     await page.getByRole('link', { name: 'Déclaration 2024' }).click();
 
-    await expect(page).toHaveURL('/declarations/2024/entreprise/1');
+    await expect(page).toHaveURL('/mon-espace/declarations/2024/entreprise/1');
   });
 
   test('Les redirections intermédiaires sont correctes', async ({ page }) => {
-    let response = await page.goto('/declarations');
+    let response = await page.goto('/mon-espace/declarations');
     expect(response?.status()).toBe(404);
 
-    response = await page.goto('/declarations/');
+    response = await page.goto('/mon-espace/declarations/');
     expect(response?.status()).toBe(404);
 
-    await page.goto('/declarations/2024');
-    await expect(page).toHaveURL('/declarations/2024/entreprise/1');
+    await page.goto('/mon-espace/declarations/2024');
+    await expect(page).toHaveURL('/mon-espace/declarations/2024/entreprise/1');
 
-    await page.goto('/declarations/2024/');
-    await expect(page).toHaveURL('/declarations/2024/entreprise/1');
+    await page.goto('/mon-espace/declarations/2024/');
+    await expect(page).toHaveURL('/mon-espace/declarations/2024/entreprise/1');
 
-    await page.goto('/declarations/2024/entreprise');
-    await expect(page).toHaveURL('/declarations/2024/entreprise/1');
+    await page.goto('/mon-espace/declarations/2024/entreprise');
+    await expect(page).toHaveURL('/mon-espace/declarations/2024/entreprise/1');
 
-    await page.goto('/declarations/2024/entreprise/');
-    await expect(page).toHaveURL('/declarations/2024/entreprise/1');
+    await page.goto('/mon-espace/declarations/2024/entreprise/');
+    await expect(page).toHaveURL('/mon-espace/declarations/2024/entreprise/1');
   });
 });

@@ -32,7 +32,7 @@
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
-            <a href="/declarations/2024">Déclaration 2024</a>
+            <a href="mon-espace/declarations/2024">Déclaration 2024</a>
           </h3>
           <p class="fr-tile__detail">Commencer</p>
 
@@ -89,7 +89,7 @@
 
 <div class="fr-grid-row fr-mt-4v">
   <div class="fr-col">
-    <a href="/declarations" class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+    <a href="mon-espace/declarations" class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
       >Voir toutes mes déclarations passées</a
     >
   </div>
