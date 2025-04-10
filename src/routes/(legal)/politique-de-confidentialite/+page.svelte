@@ -102,14 +102,11 @@
 
     <h2>V - Durée de conservation</h2>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Type de données </th>
@@ -117,19 +114,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données de création de compte et de connexion </td>
                   <td> 3 ans à compter de la dernière activité</td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données d’entreprise </td>
                   <td> 5 ans à compter de la dernière activité</td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données relatives aux demandes d’une concession aquacole </td>
                   <td> 3 ans à compter de la dernière activité </td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
                     5 ans en base active puis archivage intermédiaire jusqu’au terme de la durée de
@@ -138,7 +135,7 @@
                     ans)</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Cookies </td>
                   <td> 30 jours</td>
                 </tr>
@@ -194,14 +191,11 @@
     </p>
     <p>Suite à l’expérimentation, les personnes suivantes vont avoir accès aux données :</p>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Données </th>
@@ -209,13 +203,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données de création de compte et de connexion </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données d’entreprise </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État<br />
@@ -223,13 +217,13 @@
                     de l’agriculture biologique (Agence Bio)</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données relatives aux demandes d’une concession aquacole </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État
                   </td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État</td
@@ -268,14 +262,11 @@
       RGPD et qu’ils apportent des garanties suffisantes en matière de sécurité.
     </p>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Sous-traitant </th>
@@ -285,7 +276,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Scalingo</td>
                   <td> France</td>
                   <td> Hébergement</td>
@@ -297,7 +288,7 @@
                     ></td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Boscop</td>
                   <td> France</td>
                   <td> Monitorage</td>

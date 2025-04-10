@@ -30,8 +30,8 @@
               <button
                 class="fr-btn--menu fr-btn"
                 data-fr-opened="false"
-                aria-controls="modal-499"
-                id="button-500"
+                aria-controls="modal-header-menu"
+                id="button-header-menu"
                 title="Menu"
               >
                 Menu
@@ -76,9 +76,9 @@
       </div>
     </div>
   </div>
-  <div class="fr-header__menu fr-modal" id="modal-499" aria-labelledby="button-500">
+  <div class="fr-header__menu fr-modal" id="modal-header-menu" aria-labelledby="button-header-menu">
     <div class="fr-container">
-      <button class="fr-btn--close fr-btn" aria-controls="modal-499" title="Fermer">
+      <button class="fr-btn--close fr-btn" aria-controls="modal-header-menu" title="Fermer">
         Fermer
       </button>
       <div class="fr-header__menu-links"></div>

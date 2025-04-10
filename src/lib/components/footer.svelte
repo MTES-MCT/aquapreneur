@@ -29,7 +29,6 @@
               target="_blank"
               rel="noopener external"
               title="info.gouv.fr - nouvelle fenêtre"
-              id="footer__content-link-7362"
               class="fr-footer__content-link"
               href="https://info.gouv.fr">info.gouv.fr</a
             >
@@ -39,7 +38,6 @@
               target="_blank"
               rel="noopener external"
               title="service-public.fr - nouvelle fenêtre"
-              id="footer__content-link-7363"
               class="fr-footer__content-link"
               href="https://service-public.fr">service-public.fr</a
             >
@@ -49,7 +47,6 @@
               target="_blank"
               rel="noopener external"
               title="legifrance.gouv.fr - nouvelle fenêtre"
-              id="footer__content-link-7364"
               class="fr-footer__content-link"
               href="https://legifrance.gouv.fr">legifrance.gouv.fr</a
             >
@@ -59,7 +56,6 @@
               target="_blank"
               rel="noopener external"
               title="data.gouv.fr - nouvelle fenêtre"
-              id="footer__content-link-7365"
               class="fr-footer__content-link"
               href="https://data.gouv.fr">data.gouv.fr</a
             >

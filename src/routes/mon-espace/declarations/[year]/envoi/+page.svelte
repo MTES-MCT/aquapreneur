@@ -16,7 +16,7 @@
 
 <!-- Bouton d'ouverture de la modale -->
 
-<button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-2">
+<button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-confirmation">
   Valider et envoyer
 </button>
 
@@ -25,16 +25,23 @@
 -->
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
-<dialog aria-labelledby="fr-modal-2-title" id="fr-modal-2" class="fr-modal" role="dialog">
+<dialog
+  aria-labelledby="fr-modal-confirmation-title"
+  id="fr-modal-confirmation"
+  class="fr-modal"
+  role="dialog"
+>
   <div class="fr-container fr-container--fluid fr-container-md">
     <div class="fr-grid-row fr-grid-row--center">
       <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
         <div class="fr-modal__body">
           <div class="fr-modal__header">
-            <button class="fr-btn--close fr-btn" aria-controls="fr-modal-2">Fermer</button>
+            <button class="fr-btn--close fr-btn" aria-controls="fr-modal-confirmation"
+              >Fermer</button
+            >
           </div>
           <div class="fr-modal__content">
-            <h1 id="fr-modal-2-title" class="fr-modal__title">
+            <h1 id="fr-modal-confirmation-title" class="fr-modal__title">
               <span class="fr-icon-arrow-right-line fr-icon--lg"></span>
               Confirmation de l’envoi
             </h1>
@@ -49,7 +56,7 @@
               <button class="fr-btn fr-btn--icon-left" onclick={handleSubmit}> Envoyer </button>
               <button
                 class="fr-btn fr-btn--secondary"
-                onclick={() => handleCloseModal('fr-modal-2')}
+                onclick={() => handleCloseModal('fr-modal-confirmation')}
               >
                 Continuer ma déclaration
               </button>

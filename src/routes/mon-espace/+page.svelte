@@ -19,13 +19,19 @@
         update({ reset: false });
       }}
   >
-    <fieldset class="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
+    <fieldset class="fr-fieldset">
       <div class="fr-fieldset__element">
         <div class="fr-select-group">
-          <label class="fr-label" for="select">
+          <label class="fr-label" for="select-siret">
             Choix de l’exploitant (seulement pour les administrateurs)
           </label>
-          <select class="fr-select" id="select" name="select" value={data.siret} autocomplete="off">
+          <select
+            class="fr-select"
+            id="select-siret"
+            name="select"
+            value={data.siret}
+            autocomplete="off"
+          >
             <option value="" selected disabled>Sélectionner une option</option>
             {#each data.exploitants! as exploitant (exploitant.siret)}
               <option value={exploitant.siret}>{exploitant.nom} ({exploitant.siret})</option>
@@ -50,20 +56,24 @@
       <input
         type="checkbox"
         class="fr-toggle__input"
-        aria-describedby="toggle-4693-messages"
-        id="toggle-4693"
+        aria-describedby="toggle-declarations-recentes-messages"
+        id="toggle-declarations-recentes"
       />
-      <label class="fr-toggle__label" for="toggle-4693"
+      <label class="fr-toggle__label" for="toggle-declarations-recentes"
         >Afficher uniquement les déclarations incomplètes</label
       >
-      <div class="fr-messages-group" id="toggle-4693-messages" aria-live="polite"></div>
+      <div
+        class="fr-messages-group"
+        id="toggle-declarations-recentes-messages"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 </div>
 
 <div class="fr-grid-row fr-grid-row--gutters">
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
@@ -93,7 +103,7 @@
   </div>
 
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
@@ -109,7 +119,7 @@
     </div>
   </div>
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
