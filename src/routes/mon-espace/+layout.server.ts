@@ -4,14 +4,24 @@ import { redirect } from '@sveltejs/kit';
 
 import { SIRENE_AUTH_TOKEN } from '$env/static/private';
 
-export const load = async ({ fetch, parent }) => {
+import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from '$lib/constants';
+
+export const load = async ({ fetch, parent, cookies }) => {
   const { utilisateur } = await parent();
 
   // Cette route n’est accessible qu’aux utilisateurs connectés, et validés
   if (!utilisateur) redirect(307, '/');
   if (!utilisateur.valide) redirect(307, '/validation');
 
-  const siret = utilisateur.siret;
+  let siret;
+  // Pour les administrateurs, leur propre siret n’est pas pertinent, on utilise
+  // celui qui a été éventuellement choisi manuellement et stocké dans le cookie
+  // `ADMIN_CURRENT_SIRET_COOKIE_NAME`
+  if (utilisateur.estAdmin) {
+    siret = cookies.get(ADMIN_CURRENT_SIRET_COOKIE_NAME) ?? null;
+  } else {
+    siret = utilisateur.siret;
+  }
 
   let etablissement;
   let activitePrincipale;

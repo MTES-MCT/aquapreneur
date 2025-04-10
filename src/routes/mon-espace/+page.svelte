@@ -1,9 +1,44 @@
 <script lang="ts">
   import ContractPict from '@gouvfr/dsfr/dist/artwork/pictograms/document/contract.svg';
   import PlaceholderPict16x9 from '@gouvfr/dsfr/example/img/placeholder.16x9.png';
+
+  import { enhance } from '$app/forms';
+
+  const { data } = $props();
+  console.log(data.siret);
 </script>
 
 <h1>Mon espace</h1>
+
+{#if data.utilisateur?.estAdmin}
+  <form
+    method="POST"
+    class="fr-mb-8w"
+    use:enhance={() =>
+      async ({ update }) => {
+        update({ reset: false });
+      }}
+  >
+    <fieldset class="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
+      <div class="fr-fieldset__element">
+        <div class="fr-select-group">
+          <label class="fr-label" for="select">
+            Choix de l’exploitant (seulement pour les administrateurs)
+          </label>
+          <select class="fr-select" id="select" name="select" value={data.siret} autocomplete="off">
+            <option value="" selected disabled>Sélectionner une option</option>
+            {#each data.exploitants! as exploitant (exploitant.siret)}
+              <option value={exploitant.siret}>{exploitant.nom} ({exploitant.siret})</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+      <div class="fr-fieldset__element">
+        <button class="fr-btn">Choisir</button>
+      </div>
+    </fieldset>
+  </form>
+{/if}
 
 <div class="fr-grid-row fr-grid-row--top">
   <div class="fr-col">
@@ -32,7 +67,11 @@
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
-            <a href="mon-espace/declarations/2024">Déclaration 2024</a>
+            {#if data.siret}
+              <a href="mon-espace/declarations/2024">Déclaration 2024</a>
+            {:else}
+              <a aria-disabled="true" role="link">Déclaration 2024</a>
+            {/if}
           </h3>
           <p class="fr-tile__detail">Commencer</p>
 

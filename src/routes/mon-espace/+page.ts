@@ -1,5 +1,6 @@
-export const load = async () => {
+export const load = async ({ data }) => {
   return {
-    title: 'Mon espace'
+    title: 'Mon espace',
+    exploitants: data.exploitants
   };
 };
