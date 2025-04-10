@@ -33,6 +33,7 @@ export const load = async ({ fetch, parent, cookies }) => {
     });
     const jsonRes = await res.json();
     etablissement = jsonRes.etablissement;
+    // TODO: passer par un schema Zod
     const naf = etablissement.uniteLegale.activitePrincipaleUniteLegale;
     activitePrincipale = nafRev2.find((line) => line.code == naf)?.label;
   }
