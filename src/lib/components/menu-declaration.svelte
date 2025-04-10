@@ -22,7 +22,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/entreprise"
-            target="_self"
             aria-current={step === 'entreprise' ? 'page' : undefined}>Mon entreprise</a
           >
         </li>
@@ -30,7 +29,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/concessions"
-            target="_self"
             aria-current={step === 'concessions' ? 'page' : undefined}>Mes concessions</a
           >
         </li>
@@ -38,7 +36,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/production"
-            target="_self"
             aria-current={step === 'production' ? 'page' : undefined}>Production aquacole vendue</a
           >
         </li>
@@ -46,7 +43,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/stock"
-            target="_self"
             aria-current={step === 'stock' ? 'page' : undefined}>Stock</a
           >
         </li>
@@ -54,7 +50,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/eco"
-            target="_self"
             aria-current={step === 'eco' ? 'page' : undefined}>Données économiques</a
           >
         </li>
@@ -62,7 +57,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/declaration"
-            target="_self"
             aria-current={step === 'declaration' ? 'page' : undefined}>Déclaration obligatoire</a
           >
         </li>
@@ -70,7 +64,6 @@
           <a
             class="fr-sidemenu__link"
             href="{baseUrl}/envoi"
-            target="_self"
             aria-current={step === 'envoi' ? 'page' : undefined}>Envoi</a
           >
         </li>

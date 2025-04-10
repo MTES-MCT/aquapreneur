@@ -3,7 +3,6 @@ export const load = async ({ parent }) => {
 
   return {
     title: `Déclaration ${year} • Concessions • 1`,
-    year,
     step: 'concessions'
   };
 };
