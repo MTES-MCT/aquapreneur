@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   import NavigationLinks from '$lib/components/navigation-links.svelte';
 
   const { data } = $props();
@@ -34,9 +36,14 @@
   >
 {/snippet}
 
-<h1 class="fr-h2">Veuillez passer en revue vos données d’entreprise</h1>
+<h1 class="fr-h2">Votre entreprise</h1>
 
-<div class="fr-table fr-table--sm">
+<p>
+  Veuillez confirmer les informations suivantes liées à votre entreprise. Si vous remarquez une
+  erreur, merci de la reporter dans la section dédiée à la fin du formulaire.
+</p>
+
+<div class="fr-table fr-table--sm fr-mt-8v">
   <div class="fr-table__wrapper">
     <div class="fr-table__container">
       <div class="fr-table__content">
@@ -84,4 +91,4 @@
   </div>
 </div>
 
-<NavigationLinks prevHref="1" nextHref="3" nextLabel="Confirmer" />
+<NavigationLinks prevHref="1" nextLabel="Valider" nextIsButton nextButtonCb={() => goto('3')} />

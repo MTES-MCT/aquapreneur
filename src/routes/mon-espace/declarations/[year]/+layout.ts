@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 
-export const load = async ({ params }) => {
+export const load = async ({ params, data }) => {
   const { year } = params;
 
   const safeYear = Number.parseInt(year);
@@ -10,6 +10,8 @@ export const load = async ({ params }) => {
   }
 
   return {
-    year: safeYear
+    year: safeYear,
+    bilan: data.bilan,
+    concessions: data.concessions
   };
 };

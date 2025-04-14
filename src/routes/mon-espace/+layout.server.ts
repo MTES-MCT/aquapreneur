@@ -6,7 +6,7 @@ import { SIRENE_AUTH_TOKEN } from '$env/static/private';
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from '$lib/constants';
 
-export const load = async ({ fetch, parent, cookies }) => {
+export const load = async ({ fetch, parent, cookies, route }) => {
   const { utilisateur } = await parent();
 
   // Cette route n’est accessible qu’aux utilisateurs connectés, et validés
@@ -36,6 +36,10 @@ export const load = async ({ fetch, parent, cookies }) => {
     // TODO: passer par un schema Zod
     const naf = etablissement.uniteLegale.activitePrincipaleUniteLegale;
     activitePrincipale = nafRev2.find((line) => line.code == naf)?.label;
+  }
+
+  if (!etablissement && route.id != '/mon-espace') {
+    redirect(307, '/mon-espace');
   }
   // TODO log gestion d’erreur
   // - pas de siret

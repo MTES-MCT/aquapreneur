@@ -3,8 +3,17 @@
     prevHref,
     nextHref,
     prevLabel = 'Précédent',
-    nextLabel = 'Suivant'
-  }: { prevHref?: string; nextHref?: string; prevLabel?: string; nextLabel?: string } = $props();
+    nextLabel = 'Suivant',
+    nextIsButton = false,
+    nextButtonCb
+  }: {
+    prevHref?: string;
+    nextHref?: string;
+    prevLabel?: string;
+    nextLabel?: string;
+    nextIsButton?: boolean;
+    nextButtonCb?: () => void;
+  } = $props();
 </script>
 
 <div
@@ -24,5 +33,7 @@
       class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
       style="justify-self: end">{nextLabel}</a
     >
+  {:else if nextIsButton}
+    <button class="fr-btn" onclick={nextButtonCb ?? (() => null)}>{nextLabel}</button>
   {/if}
 </div>

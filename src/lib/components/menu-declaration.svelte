@@ -13,7 +13,7 @@
       Dans cette rubrique
     </button>
     <div class="fr-collapse" id="fr-sidemenu-wrapper">
-      <div class="fr-sidemenu__title" id="fr-sidemenu-title">Ma déclaration annuelle</div>
+      <div class="fr-sidemenu__title fr-h4" id="fr-sidemenu-title">Ma déclaration annuelle</div>
       <ul class="fr-sidemenu__list">
         <li class="fr-sidemenu__item fr-sidemenu__item--active">
           <a

@@ -9,4 +9,9 @@
 
 <h1 class="fr-h2 fr-mt-6v">Nous allons commencer par vérifier vos informations d’entreprise</h1>
 
+<p>
+  Cette étape permet de confirmer les informations et coordonnées liées à votre entreprise, et si
+  besoin les corriger ou les compléter.
+</p>
+
 <NavigationLinks nextHref="2" />
