@@ -1,0 +1,27 @@
+<script lang="ts">
+  import type { Snippet } from 'svelte';
+
+  let {
+    label,
+    type,
+    name,
+    value,
+    fieldsetId
+  }: {
+    label: Snippet;
+    type: 'text' | 'email' | 'tel';
+    name: string;
+    value?: string | null;
+    fieldsetId: string;
+  } = $props();
+  const id = $props.id();
+</script>
+
+<div class="fr-fieldset__element">
+  <div class="fr-input-group">
+    <label class="fr-label" for={id}>
+      {@render label()}
+    </label>
+    <input class="fr-input" aria-describedby="{fieldsetId}-messages" {type} {id} {name} {value} />
+  </div>
+</div>
