@@ -24,7 +24,7 @@
     <a
       href={prevHref}
       class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
-      style="justify-self: start">{prevLabel}</a
+      style="justify-self: start; align-self: center;">{prevLabel}</a
     >
   {/if}
   {#if nextHref}
