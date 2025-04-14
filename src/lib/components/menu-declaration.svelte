@@ -46,13 +46,6 @@
         <li class="fr-sidemenu__item">
           <a
             class="fr-sidemenu__link"
-            href="{baseUrl}/eco"
-            aria-current={step === 'eco' ? 'page' : undefined}>Données économiques</a
-          >
-        </li>
-        <li class="fr-sidemenu__item">
-          <a
-            class="fr-sidemenu__link"
             href="{baseUrl}/declaration"
             aria-current={step === 'declaration' ? 'page' : undefined}>Déclaration obligatoire</a
           >
