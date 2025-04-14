@@ -7,8 +7,11 @@
 
 <Pictogram pict={CommunityPict} width={124} height={124}></Pictogram>
 
-<h1 class="fr-h2 fr-mt-6v">
-  Pour terminer, veuillez répondre à ces dernières questions afin de compléter votre déclaration
-</h1>
+<h1 class="fr-h2 fr-mt-6v">Pour conclure</h1>
 
-<NavigationLinks nextHref="2" />
+<p>
+  Avant d’envoyer votre déclaration, vous pouvez partager ici tout événement exceptionnel survenu en
+  2024 ou tout retour utile concernant l’outil et votre déclaration.
+</p>
+
+<NavigationLinks nextHref="2" prevHref="stock/3" />
