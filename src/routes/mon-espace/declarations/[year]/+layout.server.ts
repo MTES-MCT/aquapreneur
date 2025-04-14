@@ -21,17 +21,20 @@ export const load = async ({ parent, params }) => {
 
   const reqConcessions = await db
     .select({
+      lieu: sql<string>`${concessions.quartierParcelle} || ' – ' || ${concessions.libLocalite} || ' – ' || ${concessions.nomLieuDit}`,
       idParcelle: concessions.idRcmParcelle,
       libLocalite: concessions.libLocalite,
-      quartierLieuDit: concessions.quartierLieuDit,
-      codeQuartierParcelle: concessions.codeQuartierParcelle,
+      nomLieuDit: concessions.nomLieuDit,
       quartierParcelle: concessions.quartierParcelle,
       numeroParcelle: concessions.numeroParcelle,
       codeLocaliteInsee: concessions.codeLocaliteInsee,
       typeParcelle: concessions.typeParcelle,
+      nomSituation: concessions.nomSituation,
       surfaceParcelle: concessions.surfaceParcelle,
+      uniteMesure: concessions.uniteMesure,
       etatParcelle: concessions.etatParcelle,
       familleExploitation: concessions.familleExploitation,
+      exploitation: concessions.exploitation,
       natureJuridique: concessions.natureJuridique,
       numArrete: concessions.numArrete,
       dateArrete: concessions.dateArrete,
@@ -40,7 +43,10 @@ export const load = async ({ parent, params }) => {
       familleEspece: concessions.familleEspece
     })
     .from(concessions)
-    .where(and(eq(concessions.siren, etablissement.siret.substring(0, 9))));
+    .where(and(eq(concessions.siren, etablissement.siret.substring(0, 9))))
+    .orderBy(
+      sql<string>`${concessions.quartierParcelle} || ' – ' || ${concessions.libLocalite} || ' – ' || ${concessions.nomLieuDit}`
+    );
 
   return { bilan: reqBilans?.[0], concessions: reqConcessions };
 };
