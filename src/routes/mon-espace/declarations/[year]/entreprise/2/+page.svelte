@@ -34,7 +34,7 @@
   >
 {/snippet}
 
-<h2 class="fr-h5">Veuillez passer en revue vos données d’entreprise</h2>
+<h1 class="fr-h2">Veuillez passer en revue vos données d’entreprise</h1>
 
 <div class="fr-table fr-table--sm">
   <div class="fr-table__wrapper">

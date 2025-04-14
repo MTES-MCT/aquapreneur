@@ -8,43 +8,47 @@
   console.log(data.siret);
 </script>
 
-<h1>Mon espace</h1>
+<div class="fr-grid-row">
+  <div class="fr-col-8 fr-pt-12v" id="contenu">
+    <h1>Mon espace</h1>
 
-{#if data.utilisateur?.estAdmin}
-  <form
-    method="POST"
-    class="fr-mb-8w"
-    use:enhance={() =>
-      async ({ update }) => {
-        update({ reset: false });
-      }}
-  >
-    <fieldset class="fr-fieldset">
-      <div class="fr-fieldset__element">
-        <div class="fr-select-group">
-          <label class="fr-label" for="select-siret">
-            Choix de l’exploitant (seulement pour les administrateurs)
-          </label>
-          <select
-            class="fr-select"
-            id="select-siret"
-            name="select"
-            value={data.siret}
-            autocomplete="off"
-          >
-            <option value="" selected disabled>Sélectionner une option</option>
-            {#each data.exploitants! as exploitant (exploitant.siret)}
-              <option value={exploitant.siret}>{exploitant.nom} ({exploitant.siret})</option>
-            {/each}
-          </select>
-        </div>
-      </div>
-      <div class="fr-fieldset__element">
-        <button class="fr-btn">Choisir</button>
-      </div>
-    </fieldset>
-  </form>
-{/if}
+    {#if data.utilisateur?.estAdmin}
+      <form
+        method="POST"
+        class="fr-mb-8w"
+        use:enhance={() =>
+          async ({ update }) => {
+            update({ reset: false });
+          }}
+      >
+        <fieldset class="fr-fieldset">
+          <div class="fr-fieldset__element">
+            <div class="fr-select-group">
+              <label class="fr-label" for="select-siret">
+                Choix de l’exploitant (seulement pour les administrateurs)
+              </label>
+              <select
+                class="fr-select"
+                id="select-siret"
+                name="select"
+                value={data.siret}
+                autocomplete="off"
+              >
+                <option value="" selected disabled>Sélectionner une option</option>
+                {#each data.exploitants! as exploitant (exploitant.siret)}
+                  <option value={exploitant.siret}>{exploitant.nom} ({exploitant.siret})</option>
+                {/each}
+              </select>
+            </div>
+          </div>
+          <div class="fr-fieldset__element">
+            <button class="fr-btn">Choisir</button>
+          </div>
+        </fieldset>
+      </form>
+    {/if}
+  </div>
+</div>
 
 <div class="fr-grid-row fr-grid-row--top">
   <div class="fr-col">
@@ -229,4 +233,8 @@
       </div>
     </figure>
   </div>
+</div>
+
+<div class="fr-grid-row">
+  <div class="fr-col-8 fr-pb-12v"></div>
 </div>

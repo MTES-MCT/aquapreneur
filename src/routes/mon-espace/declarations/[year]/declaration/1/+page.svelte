@@ -7,8 +7,8 @@
 
 <Pictogram pict={CommunityPict} width={124} height={124}></Pictogram>
 
-<h2 class="fr-h5 fr-mt-6v">
+<h1 class="fr-h2 fr-mt-6v">
   Pour terminer, veuillez répondre à ces dernières questions afin de compléter votre déclaration
-</h2>
+</h1>
 
 <NavigationLinks nextHref="2" />

@@ -7,6 +7,6 @@
 
 <Pictogram pict={CityHallPict} width={124} height={124}></Pictogram>
 
-<h2 class="fr-h5 fr-mt-6v">Nous allons commencer par vérifier vos informations d’entreprise</h2>
+<h1 class="fr-h2 fr-mt-6v">Nous allons commencer par vérifier vos informations d’entreprise</h1>
 
 <NavigationLinks nextHref="2" />

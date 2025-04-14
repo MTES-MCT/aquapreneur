@@ -12,7 +12,7 @@
   }
 </script>
 
-<h2 class="fr-h5">Récapitulatif de votre déclaration</h2>
+<h1 class="fr-h2">Récapitulatif de votre déclaration</h1>
 
 <!-- Bouton d'ouverture de la modale -->
 

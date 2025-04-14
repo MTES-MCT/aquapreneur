@@ -7,6 +7,6 @@
 
 <Pictogram pict={FranceMapPict} width={124} height={124}></Pictogram>
 
-<h2 class="fr-h5 fr-mt-6v">Nous allons maintenant examiner vos concessions</h2>
+<h1 class="fr-h2 fr-mt-6v">Nous allons maintenant examiner vos concessions</h1>
 
 <NavigationLinks nextHref="2" />

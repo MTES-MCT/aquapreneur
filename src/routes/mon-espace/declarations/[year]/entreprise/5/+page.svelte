@@ -2,6 +2,6 @@
   import NavigationLinks from '$lib/components/navigation-links.svelte';
 </script>
 
-<h2 class="fr-h5">Veuillez passer en revue les informations de contact de votre entreprise</h2>
+<h1 class="fr-h2">Veuillez passer en revue les informations de contact de votre entreprise</h1>
 
 <NavigationLinks prevHref="4" nextHref="../concessions" nextLabel="Confirmer" />

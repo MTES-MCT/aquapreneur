@@ -3,7 +3,7 @@
 </script>
 
 <div class="fr-grid-row">
-  <div class="fr-col-8">
+  <div class="fr-col-8 fr-py-12v" id="contenu">
     <h1>Politique de confidentialité</h1>
     <p class="fr-text--xs">25 mars 2025</p>
 

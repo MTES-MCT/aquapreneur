@@ -2,10 +2,7 @@
   const { step, baseUrl } = $props();
 </script>
 
-<nav
-  class="fr-sidemenu fr-sidemenu--sticky fr-sidemenu--sticky-full-height"
-  aria-labelledby="fr-sidemenu-title"
->
+<nav class="fr-sidemenu fr-sidemenu--sticky-full-height" aria-labelledby="fr-sidemenu-title">
   <div class="fr-sidemenu__inner">
     <button
       class="fr-sidemenu__btn"
@@ -16,7 +13,7 @@
       Dans cette rubrique
     </button>
     <div class="fr-collapse" id="fr-sidemenu-wrapper">
-      <h1 class="fr-sidemenu__title fr-h3" id="fr-sidemenu-title">Ma déclaration annuelle</h1>
+      <div class="fr-sidemenu__title" id="fr-sidemenu-title">Ma déclaration annuelle</div>
       <ul class="fr-sidemenu__list">
         <li class="fr-sidemenu__item fr-sidemenu__item--active">
           <a
