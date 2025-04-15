@@ -1,6 +1,8 @@
-import { asc } from 'drizzle-orm';
+import { asc, inArray, sql } from 'drizzle-orm';
 
 import { fail } from '@sveltejs/kit';
+
+import { TMP_ALLOWED_SIRENS } from '$env/static/private';
 
 import { db } from '$db';
 
@@ -15,6 +17,9 @@ export const load = async ({ parent }) => {
     exploitants = await db
       .selectDistinct({ siret: bilans.siret, nom: bilans.nom })
       .from(bilans)
+      .where(
+        inArray(sql<string>`substring(${bilans.siret} from 1 for 9)`, TMP_ALLOWED_SIRENS.split(','))
+      )
       .orderBy(asc(bilans.nom));
   }
 

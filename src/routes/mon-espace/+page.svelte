@@ -5,7 +5,9 @@
   import { enhance } from '$app/forms';
 
   const { data } = $props();
-  console.log(data.siret);
+
+  let selectedSiret = $state(data.siret);
+  let creating = $state(false);
 </script>
 
 <div class="fr-grid-row">
@@ -16,10 +18,14 @@
       <form
         method="POST"
         class="fr-mb-8w"
-        use:enhance={() =>
-          async ({ update }) => {
-            update({ reset: false });
-          }}
+        use:enhance={() => {
+          creating = true;
+          return async ({ update }) => {
+            await update({ reset: false });
+            selectedSiret = data.siret;
+            creating = false;
+          };
+        }}
       >
         <fieldset class="fr-fieldset">
           <div class="fr-fieldset__element">
@@ -31,8 +37,8 @@
                 class="fr-select"
                 id="select-siret"
                 name="select"
-                value={data.siret}
                 autocomplete="off"
+                bind:value={selectedSiret}
               >
                 <option value="" selected disabled>Sélectionner une option</option>
                 {#each data.exploitants! as exploitant (exploitant.siret)}
@@ -42,7 +48,9 @@
             </div>
           </div>
           <div class="fr-fieldset__element">
-            <button class="fr-btn">Choisir</button>
+            <button class="fr-btn" disabled={creating || data.siret === selectedSiret}
+              >Choisir</button
+            >
           </div>
         </fieldset>
       </form>
@@ -81,7 +89,7 @@
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
-            {#if data.siret}
+            {#if data.siret && !creating && data.siret === selectedSiret}
               <a href="mon-espace/declarations/2024">Déclaration 2024</a>
             {:else}
               <a aria-disabled="true" role="link">Déclaration 2024</a>
