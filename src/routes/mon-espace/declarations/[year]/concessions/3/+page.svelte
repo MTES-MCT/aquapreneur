@@ -7,7 +7,25 @@
   import NavigationLinks from '$lib/components/navigation-links.svelte';
 
   const { data } = $props();
-  const concessionsGroups = Object.entries(Object.groupBy(data.concessions, (c) => c.lieu));
+
+  // TODO typing
+  const groupedConcessions = new Map();
+
+  data.concessions.forEach((c) => {
+    const quartier = c.quartierParcelle ?? '';
+    const lieu = c.lieu.replace(/^ – /, '').replace(/ – $/, '') ?? '';
+
+    if (!groupedConcessions.has(quartier)) {
+      groupedConcessions.set(quartier, new Map([[lieu, [c]]]));
+    } else {
+      const quartierConcessions = groupedConcessions.get(quartier);
+      if (quartierConcessions.has(lieu)) {
+        quartierConcessions.get(lieu).push(c);
+      } else {
+        quartierConcessions.set(lieu, [c]);
+      }
+    }
+  });
 </script>
 
 <h1 class="fr-h2">Passons en revue vos concessions</h1>
@@ -31,57 +49,63 @@
   </div>
 </fieldset>
 
-{#each concessionsGroups as cg (cg[0])}
-  <h6>{cg[0]}</h6>
-  <div class="fr-accordions-group fr-mb-8v">
-    {#if cg.length === 2 && cg[1]?.length}
-      {#each cg[1]?.sort( (a, b) => ((a.numeroParcelle ?? '') > (b.numeroParcelle ?? '') ? 1 : -1) ) as cons (cons.numeroParcelle)}
+{#each groupedConcessions as cg (cg[0])}
+  <h2 class="fr-h6">
+    <span aria-hidden="true" class="fr-mr-3v fr-icon-community-line"></span>
+    {cg[0]}
+  </h2>
+  <div class="fr-accordions-group fr-mb-10v">
+    {#each cg[1] as concesParLieu (concesParLieu[0])}
+      <h3 class="fr-text--md fr-text--bold fr-mt-6v">
+        {concesParLieu[0]}
+      </h3>
+      {#each concesParLieu[1] as conces (conces.numeroParcelle)}
         <section class="fr-accordion">
-          <h3 class="fr-accordion__title">
+          <h4 class="fr-accordion__title">
             <button
               class="fr-accordion__btn"
               aria-expanded="false"
-              aria-controls="accordion-{cons.numeroParcelle}">{cons.numeroParcelle}</button
+              aria-controls="accordion-{conces.numeroParcelle}">{conces.numeroParcelle}</button
             >
-          </h3>
-          <div class="fr-collapse" id="accordion-{cons.numeroParcelle}">
+          </h4>
+          <div class="fr-collapse" id="accordion-{conces.numeroParcelle}">
             <dl class="wrapper">
               <dt>Quartier</dt>
-              <dd>{cons.quartierParcelle}</dd>
+              <dd>{conces.quartierParcelle}</dd>
               <dt>Commune</dt>
-              <dd>{cons.libLocalite}</dd>
+              <dd>{conces.libLocalite}</dd>
               <dt>Code INSEE</dt>
-              <dd>{cons.codeLocaliteInsee}</dd>
+              <dd>{conces.codeLocaliteInsee}</dd>
               <dt>Lieu-dit</dt>
-              <dd>{cons.nomLieuDit}</dd>
+              <dd>{conces.nomLieuDit}</dd>
               <dt>Situation</dt>
-              <dd>{cons.nomSituation}</dd>
+              <dd>{conces.nomSituation}</dd>
               <dt>Type</dt>
-              <dd>{cons.typeParcelle}</dd>
+              <dd>{conces.typeParcelle}</dd>
               <dt>Surface</dt>
-              <dd>{cons.surfaceParcelle} {cons.uniteMesure}</dd>
+              <dd>{conces.surfaceParcelle} {conces.uniteMesure}</dd>
               <dt>État</dt>
-              <dd>{cons.etatParcelle}</dd>
+              <dd>{conces.etatParcelle}</dd>
               <dt>Famille d’exploitation</dt>
-              <dd>{cons.familleExploitation}</dd>
+              <dd>{conces.familleExploitation}</dd>
               <dt>Nature d’exploitation</dt>
-              <dd>{cons.exploitation}</dd>
+              <dd>{conces.exploitation}</dd>
               <dt>Famille espèce</dt>
-              <dd>{cons.familleEspece}</dd>
+              <dd>{conces.familleEspece}</dd>
               <dt>Espèce principale</dt>
-              <dd>{cons.espece}</dd>
+              <dd>{conces.espece}</dd>
               <dt>Nature juridique</dt>
-              <dd>{cons.natureJuridique}</dd>
+              <dd>{conces.natureJuridique}</dd>
               <dt>N° d’arrêté</dt>
-              <dd>{cons.numArrete}</dd>
+              <dd>{conces.numArrete}</dd>
               <dt>Date d’arrêté</dt>
               <dd>
-                {#if cons.dateArrete}
+                {#if conces.dateArrete}
                   {new Intl.DateTimeFormat('fr-FR', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-                  }).format(new Date(cons.dateArrete))}
+                  }).format(new Date(conces.dateArrete))}
                 {/if}
               </dd>
               <dt>Capacité de production</dt>
@@ -92,7 +116,7 @@
           </div>
         </section>
       {/each}
-    {/if}
+    {/each}
   </div>
 {/each}
 

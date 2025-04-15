@@ -18,11 +18,11 @@
       </span>
     {/snippet}
     {#snippet inputs()}
-      <RadioGroup name="radio-inline" id="radio-oui" inline>
+      <RadioGroup name="radio-inline" id="radio-oui" checked inline>
         {#snippet label()}Oui{/snippet}
       </RadioGroup>
 
-      <RadioGroup name="radio-inline" id="radio-non" inline>
+      <RadioGroup name="radio-inline" id="radio-non" disabled inline>
         {#snippet label()}Non{/snippet}
       </RadioGroup>
     {/snippet}

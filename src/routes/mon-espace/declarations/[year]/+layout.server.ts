@@ -21,7 +21,7 @@ export const load = async ({ parent, params }) => {
 
   const reqConcessions = await db
     .select({
-      lieu: sql<string>`${concessions.quartierParcelle} || ' – ' || ${concessions.libLocalite} || ' – ' || ${concessions.nomLieuDit}`,
+      lieu: sql<string>`concat(${concessions.libLocalite} ,  ' – ', ${concessions.nomLieuDit})`,
       idParcelle: concessions.idRcmParcelle,
       libLocalite: concessions.libLocalite,
       nomLieuDit: concessions.nomLieuDit,
@@ -45,7 +45,10 @@ export const load = async ({ parent, params }) => {
     .from(concessions)
     .where(and(eq(concessions.siren, etablissement.siret.substring(0, 9))))
     .orderBy(
-      sql<string>`${concessions.quartierParcelle} || ' – ' || ${concessions.libLocalite} || ' – ' || ${concessions.nomLieuDit}`
+      concessions.quartierParcelle,
+      concessions.libLocalite,
+      concessions.nomLieuDit,
+      concessions.numeroParcelle
     );
 
   return { bilan: reqBilans?.[0], concessions: reqConcessions };
