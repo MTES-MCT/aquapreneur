@@ -27,6 +27,15 @@
 - renseignez le nom et le siret du partenaire
 - transmettez-lui le jeton renvoyé
 
+## Importer les données de concessions ATENA en BDD
+
+- éditer les noms de chemin dans le fichier `data-tools/R/import-atena.R`
+- dans le répertoire `data-tools`, lancer la commande `make atena`
+
+## Mise à jour des codes NAFv2
+
+- dans le répertoire `data-tools`, lancer la commande `make nafv2`
+
 ## Documentation utile
 
 - [SvelteKit](https://svelte.dev/docs/kit/introduction) : la documentation du framework javascript

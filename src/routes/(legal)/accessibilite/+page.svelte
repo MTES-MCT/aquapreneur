@@ -3,13 +3,14 @@
 </script>
 
 <div class="fr-grid-row">
-  <div class="fr-col-8">
+  <div class="fr-col-8 fr-py-12v" id="contenu">
     <h1>Déclaration d’accessibilité</h1>
     <p class="fr-text--xs">Établie le 25 mars 2025.</p>
     <p>
-      La Direction générale des affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) du
-      ministère de la Transition écologique et de la Cohésion des territoires s’engage à rendre son
-      service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
+      La direction générale des Affaires maritimes, de la Pêche et de l’Aquaculture (DGAMPA) du
+      ministère de la Transition écologique, de la Biodiversité, de la Forêt, de la Mer et de la
+      Pêche s’engage à rendre son service accessible, conformément à l’article 47 de la loi n°
+      2005-102 du 11 février 2005.
     </p>
     <p>
       Cette déclaration d’accessibilité s’applique à : <strong>Aquapreneur</strong> (https://aquapreneur.beta.gouv.fr).

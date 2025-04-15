@@ -14,8 +14,8 @@
 </svelte:head>
 
 {#if page.error?.message === 'Not Found'}
-  <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center">
-    <div class="fr-py-0 fr-col-12 fr-col-md-6">
+  <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center fr-py-12v">
+    <div class="fr-py-0 fr-col-12 fr-col-md-6" id="contenu">
       <h1>Page non trouvée</h1>
       <p class="fr-text--sm fr-mb-3w">Erreur 404</p>
       <p class="fr-text--lead fr-mb-5w">
@@ -60,8 +60,8 @@
     </div>
   </div>
 {:else}
-  <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center">
-    <div class="fr-py-0 fr-col-12 fr-col-md-6">
+  <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center fr-py-12v">
+    <div class="fr-py-0 fr-col-12 fr-col-md-6" id="contenu">
       <h1>Erreur inattendue</h1>
       <p class="fr-text--sm fr-mb-3w">Erreur 500</p>
       <p class="fr-text--lead fr-mb-5w">

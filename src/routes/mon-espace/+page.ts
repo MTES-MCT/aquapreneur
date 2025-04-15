@@ -1,13 +1,6 @@
-import { redirect } from '@sveltejs/kit';
-
-export const load = async ({ parent }) => {
-  const { utilisateur } = await parent();
-
-  if (!utilisateur) redirect(307, '/');
-
-  if (!utilisateur.valide) redirect(307, '/validation');
-
+export const load = async ({ data }) => {
   return {
-    title: 'Mon espace'
+    title: 'Mon espace',
+    exploitants: data.exploitants
   };
 };

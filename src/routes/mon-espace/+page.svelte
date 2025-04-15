@@ -1,9 +1,62 @@
 <script lang="ts">
   import ContractPict from '@gouvfr/dsfr/dist/artwork/pictograms/document/contract.svg';
   import PlaceholderPict16x9 from '@gouvfr/dsfr/example/img/placeholder.16x9.png';
+
+  import { enhance } from '$app/forms';
+
+  const { data } = $props();
+
+  let selectedSiret = $state(data.siret);
+  let creating = $state(false);
 </script>
 
-<h1>Mon espace</h1>
+<div class="fr-grid-row">
+  <div class="fr-col-8 fr-pt-12v" id="contenu">
+    <h1>Mon espace</h1>
+
+    {#if data.utilisateur?.estAdmin}
+      <form
+        method="POST"
+        class="fr-mb-8w"
+        use:enhance={() => {
+          creating = true;
+          return async ({ update }) => {
+            await update({ reset: false });
+            selectedSiret = data.siret;
+            creating = false;
+          };
+        }}
+      >
+        <fieldset class="fr-fieldset">
+          <div class="fr-fieldset__element">
+            <div class="fr-select-group">
+              <label class="fr-label" for="select-siret">
+                Choix de l’exploitant (seulement pour les administrateurs)
+              </label>
+              <select
+                class="fr-select"
+                id="select-siret"
+                name="select"
+                autocomplete="off"
+                bind:value={selectedSiret}
+              >
+                <option value="" selected disabled>Sélectionner une option</option>
+                {#each data.exploitants! as exploitant (exploitant.siret)}
+                  <option value={exploitant.siret}>{exploitant.nom} ({exploitant.siret})</option>
+                {/each}
+              </select>
+            </div>
+          </div>
+          <div class="fr-fieldset__element">
+            <button class="fr-btn" disabled={creating || data.siret === selectedSiret}
+              >Choisir</button
+            >
+          </div>
+        </fieldset>
+      </form>
+    {/if}
+  </div>
+</div>
 
 <div class="fr-grid-row fr-grid-row--top">
   <div class="fr-col">
@@ -15,24 +68,32 @@
       <input
         type="checkbox"
         class="fr-toggle__input"
-        aria-describedby="toggle-4693-messages"
-        id="toggle-4693"
+        aria-describedby="toggle-declarations-recentes-messages"
+        id="toggle-declarations-recentes"
       />
-      <label class="fr-toggle__label" for="toggle-4693"
+      <label class="fr-toggle__label" for="toggle-declarations-recentes"
         >Afficher uniquement les déclarations incomplètes</label
       >
-      <div class="fr-messages-group" id="toggle-4693-messages" aria-live="polite"></div>
+      <div
+        class="fr-messages-group"
+        id="toggle-declarations-recentes-messages"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 </div>
 
 <div class="fr-grid-row fr-grid-row--gutters">
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
-            <a href="/declarations/2024">Déclaration 2024</a>
+            {#if data.siret && !creating && data.siret === selectedSiret}
+              <a href="mon-espace/declarations/2024">Déclaration 2024</a>
+            {:else}
+              <a aria-disabled="true" role="link">Déclaration 2024</a>
+            {/if}
           </h3>
           <p class="fr-tile__detail">Commencer</p>
 
@@ -54,7 +115,7 @@
   </div>
 
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
@@ -70,7 +131,7 @@
     </div>
   </div>
   <div class="fr-col">
-    <div class="fr-tile fr-tile--horizontal fr-enlarge-link" id="tile-6661">
+    <div class="fr-tile fr-tile--horizontal fr-enlarge-link">
       <div class="fr-tile__body">
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
@@ -89,7 +150,7 @@
 
 <div class="fr-grid-row fr-mt-4v">
   <div class="fr-col">
-    <a href="/declarations" class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+    <a href="mon-espace/declarations" class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
       >Voir toutes mes déclarations passées</a
     >
   </div>
@@ -180,4 +241,8 @@
       </div>
     </figure>
   </div>
+</div>
+
+<div class="fr-grid-row">
+  <div class="fr-col-8 fr-pb-12v"></div>
 </div>

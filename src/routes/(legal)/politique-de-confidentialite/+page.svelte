@@ -3,7 +3,7 @@
 </script>
 
 <div class="fr-grid-row">
-  <div class="fr-col-8">
+  <div class="fr-col-8 fr-py-12v" id="contenu">
     <h1>Politique de confidentialité</h1>
     <p class="fr-text--xs">25 mars 2025</p>
 
@@ -32,9 +32,9 @@
 
     <h2>I - Responsable de traitement</h2>
     <p>
-      Le responsable de traitement est la Direction générale des affaires maritimes, de la pêche et
-      de l’aquaculture (DGAMPA) du ministère de la Transition Écologique et de la Cohésion des
-      Territoires, représenté par son directeur général, Eric Banel.
+      Le responsable de traitement est la direction générale des Affaires maritimes, de la Pêche et
+      de l’Aquaculture (DGAMPA) du ministère de la Transition écologique, de la Biodiversité, de la
+      Forêt, de la Mer et de la Pêche, représentée par son directeur général, Eric Banel.
     </p>
 
     <h2>II - Finalités</h2>
@@ -66,8 +66,8 @@
         dont est investi le responsable de traitement au sens de l’article 6-1 e) du RPGD ;
       </li>
       <li>
-        Cette mission d’intérêt public découle des attributions confiées à la Direction générale des
-        affaires maritimes, de la pêche et de l’aquaculture (DGAMPA) par l’article 9 du décret n°
+        Cette mission d’intérêt public découle des attributions confiées à la direction générale des
+        Affaires maritimes, de la Pêche et de l’Aquaculture (DGAMPA) par l’article 9 du décret n°
         2008-680, l’article 9.1.1 de l’arrêté du 9 juillet 2008 portant organisation des
         administrations centrales des ministères chargés de la transition écologique, de la cohésion
         des territoires et de la mer et l’article R. 923-11 du code rural et de la pêche maritime.
@@ -102,14 +102,11 @@
 
     <h2>V - Durée de conservation</h2>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Type de données </th>
@@ -117,19 +114,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données de création de compte et de connexion </td>
                   <td> 3 ans à compter de la dernière activité</td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données d’entreprise </td>
                   <td> 5 ans à compter de la dernière activité</td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données relatives aux demandes d’une concession aquacole </td>
                   <td> 3 ans à compter de la dernière activité </td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
                     5 ans en base active puis archivage intermédiaire jusqu’au terme de la durée de
@@ -138,7 +135,7 @@
                     ans)</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Cookies </td>
                   <td> 30 jours</td>
                 </tr>
@@ -194,14 +191,11 @@
     </p>
     <p>Suite à l’expérimentation, les personnes suivantes vont avoir accès aux données :</p>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Données </th>
@@ -209,13 +203,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données de création de compte et de connexion </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données d’entreprise </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État<br />
@@ -223,13 +217,13 @@
                     de l’agriculture biologique (Agence Bio)</td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données relatives aux demandes d’une concession aquacole </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État
                   </td>
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Données des concessions d’exploitation aquacole </td>
                   <td>
                     Agents publics et personnels habilités des services déconcentrés de l’État</td
@@ -268,14 +262,11 @@
       RGPD et qu’ils apportent des garanties suffisantes en matière de sécurité.
     </p>
 
-    <div
-      class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll"
-      id="table-sm-component"
-    >
+    <div class="fr-table--sm fr-table fr-table--bordered fr-table--no-scroll">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
-            <table id="table-sm">
+            <table>
               <thead>
                 <tr>
                   <th scope="col"> Sous-traitant </th>
@@ -285,7 +276,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Scalingo</td>
                   <td> France</td>
                   <td> Hébergement</td>
@@ -297,7 +288,7 @@
                     ></td
                   >
                 </tr>
-                <tr id="table-sm-row-key-1" data-row-key="1">
+                <tr>
                   <td> Boscop</td>
                   <td> France</td>
                   <td> Monitorage</td>

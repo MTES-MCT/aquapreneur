@@ -18,7 +18,8 @@ export const utilisateurs = pgTable('utilisateurs', {
   derniereConnexion: timestamp({ withTimezone: true, mode: 'date' }),
   dernierAcces: timestamp({ withTimezone: true, mode: 'date' }),
 
-  valide: boolean().default(false)
+  valide: boolean().default(false),
+  estAdmin: boolean().default(false)
 });
 
 export type Utilisateur = InferSelectModel<typeof utilisateurs>;

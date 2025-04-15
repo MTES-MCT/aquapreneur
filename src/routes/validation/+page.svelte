@@ -3,8 +3,8 @@
   import TechErrorPict from '@gouvfr/dsfr/dist/artwork/pictograms/system/technical-error.svg';
 </script>
 
-<div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center">
-  <div class="fr-py-0 fr-col-12 fr-col-md-6">
+<div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center fr-py-12v">
+  <div class="fr-py-0 fr-col-12 fr-col-md-6" id="contenu">
     <h1>Compte non validé</h1>
     <p class="fr-text--lead fr-mb-5w">
       Votre compte utilisateur n’est pas autorisé à accéder aux données d’Aquapreneur.

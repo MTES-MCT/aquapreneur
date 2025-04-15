@@ -49,7 +49,7 @@ test.describe('Connecté mais non validés', () => {
   });
 
   test('Les utilisateurs non validés ne peuvent pas acceder aux déclarations', async ({ page }) => {
-    await page.goto('/declarations/2024/entreprise/1');
+    await page.goto('/mon-espace/declarations/2024/entreprise/1');
     await expect(page).toHaveURL('/validation');
   });
 });

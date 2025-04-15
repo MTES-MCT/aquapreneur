@@ -11,10 +11,11 @@ export default defineConfig({
   },
   migrations: {
     table: 'migrations',
-    schema: 'public'
+    schema: 'drizzle'
   },
   verbose: true,
   strict: true,
   casing: 'snake_case',
-  breakpoints: false
+  breakpoints: false,
+  schemaFilter: ['public', 'atena']
 });
