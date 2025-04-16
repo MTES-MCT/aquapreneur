@@ -118,6 +118,14 @@
       {/each}
     {/each}
   </div>
+{:else}
+  <div class="fr-alert fr-alert--warning">
+    <h3 class="fr-alert__title">Données manquantes</h3>
+    <p>
+      Nous n’avons pas trouvé de données sur les concessions de l’établissement<br />{data
+        .etablissement.uniteLegale.denominationUniteLegale}.
+    </p>
+  </div>
 {/each}
 
 <NavigationLinks prevHref="2" nextHref="../production" />
