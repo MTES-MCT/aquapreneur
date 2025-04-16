@@ -3,6 +3,7 @@
   //  à réévaluer plus tard
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy#browser_compatibility
   import 'core-js/actual/object/group-by';
+  import { onMount } from 'svelte';
 
   import NavigationLinks from '$lib/components/navigation-links.svelte';
 
@@ -25,6 +26,14 @@
         quartierConcessions.set(lieu, [c]);
       }
     }
+  });
+
+  // Le rendu des accordéons est extrêmement long. On charge donc la page en les
+  // masquant, et on les réactive après un délai, pour ne pas rester bloqués sur
+  // la page précédente le temps que Svelte finisse le rendu.
+  let delayed = $state(true);
+  onMount(() => {
+    setTimeout(() => (delayed = false), 1000);
   });
 </script>
 
@@ -68,7 +77,7 @@
               aria-controls="accordion-{conces.numeroParcelle}">{conces.numeroParcelle}</button
             >
           </h4>
-          <div class="fr-collapse" id="accordion-{conces.numeroParcelle}">
+          <div class:delayed class="fr-collapse" id="accordion-{conces.numeroParcelle}">
             <dl class="wrapper">
               <dt>Quartier</dt>
               <dd>{conces.quartierParcelle}</dd>
@@ -142,5 +151,9 @@
 
   dd {
     padding: 0;
+  }
+
+  .delayed {
+    display: none;
   }
 </style>
