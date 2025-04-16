@@ -27,8 +27,11 @@
     <div class="fr-accordions-group">
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-114"
-            >Stock d’huîtres de taille marchande</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-114">Stock d’huîtres de taille marchande</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-114">

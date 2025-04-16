@@ -27,8 +27,11 @@
     <div class="fr-accordions-group">
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-114"
-            >Ventes d’huîtres de taille marchande</button
+          <button
+            type="button"
+            class="fr-accordion__btn"
+            aria-expanded="false"
+            aria-controls="accordion-114">Ventes d’huîtres de taille marchande</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-114">
@@ -125,8 +128,11 @@
       </section>
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-115"
-            >Ventes de naissains</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-115">Ventes de naissains</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-115"></div>
@@ -137,16 +143,22 @@
     <div class="fr-accordions-group">
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-116"
-            >Ventes de moules de taille marchande</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-116">Ventes de moules de taille marchande</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-116"></div>
       </section>
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-119"
-            >Ventes de naissains</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-119">Ventes de naissains</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-119"></div>
@@ -157,16 +169,22 @@
     <div class="fr-accordions-group">
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-117"
-            >Ventes d’huîtres de taille marchande</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-117">Ventes d’huîtres de taille marchande</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-117"></div>
       </section>
       <section class="fr-accordion">
         <h3 class="fr-accordion__title">
-          <button class="fr-accordion__btn" aria-expanded="false" aria-controls="accordion-118"
-            >Ventes de naissains</button
+          <button
+            class="fr-accordion__btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="accordion-118">Ventes de naissains</button
           >
         </h3>
         <div class="fr-collapse" id="accordion-118"></div>

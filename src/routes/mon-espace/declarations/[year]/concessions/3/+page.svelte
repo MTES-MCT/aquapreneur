@@ -69,6 +69,7 @@
           <h4 class="fr-accordion__title">
             <button
               class="fr-accordion__btn"
+              type="button"
               aria-expanded="false"
               aria-controls="accordion-{conces.numeroParcelle}">{conces.numeroParcelle}</button
             >
