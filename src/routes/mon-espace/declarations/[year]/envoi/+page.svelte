@@ -1,13 +1,18 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
 
+  import { getDeclarationContext } from '$lib/declaration-context';
+
   function handleCloseModal(modalId: string) {
     const element = document.getElementById(modalId);
     // @ts-expect-error -- pas de type disponible
     dsfr(element).modal.conceal();
   }
 
+  const context = getDeclarationContext();
+
   function handleSubmit() {
+    context.valide = true;
     goto('/');
   }
 </script>

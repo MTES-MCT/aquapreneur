@@ -5,7 +5,7 @@
     label,
     type,
     name,
-    value,
+    value = $bindable(),
     fieldsetId
   }: {
     label: Snippet;
@@ -22,6 +22,13 @@
     <label class="fr-label" for={id}>
       {@render label()}
     </label>
-    <input class="fr-input" aria-describedby="{fieldsetId}-messages" {type} {id} {name} {value} />
+    <input
+      class="fr-input"
+      aria-describedby="{fieldsetId}-messages"
+      {type}
+      {id}
+      {name}
+      bind:value
+    />
   </div>
 </div>

@@ -4,8 +4,18 @@
   import Fieldset from '$lib/components/fieldset.svelte';
   import InputGroup from '$lib/components/input-group.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { getDeclarationContext } from '$lib/declaration-context';
 
   const { data } = $props();
+
+  const context = getDeclarationContext();
+
+  if (!context.emailEntreprise) {
+    context.emailEntreprise = data.utilisateur.courriel;
+  }
+  if (!context.telEntreprise) {
+    context.telEntreprise = data.utilisateur.telephone ?? '';
+  }
 </script>
 
 <h1 class="fr-h2">Comment vous contacter ?</h1>
@@ -25,7 +35,7 @@
     <InputGroup
       name="courriel-entreprise"
       type="email"
-      value={data.utilisateur.courriel}
+      bind:value={context.emailEntreprise}
       {fieldsetId}
     >
       {#snippet label()}
@@ -36,7 +46,7 @@
       {/snippet}
     </InputGroup>
 
-    <InputGroup name="courriel-contact" type="email" {fieldsetId}>
+    <InputGroup name="courriel-contact" type="email" {fieldsetId} bind:value={context.emailContact}>
       {#snippet label()}
         E-mail de contact
         <span class="fr-hint-text">
@@ -45,7 +55,7 @@
       {/snippet}
     </InputGroup>
 
-    <InputGroup name="tel-entreprise" type="tel" value={data.utilisateur.telephone} {fieldsetId}>
+    <InputGroup name="tel-entreprise" type="tel" {fieldsetId} bind:value={context.telEntreprise}>
       {#snippet label()}
         Numéro de téléphone de l’entreprise *
         <span class="fr-hint-text">
@@ -55,7 +65,7 @@
       {/snippet}
     </InputGroup>
 
-    <InputGroup name="tel-contact" type="tel" {fieldsetId}>
+    <InputGroup name="tel-contact" type="tel" {fieldsetId} bind:value={context.telContact}>
       {#snippet label()}
         Numéro de téléphone de contact
         <span class="fr-hint-text">

@@ -4,10 +4,14 @@
 
   import { enhance } from '$app/forms';
 
+  import { getDeclarationContext, resetDeclarationContext } from '$lib/declaration-context';
+
   const { data } = $props();
 
   let selectedSiret = $state(data.siret);
   let creating = $state(false);
+
+  const context = getDeclarationContext();
 </script>
 
 <div class="fr-grid-row">
@@ -21,6 +25,7 @@
         use:enhance={() => {
           creating = true;
           return async ({ update }) => {
+            resetDeclarationContext(context);
             await update({ reset: false });
             selectedSiret = data.siret;
             creating = false;
@@ -95,10 +100,14 @@
               <a aria-disabled="true" role="link">Déclaration 2024</a>
             {/if}
           </h3>
-          <p class="fr-tile__detail">Commencer</p>
+          <p class="fr-tile__detail">{context.valide ? 'Afficher' : 'Commencer'}</p>
 
           <div class="fr-tile__start">
-            <p class="fr-badge fr-badge--sm fr-badge--new fr-badge--no-icon">À compléter</p>
+            {#if context.valide}
+              <p class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon">Terminée</p>
+            {:else}
+              <p class="fr-badge fr-badge--sm fr-badge--new fr-badge--no-icon">À compléter</p>
+            {/if}
           </div>
         </div>
       </div>
