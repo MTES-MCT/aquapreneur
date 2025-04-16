@@ -12,7 +12,7 @@
     ></MenuDeclaration>
   </div>
 
-  <div id="contenu" class="fr-col-12 fr-col-md-8" style="min-height: 100vh; margin: auto">
+  <div id="contenu" class="fr-col-12 fr-col-md-8 fr-mx-auto" style="min-height: 100vh; ">
     {@render children()}
   </div>
 </div>
