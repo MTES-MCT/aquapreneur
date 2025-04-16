@@ -14,6 +14,8 @@
     nextIsButton?: boolean;
     nextButtonCb?: () => void;
   } = $props();
+
+  let clicked = $state(false);
 </script>
 
 <div
@@ -34,6 +36,15 @@
       style="justify-self: end">{nextLabel}</a
     >
   {:else if nextIsButton}
-    <button class="fr-btn" onclick={nextButtonCb ?? (() => null)}>{nextLabel}</button>
+    <button
+      class="fr-btn"
+      disabled={clicked}
+      onclick={() => {
+        clicked = true;
+        if (nextButtonCb) {
+          return nextButtonCb();
+        }
+      }}>{nextLabel}</button
+    >
   {/if}
 </div>
