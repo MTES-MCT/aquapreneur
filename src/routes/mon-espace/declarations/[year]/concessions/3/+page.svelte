@@ -1,8 +1,4 @@
 <script lang="ts">
-  // Pas assez répandu en avril 2025 pour utiliser la version native,
-  //  à réévaluer plus tard
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy#browser_compatibility
-  import 'core-js/actual/object/group-by';
   import { onMount } from 'svelte';
 
   import NavigationLinks from '$lib/components/navigation-links.svelte';
