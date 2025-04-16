@@ -6,13 +6,15 @@
     type,
     name,
     value = $bindable(),
-    fieldsetId
+    fieldsetId,
+    required
   }: {
     label: Snippet;
     type: 'text' | 'email' | 'tel';
     name: string;
     value?: string | null;
     fieldsetId: string;
+    required?: boolean;
   } = $props();
   const id = $props.id();
 </script>
@@ -29,6 +31,7 @@
       {id}
       {name}
       bind:value
+      {required}
     />
   </div>
 </div>

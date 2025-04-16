@@ -2,17 +2,11 @@
   const {
     prevHref,
     nextHref,
-    prevLabel = 'Précédent',
-    nextLabel = 'Suivant',
-    nextIsButton = false,
-    nextButtonCb
+    nextIsButton = false
   }: {
     prevHref?: string;
     nextHref?: string;
-    prevLabel?: string;
-    nextLabel?: string;
     nextIsButton?: boolean;
-    nextButtonCb?: () => void;
   } = $props();
 
   let clicked = $state(false);
@@ -26,25 +20,16 @@
     <a
       href={prevHref}
       class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
-      style="justify-self: start; align-self: center;">{prevLabel}</a
+      style="justify-self: start; align-self: center;">Précédent</a
     >
   {/if}
   {#if nextHref}
     <a
       href={nextHref}
       class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-      style="justify-self: end">{nextLabel}</a
+      style="justify-self: end">Suivant</a
     >
   {:else if nextIsButton}
-    <button
-      class="fr-btn"
-      disabled={clicked}
-      onclick={() => {
-        clicked = true;
-        if (nextButtonCb) {
-          return nextButtonCb();
-        }
-      }}>{nextLabel}</button
-    >
+    <button class="fr-btn" disabled={clicked} type="submit">Valider</button>
   {/if}
 </div>

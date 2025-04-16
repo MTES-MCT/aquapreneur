@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { enhance } from '$app/forms';
 
   import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
@@ -10,7 +10,7 @@
   Avez-vous effectué des changements sur vos concessions depuis l'année dernière ?
 </h1>
 
-<form method="POST" class="fr-mb-8w fr-col-">
+<form method="POST" use:enhance>
   <Fieldset>
     {#snippet legend()}
       <span class="fr-fieldset__legend--regular">
@@ -27,6 +27,6 @@
       </RadioGroup>
     {/snippet}
   </Fieldset>
-</form>
 
-<NavigationLinks prevHref="1" nextLabel="Valider" nextIsButton nextButtonCb={() => goto('3')} />
+  <NavigationLinks prevHref="1" nextIsButton />
+</form>

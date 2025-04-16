@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { enhance } from '$app/forms';
 
   import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
@@ -10,20 +10,16 @@
 </script>
 
 <h1 class="fr-h2">Avez-vous des remarques ou suggestions concernant l’outil ?</h1>
+<form method="POST" use:enhance>
+  <Fieldset>
+    {#snippet legend()}
+      <span class="fr-fieldset__legend--regular"></span>{/snippet}
+    {#snippet inputs()}
+      <Textareagroup name="suggestions-txt" rows={5} bind:value={context.suggestionsComment}>
+        {#snippet label()}{/snippet}
+      </Textareagroup>
+    {/snippet}
+  </Fieldset>
 
-<Fieldset>
-  {#snippet legend()}
-    <span class="fr-fieldset__legend--regular"></span>{/snippet}
-  {#snippet inputs()}
-    <Textareagroup name="suggestions-txt" rows={5} bind:value={context.suggestionsComment}>
-      {#snippet label()}{/snippet}
-    </Textareagroup>
-  {/snippet}
-</Fieldset>
-
-<NavigationLinks
-  prevHref="2"
-  nextIsButton
-  nextButtonCb={() => goto('../envoi')}
-  nextLabel="Valider"
-/>
+  <NavigationLinks prevHref="3" nextIsButton />
+</form>

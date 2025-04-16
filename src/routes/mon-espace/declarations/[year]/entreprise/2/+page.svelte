@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { enhance } from '$app/forms';
 
   import NavigationLinks from '$lib/components/navigation-links.svelte';
 
@@ -43,52 +43,54 @@
   erreur, merci de la reporter dans la section dédiée à la fin du formulaire.
 </p>
 
-<div class="fr-table fr-table--sm fr-mt-8v">
-  <div class="fr-table__wrapper">
-    <div class="fr-table__container">
-      <div class="fr-table__content">
-        <table class="fr-cell--multiline">
-          <tbody>
-            <tr>
-              <th scope="row" class="fr-col-xs">Dénomination</th>
-              <td>{etabl.uniteLegale.denominationUniteLegale}</td>
-              <td class="fr-cell--right">
-                {@render editBtn()}
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Numéro SIREN</th>
-              <td>{etabl.siren}</td>
-              <td class="fr-cell--right">
-                {@render editBtn()}
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Activité principale</th>
-              <td>
-                {data.activitePrincipale}
-                ({etabl.uniteLegale.activitePrincipaleUniteLegale})
-              </td>
-              <td class="fr-cell--right">
-                {@render editBtn()}
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Adresse postale</th>
-              <td
-                >{getSireneStreetAddress(etabl.adresseEtablissement)},
-                {etabl.adresseEtablissement.codePostalEtablissement}
-                {getSireneCity(etabl.adresseEtablissement)}
-              </td>
-              <td class="fr-cell--right">
-                {@render editBtn()}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+<form method="POST" use:enhance>
+  <div class="fr-table fr-table--sm fr-mt-8v">
+    <div class="fr-table__wrapper">
+      <div class="fr-table__container">
+        <div class="fr-table__content">
+          <table class="fr-cell--multiline">
+            <tbody>
+              <tr>
+                <th scope="row" class="fr-col-xs">Dénomination</th>
+                <td>{etabl.uniteLegale.denominationUniteLegale}</td>
+                <td class="fr-cell--right">
+                  {@render editBtn()}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Numéro SIREN</th>
+                <td>{etabl.siren}</td>
+                <td class="fr-cell--right">
+                  {@render editBtn()}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Activité principale</th>
+                <td>
+                  {data.activitePrincipale}
+                  ({etabl.uniteLegale.activitePrincipaleUniteLegale})
+                </td>
+                <td class="fr-cell--right">
+                  {@render editBtn()}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Adresse postale</th>
+                <td
+                  >{getSireneStreetAddress(etabl.adresseEtablissement)},
+                  {etabl.adresseEtablissement.codePostalEtablissement}
+                  {getSireneCity(etabl.adresseEtablissement)}
+                </td>
+                <td class="fr-cell--right">
+                  {@render editBtn()}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<NavigationLinks prevHref="1" nextLabel="Valider" nextIsButton nextButtonCb={() => goto('3')} />
+  <NavigationLinks prevHref="1" nextIsButton />
+</form>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { enhance } from '$app/forms';
 
   import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
@@ -17,14 +17,16 @@
   Vous pouvez nous indiquer tout évènement pouvant expliquer des changements importants de votre
   production.
 </p>
-<Fieldset>
-  {#snippet legend()}
-    <span class="fr-fieldset__legend--regular">Si oui, veuillez les préciser :</span>{/snippet}
-  {#snippet inputs()}
-    <TextareaGroup name="events-txt" rows={5} bind:value={context.evtExceptionnelsComment}>
-      {#snippet label()}{/snippet}
-    </TextareaGroup>
-  {/snippet}
-</Fieldset>
+<form method="POST" use:enhance>
+  <Fieldset>
+    {#snippet legend()}
+      <span class="fr-fieldset__legend--regular">Si oui, veuillez les préciser :</span>{/snippet}
+    {#snippet inputs()}
+      <TextareaGroup name="events-txt" rows={5} bind:value={context.evtExceptionnelsComment}>
+        {#snippet label()}{/snippet}
+      </TextareaGroup>
+    {/snippet}
+  </Fieldset>
 
-<NavigationLinks prevHref="1" nextIsButton nextButtonCb={() => goto('3')} nextLabel="Valider" />
+  <NavigationLinks prevHref="1" nextIsButton />
+</form>
