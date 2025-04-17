@@ -21,9 +21,17 @@
 
 <!-- Bouton d'ouverture de la modale -->
 
-<button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-confirmation">
-  Valider et envoyer
-</button>
+<div class="fr-mt-8w" style="display:flex; justify-content: space-between;">
+  <a
+    href="declaration/5"
+    class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
+    style="justify-self: start; align-self: center;">Précédent</a
+  >
+
+  <button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-confirmation">
+    Envoyer ma déclaration
+  </button>
+</div>
 
 <!-- Modale avec zone d'action DSFR
    Idéalement, la balise <dialog> devrait être un enfant direct de la balise <body>

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { formatDate } from '$lib/utils.js';
 
   const { data } = $props();
 
@@ -107,11 +108,7 @@
               <dt>Date d’arrêté</dt>
               <dd>
                 {#if conces.dateArrete}
-                  {new Intl.DateTimeFormat('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  }).format(new Date(conces.dateArrete))}
+                  {formatDate(conces.dateArrete)}
                 {/if}
               </dd>
               <dt>Capacité de production</dt>
