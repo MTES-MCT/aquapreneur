@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { enhanceNoInvalidate } from '$lib/utils';
 
   const { data } = $props();
 
@@ -40,7 +39,7 @@
 
 <p>Veuillez confirmer les informations suivantes liées à votre entreprise.</p>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhanceNoInvalidate>
   <div class="fr-table fr-table--sm fr-mt-8v">
     <div class="fr-table__wrapper">
       <div class="fr-table__container">

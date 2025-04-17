@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
-  import { formatDate } from '$lib/utils';
+  import { enhanceNoInvalidate, formatDate } from '$lib/utils';
 
   let { data } = $props();
 </script>
@@ -11,7 +9,7 @@
 
 <p>Veuillez confirmer les informations suivantes liées à votre exercice comptable.</p>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhanceNoInvalidate>
   <div class="fr-table fr-table--sm fr-mt-8v">
     <div class="fr-table__wrapper">
       <div class="fr-table__container">

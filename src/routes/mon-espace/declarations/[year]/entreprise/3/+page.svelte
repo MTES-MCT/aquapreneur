@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import Fieldset from '$lib/components/fieldset.svelte';
   import InputGroup from '$lib/components/input-group.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import { getDeclarationContext } from '$lib/declaration-context';
+  import { enhanceNoInvalidate } from '$lib/utils';
 
   const { data } = $props();
 
@@ -23,7 +22,7 @@
   Merci de vérifier si vos coordonnées de contact sont exactes, et si besoin les corriger ou les
   compléter.
 </p>
-<form method="POST" use:enhance>
+<form method="POST" use:enhanceNoInvalidate>
   <Fieldset>
     {#snippet legend()}
       <span class="fr-fieldset__legend--regular fr-hint-text fr-text--sm">

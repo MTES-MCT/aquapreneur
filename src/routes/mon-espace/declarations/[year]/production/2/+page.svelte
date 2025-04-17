@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { enhanceNoInvalidate } from '$lib/utils';
 
   const { data } = $props();
 </script>
@@ -11,7 +10,7 @@
 <p>
   Veuillez vérifier les données relatives à vos ventes pour chaque espèce et chaque stade d’élevage.
 </p>
-<form method="POST" use:enhance>
+<form method="POST" use:enhanceNoInvalidate>
   {#if !data.bilan}
     <div class="fr-alert fr-alert--warning">
       <h3 class="fr-alert__title">Données manquantes</h3>

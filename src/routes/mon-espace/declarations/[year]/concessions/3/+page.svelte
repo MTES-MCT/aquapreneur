@@ -26,11 +26,11 @@
   });
 
   // Le rendu des accordéons est extrêmement long. On charge donc la page en les
-  // masquant, et on les réactive après un délai, pour ne pas rester bloqués sur
-  // la page précédente le temps que Svelte finisse le rendu.
+  // masquant, et on les réactive de façon asynchrone, pour ne pas rester
+  // bloqués sur la page précédente le temps que Svelte finisse le rendu.
   let delayed = $state(true);
   onMount(() => {
-    setTimeout(() => (delayed = false), 1000);
+    setTimeout(() => (delayed = false), 0);
   });
 </script>
 

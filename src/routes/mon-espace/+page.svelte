@@ -106,7 +106,9 @@
         <div class="fr-tile__content">
           <h3 class="fr-tile__title">
             {#if data.siret && !creating && data.siret === selectedSiret}
-              <a href="mon-espace/declarations/2024">Déclaration 2024</a>
+              <a href="mon-espace/declarations/2024/entreprise/1" data-sveltekit-preload-data="off"
+                >Déclaration 2024</a
+              >
             {:else}
               <a aria-disabled="true" role="link">Déclaration 2024</a>
             {/if}

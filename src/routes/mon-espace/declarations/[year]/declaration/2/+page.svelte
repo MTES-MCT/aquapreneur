@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-
   import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import TextareaGroup from '$lib/components/textarea–group.svelte';
   import { getDeclarationContext } from '$lib/declaration-context';
+  import { enhanceNoInvalidate } from '$lib/utils';
 
   const { data } = $props();
 
@@ -17,7 +16,7 @@
   Vous pouvez nous indiquer tout évènement pouvant expliquer des changements importants de votre
   production.
 </p>
-<form method="POST" use:enhance>
+<form method="POST" use:enhanceNoInvalidate>
   <Fieldset>
     {#snippet inputs()}
       <TextareaGroup name="events-txt" rows={5} bind:value={context.evtExceptionnelsComment}>
