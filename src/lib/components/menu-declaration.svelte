@@ -3,7 +3,7 @@
 </script>
 
 <nav class="fr-sidemenu fr-sidemenu--sticky-full-height" aria-labelledby="fr-sidemenu-title">
-  <div class="fr-sidemenu__inner">
+  <div class="fr-sidemenu__inner fr-pt-md-12v fr-pt-2v">
     <button
       class="fr-sidemenu__btn"
       hidden
