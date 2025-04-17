@@ -1,10 +1,21 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { getDeclarationContext } from '$lib/declaration-context';
   import { enhanceNoInvalidate } from '$lib/utils';
 
   import ContactTable from './contact-table.svelte';
 
-  const { data } = $props();
+  const { data, form } = $props();
+
+  $effect(() => {
+    if (form?.success) {
+      const context = getDeclarationContext();
+      context.entrepriseComplete = true;
+      goto('../concessions');
+    }
+  });
 </script>
 
 <h1 class="fr-h2">Comment vous contacter</h1>

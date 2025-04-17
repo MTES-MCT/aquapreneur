@@ -18,6 +18,7 @@
   const context = getDeclarationContext();
 
   function handleSubmit() {
+    context.envoiComplete = true;
     context.valide = true;
     goto('/');
   }

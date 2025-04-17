@@ -11,6 +11,12 @@ export type DeclarationContext = {
   formErreursComment: string;
   suggestionsComment: string;
   valide: boolean;
+  entrepriseComplete: boolean;
+  concessionsComplete: boolean;
+  productionComplete: boolean;
+  stockComplete: boolean;
+  declarationComplete: boolean;
+  envoiComplete: boolean;
 };
 
 export const emptyDeclarationValues = Object.freeze({
@@ -21,7 +27,13 @@ export const emptyDeclarationValues = Object.freeze({
   evtExceptionnelsComment: '',
   formErreursComment: '',
   suggestionsComment: '',
-  valide: false
+  valide: false,
+  entrepriseComplete: false,
+  concessionsComplete: false,
+  productionComplete: false,
+  stockComplete: false,
+  declarationComplete: false,
+  envoiComplete: false
 });
 
 export function setDeclarationContext(dc: DeclarationContext) {

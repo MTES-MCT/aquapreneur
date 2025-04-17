@@ -1,8 +1,18 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import { getDeclarationContext } from '$lib/declaration-context';
   import { enhanceNoInvalidate } from '$lib/utils';
 
-  const { data } = $props();
+  const { data, form } = $props();
+  $effect(() => {
+    if (form?.success) {
+      const context = getDeclarationContext();
+      context.productionComplete = true;
+      goto('../stock');
+    }
+  });
 </script>
 
 <h1 class="fr-h2">Passons en revue vos ventes en {data.year}</h1>
