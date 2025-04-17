@@ -5,3 +5,4 @@ yarn.lock
 data
 data-tools
 migrations
+tests/**/.auth

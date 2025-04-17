@@ -4,11 +4,13 @@
   let {
     label,
     name,
-    rows = 2
+    rows = 2,
+    value = $bindable()
   }: {
     label: Snippet;
     name: string;
     rows: number;
+    value?: string;
   } = $props();
   const id = $props.id();
 </script>
@@ -18,6 +20,6 @@
     <label class="fr-label" for={id}>
       {@render label()}
     </label>
-    <textarea class="fr-input" {id} {name} {rows}></textarea>
+    <textarea class="fr-input" {id} {name} {rows} bind:value></textarea>
   </div>
 </div>

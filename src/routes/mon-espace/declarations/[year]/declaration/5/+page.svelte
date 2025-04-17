@@ -5,25 +5,25 @@
   import { getDeclarationContext } from '$lib/declaration-context';
   import { enhanceNoInvalidate } from '$lib/utils';
 
-  import ContactTable from './contact-table.svelte';
+  import BilanTable from './bilan-table.svelte';
 
-  const { data, form } = $props();
+  let { data, form } = $props();
 
   $effect(() => {
     if (form?.success) {
       const context = getDeclarationContext();
-      context.entrepriseComplete = true;
-      goto('../concessions');
+      context.declarationComplete = true;
+      goto('../envoi');
     }
   });
 </script>
 
-<h1 class="fr-h2">Comment vous contacter</h1>
-<p>
-  Merci de vérifier si vos coordonnées de contact sont exactes, et si besoin les corriger ou les
-  compléter.
-</p>
+<h1 class="fr-h2">Merci de confirmer les dates de votre exercice comptable</h1>
+
+<p>Veuillez confirmer les informations suivantes liées à votre exercice comptable.</p>
+
 <form method="POST" use:enhanceNoInvalidate>
-  <ContactTable {data} editable></ContactTable>
-  <NavigationLinks prevHref="2" nextIsButton />
+  <BilanTable bilan={data.bilan}></BilanTable>
+
+  <NavigationLinks prevHref="4" nextIsButton />
 </form>

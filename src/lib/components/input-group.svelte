@@ -5,14 +5,18 @@
     label,
     type,
     name,
-    value,
-    fieldsetId
+    value = $bindable(),
+    fieldsetId,
+    required,
+    actionButton
   }: {
     label: Snippet;
     type: 'text' | 'email' | 'tel';
     name: string;
     value?: string | null;
     fieldsetId: string;
+    required?: boolean;
+    actionButton?: Snippet;
   } = $props();
   const id = $props.id();
 </script>
@@ -22,6 +26,26 @@
     <label class="fr-label" for={id}>
       {@render label()}
     </label>
-    <input class="fr-input" aria-describedby="{fieldsetId}-messages" {type} {id} {name} {value} />
+    <div class:wbtn={!!actionButton} class="fr-mt-2v">
+      <input
+        class="fr-input"
+        aria-describedby="{fieldsetId}-messages"
+        {type}
+        {id}
+        {name}
+        bind:value
+        {required}
+      />
+      {#if actionButton}
+        {@render actionButton()}
+      {/if}
+    </div>
   </div>
 </div>
+
+<style>
+  .wbtn {
+    display: flex;
+    column-gap: 1rem;
+  }
+</style>

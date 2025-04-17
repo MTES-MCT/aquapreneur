@@ -4,6 +4,8 @@ import { redirect } from '@sveltejs/kit';
 
 import { SIRENE_AUTH_TOKEN } from '$env/static/private';
 
+import * as logger from '$utils/logger';
+
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from '$lib/constants';
 
 export const load = async ({ fetch, parent, cookies, route }) => {
@@ -26,6 +28,7 @@ export const load = async ({ fetch, parent, cookies, route }) => {
   let etablissement;
   let activitePrincipale;
   if (siret) {
+    logger.info('Appel à l’API INSEE');
     const res = await fetch(`https://api.insee.fr/api-sirene/3.11/siret/${siret}`, {
       headers: {
         'x-insee-api-key-integration': SIRENE_AUTH_TOKEN
@@ -34,7 +37,7 @@ export const load = async ({ fetch, parent, cookies, route }) => {
     const jsonRes = await res.json();
     etablissement = jsonRes.etablissement;
     // TODO: passer par un schema Zod
-    const naf = etablissement.uniteLegale.activitePrincipaleUniteLegale;
+    const naf = etablissement?.uniteLegale.activitePrincipaleUniteLegale;
     activitePrincipale = nafRev2.find((line) => line.code == naf)?.label;
   }
 

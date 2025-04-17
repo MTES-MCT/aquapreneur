@@ -1,11 +1,11 @@
 <script lang="ts">
-  import LeafPict from '@gouvfr/dsfr/dist/artwork/pictograms/environment/leaf.svg';
+  import BookPict from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/book.svg';
 
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
 </script>
 
-<Pictogram pict={LeafPict} width={124} height={124}></Pictogram>
+<Pictogram pict={BookPict} width={124} height={124}></Pictogram>
 
 <h1 class="fr-h2 fr-mt-6v">Nous allons maintenant faire le point sur votre stock.</h1>
 

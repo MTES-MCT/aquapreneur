@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
 //
 
 test.describe('entreprise', () => {
-  test('Le bouton Déclaration 2024 sur Mon espace ouvre la déclaration', async ({ page }) => {
+  test('Le bouton Déclaration 2024 sur Votre espace ouvre la déclaration', async ({ page }) => {
     await page.goto('/mon-espace');
 
     await page.getByRole('link', { name: 'Déclaration 2024' }).click();

@@ -114,6 +114,7 @@ export const concessions = atena.table(
     index('concessions_geom_geom_idx').using(
       'gist',
       table.geom.asc().nullsLast().op('gist_geometry_ops_2d')
-    )
+    ),
+    index('concessions_siren_idx').on(table.siren)
   ]
 );
