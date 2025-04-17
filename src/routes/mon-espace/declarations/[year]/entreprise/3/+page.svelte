@@ -45,6 +45,15 @@
             Indiquez l’adresse e-mail générale de votre entreprise. Format attendu : nom@domaine.fr
           </span>
         {/snippet}
+        {#snippet actionButton()}
+          <button
+            type="button"
+            class="fr-btn fr-btn--tertiary fr-btn--sm"
+            disabled={context.emailEntreprise === data.utilisateur.courriel}
+            onclick={() => (context.emailEntreprise = data.utilisateur.courriel)}
+            >Réinitialiser</button
+          >
+        {/snippet}
       </InputGroup>
 
       <InputGroup
@@ -74,6 +83,16 @@
             Indiquez le numéro de téléphone principal de votre entreprise. Format attendu : 01 22 33
             44 55
           </span>
+        {/snippet}
+
+        {#snippet actionButton()}
+          <button
+            type="button"
+            class="fr-btn fr-btn--tertiary fr-btn--sm"
+            disabled={context.telEntreprise === data.utilisateur.telephone}
+            onclick={() => (context.telEntreprise = data.utilisateur.telephone ?? '')}
+            >Réinitialiser</button
+          >
         {/snippet}
       </InputGroup>
 
