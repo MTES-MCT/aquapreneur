@@ -3,6 +3,12 @@
 
   import { getDeclarationContext } from '$lib/declaration-context';
 
+  import BilanTable from '../declaration/5/bilan-table.svelte';
+  import EtablissementDataTable from '../entreprise/2/etablissement-data-table.svelte';
+  import ContactTable from '../entreprise/3/contact-table.svelte';
+
+  let { data } = $props();
+
   function handleCloseModal(modalId: string) {
     const element = document.getElementById(modalId);
     // @ts-expect-error -- pas de type disponible
@@ -17,7 +23,75 @@
   }
 </script>
 
-<h1 class="fr-h2">Récapitulatif de votre déclaration</h1>
+{#snippet fieldContent(content: string)}
+  {#if content}
+    <p>{content}</p>
+  {:else}
+    <p class="fr-text--light">Aucune réponse</p>
+  {/if}
+{/snippet}
+
+<h1 class="fr-h2">Voici le récapitulatif de votre déclaration :</h1>
+
+<p>
+  Avant d’envoyer votre déclaration, merci de vérifier que toutes les informations saisies sont
+  exactes. Vous pouvez encore revenir en arrière pour les modifier si nécessaire.
+</p>
+
+<div class="header-wrapper">
+  <h2 class="fr-h5">Données entreprise</h2>
+  <a href="entreprise/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+</div>
+
+<h3 class="fr-text--md fr-text--bold">Informations</h3>
+
+<EtablissementDataTable
+  etablissement={data.etablissement}
+  activitePrincipale={data.activitePrincipale}
+></EtablissementDataTable>
+
+<h3 class="fr-text--md fr-text--bold">Contact</h3>
+
+<ContactTable {data}></ContactTable>
+
+<div class="header-wrapper">
+  <h2 class="fr-h5">Concessions</h2>
+  <a href="concessions/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+</div>
+<div class="header-wrapper">
+  <h2 class="fr-h5">Production aquacole vendue</h2>
+  <a href="production/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+</div>
+<div class="header-wrapper">
+  <h2 class="fr-h5">Stock</h2>
+  <a href="stock/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+</div>
+<div class="header-wrapper">
+  <h2 class="fr-h5">Déclaration obligatoire</h2>
+  <a href="declaration/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+</div>
+
+<h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
+
+<BilanTable bilan={data.bilan}></BilanTable>
+
+<h3 class="fr-text--md fr-text--bold">
+  Avez-vous eu des événements exceptionnels au cours de l'année 2024 ?
+</h3>
+
+{@render fieldContent(context.evtExceptionnelsComment)}
+
+<h3 class="fr-text--md fr-text--bold">
+  Avez-vous relevé des données erronées dans le formulaire ?
+</h3>
+{@render fieldContent(context.formErreursComment)}
+
+<h3 class="fr-text--md fr-text--bold">
+  Avez-vous des remarques ou suggestions concernant l’outil ?
+</h3>
+{@render fieldContent(context.suggestionsComment)}
+
+<!-- ####################################################################### -->
 
 <!-- Bouton d'ouverture de la modale -->
 
@@ -80,3 +154,19 @@
     </div>
   </div>
 </dialog>
+
+<style>
+  .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  h2 {
+    margin-top: 2rem !important;
+  }
+
+  h3 {
+    margin-bottom: 0 !important;
+  }
+</style>
