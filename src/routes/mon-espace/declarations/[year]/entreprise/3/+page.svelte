@@ -18,7 +18,7 @@
   }
 </script>
 
-<h1 class="fr-h2">Comment vous contacter ?</h1>
+<h1 class="fr-h2">Comment vous contacter</h1>
 <p>
   Merci de vérifier si vos coordonnées de contact sont exactes, et si besoin les corriger ou les
   compléter.

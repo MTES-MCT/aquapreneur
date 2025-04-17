@@ -12,11 +12,11 @@
 <h1 class="fr-h2">Avez-vous des remarques ou suggestions concernant l’outil ?</h1>
 <form method="POST" use:enhance>
   <Fieldset>
-    {#snippet legend()}
-      <span class="fr-fieldset__legend--regular"></span>{/snippet}
     {#snippet inputs()}
       <Textareagroup name="suggestions-txt" rows={5} bind:value={context.suggestionsComment}>
-        {#snippet label()}{/snippet}
+        {#snippet label()}
+          Si oui, merci de les décrire dans le champ ci-dessous :
+        {/snippet}
       </Textareagroup>
     {/snippet}
   </Fieldset>

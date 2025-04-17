@@ -36,10 +36,7 @@
 
 <h1 class="fr-h2">Passons en revue vos concessions</h1>
 
-<p>
-  Vous pouvez maintenant vérifier les données liées à vos concessions. Si des informations sont
-  incorrectes ou manquantes, merci de les noter pour pouvoir les signaler à la fin du formulaire.
-</p>
+<p>Vous pouvez maintenant vérifier les données liées à vos concessions.</p>
 
 <fieldset class="fr-segmented fr-segmented--no-legend fr-mb-12v">
   <legend class="fr-segmented__legend"> Choix de la visualisation </legend>

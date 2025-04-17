@@ -12,11 +12,10 @@
 <h1 class="fr-h2">Avez-vous relevé des données erronées dans le formulaire ?</h1>
 <form method="POST" use:enhance>
   <Fieldset>
-    {#snippet legend()}
-      <span class="fr-fieldset__legend--regular"></span>{/snippet}
     {#snippet inputs()}
       <Textareagroup name="data-errors-txt" rows={5} bind:value={context.formErreursComment}>
-        {#snippet label()}{/snippet}
+        {#snippet label()}Décrivez les erreurs que vous avez constatées dans le formulaire :
+        {/snippet}
       </Textareagroup>
     {/snippet}
   </Fieldset>

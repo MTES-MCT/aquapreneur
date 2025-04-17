@@ -30,7 +30,7 @@
 
 {#snippet editBtn()}
   <button
-    class="fr-btn fr-icon-pencil-fill fr-btn--tertiary-no-outline fr-btn--sm"
+    class="fr-btn fr-icon-edit-line fr-btn--tertiary-no-outline fr-btn--sm"
     title="Éditer"
     disabled>Éditer</button
   >
@@ -38,10 +38,7 @@
 
 <h1 class="fr-h2">Votre entreprise</h1>
 
-<p>
-  Veuillez confirmer les informations suivantes liées à votre entreprise. Si vous remarquez une
-  erreur, merci de la reporter dans la section dédiée à la fin du formulaire.
-</p>
+<p>Veuillez confirmer les informations suivantes liées à votre entreprise.</p>
 
 <form method="POST" use:enhance>
   <div class="fr-table fr-table--sm fr-mt-8v">
@@ -51,7 +48,7 @@
           <table class="fr-cell--multiline">
             <tbody>
               <tr>
-                <th scope="row" class="fr-col-xs">Dénomination</th>
+                <th scope="row">Dénomination</th>
                 <td>{etabl.uniteLegale.denominationUniteLegale}</td>
                 <td class="fr-cell--right">
                   {@render editBtn()}

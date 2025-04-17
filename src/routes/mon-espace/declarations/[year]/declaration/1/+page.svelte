@@ -14,4 +14,4 @@
   2024 ou tout retour utile concernant l’outil et votre déclaration.
 </p>
 
-<NavigationLinks nextHref="2" prevHref="stock/3" />
+<NavigationLinks nextHref="2" prevHref="../stock/2" />

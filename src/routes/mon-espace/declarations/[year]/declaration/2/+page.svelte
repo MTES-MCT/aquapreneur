@@ -19,11 +19,9 @@
 </p>
 <form method="POST" use:enhance>
   <Fieldset>
-    {#snippet legend()}
-      <span class="fr-fieldset__legend--regular">Si oui, veuillez les préciser :</span>{/snippet}
     {#snippet inputs()}
       <TextareaGroup name="events-txt" rows={5} bind:value={context.evtExceptionnelsComment}>
-        {#snippet label()}{/snippet}
+        {#snippet label()}Si oui, veuillez les préciser :{/snippet}
       </TextareaGroup>
     {/snippet}
   </Fieldset>

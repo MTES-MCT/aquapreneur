@@ -10,8 +10,6 @@
 
 <p>
   Veuillez vérifier les données relatives à vos ventes pour chaque espèce et chaque stade d’élevage.
-  Si certaines informations sont incorrectes ou manquantes, notez-les afin de pouvoir les signaler à
-  la fin du formulaire.
 </p>
 <form method="POST" use:enhance>
   {#if !data.bilan}
