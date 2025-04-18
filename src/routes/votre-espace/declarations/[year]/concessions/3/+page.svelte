@@ -3,7 +3,9 @@
 
   import { goto } from '$app/navigation';
 
+  import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import Textareagroup from '$lib/components/textarea–group.svelte';
   import { getDeclarationContext } from '$lib/declaration-context';
   import { enhanceNoInvalidate, formatDate } from '$lib/utils.js';
 
@@ -28,6 +30,8 @@
     }
   });
 
+  const context = getDeclarationContext();
+
   // Le rendu des accordéons est extrêmement long. On charge donc la page en les
   // masquant, et on les réactive de façon asynchrone, pour ne pas rester
   // bloqués sur la page précédente le temps que Svelte finisse le rendu.
@@ -45,9 +49,13 @@
   });
 </script>
 
-<h1 class="fr-h2">Passons en revue vos concessions</h1>
+<h1 class="fr-h2">Vérifions les données de vos concessions</h1>
 
-<p>Vous pouvez maintenant vérifier les données liées à vos concessions.</p>
+<p>
+  Voici la liste des concessions dont vous êtes titulaire, avec les informations correspondantes.
+  Merci de vérifier que ces données reflètent bien les éventuels changements que vous avez
+  effectués. Indiquez tout changement non pris en compte dans le champ en bas de page.
+</p>
 
 <fieldset class="fr-segmented fr-segmented--no-legend fr-mb-12v">
   <legend class="fr-segmented__legend"> Choix de la visualisation </legend>
@@ -139,6 +147,19 @@
       </p>
     </div>
   {/each}
+
+  <Fieldset>
+    {#snippet inputs()}
+      <Textareagroup name="data-errors-txt" rows={5} bind:value={context.concessionsErreursComment}>
+        {#snippet label()}Changement(s) à signaler
+          <span class="fr-hint-text"
+            >Si certaines informations ne correspondent pas à vos concessions actuelles, merci de
+            les préciser ci-dessous.</span
+          >
+        {/snippet}
+      </Textareagroup>
+    {/snippet}
+  </Fieldset>
 
   <NavigationLinks prevHref="2" nextIsButton />
 </form>
