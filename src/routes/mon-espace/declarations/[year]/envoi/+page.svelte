@@ -26,7 +26,11 @@
 
 {#snippet fieldContent(content: string)}
   {#if content}
-    <p>{content}</p>
+    <p>
+      {#each content.split('\n') as line (line)}
+        {line}<br />
+      {/each}
+    </p>
   {:else}
     <p class="fr-text--light">Aucune réponse</p>
   {/if}
