@@ -6,6 +6,8 @@
   import BilanTable from '../declaration/5/bilan-table.svelte';
   import EtablissementDataTable from '../entreprise/2/etablissement-data-table.svelte';
   import ContactTable from '../entreprise/3/contact-table.svelte';
+  import ProductionDetails from '../production/2/production-details.svelte';
+  import StockDetails from '../stock/2/stock-details.svelte';
 
   let { data } = $props();
 
@@ -36,7 +38,7 @@
   {/if}
 {/snippet}
 
-<h1 class="fr-h2">Voici le récapitulatif de votre déclaration :</h1>
+<h1 class="fr-h2">Voici le récapitulatif de votre déclaration</h1>
 
 <p>
   Avant d’envoyer votre déclaration, merci de vérifier que toutes les informations saisies sont
@@ -76,10 +78,15 @@
   <h2 class="fr-h5">Production aquacole vendue</h2>
   <a href="production/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
+
+<ProductionDetails bilan={data.bilan} etablissement={data.etablissement}></ProductionDetails>
+
 <div class="header-wrapper">
   <h2 class="fr-h5">Stock</h2>
   <a href="stock/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
+
+<StockDetails bilan={data.bilan} etablissement={data.etablissement}></StockDetails>
 
 <div class="header-wrapper">
   <h2 class="fr-h5">Déclaration obligatoire</h2>
@@ -177,10 +184,11 @@
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: 1.5em;
+    margin-top: 3rem;
   }
 
   h2 {
-    margin-top: 2rem;
+    margin-top: 0;
     margin-bottom: 0;
   }
 
