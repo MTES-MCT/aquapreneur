@@ -45,7 +45,7 @@
 
 <div class="header-wrapper">
   <h2 class="fr-h5">Données entreprise</h2>
-  <a href="entreprise/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+  <a href="entreprise/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
 
 <h3 class="fr-text--md fr-text--bold">Informations</h3>
@@ -61,19 +61,19 @@
 
 <div class="header-wrapper">
   <h2 class="fr-h5">Concessions</h2>
-  <a href="concessions/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+  <a href="concessions/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
 <div class="header-wrapper">
   <h2 class="fr-h5">Production aquacole vendue</h2>
-  <a href="production/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+  <a href="production/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
 <div class="header-wrapper">
   <h2 class="fr-h5">Stock</h2>
-  <a href="stock/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+  <a href="stock/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
 <div class="header-wrapper">
   <h2 class="fr-h5">Déclaration obligatoire</h2>
-  <a href="declaration/1" class=" fr-btn fr-btn--tertiary fr-btn--sm">Revoir</a>
+  <a href="declaration/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
 
 <h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
