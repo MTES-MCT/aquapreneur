@@ -63,6 +63,13 @@
   <h2 class="fr-h5">Concessions</h2>
   <a href="concessions/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
+
+<p>Vous avez effectué un ou plusieurs changements sur vos concessions cette année.</p>
+
+<h3 class="fr-text--md fr-text--bold">Changement(s) non pris en compte</h3>
+
+{@render fieldContent(context.concessionsErreursComment)}
+
 <div class="header-wrapper">
   <h2 class="fr-h5">Production aquacole vendue</h2>
   <a href="production/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
@@ -71,6 +78,7 @@
   <h2 class="fr-h5">Stock</h2>
   <a href="stock/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>
 </div>
+
 <div class="header-wrapper">
   <h2 class="fr-h5">Déclaration obligatoire</h2>
   <a href="declaration/1" class="fr-link fr-icon-arrow-right-line fr-link--icon-right">Revoir</a>

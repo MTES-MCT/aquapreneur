@@ -7,6 +7,7 @@ export type DeclarationContext = {
   emailContact: string;
   telEntreprise: string;
   telContact: string;
+  concessionsErreursComment: string;
   evtExceptionnelsComment: string;
   formErreursComment: string;
   suggestionsComment: string;
@@ -24,6 +25,7 @@ export const emptyDeclarationValues = Object.freeze({
   emailContact: '',
   telEntreprise: '',
   telContact: '',
+  concessionsErreursComment: '',
   evtExceptionnelsComment: '',
   formErreursComment: '',
   suggestionsComment: '',

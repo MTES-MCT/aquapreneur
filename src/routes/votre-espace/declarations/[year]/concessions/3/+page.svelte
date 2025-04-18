@@ -3,7 +3,9 @@
 
   import { goto } from '$app/navigation';
 
+  import Fieldset from '$lib/components/fieldset.svelte';
   import NavigationLinks from '$lib/components/navigation-links.svelte';
+  import Textareagroup from '$lib/components/textarea–group.svelte';
   import { getDeclarationContext } from '$lib/declaration-context';
   import { enhanceNoInvalidate, formatDate } from '$lib/utils.js';
 
@@ -27,6 +29,8 @@
       }
     }
   });
+
+  const context = getDeclarationContext();
 
   // Le rendu des accordéons est extrêmement long. On charge donc la page en les
   // masquant, et on les réactive de façon asynchrone, pour ne pas rester
@@ -143,6 +147,19 @@
       </p>
     </div>
   {/each}
+
+  <Fieldset>
+    {#snippet inputs()}
+      <Textareagroup name="data-errors-txt" rows={5} bind:value={context.concessionsErreursComment}>
+        {#snippet label()}Changement(s) à signaler
+          <span class="fr-hint-text"
+            >Si certaines informations ne correspondent pas à vos concessions actuelles, merci de
+            les préciser ci-dessous.</span
+          >
+        {/snippet}
+      </Textareagroup>
+    {/snippet}
+  </Fieldset>
 
   <NavigationLinks prevHref="2" nextIsButton />
 </form>
