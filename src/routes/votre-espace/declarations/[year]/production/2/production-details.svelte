@@ -82,7 +82,7 @@
           {
             nom: 'Ventes d’huîtres de taille marchande pour l’élevage',
             description:
-              "Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour l’élevage auprès d'autres exploitants.",
+              'Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour l’élevage auprès d’autres exploitants.',
             destinations: [
               {
                 nom: 'France',
@@ -244,11 +244,6 @@
   td {
     white-space: normal;
     word-break: keep-all;
-  }
-  dl {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    padding: 0;
   }
 
   dl {
