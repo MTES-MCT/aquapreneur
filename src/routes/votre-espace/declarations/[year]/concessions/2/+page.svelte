@@ -9,13 +9,14 @@
   Avez-vous effectué des changements sur vos concessions depuis l'année dernière ?
 </h1>
 
+<p>
+  Cela concerne tout changement ayant un impact sur l’usage de vos concessions. Par exemple :
+  changement d’activité sur une zone, remplacement de tables par des filières en mer, extension
+  d’une concession, arrêt de l’exploitation d’une concession…
+</p>
+
 <form method="POST" use:enhanceNoInvalidate>
   <Fieldset>
-    {#snippet legend()}
-      <span class="fr-fieldset__legend--regular">
-        Par exemple, vous avez [changements typiques effectués sur les concessions]
-      </span>
-    {/snippet}
     {#snippet inputs()}
       <RadioGroup name="radio-inline" id="radio-oui" checked inline>
         {#snippet label()}Oui{/snippet}

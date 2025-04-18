@@ -108,7 +108,7 @@
   >
 
   <button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-confirmation">
-    Envoyer votre déclaration
+    Envoyer la déclaration
   </button>
 </div>
 
@@ -125,7 +125,7 @@
 >
   <div class="fr-container fr-container--fluid fr-container-md">
     <div class="fr-grid-row fr-grid-row--center">
-      <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
+      <div class="fr-col-12 fr-col-md-8">
         <div class="fr-modal__body">
           <div class="fr-modal__header">
             <button class="fr-btn--close fr-btn" aria-controls="fr-modal-confirmation"
@@ -134,11 +134,12 @@
           </div>
           <div class="fr-modal__content">
             <h1 id="fr-modal-confirmation-title" class="fr-modal__title">
-              <span class="fr-icon-arrow-right-line fr-icon--lg"></span>
               Confirmation de l’envoi
             </h1>
             <p>
-              La déclaration ne sera plus modifiable. Vous recevrez une confirmation par e-mail.
+              Êtes-vous sûr(e) de vouloir soumettre votre déclaration ? Une fois envoyée, vous ne
+              pourrez plus modifier les informations. Vérifiez bien que toutes les données sont
+              correctes avant de confirmer.
             </p>
           </div>
           <div class="fr-modal__footer">
@@ -150,7 +151,7 @@
                 class="fr-btn fr-btn--secondary"
                 onclick={() => handleCloseModal('fr-modal-confirmation')}
               >
-                Continuer votre déclaration
+                Continuer la déclaration
               </button>
             </div>
           </div>
