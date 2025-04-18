@@ -23,7 +23,7 @@
 <p>Veuillez confirmer les informations suivantes liées à votre exercice comptable.</p>
 
 <form method="POST" use:enhanceNoInvalidate>
-  <BilanTable bilan={data.bilan}></BilanTable>
+  <BilanTable bilan={data.bilan} etablissement={data.etablissement}></BilanTable>
 
   <NavigationLinks prevHref="4" nextIsButton />
 </form>
