@@ -74,7 +74,7 @@
 
 <h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
 
-<BilanTable bilan={data.bilan}></BilanTable>
+<BilanTable bilan={data.bilan} etablissement={data.etablissement}></BilanTable>
 
 <h3 class="fr-text--md fr-text--bold">
   Avez-vous eu des événements exceptionnels au cours de l'année 2024 ?
@@ -156,18 +156,21 @@
   </div>
 </dialog>
 
-<style>
+<style lang="postcss">
   .header-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin-bottom: 1.5em;
   }
 
   h2 {
-    margin-top: 2rem !important;
+    margin-top: 2rem;
+    margin-bottom: 0;
   }
 
   h3 {
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
+    margin-top: 1rem;
   }
 </style>
