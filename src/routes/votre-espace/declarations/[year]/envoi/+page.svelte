@@ -108,7 +108,7 @@
   >
 
   <button class="fr-btn" data-fr-opened="false" aria-controls="fr-modal-confirmation">
-    Envoyer ma déclaration
+    Envoyer votre déclaration
   </button>
 </div>
 
@@ -150,7 +150,7 @@
                 class="fr-btn fr-btn--secondary"
                 onclick={() => handleCloseModal('fr-modal-confirmation')}
               >
-                Continuer ma déclaration
+                Continuer votre déclaration
               </button>
             </div>
           </div>

@@ -8,7 +8,7 @@
 
 <div class="fr-grid-row">
   <div class="fr-col-md-4 fr-col-12">
-    <MenuDeclaration step={page.data.step} baseUrl="/mon-espace/declarations/{data.year}"
+    <MenuDeclaration step={page.data.step} baseUrl="/votre-espace/declarations/{data.year}"
     ></MenuDeclaration>
   </div>
 

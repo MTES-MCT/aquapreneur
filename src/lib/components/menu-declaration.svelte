@@ -26,7 +26,7 @@
       Dans cette rubrique
     </button>
     <div class="fr-collapse" id="fr-sidemenu-wrapper">
-      <div class="fr-sidemenu__title fr-h4" id="fr-sidemenu-title">Ma déclaration annuelle</div>
+      <div class="fr-sidemenu__title fr-h4" id="fr-sidemenu-title">Votre déclaration annuelle</div>
       <ul class="fr-sidemenu__list">
         <li class="fr-sidemenu__item fr-sidemenu__item--active">
           <a
@@ -34,7 +34,7 @@
             href="{baseUrl}/entreprise"
             aria-current={step === 'entreprise' ? 'page' : undefined}
           >
-            {@render categoryTitle('Mon entreprise', context.entrepriseComplete)}</a
+            {@render categoryTitle('Votre entreprise', context.entrepriseComplete)}</a
           >
         </li>
         <li class="fr-sidemenu__item">
@@ -43,7 +43,7 @@
             href="{baseUrl}/concessions"
             aria-current={step === 'concessions' ? 'page' : undefined}
           >
-            {@render categoryTitle('Mes concessions', context.concessionsComplete)}
+            {@render categoryTitle('Vos concessions', context.concessionsComplete)}
           </a>
         </li>
         <li class="fr-sidemenu__item">
