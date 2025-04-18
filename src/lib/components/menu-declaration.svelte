@@ -16,7 +16,7 @@
 {/snippet}
 
 <nav class="fr-sidemenu fr-sidemenu--sticky-full-height" aria-labelledby="fr-sidemenu-title">
-  <div class="fr-sidemenu__inner fr-pt-md-12v fr-pt-2v">
+  <div class="fr-sidemenu__inner fr-pt-md-12v fr-pt-2v fr-pr-0">
     <button
       class="fr-sidemenu__btn"
       hidden

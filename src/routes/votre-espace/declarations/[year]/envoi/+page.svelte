@@ -65,10 +65,12 @@
 </div>
 
 <p>Vous avez effectué un ou plusieurs changements sur vos concessions cette année.</p>
-
-<h3 class="fr-text--md fr-text--bold">Changement(s) non pris en compte</h3>
-
-{@render fieldContent(context.concessionsErreursComment)}
+{#if context.concessionsErreursComment}
+  <h3 class="fr-text--md fr-text--bold">Changement(s) non pris en compte</h3>
+  {@render fieldContent(context.concessionsErreursComment)}
+{:else}
+  <p>Les informations sur vos concessions sont à jour.</p>
+{/if}
 
 <div class="header-wrapper">
   <h2 class="fr-h5">Production aquacole vendue</h2>
