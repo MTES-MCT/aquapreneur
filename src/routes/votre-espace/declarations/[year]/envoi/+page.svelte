@@ -38,7 +38,7 @@
   {/if}
 {/snippet}
 
-<h1 class="fr-h2">Voici le récapitulatif de votre déclaration :</h1>
+<h1 class="fr-h2">Voici le récapitulatif de votre déclaration</h1>
 
 <p>
   Avant d’envoyer votre déclaration, merci de vérifier que toutes les informations saisies sont

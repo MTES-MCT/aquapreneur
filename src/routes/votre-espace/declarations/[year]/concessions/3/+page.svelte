@@ -54,8 +54,9 @@
 <p>
   Voici la liste des concessions dont vous êtes titulaire, avec les informations correspondantes.
   Merci de vérifier que ces données reflètent bien les éventuels changements que vous avez
-  effectués. Indiquez tout changement non pris en compte dans le champ en bas de page.
+  effectués.
 </p>
+<p>Indiquez tout changement non pris en compte dans le champ en bas de page.</p>
 
 <fieldset class="fr-segmented fr-segmented--no-legend fr-mb-12v">
   <legend class="fr-segmented__legend"> Choix de la visualisation </legend>
