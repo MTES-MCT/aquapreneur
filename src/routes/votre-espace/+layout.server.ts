@@ -41,8 +41,8 @@ export const load = async ({ fetch, parent, cookies, route }) => {
     activitePrincipale = nafRev2.find((line) => line.code == naf)?.label;
   }
 
-  if (!etablissement && route.id != '/mon-espace') {
-    redirect(307, '/mon-espace');
+  if (!etablissement && route.id != '/votre-espace') {
+    redirect(307, '/votre-espace');
   }
   // TODO log gestion d’erreur
   // - pas de siret

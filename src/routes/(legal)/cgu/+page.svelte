@@ -107,8 +107,8 @@
       l’article R. 923-11 du code rural et de la pêche maritime et son acte de concession.
     </p>
     <p>
-      L’Utilisateur peut depuis l’onglet « mon entreprise » déterminer le flux des notifications
-      afin d’être informé de ses obligations télédéclaratives.
+      L’Utilisateur peut depuis la page « Votre espace » déterminer le flux des notifications afin
+      d’être informé de ses obligations télédéclaratives.
     </p>
     <h4>c. Déposer une demande de concession aquacole</h4>
     <p>
