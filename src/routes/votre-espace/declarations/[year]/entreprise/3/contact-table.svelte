@@ -7,12 +7,12 @@
 
   const context = getDeclarationContext();
 
-  if (!context.emailEntreprise) {
-    context.emailEntreprise = data.utilisateur.courriel;
-  }
-  if (!context.telEntreprise) {
-    context.telEntreprise = data.utilisateur.telephone ?? '';
-  }
+  // if (!context.emailEntreprise) {
+  //   context.emailEntreprise = data.utilisateur.courriel;
+  // }
+  // if (!context.telEntreprise) {
+  //   context.telEntreprise = data.utilisateur.telephone ?? '';
+  // }
 </script>
 
 {#if editable}
@@ -37,15 +37,16 @@
             Indiquez l’adresse e-mail générale de votre entreprise. Format attendu : nom@domaine.fr
           </span>
         {/snippet}
-        {#snippet actionButton()}
+        <!-- {#snippet actionButton()}
           <button
             type="button"
             class="fr-btn fr-btn--tertiary fr-btn--sm"
             disabled={context.emailEntreprise === data.utilisateur.courriel}
-            onclick={() => (context.emailEntreprise = data.utilisateur.courriel)}
+            onclick={() => (
+              context.emailEntreprise = data.utilisateur.courriel)}
             >Réinitialiser</button
           >
-        {/snippet}
+        {/snippet} -->
       </InputGroup>
 
       <InputGroup
@@ -77,7 +78,7 @@
           </span>
         {/snippet}
 
-        {#snippet actionButton()}
+        <!-- {#snippet actionButton()}
           <button
             type="button"
             class="fr-btn fr-btn--tertiary fr-btn--sm"
@@ -85,7 +86,7 @@
             onclick={() => (context.telEntreprise = data.utilisateur.telephone ?? '')}
             >Réinitialiser</button
           >
-        {/snippet}
+        {/snippet} -->
       </InputGroup>
 
       <InputGroup name="tel-contact" type="tel" {fieldsetId} bind:value={context.telContact}>
