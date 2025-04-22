@@ -29,9 +29,7 @@
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
 <main role="main" id="content">
-  <div class="fr-container">
-    {@render children()}
-  </div>
+  {@render children()}
 </main>
 
 <Footer></Footer>

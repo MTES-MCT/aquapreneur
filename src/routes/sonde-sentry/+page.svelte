@@ -25,8 +25,10 @@ Cette page permet de tester l’envoi d’erreurs à Sentry
   <title>Sonde Sentry | Aquapreneur</title>
 </svelte:head>
 
-<div class="fr-grid-row">
-  <div class="fr-col-8 fr-py-12v" id="contenu">
-    <button class="fr-btn" type="button" onclick={getSentryData}> Déclencher une erreur </button>
+<div class="fr-container">
+  <div class="fr-grid-row">
+    <div class="fr-col-8 fr-py-12v" id="contenu">
+      <button class="fr-btn" type="button" onclick={getSentryData}> Déclencher une erreur </button>
+    </div>
   </div>
 </div>
