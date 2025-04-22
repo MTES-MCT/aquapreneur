@@ -16,6 +16,20 @@
   let onlyIncomplete = $state(false);
 </script>
 
+{#if data.sireneError}
+  <div class="fr-notice fr-notice--warning">
+    <div class="fr-container">
+      <div class="fr-notice__body">
+        <p>
+          <span class="fr-notice__title">Impossible de contacter l’API Sirene</span><br />
+          <span class="fr-notice__desc"
+            >Les données sur votre entreprise ne sont pas disponibles, essayez de recharger la page.</span
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+{/if}
 <div class="fr-container">
   <div class="fr-grid-row fr-grid-row--center">
     <div class="fr-col-12 fr-col-md-10 fr-pt-12v" id="contenu">
@@ -105,7 +119,7 @@
         <div class="fr-tile__body">
           <div class="fr-tile__content">
             <h3 class="fr-tile__title">
-              {#if data.siret && !creating && data.siret === selectedSiret}
+              {#if data.siret && !creating && data.siret === selectedSiret && !data.sireneError}
                 <a
                   href="votre-espace/declarations/2024/entreprise/1"
                   data-sveltekit-preload-data="off">Déclaration 2024</a

@@ -26,19 +26,31 @@ export const load = async ({ fetch, parent, cookies, route }) => {
   }
 
   let etablissement;
-  let activitePrincipale;
+  let activitePrincipale: string | null = null;
+  let sireneError = false;
   if (siret) {
     logger.info('Appel à l’API INSEE');
-    const res = await fetch(`https://api.insee.fr/api-sirene/3.11/siret/${siret}`, {
-      headers: {
-        'x-insee-api-key-integration': SIRENE_AUTH_TOKEN
-      }
-    });
-    const jsonRes = await res.json();
-    etablissement = jsonRes.etablissement;
-    // TODO: passer par un schema Zod
-    const naf = etablissement?.uniteLegale.activitePrincipaleUniteLegale;
-    activitePrincipale = nafRev2.find((line) => line.code == naf)?.label;
+    let res: Response | null = null;
+    try {
+      res = await fetch(`https://api.insee.fr/api-sirene/3.11/siret/${siret}`, {
+        headers: {
+          'x-insee-api-key-integration': SIRENE_AUTH_TOKEN
+        }
+      });
+    } catch (err) {
+      logger.exception(err, 'Impossible de contacter l’API Sirene');
+    }
+    if (!res || !res.ok) {
+      etablissement = null;
+      activitePrincipale = null;
+      sireneError = true;
+    } else {
+      const jsonRes = await res.json();
+      etablissement = jsonRes.etablissement;
+      // TODO: passer par un schema Zod
+      const naf = etablissement?.uniteLegale.activitePrincipaleUniteLegale;
+      activitePrincipale = nafRev2.find((line) => line.code == naf)?.label ?? null;
+    }
   }
 
   if (!etablissement && route.id != '/votre-espace') {
@@ -47,9 +59,9 @@ export const load = async ({ fetch, parent, cookies, route }) => {
   // TODO log gestion d’erreur
   // - pas de siret
   // - timeout API sirene, etc.
-
   return {
     siret,
+    sireneError,
     etablissement,
     activitePrincipale,
     // on renvoie de nouveau l’objet utilisateur ici, au lieu de compter sur
