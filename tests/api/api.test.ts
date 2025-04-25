@@ -298,31 +298,31 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: null } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: null } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: undefined } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: '' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: '' } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 });
 
 test('204 si un champ monétaire est un nombre', async ({ request }) => {
@@ -333,28 +333,28 @@ test('204 si un champ monétaire est un nombre', async ({ request }) => {
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: '12345.67' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: '12345.67' } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBe('12345.67');
+  expect(inserted['stock__huitre__nais_mil__val']).toBe('12345.67');
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: 12345.67 } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBe('12345.67');
+  expect(inserted['stock__huitre__nais_mil__val']).toBe('12345.67');
 });
 
 test('400 si un champ monétaire est invalide', async ({ request }) => {
   const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: 'ABC' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: 'ABC' } }
   });
   expect(response.status()).toBe(400);
-  expect((await response.json()).message).toBe('stck_val_h_nais_mi: Invalid input');
+  expect((await response.json()).message).toBe('stock__huitre__nais_mil__val: Invalid input');
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
