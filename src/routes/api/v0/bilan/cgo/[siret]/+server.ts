@@ -21,6 +21,8 @@ import { formatZodError } from '$utils';
 import audit from '$utils/audit';
 import * as logger from '$utils/logger';
 
+import cgoMapping from './cgo-mapping.json';
+
 // TODO : utiliser l’algorithme de vérification complet
 const siretIsValid = (siret: string | undefined) => siret && siret.match(/^\d{14}$/);
 
@@ -118,6 +120,26 @@ export const POST = wrapServerRouteWithSentry(async ({ params, url, request }) =
 
     // Parsing du bilan, et écriture en BDD
     await db.transaction(async (tx) => {
+      Object.keys(bilanData).forEach((key) => {
+        if (
+          ![
+            'siret',
+            'nom',
+            'debut_exercice',
+            'fin_exercice',
+            'version',
+            'date_bilan',
+            'dirigeant_es',
+            'stock',
+            'production',
+            'destination',
+            'donnees_economiques'
+          ].includes(key)
+        ) {
+          error(400, `Clé \`${key}\` inconnue`);
+        }
+      });
+
       const bilanInfo = {
         siret: bilanData['siret'],
         nom: bilanData['nom'],
@@ -127,13 +149,31 @@ export const POST = wrapServerRouteWithSentry(async ({ params, url, request }) =
         dateBilan: bilanData['date_bilan']
       };
 
+      const renameFields = (
+        data: Record<string, object>,
+        category: string
+      ): Record<string, object> => {
+        if (!data) error(400, `Clé \`${category}\` manquante`);
+        const converted: Record<string, object> = {};
+
+        Object.keys(data).forEach((oldKey) => {
+          if (Object.hasOwn(cgoMapping, oldKey)) {
+            // @ts-expect-error TODO typage à préciser
+            const newKey = cgoMapping[oldKey];
+            converted[newKey] = data[oldKey];
+          } else {
+            converted[oldKey] = data[oldKey];
+          }
+        });
+        return converted;
+      };
+
       const flatBilan = {
         idEvtJournalReqs: auditLogEntry.id,
         ...bilanInfo,
-        ...bilanData['stock'],
-        ...bilanData['production'],
-        ...bilanData['destination'],
-        ...bilanData['donnees_economiques']
+        ...renameFields(bilanData['stock'], 'stock'),
+        ...renameFields(bilanData['production'], 'production'),
+        ...renameFields(bilanData['donnees_economiques'], 'donnees_economiques')
       };
 
       const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
