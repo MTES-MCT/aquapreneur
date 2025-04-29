@@ -44,7 +44,10 @@ const dummyBilan = {
       nom: 'nom',
       prenom: 'prenom'
     }
-  ]
+  ],
+  stock: {},
+  production: {},
+  donnees_economiques: {}
 };
 
 test.beforeAll(async () => {
@@ -289,40 +292,37 @@ test('204 si un champ monétaire est manquant', async ({ request }) => {
   let response;
   let inserted;
 
-  // on s’assure que la clé qu’on teste n’existe pas dans les données de test
-  expect('stock' in dummyBilan).toBeFalsy();
-
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
     data: { ...dummyBilan, stock: {} }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: null } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: null } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: undefined } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: '' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: '' } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBeNull();
+  expect(inserted['stock__huitre__nais_mil__val']).toBeNull();
 });
 
 test('204 si un champ monétaire est un nombre', async ({ request }) => {
@@ -333,28 +333,28 @@ test('204 si un champ monétaire est un nombre', async ({ request }) => {
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: '12345.67' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: '12345.67' } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBe('12345.67');
+  expect(inserted['stock__huitre__nais_mil__val']).toBe('12345.67');
 
   response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: 12345.67 } }
   });
   expect(response.status()).toBe(204);
   inserted = await getLastById(bilans);
-  expect(inserted.StckValHNaisMi).toBe('12345.67');
+  expect(inserted['stock__huitre__nais_mil__val']).toBe('12345.67');
 });
 
 test('400 si un champ monétaire est invalide', async ({ request }) => {
   const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
     headers: { Authorization: `Bearer ${validAuthToken}` },
-    data: { ...dummyBilan, stock: { StckValHNaisMi: 'ABC' } }
+    data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: 'ABC' } }
   });
   expect(response.status()).toBe(400);
-  expect((await response.json()).message).toBe('stck_val_h_nais_mi: Invalid input');
+  expect((await response.json()).message).toBe('stock__huitre__nais_mil__val: Invalid input');
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,4 +439,476 @@ test('400 si un champ date n’est pas au bon format', async ({ request }) => {
     data: { ...dummyBilan, debut_exercice: '2020-12-31' }
   });
   expect(response.status()).toBe(204);
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tests de conversion des champs CGO
+
+const testBilanCGO = {
+  siret: '12345678912345',
+  nom: 'NOM_ANONYME',
+  debut_exercice: '2024-01-01',
+  fin_exercice: '2024-12-31',
+  version: 1,
+  date_bilan: '2025-03-13',
+  dirigeant_es: [
+    {
+      nom: 'NOM_DIRIGEANT1',
+      prenom: 'PRENOM_DIRIGEANT1',
+      annee_naissance: 1965,
+      genre: 'M',
+      annee_entree: 1998,
+      diplome: null,
+      diplome_aquacole: null,
+      regime_social: null,
+      taux_travail: null
+    },
+    {
+      nom: 'NOM_DIRIGEANT2',
+      prenom: 'PRENOM_DIRIGEANT2',
+      annee_naissance: 1968,
+      genre: 'F',
+      annee_entree: 2022,
+      diplome: null,
+      diplome_aquacole: null,
+      regime_social: null,
+      taux_travail: null
+    }
+  ],
+  stock: {
+    StckVolHNaisMi: 5000,
+    StckValHNaisMi: 20000,
+    StckVolHNaisKg: null,
+    StckValHNaisKg: null,
+    StckVolHDElv: 27075,
+    StckValHDElv: 40612.5,
+    StckVolHElv: 68040,
+    StckValHElv: 122472,
+    StckVolHConso: 20800,
+    StckValHConso: 37440,
+    StckVolMNaiss: null,
+    StckValMNaiss: null,
+    StckVolMDElv: null,
+    StckValMDElv: null,
+    StckVolMConso: null,
+    StckValMConso: null,
+    StckVolPNaiss: null,
+    StckValPNaiss: null,
+    StckVolPDElv: null,
+    StckValPDElv: null,
+    StckVolPConso: null,
+    StckValPConso: null,
+    StckVolGLarv: null,
+    StckValGLarv: null,
+    StckVolGPreg: null,
+    StckValGPreg: null,
+    StckVolGConso: null,
+    StckValGConso: null,
+    LibPois: null,
+    StckVolPois: null,
+    StckValPois: null,
+    LibACoq: null,
+    StckVolACoq: 0,
+    StckValACoq: 0,
+    LibAPAqua: null,
+    StckVolAPAqua: null,
+    StckValAPAqua: null
+  },
+  production: {
+    VolVtHNaissFr: null,
+    CAHNaissFr: null,
+    VolVtHNaissUE: null,
+    CAHNaissUE: null,
+    VolVtHNaissAu: null,
+    CAHNaissAu: null,
+    VolVtHDElvFr: null,
+    CAHDElvFr: null,
+    VolVtHDElvUE: null,
+    CAHDElvUE: null,
+    VolVtHDElvAu: null,
+    CAHDElvAU: null,
+    VolVtHElvFr: null,
+    CAHElvFr: 57114,
+    VolVtHElvUE: null,
+    CAHElvUE: null,
+    VolVtHElvAu: null,
+    CAHElvAu: null,
+    VolVtHCoFrPro: 160,
+    CAHCoFrPro: 477095.07,
+    VolVtHCoFrDet: null,
+    CAHCoFrDet: null,
+    VolVtHCoFrGros: null,
+    CAHCoFrGros: null,
+    VolVtHCoFrPCE: null,
+    CAHCoFrPCE: null,
+    VolVtHCoFrPGMS: null,
+    CAHCoFrPGMS: null,
+    VolVtHCoFrDeg: null,
+    CAHCoFrDeg: 4879.55,
+    VolVtHCoUEPro: null,
+    CAHCoUEPro: null,
+    VolVtHCoUEGros: null,
+    CAHCoUEGros: null,
+    VolVtHCoAuPro: null,
+    CAHCoAuPro: null,
+    VolVtHCoAuGros: null,
+    CAHCoAuGros: null,
+    VolVtHFrNCat: null,
+    CAHFrNCat: null,
+    VolVtMNaissFr: null,
+    CAMNaissFr: null,
+    VolVtMNaissUE: null,
+    CAMNaissUE: null,
+    VolVtMNaissAu: null,
+    CAMNaissAu: null,
+    VolVtMDElvFr: null,
+    CAMDElvFr: null,
+    VolVtMDElvUE: null,
+    CAMDElvUE: null,
+    VolVtMDElvAu: null,
+    CAMDElvAU: null,
+    VolVtMCoFrPro: null,
+    CAMCoFrPro: 199.91,
+    VolVtMCoFrDet: null,
+    CAMCoFrDet: null,
+    VolVtMCoFrGros: null,
+    CAMCoFrGros: null,
+    VolVtMCoFrPCE: null,
+    CAMCoFrPCE: null,
+    VolVtMCoFrPGMS: null,
+    CAMCoFrPGMS: null,
+    VolVtMCoFrDeg: null,
+    CAMCoFrDeg: 6002.3,
+    VolVtMCoUEPro: null,
+    CAMCoUEPro: null,
+    VolVtMCoUEGros: null,
+    CAMCoUEGros: null,
+    VolVtMCoAuPro: null,
+    CAMCoAuPro: null,
+    VolVtMCoAuGros: null,
+    CAMCoAuGros: null,
+    VolVtMFrNCat: null,
+    CAMFrNCat: null,
+    VolVtPNaissFr: null,
+    CAPNaissFr: null,
+    VolVtPNaissUE: null,
+    CAPNaissUE: null,
+    VolVtPNaissAu: null,
+    CAPNaissAu: null,
+    VolVtPDElvFr: null,
+    CAPDElvFr: null,
+    VolVtPDElvUE: null,
+    CAPDElvUE: null,
+    VolVtPDElvAu: null,
+    CAPDElvAU: null,
+    VolVtPCoFrPro: null,
+    CAPCoFrPro: null,
+    VolVtPCoFrDet: null,
+    CAPCoFrDet: null,
+    VolVtPCoFrGros: null,
+    CAPCoFrGros: null,
+    VolVtPCoFrPCE: null,
+    CAPCoFrPCE: null,
+    VolVtPCoFrPGMS: null,
+    CAPCoFrPGMS: null,
+    VolVtPCoFrDeg: null,
+    CAPCoFrDeg: null,
+    VolVtPCoUEPro: null,
+    CAPCoUEPro: null,
+    VolVtPCoUEGros: null,
+    CAPCoUEGros: null,
+    VolVtPCoAuPro: null,
+    CAPCoAuPro: null,
+    VolVtPCoAuGros: null,
+    CAPCoAuGros: null,
+    VolVtPFrNCat: null,
+    CAPFrNCat: null,
+    VolVtGNaissFr: null,
+    CAGNaissFr: null,
+    VolVtGNaissUE: null,
+    CAGNaissUE: null,
+    VolVtGNaissAu: null,
+    CAGNaissAu: null,
+    VolVtGDElvFr: null,
+    CAGDElvFr: null,
+    VolVtGDElvUE: null,
+    CAGDElvUE: null,
+    VolVtGDElvAu: null,
+    CAGDElvAU: null,
+    VolVtGCoFrPro: null,
+    CAGCoFrPro: null,
+    VolVtGCoFrDet: null,
+    CAGCoFrDet: null,
+    VolVtGCoFrGros: null,
+    CAGCoFrGros: null,
+    VolVtGCoFrPCE: null,
+    CAGCoFrPCE: null,
+    VolVtGCoFrPGMS: null,
+    CAGCoFrPGMS: null,
+    VolVtGCoFrDeg: null,
+    CAGCoFrDeg: null,
+    VolVtGCoUEPro: null,
+    CAGCoUEPro: null,
+    VolVtGCoUEGros: null,
+    CAGCoUEGros: null,
+    VolVtGCoAuPro: null,
+    CAGCoAuPro: null,
+    VolVtGCoAuGros: null,
+    CAGCoAuGros: null,
+    VolVtGFrNCat: null,
+    CAGFrNCat: null,
+    VolVtPoisFr: null,
+    CAPoisFr: null,
+    VolVtACoqFr: null,
+    CAACoqFr: null,
+    VolVtACoqUE: null,
+    CAACoqUE: null,
+    VolVtACoqAu: null,
+    CAACoqAu: null,
+    VolVtAPAquaFr: null,
+    CAAPAquaFr: null,
+    VolVtAPAquaUE: null,
+    CAAPAquaUE: null,
+    VolVtAPAquaAu: null,
+    CAAPAquaAu: null
+  },
+  destination: {
+    PctCAHNaissFr: null,
+    PctCAHNaissUE: null,
+    PctCAHNaissAu: null,
+    PctCAHDElvFr: null,
+    PctCAHDElvUE: null,
+    PctCAHDElvAu: null,
+    PctCAHElvFr: 0.1,
+    PctCAHElvUE: null,
+    PctCAHElvAu: null,
+    PctCAHCoFrPro: 0.87,
+    PctCAHCoFrDet: null,
+    PctCAHCoFrGros: null,
+    PctCAHCoFrPCE: null,
+    PctCAHCoFrPGMS: null,
+    PctCAHCoFrDeg: 0.01,
+    PctCAHCoUEPro: null,
+    PctCAHCoUEGros: null,
+    PctCAHCoAuPro: null,
+    PctCAHCoAuGros: null,
+    PctCAMNaissFr: null,
+    PctCAMNaissUE: null,
+    PctCAMNaissAu: null,
+    PctCAMDElvFr: null,
+    PctCAMDElvUE: null,
+    PctCAMDElvAu: null,
+    PctCAMCoFrPro: null,
+    PctCAMCoFrDet: null,
+    PctCAMCoFrGros: null,
+    PctCAMCoFrPCE: null,
+    PctCAMCoFrPGMS: null,
+    PctCAMCoFrDeg: 0.01,
+    PctCAMCoUEPro: null,
+    PctCAMCoUEGros: null,
+    PctCAMCoAuPro: null,
+    PctCAMCoAuGros: null,
+    PctCAPNaissFr: null,
+    PctCAPNaissUE: null,
+    PctCAPNaissAu: null,
+    PctCAPDElvFr: null,
+    PctCAPDElvUE: null,
+    PctCAPDElvAu: null,
+    PctCAPCoFrPro: null,
+    PctCAPCoFrDet: null,
+    PctCAPCoFrGros: null,
+    PctCAPCoFrPCE: null,
+    PctCAPCoFrPGMS: null,
+    PctCAPCoFrDeg: null,
+    PctCAPCoUEPro: null,
+    PctCAPCoUEGros: null,
+    PctCAPCoAuPro: null,
+    PctCAPCoAuGros: null,
+    PctCAGNaissFr: null,
+    PctCAGNaissUE: null,
+    PctCAGNaissAu: null,
+    PctCAGDElvFr: null,
+    PctCAGDElvUE: null,
+    PctCAGDElvAu: null,
+    PctCAGCoFrPro: null,
+    PctCAGCoFrDet: null,
+    PctCAGCoFrGros: null,
+    PctCAGCoFrPCE: null,
+    PctCAGCoFrPGMS: null,
+    PctCAGCoFrDeg: null,
+    PctCAGCoUEPro: null,
+    PctCAGCoUEGros: null,
+    PctCAGCoAuPro: null,
+    PctCAGCoAuGros: null,
+    PctCAPoisFr: null,
+    PctCAACoqFr: null,
+    PctCAACoqUE: null,
+    PctCAACoqAu: null,
+    PctCAAPAquaFr: null,
+    PctCAAPAquaUE: null,
+    PctCAAPAquaAu: null
+  },
+  donnees_economiques: {
+    CATot: 545690.83,
+    CAAchRev: 22655.24,
+    ArevD: 26865.99,
+    Subv: null,
+    SubInvest: null,
+    Salaire: 163740.14,
+    MOExt: 11790.97,
+    CHSocNonSal: 11615.41,
+    NonSal: 59615.41,
+    Energie: 33129.84,
+    AchHNaiss: 29700,
+    VolAchHNaiss: 3228,
+    AchHDElv: null,
+    VolAchHDElv: null,
+    AchHElv: null,
+    VolAchHElv: null,
+    AchHConso: 98056.6,
+    VolAchHConso: 40766,
+    AchMNaiss: null,
+    VolAchMnaiss: null,
+    AchMDElv: null,
+    VolAchMDElv: null,
+    AchMConso: 1683.25,
+    VolAchMConso: 535,
+    AchPNaiss: null,
+    VolAchPnaiss: null,
+    AchPDElv: null,
+    VolAchPDElv: null,
+    AchPConso: null,
+    VolAchPConso: null,
+    AchGNaiss: null,
+    VolAchGnaiss: null,
+    AchGDElv: null,
+    VolAchGDElv: null,
+    AchGConso: null,
+    VolAchGConso: null,
+    AchAcoq: null,
+    VolAchAcoq: null,
+    AchAPAqua: null,
+    VolAchAPAqua: null,
+    CtAlim: null,
+    CtOp: 111024.83,
+    Repar: 35911.46,
+    Amort: 101733.41,
+    CtFi: 6538.52,
+    ProdFi: 174.92,
+    Capito: 85827.24,
+    CtExcp: 5441.56,
+    ProdExcp: 74590.69,
+    Actif: 748326.32,
+    Invest: 93815.55,
+    Acqui_Immo: 117065.55,
+    Cess_Immo: 23250,
+    Dettes: 662499.08,
+    Emprunts: 323199.65,
+    CACompt: 568346.07,
+    TotProd: 625736.29,
+    TotCharge: 610365.99,
+    VA: 239898.88,
+    EBE: 55980.49,
+    ResultatCourant: -53778.83,
+    ResultatNet: 15370.3
+  }
+};
+
+test('204 lors de la soumission d’un bilan au format CGO', async ({ request }) => {
+  const response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: testBilanCGO
+  });
+  expect(response.status()).toBe(204);
+  const inserted = await getLastById(bilans);
+  expect(inserted['stock__huitre__nais_mil__val']).toBe('20000.00');
+});
+
+test('400 si un champ inconnu est fourni', async ({ request }) => {
+  const d1 = {
+    ...testBilanCGO,
+    stock: {
+      ...testBilanCGO.stock,
+      newField: 'foo'
+    }
+  };
+
+  let response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: d1
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toContain("Unrecognized key(s) in object: 'newField'");
+
+  const d2 = {
+    ...testBilanCGO,
+    production: {
+      ...testBilanCGO.production,
+      newField: 'foo'
+    }
+  };
+
+  response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: d2
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toContain("Unrecognized key(s) in object: 'newField'");
+
+  const d3 = {
+    ...testBilanCGO,
+    donnees_economiques: {
+      ...testBilanCGO.donnees_economiques,
+      newField: 'foo'
+    }
+  };
+
+  response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: d3
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toContain("Unrecognized key(s) in object: 'newField'");
+
+  const d4 = {
+    ...testBilanCGO,
+    stk: {
+      ...testBilanCGO.stock
+    }
+  };
+
+  response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data: d4
+  });
+  expect(response.status()).toBe(400);
+  expect((await response.json()).message).toContain('Clé `stk` inconnue');
+});
+
+test('Les données de destination sont ignorées', async ({ request }) => {
+  const data = {
+    ...testBilanCGO,
+    destination: {
+      ...testBilanCGO.destination,
+      newField: 'foo'
+    }
+  };
+
+  const response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data
+  });
+  expect(response.status()).toBe(204);
+});
+
+test('400 si un champ ou catégorie est manquante', async ({ request }) => {
+  const data = JSON.parse(JSON.stringify(testBilanCGO));
+  delete data.stock;
+
+  const response = await request.post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {
+    headers: { Authorization: `Bearer ${validAuthToken}` },
+    data
+  });
+  expect((await response.json()).message).toContain('Clé `stock` manquante');
+  expect(response.status()).toBe(400);
 });

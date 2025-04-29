@@ -35,29 +35,29 @@
           description:
             'Il s’agit de vos huîtres de taille marchande disponibles à la vente pour la consommation.',
 
-          qty: bilan.StckVolHConso,
-          val: bilan.StckValHConso
+          qty: bilan['stock__huitre__conso__qt'],
+          val: bilan['stock__huitre__conso__val']
         },
         {
           nom: 'Stock d’huîtres de taille marchande pour l’élevage',
           description:
             'Il s’agit de vos huîtres de taille marchande disponibles à la vente pour l’élevage auprès d’autres exploitants',
-          qty: bilan.StckVolHElv,
-          val: bilan.StckValHElv
+          qty: bilan['stock__huitre__elv__qt'],
+          val: bilan['stock__huitre__elv__val']
         },
         {
           nom: 'Ventes d’huîtres de demi-élevage',
           description:
             'Il s’agit de vos huîtres de 18 mois ou de demi-élevage disponible à l’élevage.',
-          qty: bilan.StckVolHDElv,
-          val: bilan.StckValHDElv
+          qty: bilan['stock__huitre__demi_elv__qt'],
+          val: bilan['stock__huitre__demi_elv__val']
         },
         {
           nom: 'Stock de naissains',
           description:
             "Il s’agit de vos écloseries ou nurseries disponibles pour le grossissement auprès d'autres conchyliculteurs ou pour l'exportation.",
-          qty: bilan.StckVolHNaisMi,
-          val: bilan.StckValHNaisMi,
+          qty: bilan['stock__huitre__nais_mil__qt'],
+          val: bilan['stock__huitre__nais_mil__val'],
           unit: 'milliers'
         }
       ]

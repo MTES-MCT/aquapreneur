@@ -64,6 +64,20 @@
       "when": 1744796720868,
       "tag": "0008_index_concessions_table",
       "breakpoints": false
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1745513552231,
+      "tag": "0009_drop_pct_columns",
+      "breakpoints": false
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1745582610467,
+      "tag": "0010_rename_cgo_fields",
+      "breakpoints": false
     }
   ]
 }

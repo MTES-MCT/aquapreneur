@@ -39,43 +39,55 @@
             destinations: [
               {
                 nom: 'En gros',
-                qty: bilan.VolVtHCoFrPro,
-                val: bilan.CAHCoFrPro
+                qty: bilan['prod__huitre__conso__fr__pro__qt'],
+                val: bilan['prod__huitre__conso__fr__pro__val']
               },
               {
                 nom: 'Détail',
-                qty: bilan.VolVtHCoFrDet,
-                val: bilan.CAHCoFrDet
+                qty: bilan['prod__huitre__conso__fr__detail__qt'],
+                val: bilan['prod__huitre__conso__fr__detail__val']
               },
               {
                 nom: 'Grossistes',
-                qty: bilan.VolVtHCoFrGros,
-                val: bilan.CAHCoFrGros
+                qty: bilan['prod__huitre__conso__fr__grossiste__qt'],
+                val: bilan['prod__huitre__conso__fr__grossiste__val']
               },
               {
                 nom: 'Poissonneries',
-                qty: bilan.VolVtHCoFrPCE,
-                val: bilan.CAHCoFrPCE
+                qty: bilan['prod__huitre__conso__fr__poiss__qt'],
+                val: bilan['prod__huitre__conso__fr__poiss__val']
               },
               {
                 nom: 'Poissonneries en gr. et moy. surfaces',
-                qty: bilan.VolVtHCoFrPGMS,
-                val: bilan.CAHCoFrPGMS
+                qty: bilan['prod__huitre__conso__fr__pgms__qt'],
+                val: bilan['prod__huitre__conso__fr__pgms__val']
               },
               {
                 nom: 'Dégustation',
-                qty: bilan.VolVtHCoFrDeg,
-                val: bilan.CAHCoFrDeg
+                qty: bilan['prod__huitre__conso__fr__degust__qt'],
+                val: bilan['prod__huitre__conso__fr__degust__val']
               },
               {
                 nom: 'Export au sein de l’UE',
-                qty: sum([bilan.VolVtHCoUEPro, bilan.VolVtHCoUEGros]),
-                val: sum([bilan.CAHCoUEPro, bilan.CAHCoUEGros])
+                qty: sum([
+                  bilan['prod__huitre__conso__ue__pro__qt'],
+                  bilan['prod__huitre__conso__ue__expe__qt']
+                ]),
+                val: sum([
+                  bilan['prod__huitre__conso__ue__pro__val'],
+                  bilan['prod__huitre__conso__ue__expe__val']
+                ])
               },
               {
                 nom: 'Export hors UE',
-                qty: sum([bilan.VolVtHCoAuPro, bilan.VolVtHCoAuGros]),
-                val: sum([bilan.CAHCoAuPro, bilan.CAHCoAuGros])
+                qty: sum([
+                  bilan['prod__huitre__conso__nue__pro__qt'],
+                  bilan['prod__huitre__conso__nue__expe__qt']
+                ]),
+                val: sum([
+                  bilan['prod__huitre__conso__nue__pro__val'],
+                  bilan['prod__huitre__conso__nue__expe__val']
+                ])
               }
             ]
           },
@@ -86,18 +98,18 @@
             destinations: [
               {
                 nom: 'France',
-                qty: bilan.VolVtHElvFr,
-                val: bilan.CAHElvFr
+                qty: bilan['prod__huitre__elv__fr__qt'],
+                val: bilan['prod__huitre__elv__fr__val']
               },
               {
                 nom: 'Export au sein de l’UE',
-                qty: bilan.VolVtHElvUE,
-                val: bilan.CAHElvUE
+                qty: bilan['prod__huitre__elv__ue__qt'],
+                val: bilan['prod__huitre__elv__ue__val']
               },
               {
                 nom: 'Export hors UE',
-                qty: bilan.VolVtHElvAu,
-                val: bilan.CAHElvAu
+                qty: bilan['prod__huitre__elv__nue__qt'],
+                val: bilan['prod__huitre__elv__nue__val']
               }
             ]
           },
@@ -108,18 +120,18 @@
             destinations: [
               {
                 nom: 'France',
-                qty: bilan.VolVtHDElvFr,
-                val: bilan.CAHDElvFr
+                qty: bilan['prod__huitre__demi_elv__fr__qt'],
+                val: bilan['prod__huitre__demi_elv__fr__val']
               },
               {
                 nom: 'Export au sein de l’UE',
-                qty: bilan.VolVtHDElvUE,
-                val: bilan.CAHDElvUE
+                qty: bilan['prod__huitre__demi_elv__ue__qt'],
+                val: bilan['prod__huitre__demi_elv__ue__val']
               },
               {
                 nom: 'Export hors UE',
-                qty: bilan.VolVtHDElvAu,
-                val: bilan.CAHDElvAU
+                qty: bilan['prod__huitre__demi_elv__nue__qt'],
+                val: bilan['prod__huitre__demi_elv__nue__val']
               }
             ]
           },
@@ -130,18 +142,18 @@
             destinations: [
               {
                 nom: 'France',
-                qty: bilan.VolVtHNaissFr,
-                val: bilan.CAHNaissFr
+                qty: bilan['prod__huitre__nais__fr__qt'],
+                val: bilan['prod__huitre__nais__fr__val']
               },
               {
                 nom: 'Export au sein de l’UE',
-                qty: bilan.VolVtHNaissUE,
-                val: bilan.CAHNaissUE
+                qty: bilan['prod__huitre__nais__ue__qt'],
+                val: bilan['prod__huitre__nais__ue__val']
               },
               {
                 nom: 'Export hors UE',
-                qty: bilan.VolVtHNaissAu,
-                val: bilan.CAHNaissAu
+                qty: bilan['prod__huitre__nais__nue__qt'],
+                val: bilan['prod__huitre__nais__nue__val']
               }
             ]
           }
