@@ -1,8 +1,8 @@
 <script lang="ts">
-  import LeafPict from '@gouvfr/dsfr/dist/artwork/pictograms/environment/leaf.svg';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
+
+  import LeafPict from '/dsfr-1.13.1/artwork/pictograms/environment/leaf.svg';
 </script>
 
 <Pictogram pict={LeafPict} width={124} height={124}></Pictogram>

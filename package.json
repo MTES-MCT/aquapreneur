@@ -29,7 +29,6 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.24.0",
-    "@gouvfr/dsfr": "^1.13.0",
     "@playwright/browser-chromium": "^1.51.1",
     "@playwright/browser-firefox": "^1.51.1",
     "@playwright/test": "^1.49.1",
@@ -63,7 +62,7 @@
     "@sentry/sveltekit": "^9.5.0",
     "decamelize": "^6.0.0",
     "drizzle-kit": "^0.31.0",
-    "drizzle-orm": "^0.42.0",
+    "drizzle-orm": "^0.43.1",
     "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.7.0",
     "postgres": "^3.4.5",

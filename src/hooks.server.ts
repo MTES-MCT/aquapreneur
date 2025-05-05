@@ -78,6 +78,14 @@ export const appHandle: Handle = async ({ event, resolve }) => {
 
   logger.canonical(event, event.locals.utilisateur?.id, shortSessionId, response.status);
 
+  response.headers.set('cross-origin-opener-policy', 'same-origin');
+  response.headers.set('cross-origin-resource-policy', 'same-origin');
+  response.headers.set('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
+  response.headers.set('referrer-policy', 'strict-origin-when-cross-origin');
+  response.headers.set('x-content-type-options', 'nosniff');
+  response.headers.set('x-dns-prefetch-control', 'off');
+  response.headers.set('x-frame-options', 'DENY');
+
   return response;
 };
 

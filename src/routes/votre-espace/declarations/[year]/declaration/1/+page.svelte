@@ -1,11 +1,10 @@
 <script lang="ts">
-  import CommunityPict from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/community.svg';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
 </script>
 
-<Pictogram pict={CommunityPict} width={124} height={124}></Pictogram>
+<Pictogram pict="/dsfr-1.13.1/artwork/pictograms/leisure/community.svg" width={124} height={124}
+></Pictogram>
 
 <h1 class="fr-h2 fr-mt-6v">Pour conclure</h1>
 

@@ -1,7 +1,4 @@
 <script lang="ts">
-  import ContractPict from '@gouvfr/dsfr/dist/artwork/pictograms/document/contract.svg';
-  import PlaceholderPict16x9 from '@gouvfr/dsfr/example/img/placeholder.16x9.png';
-
   import { enhance } from '$app/forms';
 
   import { getDeclarationContext, resetDeclarationContext } from '$lib/declaration-context';
@@ -148,9 +145,18 @@
               width="80px"
               height="80px"
             >
-              <use class="fr-artwork-decorative" href="{ContractPict}#artwork-decorative"></use>
-              <use class="fr-artwork-minor" href="{ContractPict}#artwork-minor"></use>
-              <use class="fr-artwork-major" href="{ContractPict}#artwork-major"></use>
+              <use
+                class="fr-artwork-decorative"
+                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-decorative"
+              ></use>
+              <use
+                class="fr-artwork-minor"
+                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-minor"
+              ></use>
+              <use
+                class="fr-artwork-major"
+                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-major"
+              ></use>
             </svg>
           </div>
         </div>
@@ -213,7 +219,11 @@
       </p>
       <figure class="fr-content-media" role="group">
         <div class="fr-content-media__img">
-          <img class="fr-responsive-img fr-ratio-16x9" src={PlaceholderPict16x9} alt="" />
+          <img
+            class="fr-responsive-img fr-ratio-16x9"
+            src="/placeholders/placeholder.16x9.png"
+            alt=""
+          />
         </div>
       </figure>
     </div>
@@ -225,7 +235,11 @@
       </p>
       <figure class="fr-content-media" role="group">
         <div class="fr-content-media__img">
-          <img class="fr-responsive-img fr-ratio-16x9" src={PlaceholderPict16x9} alt="" />
+          <img
+            class="fr-responsive-img fr-ratio-16x9"
+            src="/placeholders/placeholder.16x9.png"
+            alt=""
+          />
         </div>
       </figure>
     </div>
@@ -240,7 +254,11 @@
     <div class="fr-col-12 fr-col-md-10">
       <figure class="fr-content-media" role="group">
         <div class="fr-content-media__img">
-          <img class="fr-responsive-img fr-ratio-16x9" src={PlaceholderPict16x9} alt="" />
+          <img
+            class="fr-responsive-img fr-ratio-16x9"
+            src="/placeholders/placeholder.16x9.png"
+            alt=""
+          />
         </div>
       </figure>
     </div>
