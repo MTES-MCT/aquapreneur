@@ -1,7 +1,4 @@
 <script lang="ts">
-  import OvoidPict from '@gouvfr/dsfr/dist/artwork/background/ovoid.svg';
-  import TechErrorPict from '@gouvfr/dsfr/dist/artwork/pictograms/system/technical-error.svg';
-
   import { page } from '$app/state';
 </script>
 
@@ -49,12 +46,27 @@
           height="200"
           viewBox="0 0 160 200"
         >
-          <use class="fr-artwork-motif" href="{OvoidPict}#artwork-motif"></use>
-          <use class="fr-artwork-background" href="{OvoidPict}#artwork-background"></use>
+          <use
+            class="fr-artwork-motif"
+            href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-motif"
+          ></use>
+          <use
+            class="fr-artwork-background"
+            href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-background"
+          ></use>
           <g transform="translate(40, 60)">
-            <use class="fr-artwork-decorative" href="{TechErrorPict}#artwork-decorative"></use>
-            <use class="fr-artwork-minor" href="{TechErrorPict}#artwork-minor"></use>
-            <use class="fr-artwork-major" href="{TechErrorPict}#artwork-major"></use>
+            <use
+              class="fr-artwork-decorative"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-decorative"
+            ></use>
+            <use
+              class="fr-artwork-minor"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-minor"
+            ></use>
+            <use
+              class="fr-artwork-major"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-major"
+            ></use>
           </g>
         </svg>
       </div>
@@ -91,12 +103,27 @@
           height="200"
           viewBox="0 0 160 200"
         >
-          <use class="fr-artwork-motif" href="{OvoidPict}#artwork-motif"></use>
-          <use class="fr-artwork-background" href="{OvoidPict}#artwork-background"></use>
+          <use
+            class="fr-artwork-motif"
+            href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-motif"
+          ></use>
+          <use
+            class="fr-artwork-background"
+            href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-background"
+          ></use>
           <g transform="translate(40, 60)">
-            <use class="fr-artwork-decorative" href="{TechErrorPict}#artwork-decorative"></use>
-            <use class="fr-artwork-minor" href="{TechErrorPict}#artwork-minor"></use>
-            <use class="fr-artwork-major" href="{TechErrorPict}#artwork-major"></use>
+            <use
+              class="fr-artwork-decorative"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-decorative"
+            ></use>
+            <use
+              class="fr-artwork-minor"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-minor"
+            ></use>
+            <use
+              class="fr-artwork-major"
+              href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-major"
+            ></use>
           </g>
         </svg>
       </div>

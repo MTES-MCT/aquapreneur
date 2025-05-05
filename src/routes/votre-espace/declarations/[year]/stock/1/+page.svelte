@@ -1,8 +1,8 @@
 <script lang="ts">
-  import BookPict from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/book.svg';
-
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
+
+  import BookPict from '/dsfr-1.13.1/artwork/pictograms/leisure/book.svg';
 </script>
 
 <Pictogram pict={BookPict} width={124} height={124}></Pictogram>

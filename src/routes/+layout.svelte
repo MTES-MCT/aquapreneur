@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
   import { page } from '$app/state';
 
   import Footer from '$lib/components/footer.svelte';
@@ -8,11 +6,6 @@
   import Skiplink from '$lib/components/skiplink.svelte';
 
   import '../app.css';
-
-  onMount(async () => {
-    // @ts-expect-error -- pas de type disponible
-    await import('@gouvfr/dsfr/dist/dsfr.module.js');
-  });
 
   let { data, children } = $props();
 </script>

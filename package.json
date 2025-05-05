@@ -29,7 +29,6 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.24.0",
-    "@gouvfr/dsfr": "^1.13.0",
     "@playwright/browser-chromium": "^1.51.1",
     "@playwright/browser-firefox": "^1.51.1",
     "@playwright/test": "^1.49.1",
