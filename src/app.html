@@ -36,10 +36,15 @@
   <body data-sveltekit-preload-data="hover">
     <div style="display: contents">%sveltekit.body%</div>
 
-    <script type="module" src="%sveltekit.assets%/dsfr-1.13.1/dsfr.module.min.js"></script>
+    <script
+      type="module"
+      nonce="%sveltekit.nonce%"
+      src="%sveltekit.assets%/dsfr-1.13.1/dsfr.module.min.js"
+    ></script>
     <script
       type="text/javascript"
       nomodule
+      nonce="%sveltekit.nonce%"
       src="%sveltekit.assets%/dsfr-1.13.1/dsfr.nomodule.min.js"
     ></script>
   </body>

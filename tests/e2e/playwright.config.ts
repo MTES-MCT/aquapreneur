@@ -31,7 +31,8 @@ export default defineConfig({
     reuseExistingServer: true
   },
   use: {
-    baseURL: 'http://localhost:4173'
+    baseURL: 'http://localhost:4173',
+    bypassCSP: true
   },
   testDir: '.',
   outputDir: './_results'
