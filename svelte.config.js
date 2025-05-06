@@ -1,9 +1,11 @@
-import * as dotenvx from '@dotenvx/dotenvx';
-
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-dotenvx.config({ ignore: ['MISSING_ENV_FILE'], quiet: true });
+const sentryReportURI = process.env.SENTRY_CSP_REPORT_URI
+  ? new URL(process.env.SENTRY_CSP_REPORT_URI)
+  : null;
+if (sentryReportURI && process.env.PUBLIC_SENTRY_ENVIRONMENT)
+  sentryReportURI.searchParams.append('sentry_environment', process.env.PUBLIC_SENTRY_ENVIRONMENT);
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -29,9 +31,7 @@ const config = {
         'form-action': ['self'],
         'img-src': ['self', 'data:'],
         'require-trusted-types-for': ['script'],
-        'report-uri': [
-          process.env.SENTRY_CSP_REPORT_URI ? process.env.SENTRY_CSP_REPORT_URI : 'none'
-        ]
+        'report-uri': [sentryReportURI?.toString() ?? '']
       }
     },
     alias: {

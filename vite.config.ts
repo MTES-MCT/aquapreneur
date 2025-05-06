@@ -4,6 +4,9 @@ import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
+  build: {
+    sourcemap: true
+  },
   plugins: [
     sentrySvelteKit({
       autoUploadSourceMaps:
@@ -11,8 +14,12 @@ export default defineConfig({
       sourceMapsUploadOptions: {
         org: 'betagouv',
         project: 'aquapreneur',
-        url: 'https://sentry.incubateur.net/',
-        authToken: process.env.SENTRY_AUTH_TOKEN
+        url: 'https://sentry.incubateur.net',
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        telemetry: false,
+        sourcemaps: {
+          filesToDeleteAfterUpload: []
+        }
       }
     }),
     sveltekit()
