@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
+  import Pictogram from '$lib/components/pictogram.svelte';
   import { getDeclarationContext, resetDeclarationContext } from '$lib/declaration-context';
 
   const { data } = $props();
@@ -138,26 +139,7 @@
         </div>
         <div class="fr-tile__header">
           <div class="fr-tile__pictogram">
-            <svg
-              aria-hidden="true"
-              class="fr-artwork"
-              viewBox="0 0 80 80"
-              width="80px"
-              height="80px"
-            >
-              <use
-                class="fr-artwork-decorative"
-                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-decorative"
-              ></use>
-              <use
-                class="fr-artwork-minor"
-                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-minor"
-              ></use>
-              <use
-                class="fr-artwork-major"
-                href="/dsfr-1.13.1/artwork/pictograms/document/contract.svg#artwork-major"
-              ></use>
-            </svg>
+            <Pictogram pict="document/contract"></Pictogram>
           </div>
         </div>
       </div>

@@ -1,12 +1,14 @@
 <script lang="ts">
+  import { dsfrLink } from '$lib/utils';
+
   const {
     pict,
     width = 80,
     height = 80
   }: {
     pict: string;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
   } = $props();
 </script>
 
@@ -17,7 +19,7 @@
   width="{width}px"
   height="{height}px"
 >
-  <use class="fr-artwork-decorative" href="{pict}#artwork-decorative"></use>
-  <use class="fr-artwork-minor" href="{pict}#artwork-minor"></use>
-  <use class="fr-artwork-major" href="{pict}#artwork-major"></use>
+  <use class="fr-artwork-decorative" href="{dsfrLink(pict)}#artwork-decorative"></use>
+  <use class="fr-artwork-minor" href="{dsfrLink(pict)}#artwork-minor"></use>
+  <use class="fr-artwork-major" href="{dsfrLink(pict)}#artwork-major"></use>
 </svg>

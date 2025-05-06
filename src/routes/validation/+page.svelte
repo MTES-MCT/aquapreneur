@@ -1,3 +1,7 @@
+<script>
+  import { dsfrLink } from '$lib/utils';
+</script>
+
 <div class="fr-container">
   <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center fr-py-12v">
     <div class="fr-py-0 fr-col-12 fr-col-md-6" id="contenu">
@@ -31,24 +35,19 @@
         height="200"
         viewBox="0 0 160 200"
       >
-        <use class="fr-artwork-motif" href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-motif"
-        ></use>
+        <use class="fr-artwork-motif" href="{dsfrLink('ovoid', 'background')}#artwork-motif"></use>
         <use
           class="fr-artwork-background"
-          href="/dsfr-1.13.1/artwork/background/ovoid.svg#artwork-background"
+          href="{dsfrLink('ovoid', 'background')}#artwork-background"
         ></use>
         <g transform="translate(40, 60)">
           <use
             class="fr-artwork-decorative"
-            href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-decorative"
+            href="{dsfrLink('system/technical-error')}#artwork-decorative"
           ></use>
-          <use
-            class="fr-artwork-minor"
-            href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-minor"
+          <use class="fr-artwork-minor" href="{dsfrLink('system/technical-error')}#artwork-minor"
           ></use>
-          <use
-            class="fr-artwork-major"
-            href="/dsfr-1.13.1/artwork/pictograms/system/technical-error.svg#artwork-major"
+          <use class="fr-artwork-major" href="{dsfrLink('system/technical-error')}#artwork-major"
           ></use>
         </g>
       </svg>

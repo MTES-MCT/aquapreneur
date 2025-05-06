@@ -1,11 +1,9 @@
 <script lang="ts">
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
-
-  import BookPict from '/dsfr-1.13.1/artwork/pictograms/leisure/book.svg';
 </script>
 
-<Pictogram pict={BookPict} width={124} height={124}></Pictogram>
+<Pictogram pict="leisure/book" width={124} height={124}></Pictogram>
 
 <h1 class="fr-h2 fr-mt-6v">Nous allons maintenant faire le point sur votre stock.</h1>
 

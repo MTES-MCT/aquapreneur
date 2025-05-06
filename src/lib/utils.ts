@@ -1,6 +1,8 @@
 import { applyAction, enhance } from '$app/forms';
 import { goto } from '$app/navigation';
 
+import { DSFR_VERSION } from './constants';
+
 export const formatDate = (date: string) => {
   return new Intl.DateTimeFormat('fr-FR', {
     year: 'numeric',
@@ -21,3 +23,7 @@ export function enhanceNoInvalidate(node: HTMLFormElement) {
     };
   });
 }
+
+export const dsfrLink = (picto: string, parent = 'pictograms') => {
+  return `/dsfr-${DSFR_VERSION}/artwork/${parent}/${picto}.svg`;
+};
