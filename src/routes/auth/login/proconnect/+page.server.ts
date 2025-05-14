@@ -13,7 +13,7 @@ import { OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 // basé sur
 // https://lucia-auth.com/tutorials/github-oauth/sveltekit
 // et
-// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/implementation_technique
 
 export const actions = {
   default: async (event) => {
@@ -24,7 +24,7 @@ export const actions = {
       [
         'openid',
         // liste des scopes disponibles :
-        // https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/donnees_fournies.md
+        // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
         'given_name',
         'usual_name',
         'email',

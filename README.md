@@ -39,7 +39,7 @@
 ## Documentation utile
 
 - [SvelteKit](https://svelte.dev/docs/kit/introduction) : la documentation du framework javascript
-- [ProConnect](https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/README.md) : le service d’authentification
+- [ProConnect](https://partenaires.proconnect.gouv.fr/docs/fournisseur-service) : le service d’authentification
 - [Lucia](https://lucia-auth.com/) : l’inspiration pour l’implémentation OIDC
 - [Drizzle](https://orm.drizzle.team) : la documentation de l’ORM
 - [Playwright](https://playwright.dev/) : le framework de tests e2e

@@ -24,7 +24,7 @@ import { createSession, setSessionTokenCookie } from '$lib/server/auth/session';
 
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
-// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/donnees_fournies.md
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
 const proConnectPayload = z.object({
   sub: z.string(),
   given_name: z.string(),
@@ -39,7 +39,7 @@ const proConnectPayload = z.object({
 // basé sur
 // https://lucia-auth.com/tutorials/github-oauth/sveltekit
 // et
-// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/implementation_technique
 
 export const load = async ({ url, cookies }) => {
   const code = url.searchParams.get('code');
@@ -72,7 +72,7 @@ export const load = async ({ url, cookies }) => {
 
   // On stocke le tokenId pour pouvoir déconnecter l’utilisateurice de ProConnect
   // Les sessions ProConnect durent 12h par défaut
-  // https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md#237-authentification-de-lutilisateur
+  // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/implementation_technique#:~:text=2.3.7.%20Authentification%20de%20l%27utilisateur
   cookies.set(OIDC_ID_TOKEN_COOKIE_NAME, tokenId, {
     path: '/',
     httpOnly: true,
