@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import type { Handle, HandleServerError, RequestEvent } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
+import { DISABLE_CANONICAL_LOGS } from '$env/static/private';
 import {
   PUBLIC_SENTRY_DSN,
   PUBLIC_SENTRY_ENVIRONMENT,
@@ -76,7 +77,9 @@ export const appHandle: Handle = async ({ event, resolve }) => {
   // ne faire apparaitre que ses premiers caractères dans les logs.
   const shortSessionId = getShortId(event.locals.session?.id);
 
-  logger.canonical(event, event.locals.utilisateur?.id, shortSessionId, response.status);
+  if (!DISABLE_CANONICAL_LOGS) {
+    logger.canonical(event, event.locals.utilisateur?.id, shortSessionId, response.status);
+  }
 
   response.headers.set('cross-origin-opener-policy', 'same-origin');
   response.headers.set('cross-origin-resource-policy', 'same-origin');
