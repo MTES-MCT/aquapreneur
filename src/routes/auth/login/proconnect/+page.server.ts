@@ -13,7 +13,7 @@ import { OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 // basé sur
 // https://lucia-auth.com/tutorials/github-oauth/sveltekit
 // et
-// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/implementation_technique
 
 export const actions = {
   default: async (event) => {
@@ -24,7 +24,7 @@ export const actions = {
       [
         'openid',
         // liste des scopes disponibles :
-        // https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/donnees_fournies.md
+        // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
         'given_name',
         'usual_name',
         'email',
@@ -32,6 +32,11 @@ export const actions = {
         'phone'
       ]
     );
+
+    // On ajoute ce "claim", afin de récupérer en sortie le champ `amr`
+    // qui permet de vérifier si une authentification à deux facteurs a été utilisée
+    // https://partenaires.proconnect.gouv.fr/docs/ressources/claim_amr
+    url.searchParams.append('claims', '{"id_token":{"amr":{"essential":true}}}');
 
     event.cookies.set(OIDC_STATE_COOKIE_NAME, state, {
       path: '/',

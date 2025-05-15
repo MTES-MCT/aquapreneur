@@ -22,15 +22,16 @@ const config = {
         'default-src': ['none'],
         'object-src': ['none'],
         'script-src': [],
+        'script-src-elem': ['self'],
         'style-src': ['none'],
         'style-src-elem': ['self'],
         'style-src-attr': ['unsafe-inline'],
-        'connect-src': ['self'],
+        'connect-src': ['self', 'https://sentry.incubateur.net'],
         'font-src': ['self'],
         'frame-ancestors': ['none'],
         'form-action': ['self'],
         'img-src': ['self', 'data:'],
-        'require-trusted-types-for': ['script'],
+        'manifest-src': ['self'],
         'report-uri': [sentryReportURI?.toString() ?? '']
       }
     },

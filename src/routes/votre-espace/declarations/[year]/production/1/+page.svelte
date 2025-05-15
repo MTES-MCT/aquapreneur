@@ -1,11 +1,9 @@
 <script lang="ts">
   import NavigationLinks from '$lib/components/navigation-links.svelte';
   import Pictogram from '$lib/components/pictogram.svelte';
-
-  import LeafPict from '/dsfr-1.13.1/artwork/pictograms/environment/leaf.svg';
 </script>
 
-<Pictogram pict={LeafPict} width={124} height={124}></Pictogram>
+<Pictogram pict="environment/leaf" width={124} height={124}></Pictogram>
 
 <h1 class="fr-h2 fr-mt-6v">
   Nous allons à présent nous intéresser à votre production aquacole vendue.

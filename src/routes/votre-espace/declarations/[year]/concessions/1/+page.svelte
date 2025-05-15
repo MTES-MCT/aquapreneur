@@ -3,8 +3,7 @@
   import Pictogram from '$lib/components/pictogram.svelte';
 </script>
 
-<Pictogram pict="/dsfr-1.13.1/artwork/pictograms/map/location-france.svg" width={124} height={124}
-></Pictogram>
+<Pictogram pict="map/location-france" width={124} height={124}></Pictogram>
 
 <h1 class="fr-h2 fr-mt-6v">Nous allons maintenant examiner vos concessions</h1>
 

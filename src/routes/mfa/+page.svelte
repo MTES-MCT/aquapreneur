@@ -5,13 +5,22 @@
 <div class="fr-container">
   <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-grid-row--center fr-py-12v">
     <div class="fr-py-0 fr-col-12 fr-col-md-6" id="contenu">
-      <h1>Compte non validé</h1>
+      <h1>Authentification multifacteurs requise</h1>
       <p class="fr-text--lead fr-mb-5w">
-        Votre compte utilisateur n’est pas autorisé à accéder aux données d’Aquapreneur.
+        L’accès au fonctions d’administration n’est possible que pour les comptes ayant activé
+        l’authentification multifacteurs.
       </p>
       <p class="fr-text--sm fr-mb-3w">
-        Si vous faites partie de l’expérimentation, contactez-nous pour que nous fassions le
-        nécessaire.
+        Vous pouvez l’activer sur
+
+        <a
+          target="_blank"
+          rel="noopener external"
+          title="info.gouv.fr - nouvelle fenêtre"
+          class="fr-link"
+          href="https://identite.proconnect.gouv.fr/connection-and-account"
+          >identite.proconnect.gouv.fr</a
+        >
       </p>
       <ul class="fr-btns-group fr-btns-group--inline-md">
         <li>
@@ -24,6 +33,7 @@
         </li>
       </ul>
     </div>
+
     <div
       class="fr-col-12 fr-col-md-3 fr-col-offset-md-1 fr-px-6w fr-px-md-0 fr-py-0 fr-hidden fr-unhidden-md"
     >

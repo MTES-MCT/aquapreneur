@@ -22,7 +22,7 @@ import { ADMIN_CURRENT_SIRET_COOKIE_NAME, OIDC_ID_TOKEN_COOKIE_NAME } from '$lib
 // basé sur
 // https://lucia-auth.com/tutorials/github-oauth/sveltekit
 // et
-// https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/implementation_technique.md
+// https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/implementation_technique
 
 export const actions = {
   default: async ({ locals, cookies }) => {

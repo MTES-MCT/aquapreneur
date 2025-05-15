@@ -1,6 +1,6 @@
 <!-- 
 Bouton de connexion via ProConnect.
-Basé sur https://github.com/numerique-gouv/proconnect-documentation/blob/main/doc_fs/bouton_proconnect.md 
+Basé sur https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/bouton_proconnect
 -->
 
 <div class="fr-connect-group">
