@@ -33,6 +33,11 @@ export const actions = {
       ]
     );
 
+    // On ajoute ce "claim", afin de récupérer en sortie le champ `amr`
+    // qui permet de vérifier si une authentification à deux facteurs a été utilisée
+    // https://partenaires.proconnect.gouv.fr/docs/ressources/claim_amr
+    url.searchParams.append('claims', '{"id_token":{"amr":{"essential":true}}}');
+
     event.cookies.set(OIDC_STATE_COOKIE_NAME, state, {
       path: '/',
       httpOnly: true,

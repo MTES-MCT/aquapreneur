@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { error, redirect } from '@sveltejs/kit';
 
 import {
+  ENVIRONMENT,
   PROCONNECT_DOMAIN,
   PROCONNECT_TOKEN_ENDPOINT,
   PROCONNECT_USERINFO_ENDPOINT
@@ -25,13 +26,20 @@ import { createSession, setSessionTokenCookie } from '$lib/server/auth/session';
 import { OIDC_ID_TOKEN_COOKIE_NAME, OIDC_STATE_COOKIE_NAME } from '$lib/constants';
 
 // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
-const proConnectPayload = z.object({
+const userInfoPayloadSchema = z.object({
   sub: z.string(),
   given_name: z.string(),
   usual_name: z.string(),
   email: z.string().email().toLowerCase(),
   siret: z.string(),
   phone_number: z.string().optional().nullable()
+});
+
+// https://partenaires.proconnect.gouv.fr/docs/ressources/claim_amr
+const AmrEnum = z.enum(['pwd', 'mail', 'totp', 'pop', 'mfa']);
+type AmrEnum = z.infer<typeof AmrEnum>;
+const idTokenPayloadSchema = z.object({
+  amr: z.array(AmrEnum)
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,8 +75,14 @@ export const load = async ({ url, cookies }) => {
     logger.exception(err, '`code` ou `client_id/client_secret` incorrects');
     error(400);
   }
-
   const tokenId = tokens.idToken();
+
+  // Vérification de la connexion MFA
+  let amr: AmrEnum[] = [];
+  const idTokenParsedResult = idTokenPayloadSchema.safeParse(decodeIdToken(tokenId));
+  if (idTokenParsedResult.success) {
+    amr = idTokenParsedResult.data.amr;
+  }
 
   // On stocke le tokenId pour pouvoir déconnecter l’utilisateurice de ProConnect
   // Les sessions ProConnect durent 12h par défaut
@@ -88,8 +102,8 @@ export const load = async ({ url, cookies }) => {
       }
     }
   );
-  const payload = decodeIdToken(await userInfoResponse.text());
-  const parsedResult = proConnectPayload.safeParse(payload);
+  const userInfoPayload = decodeIdToken(await userInfoResponse.text());
+  const parsedResult = userInfoPayloadSchema.safeParse(userInfoPayload);
   if (parsedResult.success === false) {
     logger.error('IdToken OIDC invalide', { zod_err: formatZodError(parsedResult.error) });
     error(400);
@@ -103,15 +117,34 @@ export const load = async ({ url, cookies }) => {
   let utilisateur: Utilisateur;
   if (query.length) {
     utilisateur = query[0];
+    const hasMFA = amr.includes('totp') || amr.includes('pop') || amr.includes('mfa');
+    if (utilisateur.estAdmin) {
+      // Les administateur·ices **doivent utiliser une authentification 2FA
+      if (ENVIRONMENT == 'production' && !hasMFA) {
+        audit('Tentative de connexion d’un administrateur sans MFA', {
+          user_id: utilisateur.id,
+          amr
+        });
+        redirect(307, '/mfa');
+      }
+    }
     // Le compte correspondant au `sub` existe déjà, on le met à jour.
     // TODO gérer le changement d’adresse email, de service, etc ?
     await db
       .update(utilisateurs)
       .set({ derniereConnexion: new Date() })
       .where(eq(utilisateurs.id, utilisateur.id));
-    audit('Connexion ProConnect d’un utilisateur existant', {
-      user_id: utilisateur.id
-    });
+
+    if (utilisateur.estAdmin) {
+      audit('Connexion ProConnect d’un administrateur existant', {
+        user_id: utilisateur.id,
+        amr
+      });
+    } else {
+      audit('Connexion ProConnect d’un utilisateur existant', {
+        user_id: utilisateur.id
+      });
+    }
   } else {
     const query = await db
       .insert(utilisateurs)
