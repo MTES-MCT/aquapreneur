@@ -1,5 +1,5 @@
 export const load = () => {
-  return {
-    title: 'Mentions légales'
-  };
+	return {
+		title: "Mentions légales",
+	};
 };

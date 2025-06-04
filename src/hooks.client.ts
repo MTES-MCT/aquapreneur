@@ -1,16 +1,16 @@
-import { handleErrorWithSentry } from '@sentry/sveltekit';
-import * as Sentry from '@sentry/sveltekit';
+import { handleErrorWithSentry } from "@sentry/sveltekit";
+import * as Sentry from "@sentry/sveltekit";
 
 import {
-  PUBLIC_SENTRY_DSN,
-  PUBLIC_SENTRY_ENVIRONMENT,
-  PUBLIC_SENTRY_TRACE_SAMPLE_RATE
-} from '$env/static/public';
+	PUBLIC_SENTRY_DSN,
+	PUBLIC_SENTRY_ENVIRONMENT,
+	PUBLIC_SENTRY_TRACE_SAMPLE_RATE,
+} from "$env/static/public";
 
 Sentry.init({
-  dsn: PUBLIC_SENTRY_DSN,
-  tracesSampleRate: Number(PUBLIC_SENTRY_TRACE_SAMPLE_RATE || 0),
-  environment: PUBLIC_SENTRY_ENVIRONMENT
+	dsn: PUBLIC_SENTRY_DSN,
+	tracesSampleRate: Number(PUBLIC_SENTRY_TRACE_SAMPLE_RATE || 0),
+	environment: PUBLIC_SENTRY_ENVIRONMENT,
 });
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`

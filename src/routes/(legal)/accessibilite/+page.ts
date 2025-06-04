@@ -1,5 +1,5 @@
 export const load = () => {
-  return {
-    title: 'Accessibilité'
-  };
+	return {
+		title: "Accessibilité",
+	};
 };

@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 
 export const load = async () => {
-  redirect(307, `concessions/1`);
+	redirect(307, `concessions/1`);
 };

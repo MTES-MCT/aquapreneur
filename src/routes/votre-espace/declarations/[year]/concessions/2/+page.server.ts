@@ -1,7 +1,7 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 
 export const actions = {
-  default: async () => {
-    redirect(303, '3');
-  }
+	default: async () => {
+		redirect(303, "3");
+	},
 };

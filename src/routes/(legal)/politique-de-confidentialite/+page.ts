@@ -1,5 +1,5 @@
 export const load = () => {
-  return {
-    title: 'Politique de confidentialité'
-  };
+	return {
+		title: "Politique de confidentialité",
+	};
 };

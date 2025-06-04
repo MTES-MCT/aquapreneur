@@ -2,5 +2,5 @@
 // On l’utilise pour pouvoir vérifier la configuration de Sentry
 
 export const GET = async () => {
-  throw new Error('Sonde backend');
+	throw new Error("Sonde backend");
 };

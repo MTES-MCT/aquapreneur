@@ -1,0 +1,4 @@
+[format]
+indent-style = "tab"
+line-ending = "lf"
+persistent-line-breaks = true
