@@ -1,6 +1,6 @@
 import { type OAuth2Tokens, decodeIdToken } from "arctic";
+import { type } from "arktype";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
 
 import { error, redirect } from "@sveltejs/kit";
 
@@ -15,7 +15,7 @@ import { db } from "$db";
 
 import { type Utilisateur, utilisateurs } from "$db/schema/auth";
 
-import { formatZodError, getShortId } from "$utils";
+import { getShortId } from "$utils";
 
 import audit from "$utils/audit";
 import * as logger from "$utils/logger";
@@ -29,20 +29,22 @@ import {
 } from "$lib/constants";
 
 // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
-const userInfoPayloadSchema = z.object({
-	sub: z.string(),
-	given_name: z.string(),
-	usual_name: z.string(),
-	email: z.string().email().toLowerCase(),
-	siret: z.string(),
-	phone_number: z.string().optional().nullable(),
+
+const UserInfoPayloadSchema = type({
+	sub: "string",
+	given_name: "string",
+	usual_name: "string",
+	email: "string.email & string.lower",
+	siret: "string",
+	"phone_number?": "string | null",
 });
 
 // https://partenaires.proconnect.gouv.fr/docs/ressources/claim_amr
-const AmrEnum = z.enum(["pwd", "mail", "totp", "pop", "mfa"]);
-type AmrEnum = z.infer<typeof AmrEnum>;
-const idTokenPayloadSchema = z.object({
-	amr: z.array(AmrEnum),
+const AmrEnum = type("('pwd' | 'mail' | 'totp' | 'pop' | 'mfa')[]");
+type AmrEnum = typeof AmrEnum.infer;
+
+const IdTokenPayloadSchema = type({
+	amr: AmrEnum,
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,12 +83,11 @@ export const load = async ({ url, cookies }) => {
 	const tokenId = tokens.idToken();
 
 	// Vérification de la connexion MFA
-	let amr: AmrEnum[] = [];
-	const idTokenParsedResult = idTokenPayloadSchema.safeParse(
-		decodeIdToken(tokenId),
-	);
-	if (idTokenParsedResult.success) {
-		amr = idTokenParsedResult.data.amr;
+	let amr: AmrEnum = [];
+	const idTokenParsedResult = IdTokenPayloadSchema(decodeIdToken(tokenId));
+
+	if (!(idTokenParsedResult instanceof type.errors)) {
+		amr = idTokenParsedResult.amr;
 	}
 
 	// On stocke le tokenId pour pouvoir déconnecter l’utilisateurice de ProConnect
@@ -108,14 +109,14 @@ export const load = async ({ url, cookies }) => {
 		},
 	);
 	const userInfoPayload = decodeIdToken(await userInfoResponse.text());
-	const parsedResult = userInfoPayloadSchema.safeParse(userInfoPayload);
-	if (parsedResult.success === false) {
+	const parsedResult = UserInfoPayloadSchema(userInfoPayload);
+	if (parsedResult instanceof type.errors) {
 		logger.error("IdToken OIDC invalide", {
-			zod_err: formatZodError(parsedResult.error),
+			error: parsedResult.summary,
 		});
 		error(400);
 	}
-	const userData = parsedResult.data;
+	const userData = parsedResult;
 	const query = await db
 		.select()
 		.from(utilisateurs)
