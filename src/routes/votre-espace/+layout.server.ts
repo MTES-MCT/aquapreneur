@@ -1,12 +1,14 @@
 import nafRev2 from "$data/naf-rev2.json";
+import { type } from "arktype";
 
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 import { SIRENE_AUTH_TOKEN } from "$env/static/private";
 
 import * as logger from "$utils/logger";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
+import { SireneEtablissementResponse } from "$lib/schemas/sirene-etablissement-schema";
 
 export const load = async ({ fetch, parent, cookies, route }) => {
 	const { utilisateur } = await parent();
@@ -25,7 +27,7 @@ export const load = async ({ fetch, parent, cookies, route }) => {
 		siret = utilisateur.siret;
 	}
 
-	let etablissement;
+	let etablissement: SireneEtablissementResponse["etablissement"] | null = null;
 	let activitePrincipale: string | null = null;
 	let sireneError = false;
 	if (siret) {
@@ -41,14 +43,21 @@ export const load = async ({ fetch, parent, cookies, route }) => {
 			logger.exception(err, "Impossible de contacter l’API Sirene");
 		}
 		if (!res || !res.ok) {
-			etablissement = null;
 			activitePrincipale = null;
 			sireneError = true;
 		} else {
 			const jsonRes = await res.json();
-			etablissement = jsonRes.etablissement;
-			// TODO: passer par un schema Zod
-			const naf = etablissement?.uniteLegale.activitePrincipaleUniteLegale;
+			const parsedResponse = SireneEtablissementResponse(jsonRes);
+
+			if (parsedResponse instanceof type.errors) {
+				logger.error("Impossible de parser la réponse de l’API Sirene", {
+					error: parsedResponse.summary,
+				});
+				error(500, "Impossible de parser la réponse de l’API Sirene");
+			}
+
+			etablissement = parsedResponse.etablissement;
+			const naf = etablissement.uniteLegale.activitePrincipaleUniteLegale;
 			activitePrincipale =
 				nafRev2.find((line) => line.code == naf)?.label ?? null;
 		}

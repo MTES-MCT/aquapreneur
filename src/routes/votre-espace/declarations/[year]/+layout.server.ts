@@ -1,5 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
+import { redirect } from "@sveltejs/kit";
+
 import { db } from "$db";
 
 import { bilans } from "$db/schema/api";
@@ -8,6 +10,10 @@ import { concessions } from "$db/schema/atena";
 export const load = async ({ parent, params }) => {
 	const { etablissement } = await parent();
 	const { year } = params;
+
+	if (!etablissement) {
+		redirect(307, "/votre-espace");
+	}
 
 	const reqBilans = await db
 		.select()
@@ -51,5 +57,11 @@ export const load = async ({ parent, params }) => {
 			concessions.numeroParcelle,
 		);
 
-	return { bilan: reqBilans?.[0], concessions: reqConcessions };
+	return {
+		bilan: reqBilans?.[0],
+		concessions: reqConcessions,
+		// On rexporte `etablissement` pour propager son narrowing
+		// (on sait maintenant qu’il n’est pas null)
+		etablissement,
+	};
 };

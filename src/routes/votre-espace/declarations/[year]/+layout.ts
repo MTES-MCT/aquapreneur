@@ -13,5 +13,6 @@ export const load = async ({ params, data }) => {
 		year: safeYear,
 		bilan: data.bilan,
 		concessions: data.concessions,
+		etablissement: data.etablissement,
 	};
 };
