@@ -16,7 +16,7 @@ export default defineConfig({
 				org: "betagouv",
 				project: "aquapreneur",
 				url: "https://sentry.incubateur.net",
-				authToken: process.env.SENTRY_AUTH_TOKEN,
+				authToken: process.env.SENTRY_AUTH_TOKEN ?? "",
 				telemetry: false,
 				sourcemaps: {
 					filesToDeleteAfterUpload: [],
