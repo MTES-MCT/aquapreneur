@@ -1,3 +1,4 @@
+import { createInsertSchema } from "drizzle-arktype";
 import { type InferSelectModel, sql } from "drizzle-orm";
 import {
 	boolean,
@@ -11,7 +12,7 @@ import {
 	smallint,
 	text,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema as zodCreateInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 import { timestampCreation, timestamps } from ".";
@@ -38,9 +39,9 @@ export const jetonsApi = pgTable(
 );
 
 export const jetonsApiInsertSchema = createInsertSchema(jetonsApi, {
-	siretPartenaire: (s) =>
-		s.regex(/^\d{14}$/, "Le SIRET doit être composé de 14 chiffres"),
-	courrielPartenaire: (schema) => schema.email().toLowerCase(),
+	siretPartenaire: (s) => s.to("string.digits == 14"),
+	courrielPartenaire: (s) =>
+		s.to("string.trim").to("string.email & string.lower"),
 });
 
 export const evtsJournalReqs = pgTable("journal_requetes", {
@@ -501,7 +502,7 @@ export const bilans = pgTable(
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
 
-export const bilansInsertSchema = createInsertSchema(bilans, {
+export const bilansInsertSchema = zodCreateInsertSchema(bilans, {
 	siret: (s) =>
 		s.regex(/^\d{14}$/, "Le SIRET doit être composé de 14 chiffres"),
 	debutExercice: (schema) => schema.date(),
@@ -544,4 +545,4 @@ export const dirigeantEs = pgTable("dirigeant_es", {
 	tauxTravail: integer(),
 });
 
-export const dirigeantEsInsertSchema = createInsertSchema(dirigeantEs);
+export const dirigeantEsInsertSchema = zodCreateInsertSchema(dirigeantEs);

@@ -1,12 +1,15 @@
 import { input } from "@inquirer/prompts";
+import { type } from "arktype";
 import colors from "yoctocolors";
-import { z } from "zod";
 
 import { db } from "$db";
 
 import { jetonsApi, jetonsApiInsertSchema } from "$db/schema/api";
 
-import { formatZodError, generateApiToken } from "$utils";
+import { generateApiToken } from "$utils";
+
+const Email = type("string.trim").to("string.email & string.lower");
+const Siret = type("string.digits == 14");
 
 async function main() {
 	try {
@@ -20,16 +23,19 @@ async function main() {
 		const siret = await input({
 			message: "Saisir le numéro SIRET du partenaire :",
 			required: true,
-			validate: (str) =>
-				cleanSiret(str).length === 14 || "Le siret doit comporter 14 chiffres",
+			validate: (str) => {
+				const parsed = Siret(str);
+				return parsed instanceof type.errors ? parsed.summary : true;
+			},
 		});
 
 		const courriel = await input({
 			message: "Saisir le courriel de contact du partenaire :",
 			required: true,
-			validate: (str) =>
-				z.string().email().safeParse(str.trim()).success ||
-				"Saisissez une adresse de courriel valide",
+			validate: (str) => {
+				const parsed = Email(str);
+				return parsed instanceof type.errors ? parsed.summary : true;
+			},
 		});
 
 		// Basé sur https://thecopenhagenbook.com/server-side-tokens
@@ -38,22 +44,20 @@ async function main() {
 
 		const { token, digest } = generateApiToken();
 
-		const parsingResult = jetonsApiInsertSchema.strict().safeParse({
+		const parsingResult = jetonsApiInsertSchema({
 			hachage: digest,
 			nomPartenaire: nom.trim(),
 			siretPartenaire: cleanSiret(siret),
 			courrielPartenaire: courriel.trim(),
 		});
 
-		if (parsingResult.success === false) {
-			console.error(
-				colors.red(colors.bold(formatZodError(parsingResult.error))),
-			);
+		if (parsingResult instanceof type.errors) {
+			console.error(colors.red(colors.bold(parsingResult.summary)));
 			process.exitCode = 1;
 			return;
 		}
 
-		await db.insert(jetonsApi).values(parsingResult.data);
+		await db.insert(jetonsApi).values(parsingResult);
 
 		console.log();
 		console.log(
