@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+import { type } from "arktype";
 import { createInsertSchema } from "drizzle-arktype";
 import { type InferSelectModel, sql } from "drizzle-orm";
 import {
@@ -12,8 +14,6 @@ import {
 	smallint,
 	text,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema as zodCreateInsertSchema } from "drizzle-zod";
-import { z } from "zod";
 
 import { timestampCreation, timestamps } from ".";
 
@@ -502,38 +502,44 @@ export const bilans = pgTable(
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
 
-export const bilansInsertSchema = zodCreateInsertSchema(bilans, {
-	siret: (s) =>
-		s.regex(/^\d{14}$/, "Le SIRET doit être composé de 14 chiffres"),
-	debutExercice: (schema) => schema.date(),
-	finExercice: (schema) => schema.date(),
-	dateBilan: (schema) => schema.date(),
+const IsoDate = type("string").pipe((s, ctx) => {
+	try {
+		return Temporal.PlainDate.from(s).toString();
+	} catch (err) {
+		if (err instanceof Error) {
+			return ctx.error(`a valid date (${err.message})`);
+		} else {
+			return ctx.error(`a valid date (unknown error)`);
+		}
+	}
+});
+
+export const bilansInsertSchema = createInsertSchema(bilans, {
+	siret: (s) => s.to("string.digits == 14"),
+	debutExercice: IsoDate,
+	finExercice: IsoDate,
+	dateBilan: IsoDate,
 	// Les champs `numeric` de drizzle sont considérées comme des chaines de caractères
-	// Le code ci-dessous permet :
-	// 1. d’accepter une valeur numérique dans le json (sinon Zod les rejette)
-	// 2. de valider que les valeurs soient bien numériques, dans le cas de chaines.
+	// Le code ci-dessous permet d’accepter une valeur numérique dans le json
 	...Object.fromEntries(
 		Object.entries(bilans)
 			.filter(([, value]) => value.columnType === "PgNumeric")
-			.map(([key]) => [
-				key,
-				z.preprocess(
-					(val) => (val == null || val === "" ? null : String(val)),
-					z
-						.string()
-						.refine((value) => !isNaN(Number(value)))
-						.nullable(),
-				),
-			]),
+			.map(([key]) => {
+				return [
+					key,
+					type("'' | string.numeric | number | null")
+						.pipe((v) => (v == "" ? null : v))
+						.optional(),
+				];
+			}),
 	),
-});
+}).onUndeclaredKey("reject");
 
 export const dirigeantEs = pgTable("dirigeant_es", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	idBilan: integer()
 		.notNull()
 		.references(() => bilans.id, { onDelete: "cascade" }),
-
 	nom: text().notNull(),
 	prenom: text().notNull(),
 	anneeNaissance: smallint(),
@@ -545,4 +551,6 @@ export const dirigeantEs = pgTable("dirigeant_es", {
 	tauxTravail: integer(),
 });
 
-export const dirigeantEsInsertSchema = zodCreateInsertSchema(dirigeantEs);
+export const dirigeantEsInsertSchema =
+	createInsertSchema(dirigeantEs).onUndeclaredKey("reject");
+export type dirigeantEsInsertSchema = typeof dirigeantEsInsertSchema.infer;

@@ -1,4 +1,5 @@
 import { wrapServerRouteWithSentry } from "@sentry/sveltekit";
+import { type ArkErrors, type } from "arktype";
 import camelcaseKeys from "camelcase-keys";
 import { eq } from "drizzle-orm";
 
@@ -15,8 +16,6 @@ import {
 	evtsJournalReqs,
 } from "$db/schema/api";
 import { getJetonApiFromToken } from "$db/utils";
-
-import { formatZodError } from "$utils";
 
 import audit from "$utils/audit";
 import * as logger from "$utils/logger";
@@ -192,28 +191,27 @@ export const POST = wrapServerRouteWithSentry(
 					),
 				};
 
-				const parsingResult = bilansInsertSchema.strict().safeParse(flatBilan);
-				if (parsingResult.success === false) {
-					error(400, formatZodError(parsingResult.error));
+				const parsingResult = bilansInsertSchema(flatBilan);
+				if (parsingResult instanceof type.errors) {
+					error(400, parsingResult.summary);
 				}
 
-				bilan = (
-					await tx.insert(bilans).values(parsingResult.data).returning()
-				)[0];
+				bilan = (await tx.insert(bilans).values(parsingResult).returning())[0];
 
 				if (!Array.isArray(bilanData["dirigeant_es"])) {
 					error(400, "Clé `dirigeant_es` manquantes, ou pas un tableau");
 				}
 				for (const dir of bilanData["dirigeant_es"]) {
-					const parsingResult = dirigeantEsInsertSchema.strict().safeParse({
-						...camelcaseKeys(dir),
-						idBilan: bilan.id,
-					});
-					if (!parsingResult.success) {
-						error(400, formatZodError(parsingResult.error));
+					const dirParsingResult: dirigeantEsInsertSchema | ArkErrors =
+						dirigeantEsInsertSchema({
+							idBilan: bilan.id,
+							...camelcaseKeys(dir),
+						});
+					if (dirParsingResult instanceof type.errors) {
+						error(400, dirParsingResult.summary);
 					}
 
-					await tx.insert(dirigeantEs).values(parsingResult.data);
+					await tx.insert(dirigeantEs).values(dirParsingResult);
 				}
 			});
 			await setLogEntryStatus(auditLogEntry, 204);

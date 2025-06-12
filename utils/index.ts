@@ -4,19 +4,6 @@ import {
 	encodeHexLowerCase,
 } from "@oslojs/encoding";
 import crypto from "crypto";
-import decamelize from "decamelize";
-import type { ZodError } from "zod";
-
-export const formatZodError = (err: ZodError) => {
-	return err.issues
-		.map((issue) => {
-			const paths = issue.path
-				.map((path) => decamelize(path.toString()))
-				.join(",");
-			return `${paths}: ${issue.message}`;
-		})
-		.join("\n");
-};
 
 export const getShortId = (sessionId: string | undefined) => {
 	return sessionId ? sessionId.substring(0, 7) : undefined;
