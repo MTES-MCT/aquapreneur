@@ -146,7 +146,7 @@ export const POST = wrapServerRouteWithSentry(
 				finExercice: parsingResult["fin_exercice"],
 				version: parsingResult["version"],
 				dateBilan: parsingResult["date_bilan"],
-				donneesBilan: {
+				donnees: {
 					dirigeant_es: parsingResult.dirigeant_es,
 					stock: parsingResult.stock,
 					production: parsingResult.production,

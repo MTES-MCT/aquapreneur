@@ -305,7 +305,7 @@ test("204 si un champ monétaire est manquant", async ({ request }) => {
 		data: { ...dummyBilan, stock: {} },
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -313,7 +313,7 @@ test("204 si un champ monétaire est manquant", async ({ request }) => {
 		data: { ...dummyBilan, stock: { StckValHNaisMi: null } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBeNull();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -321,7 +321,7 @@ test("204 si un champ monétaire est manquant", async ({ request }) => {
 		data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -329,7 +329,7 @@ test("204 si un champ monétaire est manquant", async ({ request }) => {
 		data: { ...dummyBilan, stock: { StckValHNaisMi: "" } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBeNull();
 });
 
@@ -349,7 +349,7 @@ test("204 si un champ monétaire est une chaine où un nombre", async ({
 		},
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBe("12345.67");
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -357,7 +357,7 @@ test("204 si un champ monétaire est une chaine où un nombre", async ({
 		data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donneesBilan);
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 });
 
@@ -981,9 +981,7 @@ test("204 lors de la soumission d’un bilan au format CGO", async ({
 		},
 	);
 	expect(response.status()).toBe(204);
-	const inserted = CGODonneesBilan.assert(
-		(await getLastById(bilans)).donneesBilan,
-	);
+	const inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 	expect(inserted.stock.StckValHNaisMi).toBe(20000);
 });
 

@@ -11,9 +11,8 @@ import {
 	text,
 } from "drizzle-orm/pg-core";
 
-import { IsoDate } from "$utils/types";
-
 import { timestampCreation, timestamps } from ".";
+import { IsoDate } from "../../utils/types";
 
 // Authentification pour l’API
 export const jetonsApi = pgTable(
@@ -72,7 +71,7 @@ export const bilans = pgTable(
 		finExercice: date().notNull(),
 		version: integer().notNull(),
 		dateBilan: date().notNull(),
-		donneesBilan: jsonb().notNull(),
+		donnees: jsonb().notNull(),
 	},
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
