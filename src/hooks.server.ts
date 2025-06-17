@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/sveltekit";
+import { configure } from "arktype/config";
 import { eq } from "drizzle-orm";
 
 import type { Handle, HandleServerError, RequestEvent } from "@sveltejs/kit";
@@ -27,6 +28,8 @@ import {
 } from "$lib/server/auth/session";
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
+
+configure({ onUndeclaredKey: "reject" });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,

@@ -1,11 +1,14 @@
 import { handleErrorWithSentry } from "@sentry/sveltekit";
 import * as Sentry from "@sentry/sveltekit";
+import { configure } from "arktype/config";
 
 import {
 	PUBLIC_SENTRY_DSN,
 	PUBLIC_SENTRY_ENVIRONMENT,
 	PUBLIC_SENTRY_TRACE_SAMPLE_RATE,
 } from "$env/static/public";
+
+configure({ onUndeclaredKey: "reject" });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,
