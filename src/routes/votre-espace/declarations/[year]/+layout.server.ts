@@ -39,14 +39,14 @@ export const load = async ({ parent, params }) => {
 
 	if (reqBilans.length === 1) {
 		const reqBilan = reqBilans[0];
-		const bilan2 = bilansSelectSchema(reqBilan);
+		const parsedBilan = bilansSelectSchema(reqBilan);
 
-		if (bilan2 instanceof type.errors) {
-			logger.error(bilan2.summary);
-			error(500, bilan2.summary);
+		if (parsedBilan instanceof type.errors) {
+			logger.error(parsedBilan.summary);
+			error(500, parsedBilan.summary);
 		}
 
-		bilan = bilan2;
+		bilan = parsedBilan;
 	}
 
 	const reqConcessions = await db

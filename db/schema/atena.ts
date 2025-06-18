@@ -16,7 +16,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const atena = pgSchema("atena");
-// TODO : limiter aux champs “utiles”
+
 export const concessions = atena.table(
 	"concessions",
 	{

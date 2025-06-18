@@ -8,6 +8,8 @@ const CGOValue = type("'' | string.numeric | number | null").pipe((v) =>
 	v == "" ? null : v,
 );
 
+// Documentation : https://docs.numerique.gouv.fr/docs/497b674d-abd9-4941-8d72-3e0428b853ee/
+
 export const CGODonneesBilan = type({
 	dirigeant_es: type(
 		{

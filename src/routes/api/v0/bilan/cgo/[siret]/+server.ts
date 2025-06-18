@@ -91,7 +91,6 @@ export const POST = wrapServerRouteWithSentry(
 				api_token_id: jeton.id,
 			});
 			// TODO ajouter une requête d’audit ?
-
 			error(400, "Contenu JSON invalide");
 		}
 
