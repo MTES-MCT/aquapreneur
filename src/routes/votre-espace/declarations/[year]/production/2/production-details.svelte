@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { bilans } from "$db/schema/api";
+	import type { bilansSelectSchema } from "$db/schema/api";
 
 	let {
 		bilan,
 		etablissement,
 	}: {
-		bilan: typeof bilans.$inferSelect;
+		bilan: bilansSelectSchema | null;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- en attente du typage des données SIRENE
 		etablissement: any;
 	} = $props();
@@ -19,7 +19,9 @@
 			:	"n/a";
 	};
 
-	const sum = (values: (string | number | null)[]): number | null => {
+	const sum = (
+		values: (string | number | null | undefined)[],
+	): number | null => {
 		const filteredValues = values.filter((val) => val != null);
 		return filteredValues.length ?
 				filteredValues.reduce((total: number, current: string | number) => {
@@ -31,6 +33,8 @@
 			:	null;
 	};
 
+	const p = $derived(bilan?.donnees.production ?? {});
+
 	const template = $derived(
 		[
 			{
@@ -41,58 +45,46 @@
 						description:
 							"Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour la consommation.",
 						destinations: [
-							// {
-							// 	nom: "En gros",
-							// 	qty: bilan["prod__huitre__conso__fr__pro__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__pro__val"],
-							// },
-							// {
-							// 	nom: "Détail",
-							// 	qty: bilan["prod__huitre__conso__fr__detail__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__detail__val"],
-							// },
-							// {
-							// 	nom: "Grossistes",
-							// 	qty: bilan["prod__huitre__conso__fr__grossiste__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__grossiste__val"],
-							// },
-							// {
-							// 	nom: "Poissonneries",
-							// 	qty: bilan["prod__huitre__conso__fr__poiss__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__poiss__val"],
-							// },
-							// {
-							// 	nom: "Poissonneries en gr. et moy. surfaces",
-							// 	qty: bilan["prod__huitre__conso__fr__pgms__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__pgms__val"],
-							// },
-							// {
-							// 	nom: "Dégustation",
-							// 	qty: bilan["prod__huitre__conso__fr__degust__qt"],
-							// 	val: bilan["prod__huitre__conso__fr__degust__val"],
-							// },
-							// {
-							// 	nom: "Export au sein de l’UE",
-							// 	qty: sum([
-							// 		bilan["prod__huitre__conso__ue__pro__qt"],
-							// 		bilan["prod__huitre__conso__ue__expe__qt"],
-							// 	]),
-							// 	val: sum([
-							// 		bilan["prod__huitre__conso__ue__pro__val"],
-							// 		bilan["prod__huitre__conso__ue__expe__val"],
-							// 	]),
-							// },
-							// {
-							// 	nom: "Export hors UE",
-							// 	qty: sum([
-							// 		bilan["prod__huitre__conso__nue__pro__qt"],
-							// 		bilan["prod__huitre__conso__nue__expe__qt"],
-							// 	]),
-							// 	val: sum([
-							// 		bilan["prod__huitre__conso__nue__pro__val"],
-							// 		bilan["prod__huitre__conso__nue__expe__val"],
-							// 	]),
-							// },
+							{
+								nom: "En gros",
+								qty: p.VolVtHCoFrPro,
+								val: p.CAHCoFrPro,
+							},
+							{
+								nom: "Détail",
+								qty: p.VolVtHCoFrDet,
+								val: p.CAHCoFrDet,
+							},
+							{
+								nom: "Grossistes",
+								qty: p.VolVtHCoFrGros,
+								val: p.CAHCoFrGros,
+							},
+							{
+								nom: "Poissonneries",
+								qty: p.VolVtHCoFrPCE,
+								val: p.CAHCoFrPCE,
+							},
+							{
+								nom: "Poissonneries en gr. et moy. surfaces",
+								qty: p.VolVtHCoFrPGMS,
+								val: p.CAHCoFrPGMS,
+							},
+							{
+								nom: "Dégustation",
+								qty: p.VolVtHCoFrDeg,
+								val: p.CAHCoFrDeg,
+							},
+							{
+								nom: "Export au sein de l’UE",
+								qty: sum([p.VolVtHCoUEPro, p.VolVtHCoUEGros]),
+								val: sum([p.CAHCoUEPro, p.CAHCoUEGros]),
+							},
+							{
+								nom: "Export hors UE",
+								qty: sum([p.VolVtHCoAuPro, p.VolVtHCoAuGros]),
+								val: sum([p.CAHCoAuPro, p.CAHCoAuGros]),
+							},
 						],
 					},
 					{
@@ -100,21 +92,21 @@
 						description:
 							"Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour l’élevage auprès d’autres exploitants.",
 						destinations: [
-							// {
-							// 	nom: "France",
-							// 	qty: bilan["prod__huitre__elv__fr__qt"],
-							// 	val: bilan["prod__huitre__elv__fr__val"],
-							// },
-							// {
-							// 	nom: "Export au sein de l’UE",
-							// 	qty: bilan["prod__huitre__elv__ue__qt"],
-							// 	val: bilan["prod__huitre__elv__ue__val"],
-							// },
-							// {
-							// 	nom: "Export hors UE",
-							// 	qty: bilan["prod__huitre__elv__nue__qt"],
-							// 	val: bilan["prod__huitre__elv__nue__val"],
-							// },
+							{
+								nom: "France",
+								qty: p.VolVtHElvFr,
+								val: p.CAHElvFr,
+							},
+							{
+								nom: "Export au sein de l’UE",
+								qty: p.VolVtHElvUE,
+								val: p.CAHElvUE,
+							},
+							{
+								nom: "Export hors UE",
+								qty: p.VolVtHElvAu,
+								val: p.CAHElvAu,
+							},
 						],
 					},
 					{
@@ -122,21 +114,21 @@
 						description:
 							"Il s'agit de la production d’huîtres de 18 mois et de demi-élevage (2 ans) que vous avez vendue auprès d’autres exploitants.",
 						destinations: [
-							// 	{
-							// 		nom: "France",
-							// 		qty: bilan["prod__huitre__demi_elv__fr__qt"],
-							// 		val: bilan["prod__huitre__demi_elv__fr__val"],
-							// 	},
-							// 	{
-							// 		nom: "Export au sein de l’UE",
-							// 		qty: bilan["prod__huitre__demi_elv__ue__qt"],
-							// 		val: bilan["prod__huitre__demi_elv__ue__val"],
-							// 	},
-							// 	{
-							// 		nom: "Export hors UE",
-							// 		qty: bilan["prod__huitre__demi_elv__nue__qt"],
-							// 		val: bilan["prod__huitre__demi_elv__nue__val"],
-							// 	},
+							{
+								nom: "France",
+								qty: p.VolVtHDElvFr,
+								val: p.CAHDElvFr,
+							},
+							{
+								nom: "Export au sein de l’UE",
+								qty: p.VolVtHDElvUE,
+								val: p.CAHDElvUE,
+							},
+							{
+								nom: "Export hors UE",
+								qty: p.VolVtHDElvAu,
+								val: p.CAHDElvAU,
+							},
 						],
 					},
 					{
@@ -144,21 +136,21 @@
 						description:
 							"Il s’agit de la production de vos écloseries ou nurseries que vous avez vendue pour le grossissement auprès d'autres exploitants ou pour l'exportation.",
 						destinations: [
-							// {
-							// 	nom: "France",
-							// 	qty: bilan["prod__huitre__nais__fr__qt"],
-							// 	val: bilan["prod__huitre__nais__fr__val"],
-							// },
-							// {
-							// 	nom: "Export au sein de l’UE",
-							// 	qty: bilan["prod__huitre__nais__ue__qt"],
-							// 	val: bilan["prod__huitre__nais__ue__val"],
-							// },
-							// {
-							// 	nom: "Export hors UE",
-							// 	qty: bilan["prod__huitre__nais__nue__qt"],
-							// 	val: bilan["prod__huitre__nais__nue__val"],
-							// },
+							{
+								nom: "France",
+								qty: p.VolVtHNaissFr,
+								val: p.CAHNaissFr,
+							},
+							{
+								nom: "Export au sein de l’UE",
+								qty: p.VolVtHNaissUE,
+								val: p.CAHNaissUE,
+							},
+							{
+								nom: "Export hors UE",
+								qty: p.VolVtHNaissAu,
+								val: p.CAHNaissAu,
+							},
 						],
 					},
 				],
@@ -167,16 +159,16 @@
 			...type,
 			stades: type.stades.map((stade) => ({
 				...stade,
-				// qty: sum(
-				// 	stade.destinations
-				// 		.map((destination) => destination.qty)
-				// 		.filter((qty) => qty != null),
-				// ),
-				// val: sum(
-				// 	stade.destinations
-				// 		.map((destination) => destination.val)
-				// 		.filter((val) => val != null),
-				// ),
+				qty: sum(
+					stade.destinations
+						.map((destination) => destination.qty)
+						.filter((qty) => qty != null),
+				),
+				val: sum(
+					stade.destinations
+						.map((destination) => destination.val)
+						.filter((val) => val != null),
+				),
 			})),
 		})),
 	);
@@ -195,7 +187,7 @@
 	{#each template as entry (entry.nom)}
 		<h2 class="fr-h6">{entry.nom}</h2>
 		<div class="fr-accordions-group">
-			<!-- {#each entry.stades as stade (stade.nom)}
+			{#each entry.stades as stade (stade.nom)}
 				{#if stade.val}
 					<section class="fr-accordion">
 						<h3 class="fr-accordion__title">
@@ -257,13 +249,13 @@
 						</div>
 					</section>
 				{/if}
-			{/each} -->
+			{/each}
 		</div>
 	{/each}
 {/if}
 
 <style>
-	/* .fr-table--bordered {
+	.fr-table--bordered {
 		margin-top: 0.5rem;
 	}
 
@@ -297,5 +289,5 @@
 			grid-template-columns: 1fr 2fr;
 			padding: 0;
 		}
-	} */
+	}
 </style>

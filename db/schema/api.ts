@@ -1,4 +1,4 @@
-import { createInsertSchema } from "drizzle-arktype";
+import { createInsertSchema, createSelectSchema } from "drizzle-arktype";
 import { type InferSelectModel, sql } from "drizzle-orm";
 import {
 	boolean,
@@ -10,6 +10,8 @@ import {
 	pgTable,
 	text,
 } from "drizzle-orm/pg-core";
+
+import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
 
 import { timestampCreation, timestamps } from ".";
 import { IsoDate } from "../../utils/types";
@@ -83,3 +85,8 @@ export const bilansInsertSchema = createInsertSchema(bilans, {
 	dateBilan: IsoDate,
 });
 export type bilansInsertSchema = typeof bilansInsertSchema.infer;
+
+export const bilansSelectSchema = createSelectSchema(bilans, {
+	donnees: CGODonneesBilan,
+});
+export type bilansSelectSchema = typeof bilansSelectSchema.infer;

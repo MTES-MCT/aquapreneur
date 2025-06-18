@@ -1,20 +1,27 @@
+import { type } from "arktype";
 import { and, eq, sql } from "drizzle-orm";
 
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 import { db } from "$db";
 
-import { bilans } from "$db/schema/api";
+import { bilans, bilansSelectSchema } from "$db/schema/api";
 import { concessions } from "$db/schema/atena";
+
+import * as logger from "$utils/logger";
 
 export const load = async ({ parent, params }) => {
 	const { etablissement } = await parent();
 	const { year } = params;
 
+	let bilan: bilansSelectSchema | null = null;
+
 	if (!etablissement) {
 		redirect(307, "/votre-espace");
 	}
 
+	// On vérifie que la valeur renvoyée de la BDD est bien un `bilansSelectSchema`
+	// pour s’assurer que le champ jsonb `donnees` à bien la forme attendue
 	const reqBilans = await db
 		.select()
 		.from(bilans)
@@ -24,6 +31,23 @@ export const load = async ({ parent, params }) => {
 				eq(sql<string>`DATE_PART('year', ${bilans.finExercice})`, year),
 			),
 		);
+
+	if (reqBilans.length > 1) {
+		logger.error("Bilans multiples");
+		error(500, "Bilans multiples");
+	}
+
+	if (reqBilans.length === 1) {
+		const reqBilan = reqBilans[0];
+		const bilan2 = bilansSelectSchema(reqBilan);
+
+		if (bilan2 instanceof type.errors) {
+			logger.error(bilan2.summary);
+			error(500, bilan2.summary);
+		}
+
+		bilan = bilan2;
+	}
 
 	const reqConcessions = await db
 		.select({
@@ -58,7 +82,7 @@ export const load = async ({ parent, params }) => {
 		);
 
 	return {
-		bilan: reqBilans?.[0],
+		bilan,
 		concessions: reqConcessions,
 		// On rexporte `etablissement` pour propager son narrowing
 		// (on sait maintenant qu’il n’est pas null)
