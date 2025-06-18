@@ -1,14 +1,18 @@
-import { timestamp } from 'drizzle-orm/pg-core';
+import { timestamp } from "drizzle-orm/pg-core";
 
 export const timestampCreation = {
-  dateCreation: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull()
+	dateCreation: timestamp({ withTimezone: true, mode: "date" })
+		.defaultNow()
+		.notNull(),
 };
 
 export const timestampModification = {
-  dateMaj: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull()
+	dateMaj: timestamp({ withTimezone: true, mode: "date" })
+		.defaultNow()
+		.notNull(),
 };
 
 export const timestamps = {
-  ...timestampCreation,
-  ...timestampModification
+	...timestampCreation,
+	...timestampModification,
 };

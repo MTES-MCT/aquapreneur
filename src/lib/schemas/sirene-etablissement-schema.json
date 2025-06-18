@@ -1,0 +1,340 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$comment": "Schema de la réponse de l’API Sirene, lors d’une réponse à /siret/{siret}. Extrait de https://api-apimanager.insee.fr/portal/environments/DEFAULT/apis/2ba0e549-5587-3ef1-9082-99cd865de66f/pages/6548510e-c3e1-3099-be96-6edf02870699/content",
+	"type": "object",
+	"properties": {
+		"etablissement": {
+			"type": "object",
+			"properties": {
+				"score": {
+					"type": "number",
+					"format": "float"
+				},
+				"siren": {
+					"type": "string"
+				},
+				"nic": {
+					"type": "string"
+				},
+				"siret": {
+					"type": "string"
+				},
+				"statutDiffusionEtablissement": {
+					"type": "string"
+				},
+				"dateCreationEtablissement": {
+					"type": "string",
+					"format": "date"
+				},
+				"trancheEffectifsEtablissement": {
+					"type": "string"
+				},
+				"anneeEffectifsEtablissement": {
+					"type": "string"
+				},
+				"activitePrincipaleRegistreMetiersEtablissement": {
+					"type": "string"
+				},
+				"dateDernierTraitementEtablissement": {
+					"type": "string",
+					"format": "date-time"
+				},
+				"etablissementSiege": {
+					"type": "boolean"
+				},
+				"nombrePeriodesEtablissement": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"uniteLegale": {
+					"type": "object",
+					"properties": {
+						"statutDiffusionUniteLegale": {
+							"type": "string"
+						},
+						"unitePurgeeUniteLegale": {
+							"type": "boolean"
+						},
+						"dateCreationUniteLegale": {
+							"type": "string",
+							"format": "date"
+						},
+						"dateNaissanceUniteLegale": {
+							"type": "string"
+						},
+						"codeCommuneNaissanceUniteLegale": {
+							"type": "string"
+						},
+						"codePaysNaissanceUniteLegale": {
+							"type": "string"
+						},
+						"libelleNationaliteUniteLegale": {
+							"type": "string"
+						},
+						"identifiantAssociationUniteLegale": {
+							"type": "string"
+						},
+						"trancheEffectifsUniteLegale": {
+							"type": "string"
+						},
+						"anneeEffectifsUniteLegale": {
+							"type": "string"
+						},
+						"dateDernierTraitementUniteLegale": {
+							"type": "string",
+							"format": "AAAA-MM-JJTHH:MM:SS"
+						},
+						"categorieEntreprise": {
+							"type": "string",
+							"enum": ["PME,ETI,GE,null"]
+						},
+						"anneeCategorieEntreprise": {
+							"type": "string"
+						},
+						"sigleUniteLegale": {
+							"type": "string"
+						},
+						"sexeUniteLegale": {
+							"type": "string",
+							"enum": ["M,F,null"]
+						},
+						"prenom1UniteLegale": {
+							"type": "string"
+						},
+						"prenom2UniteLegale": {
+							"type": "string"
+						},
+						"prenom3UniteLegale": {
+							"type": "string"
+						},
+						"prenom4UniteLegale": {
+							"type": "string"
+						},
+						"prenomUsuelUniteLegale": {
+							"type": "string"
+						},
+						"pseudonymeUniteLegale": {
+							"type": "string"
+						},
+						"etatAdministratifUniteLegale": {
+							"type": "string",
+							"$comment": "A= entreprise active, C= entreprise cessée",
+							"enum": ["A,C"]
+						},
+						"nomUniteLegale": {
+							"type": "string",
+							"$comment": "Null pour les personnes morales"
+						},
+						"denominationUniteLegale": {
+							"type": "string",
+							"$comment": "Null pour les personnes physiques"
+						},
+						"denominationUsuelle1UniteLegale": {
+							"type": "string"
+						},
+						"denominationUsuelle2UniteLegale": {
+							"type": "string"
+						},
+						"denominationUsuelle3UniteLegale": {
+							"type": "string"
+						},
+						"activitePrincipaleUniteLegale": {
+							"type": "string",
+							"$comment": "L'APE est codifiée selon la <a href='https://www.insee.fr/fr/information/2406147'>nomenclature d'Activités Française (NAF)</a>"
+						},
+						"categorieJuridiqueUniteLegale": {
+							"type": "string"
+						},
+						"nicSiegeUniteLegale": {
+							"type": "string",
+							"$comment": "Le Siret du siège est obtenu en concaténant le numéro Siren et le NIC"
+						},
+						"nomenclatureActivitePrincipaleUniteLegale": {
+							"type": "string",
+							"enum": ["NAP,NAFRev1,NAFRev2,NAF1993"]
+						},
+						"nomUsageUniteLegale": {
+							"type": "string"
+						},
+						"economieSocialeSolidaireUniteLegale": {
+							"type": "string"
+						},
+						"societeMissionUniteLegale": {
+							"type": "string"
+						},
+						"caractereEmployeurUniteLegale": {
+							"type": "string",
+							"enum": ["O,N,null"]
+						}
+					}
+				},
+				"adresseEtablissement": {
+					"type": "object",
+					"properties": {
+						"complementAdresseEtablissement": {
+							"type": "string"
+						},
+						"numeroVoieEtablissement": {
+							"type": "string"
+						},
+						"indiceRepetitionEtablissement": {
+							"type": "string"
+						},
+						"dernierNumeroVoieEtablissement": {
+							"type": "string"
+						},
+						"indiceRepetitionDernierNumeroVoieEtablissement": {
+							"type": "string"
+						},
+						"typeVoieEtablissement": {
+							"type": "string"
+						},
+						"libelleVoieEtablissement": {
+							"type": "string"
+						},
+						"codePostalEtablissement": {
+							"type": "string"
+						},
+						"libelleCommuneEtablissement": {
+							"type": "string"
+						},
+						"libelleCommuneEtrangerEtablissement": {
+							"type": "string"
+						},
+						"distributionSpecialeEtablissement": {
+							"type": "string"
+						},
+						"codeCommuneEtablissement": {
+							"type": "string"
+						},
+						"codeCedexEtablissement": {
+							"type": "string"
+						},
+						"libelleCedexEtablissement": {
+							"type": "string"
+						},
+						"codePaysEtrangerEtablissement": {
+							"type": "string"
+						},
+						"libellePaysEtrangerEtablissement": {
+							"type": "string"
+						},
+						"identifiantAdresseEtablissement": {
+							"type": "string"
+						},
+						"coordonneeLambertAbscisseEtablissement": {
+							"type": "string"
+						},
+						"coordonneeLambertOrdonneeEtablissement": {
+							"type": "string"
+						}
+					}
+				},
+				"adresse2Etablissement": {
+					"type": "object",
+					"properties": {
+						"complementAdresse2Etablissement": {
+							"type": "string"
+						},
+						"numeroVoie2Etablissement": {
+							"type": "string"
+						},
+						"indiceRepetition2Etablissement": {
+							"type": "string"
+						},
+						"typeVoie2Etablissement": {
+							"type": "string"
+						},
+						"libelleVoie2Etablissement": {
+							"type": "string"
+						},
+						"codePostal2Etablissement": {
+							"type": "string"
+						},
+						"libelleCommune2Etablissement": {
+							"type": "string"
+						},
+						"libelleCommuneEtranger2Etablissement": {
+							"type": "string"
+						},
+						"distributionSpeciale2Etablissement": {
+							"type": "string"
+						},
+						"codeCommune2Etablissement": {
+							"type": "string"
+						},
+						"codeCedex2Etablissement": {
+							"type": "string"
+						},
+						"libelleCedex2Etablissement": {
+							"type": "string"
+						},
+						"codePaysEtranger2Etablissement": {
+							"type": "string"
+						},
+						"libellePaysEtranger2Etablissement": {
+							"type": "string"
+						}
+					}
+				},
+				"periodesEtablissement": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"dateFin": {
+								"type": "string",
+								"format": "date",
+								"$comment": "Null pour la période contenant les valeurs courantes de l'entreprise pour toutes les variables"
+							},
+							"dateDebut": {
+								"type": "string",
+								"format": "date"
+							},
+							"etatAdministratifEtablissement": {
+								"type": "string"
+							},
+							"changementEtatAdministratifEtablissement": {
+								"type": "boolean"
+							},
+							"enseigne1Etablissement": {
+								"type": "string"
+							},
+							"enseigne2Etablissement": {
+								"type": "string"
+							},
+							"enseigne3Etablissement": {
+								"type": "string"
+							},
+							"changementEnseigneEtablissement": {
+								"type": "boolean"
+							},
+							"denominationUsuelleEtablissement": {
+								"type": "string"
+							},
+							"changementDenominationUsuelleEtablissement": {
+								"type": "boolean"
+							},
+							"activitePrincipaleEtablissement": {
+								"type": "string"
+							},
+							"nomenclatureActivitePrincipaleEtablissement": {
+								"type": "string",
+								"enum": ["NAP,NAFRev1,NAFRev2,NAF1993"]
+							},
+							"changementActivitePrincipaleEtablissement": {
+								"type": "boolean"
+							},
+							"caractereEmployeurEtablissement": {
+								"type": "string"
+							},
+							"changementCaractereEmployeurEtablissement": {
+								"type": "boolean"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

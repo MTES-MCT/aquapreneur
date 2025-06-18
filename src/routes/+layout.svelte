@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { page } from '$app/state';
+	import { page } from "$app/state";
 
-  import Footer from '$lib/components/footer.svelte';
-  import Header from '$lib/components/header.svelte';
-  import Skiplink from '$lib/components/skiplink.svelte';
+	import Footer from "$lib/components/footer.svelte";
+	import Header from "$lib/components/header.svelte";
+	import Skiplink from "$lib/components/skiplink.svelte";
 
-  import '../app.css';
+	import "../app.css";
 
-  let { data, children } = $props();
+	let { data, children } = $props();
 </script>
 
 <svelte:head>
-  {#if page.data.title}
-    <title>{page.data.title} | Aquapreneur</title>
-  {/if}
+	{#if page.data.title}
+		<title>{page.data.title} | Aquapreneur</title>
+	{/if}
 </svelte:head>
 
 <Skiplink></Skiplink>
@@ -22,7 +22,7 @@
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
 <main role="main" id="content">
-  {@render children()}
+	{@render children()}
 </main>
 
 <Footer></Footer>
