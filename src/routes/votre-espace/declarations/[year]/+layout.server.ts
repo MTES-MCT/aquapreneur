@@ -1,11 +1,10 @@
-import { type } from "arktype";
 import { and, eq, sql } from "drizzle-orm";
 
 import { error, redirect } from "@sveltejs/kit";
 
 import { db } from "$db";
 
-import { bilans, bilansSelectSchema } from "$db/schema/api";
+import { bilans } from "$db/schema/api";
 import { concessions } from "$db/schema/atena";
 
 import * as logger from "$utils/logger";
@@ -14,14 +13,12 @@ export const load = async ({ parent, params }) => {
 	const { etablissement } = await parent();
 	const { year } = params;
 
-	let bilan: bilansSelectSchema | null = null;
+	let bilan = null;
 
 	if (!etablissement) {
 		redirect(307, "/votre-espace");
 	}
 
-	// On vérifie que la valeur renvoyée de la BDD est bien un `bilansSelectSchema`
-	// pour s’assurer que le champ jsonb `donnees` à bien la forme attendue
 	const reqBilans = await db
 		.select()
 		.from(bilans)
@@ -38,15 +35,7 @@ export const load = async ({ parent, params }) => {
 	}
 
 	if (reqBilans.length === 1) {
-		const reqBilan = reqBilans[0];
-		const parsedBilan = bilansSelectSchema(reqBilan);
-
-		if (parsedBilan instanceof type.errors) {
-			logger.error(parsedBilan.summary);
-			error(500, parsedBilan.summary);
-		}
-
-		bilan = parsedBilan;
+		bilan = reqBilans[0];
 	}
 
 	const reqConcessions = await db

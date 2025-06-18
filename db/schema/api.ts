@@ -13,7 +13,7 @@ import {
 
 import { IsoDate } from "$utils/types";
 
-import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
+import { type CGOData } from "$lib/schemas/cgo-schema";
 
 import { timestampCreation, timestamps } from ".";
 
@@ -74,7 +74,7 @@ export const bilans = pgTable(
 		finExercice: date().notNull(),
 		version: integer().notNull(),
 		dateBilan: date().notNull(),
-		donnees: jsonb().notNull(),
+		donnees: jsonb().$type<CGOData>().notNull(),
 	},
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
@@ -87,7 +87,5 @@ export const bilansInsertSchema = createInsertSchema(bilans, {
 });
 export type bilansInsertSchema = typeof bilansInsertSchema.infer;
 
-export const bilansSelectSchema = createSelectSchema(bilans, {
-	donnees: CGODonneesBilan,
-});
+export const bilansSelectSchema = createSelectSchema(bilans);
 export type bilansSelectSchema = typeof bilansSelectSchema.infer;
