@@ -1,23 +1,16 @@
 import { wrapServerRouteWithSentry } from "@sentry/sveltekit";
-import { type } from "arktype";
 import { eq } from "drizzle-orm";
 
 import { error, isHttpError } from "@sveltejs/kit";
 
 import { db } from "$db";
 
-import {
-	type EvtJournalReqs,
-	bilans,
-	bilansInsertSchema,
-	evtsJournalReqs,
-} from "$db/schema/api";
+import { type EvtJournalReqs, evtsJournalReqs } from "$db/schema/api";
 import { getJetonApiFromToken } from "$db/utils";
 
 import audit from "$utils/audit";
+import { createBilanEntry } from "$utils/convert-bilan";
 import * as logger from "$utils/logger";
-
-import { CGORequestData } from "$lib/schemas/cgo-schema";
 
 // TODO : utiliser l’algorithme de vérification complet
 // TODO: à mettre directement dans le type
@@ -98,6 +91,7 @@ export const POST = wrapServerRouteWithSentry(
 				api_token_id: jeton.id,
 			});
 			// TODO ajouter une requête d’audit ?
+
 			error(400, "Contenu JSON invalide");
 		}
 
@@ -130,42 +124,23 @@ export const POST = wrapServerRouteWithSentry(
 			if (bilanData["siret"] !== siret) {
 				error(400, "Numéros SIRET inconsistents");
 			}
-
+			let bilanId;
 			// Parsing du bilan, et écriture en BDD
-
-			const parsingResult = CGORequestData(bilanData);
-			if (parsingResult instanceof type.errors) {
-				error(400, parsingResult.summary);
+			try {
+				bilanId = await createBilanEntry(auditLogEntry);
+			} catch (err) {
+				if (err instanceof Error) {
+					error(400, err.message);
+				} else {
+					error(500, "Erreur inconnue");
+				}
 			}
-
-			const parsedBilan = bilansInsertSchema({
-				idEvtJournalReqs: auditLogEntry.id,
-				siret: parsingResult["siret"],
-				nom: parsingResult["nom"],
-				debutExercice: parsingResult["debut_exercice"],
-				finExercice: parsingResult["fin_exercice"],
-				version: parsingResult["version"],
-				dateBilan: parsingResult["date_bilan"],
-				donnees: {
-					dirigeant_es: parsingResult.dirigeant_es,
-					stock: parsingResult.stock,
-					production: parsingResult.production,
-					destination: parsingResult.destination,
-					donnees_economiques: parsingResult.donnees_economiques,
-				},
-			});
-			if (parsedBilan instanceof type.errors) {
-				error(400, parsedBilan.summary);
-			}
-			const bilan = (
-				await db.insert(bilans).values(parsedBilan).returning()
-			)[0];
 
 			await setLogEntryStatus(auditLogEntry, 204);
 
 			audit("Envoi de bilan réussi", {
 				request_log_id: auditLogEntry.id,
-				bilan_id: bilan?.id,
+				bilan_id: bilanId,
 				api_token_id: jeton.id,
 			});
 
