@@ -31,6 +31,7 @@ import {
 // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
 
 const UserInfoPayloadSchema = type({
+	"+": "ignore",
 	sub: "string",
 	given_name: "string",
 	usual_name: "string",
@@ -44,6 +45,7 @@ const AmrEnum = type("('pwd' | 'mail' | 'totp' | 'pop' | 'mfa')[]");
 type AmrEnum = typeof AmrEnum.infer;
 
 const IdTokenPayloadSchema = type({
+	"+": "ignore",
 	amr: AmrEnum,
 });
 

@@ -10,6 +10,7 @@
 import { type } from "arktype";
 
 export const SireneEtablissementResponse = type({
+	"+": "ignore",
 	etablissement: {
 		siren: "string",
 		nic: "string",

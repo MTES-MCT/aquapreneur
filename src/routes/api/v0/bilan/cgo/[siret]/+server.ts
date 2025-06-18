@@ -1,28 +1,19 @@
 import { wrapServerRouteWithSentry } from "@sentry/sveltekit";
-import { type ArkErrors, type } from "arktype";
-import camelcaseKeys from "camelcase-keys";
 import { eq } from "drizzle-orm";
 
 import { error, isHttpError } from "@sveltejs/kit";
 
 import { db } from "$db";
 
-import {
-	type EvtJournalReqs,
-	bilans,
-	bilansInsertSchema,
-	dirigeantEs,
-	dirigeantEsInsertSchema,
-	evtsJournalReqs,
-} from "$db/schema/api";
+import { type EvtJournalReqs, evtsJournalReqs } from "$db/schema/api";
 import { getJetonApiFromToken } from "$db/utils";
 
 import audit from "$utils/audit";
+import { createBilanEntry } from "$utils/convert-bilan";
 import * as logger from "$utils/logger";
 
-import cgoMapping from "./cgo-mapping.json";
-
 // TODO : utiliser l’algorithme de vérification complet
+// TODO: à mettre directement dans le type
 const siretIsValid = (siret: string | undefined) =>
 	siret && siret.match(/^\d{14}$/);
 
@@ -47,6 +38,7 @@ const setLogEntryStatus = async (logEntry: EvtJournalReqs, status: number) => {
 export const POST = wrapServerRouteWithSentry(
 	async ({ params, url, request }) => {
 		// Validation des préconditions
+
 		const { siret } = params;
 		const apiVersion = getApiVersion(url);
 
@@ -90,6 +82,7 @@ export const POST = wrapServerRouteWithSentry(
 			error(401, "Jeton d’authentification désactivé");
 		}
 		// Parsing
+
 		let bilanData;
 		try {
 			bilanData = await request.json();
@@ -102,6 +95,7 @@ export const POST = wrapServerRouteWithSentry(
 		}
 
 		// Sauvegarde de la requête pour audit
+
 		const auditLogEntry = (
 			await db
 				.insert(evtsJournalReqs)
@@ -120,7 +114,7 @@ export const POST = wrapServerRouteWithSentry(
 			request_log_id: auditLogEntry.id,
 			api_token_id: jeton.id,
 		});
-		let bilan: typeof bilans.$inferSelect | undefined;
+
 		try {
 			if (!siretIsValid(siret)) {
 				error(400, "Code SIRET de l’URL incorrect");
@@ -129,96 +123,23 @@ export const POST = wrapServerRouteWithSentry(
 			if (bilanData["siret"] !== siret) {
 				error(400, "Numéros SIRET inconsistents");
 			}
-
+			let bilanId;
 			// Parsing du bilan, et écriture en BDD
-			await db.transaction(async (tx) => {
-				Object.keys(bilanData).forEach((key) => {
-					if (
-						![
-							"siret",
-							"nom",
-							"debut_exercice",
-							"fin_exercice",
-							"version",
-							"date_bilan",
-							"dirigeant_es",
-							"stock",
-							"production",
-							"destination",
-							"donnees_economiques",
-						].includes(key)
-					) {
-						error(400, `Clé \`${key}\` inconnue`);
-					}
-				});
-
-				const bilanInfo = {
-					siret: bilanData["siret"],
-					nom: bilanData["nom"],
-					debutExercice: bilanData["debut_exercice"],
-					finExercice: bilanData["fin_exercice"],
-					version: bilanData["version"],
-					dateBilan: bilanData["date_bilan"],
-				};
-
-				const renameFields = (
-					data: Record<string, object>,
-					category: string,
-				): Record<string, object> => {
-					if (!data) error(400, `Clé \`${category}\` manquante`);
-					const converted: Record<string, object> = {};
-
-					Object.keys(data).forEach((oldKey) => {
-						if (Object.hasOwn(cgoMapping, oldKey)) {
-							// @ts-expect-error TODO typage à préciser
-							const newKey = cgoMapping[oldKey];
-							converted[newKey] = data[oldKey];
-						} else {
-							converted[oldKey] = data[oldKey];
-						}
-					});
-					return converted;
-				};
-
-				const flatBilan = {
-					idEvtJournalReqs: auditLogEntry.id,
-					...bilanInfo,
-					...renameFields(bilanData["stock"], "stock"),
-					...renameFields(bilanData["production"], "production"),
-					...renameFields(
-						bilanData["donnees_economiques"],
-						"donnees_economiques",
-					),
-				};
-
-				const parsingResult = bilansInsertSchema(flatBilan);
-				if (parsingResult instanceof type.errors) {
-					error(400, parsingResult.summary);
+			try {
+				bilanId = await createBilanEntry(auditLogEntry);
+			} catch (err) {
+				if (err instanceof Error) {
+					error(400, err.message);
+				} else {
+					error(500, "Erreur inconnue");
 				}
+			}
 
-				bilan = (await tx.insert(bilans).values(parsingResult).returning())[0];
-
-				if (!Array.isArray(bilanData["dirigeant_es"])) {
-					error(400, "Clé `dirigeant_es` manquantes, ou pas un tableau");
-				}
-				for (const dir of bilanData["dirigeant_es"]) {
-					const dirParsingResult: dirigeantEsInsertSchema | ArkErrors =
-						dirigeantEsInsertSchema({
-							idBilan: bilan.id,
-							...camelcaseKeys(dir),
-						});
-					if (dirParsingResult instanceof type.errors) {
-						error(400, dirParsingResult.summary);
-					}
-
-					await tx.insert(dirigeantEs).values(dirParsingResult);
-				}
-			});
 			await setLogEntryStatus(auditLogEntry, 204);
 
 			audit("Envoi de bilan réussi", {
 				request_log_id: auditLogEntry.id,
-				bilan_id: bilan?.id,
+				bilan_id: bilanId,
 				api_token_id: jeton.id,
 			});
 

@@ -6,16 +6,13 @@ import { expect, test } from "@playwright/test";
 
 import { db } from "$db";
 
-import {
-	bilans,
-	dirigeantEs,
-	evtsJournalReqs,
-	jetonsApi,
-} from "$db/schema/api";
+import { bilans, evtsJournalReqs, jetonsApi } from "$db/schema/api";
 import { sessions, utilisateurs } from "$db/schema/auth";
 import { getJetonApiFromToken } from "$db/utils";
 
 import { generateApiToken } from "$utils";
+
+import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Tests e2e de l’API
@@ -53,6 +50,7 @@ const dummyBilan = {
 	stock: {},
 	production: {},
 	donnees_economiques: {},
+	destination: {},
 };
 
 test.beforeAll(async () => {
@@ -64,7 +62,6 @@ test.beforeAll(async () => {
 	// Remise à zero de la DBB de test
 	await reset(db, {
 		bilans,
-		dirigeantEs,
 		jetonsApi,
 		journalRequetes: evtsJournalReqs,
 		sessions,
@@ -308,35 +305,37 @@ test("204 si un champ monétaire est manquant", async ({ request }) => {
 		data: { ...dummyBilan, stock: {} },
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBeNull();
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
-		data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: null } },
+		data: { ...dummyBilan, stock: { StckValHNaisMi: null } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBeNull();
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBeNull();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
-		data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: undefined } },
+		data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBeNull();
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
-		data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: "" } },
+		data: { ...dummyBilan, stock: { StckValHNaisMi: "" } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBeNull();
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBeNull();
 });
 
-test("204 si un champ monétaire est un nombre", async ({ request }) => {
+test("204 si un champ monétaire est une chaine où un nombre", async ({
+	request,
+}) => {
 	let response;
 	let inserted;
 
@@ -346,30 +345,30 @@ test("204 si un champ monétaire est un nombre", async ({ request }) => {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
 		data: {
 			...dummyBilan,
-			stock: { stock__huitre__nais_mil__val: "12345.67" },
+			stock: { StckValHNaisMi: "12345.67" },
 		},
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBe("12345.67");
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBe("12345.67");
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
-		data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: 12345.67 } },
+		data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } },
 	});
 	expect(response.status()).toBe(204);
-	inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBe("12345.67");
+	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 });
 
 test("400 si un champ monétaire est invalide", async ({ request }) => {
 	const response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
-		data: { ...dummyBilan, stock: { stock__huitre__nais_mil__val: "ABC" } },
+		data: { ...dummyBilan, stock: { StckValHNaisMi: "ABC" } },
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'stock__huitre__nais_mil__val must be a well-formed numeric string or "" (was "ABC")',
+		'stock.StckValHNaisMi must be a well-formed numeric string or "" (was "ABC")',
 	);
 });
 
@@ -389,7 +388,7 @@ test("400 si le champ dirigeant_es n’est pas un tableau", async ({
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"Clé `dirigeant_es` manquantes, ou pas un tableau",
+		"dirigeant_es must be an array (was missing)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -398,7 +397,7 @@ test("400 si le champ dirigeant_es n’est pas un tableau", async ({
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"Clé `dirigeant_es` manquantes, ou pas un tableau",
+		"dirigeant_es must be an array (was string)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -441,7 +440,7 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"prenom must be a string (was missing)",
+		"dirigeant_es[0].prenom must be a string (was missing)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -458,7 +457,7 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"nom must be a string (was a number)",
+		"dirigeant_es[0].nom must be a string (was a number)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -476,7 +475,7 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"anneeNaissance must be a number or null (was a string)",
+		"dirigeant_es[0].annee_naissance must be a number or null (was a string)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -487,14 +486,14 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 				{
 					nom: "Nom",
 					prenom: "Prenom",
-					anneeNaissance: "abc",
+					annee_naissance: "abc",
 				},
 			],
 		},
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"anneeNaissance must be a number or null (was a string)",
+		"dirigeant_es[0].annee_naissance must be a number or null (was a string)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -511,7 +510,9 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 		},
 	});
 	expect(response.status()).toBe(400);
-	expect((await response.json()).message).toBe("anneeN must be removed");
+	expect((await response.json()).message).toBe(
+		"dirigeant_es[0].anneeN must be removed",
+	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
@@ -541,7 +542,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'debutExercice must be a valid date (invalid RFC 9557 string: ) (was "")',
+		'debut_exercice must be a valid date (invalid RFC 9557 string: ) (was "")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -550,7 +551,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"debutExercice must be a string (was null)",
+		"debut_exercice must be a string (was null)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -559,7 +560,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"debutExercice must be a string (was undefined)",
+		"debut_exercice must be a string (was missing)",
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -568,7 +569,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'debutExercice must be a valid date (invalid RFC 9557 string: 12/31/2020) (was "12/31/2020")',
+		'debut_exercice must be a valid date (invalid RFC 9557 string: 12/31/2020) (was "12/31/2020")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -577,7 +578,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'debutExercice must be a valid date (invalid RFC 9557 string: 31/12/2020) (was "31/12/2020")',
+		'debut_exercice must be a valid date (invalid RFC 9557 string: 31/12/2020) (was "31/12/2020")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -586,7 +587,7 @@ test("400 si un champ date n’est pas au bon format", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'debutExercice must be a valid date (invalid RFC 9557 string: 2020-31-12) (was "2020-31-12")',
+		'debut_exercice must be a valid date (invalid RFC 9557 string: 2020-31-12) (was "2020-31-12")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -980,8 +981,8 @@ test("204 lors de la soumission d’un bilan au format CGO", async ({
 		},
 	);
 	expect(response.status()).toBe(204);
-	const inserted = await getLastById(bilans);
-	expect(inserted["stock__huitre__nais_mil__val"]).toBe("20000.00");
+	const inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+	expect(inserted.stock.StckValHNaisMi).toBe(20000);
 });
 
 test("400 si un champ inconnu est fourni", async ({ request }) => {
@@ -1042,26 +1043,7 @@ test("400 si un champ inconnu est fourni", async ({ request }) => {
 		data: d4,
 	});
 	expect(response.status()).toBe(400);
-	expect((await response.json()).message).toContain("Clé `stk` inconnue");
-});
-
-test("Les données de destination sont ignorées", async ({ request }) => {
-	const data = {
-		...testBilanCGO,
-		destination: {
-			...testBilanCGO.destination,
-			newField: "foo",
-		},
-	};
-
-	const response = await request.post(
-		`/api/v0/bilan/cgo/${testBilanCGO.siret}`,
-		{
-			headers: { Authorization: `Bearer ${validAuthToken}` },
-			data,
-		},
-	);
-	expect(response.status()).toBe(204);
+	expect((await response.json()).message).toContain("stk must be removed");
 });
 
 test("400 si un champ ou catégorie est manquante", async ({ request }) => {
@@ -1075,6 +1057,8 @@ test("400 si un champ ou catégorie est manquante", async ({ request }) => {
 			data,
 		},
 	);
-	expect((await response.json()).message).toContain("Clé `stock` manquante");
+	expect((await response.json()).message).toContain(
+		"stock must be an object (was missing)",
+	);
 	expect(response.status()).toBe(400);
 });
