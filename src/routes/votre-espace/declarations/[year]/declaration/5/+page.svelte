@@ -26,7 +26,7 @@
 </p>
 
 <form method="POST" use:enhanceNoInvalidate>
-	<BilanTable bilan={data.bilan} etablissement={data.etablissement}
+	<BilanTable declaration={data.declaration} etablissement={data.etablissement}
 	></BilanTable>
 
 	<NavigationLinks prevHref="4" nextIsButton />

@@ -3,6 +3,8 @@
 
 	import { goto } from "$app/navigation";
 
+	import type { Concession } from "$db/schema/atena";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import Textareagroup from "$lib/components/textarea–group.svelte";
@@ -11,19 +13,21 @@
 
 	const { data, form } = $props();
 
-	// TODO typing
-	const groupedConcessions = new Map();
+	const groupedConcessions = new Map<string, Map<string, Concession[]>>();
 
 	data.concessions.forEach((c) => {
 		const quartier = c.quartierParcelle ?? "";
-		const lieu = c.lieu.replace(/^ – /, "").replace(/ – $/, "") ?? "";
+		const lieu =
+			`${c.libLocalite} – ${c.nomLieuDit}`
+				.replace(/^ – /, "")
+				.replace(/ – $/, "") ?? "";
 
 		if (!groupedConcessions.has(quartier)) {
 			groupedConcessions.set(quartier, new Map([[lieu, [c]]]));
 		} else {
-			const quartierConcessions = groupedConcessions.get(quartier);
+			const quartierConcessions = groupedConcessions.get(quartier)!;
 			if (quartierConcessions.has(lieu)) {
-				quartierConcessions.get(lieu).push(c);
+				quartierConcessions.get(lieu)!.push(c);
 			} else {
 				quartierConcessions.set(lieu, [c]);
 			}

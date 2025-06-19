@@ -99,7 +99,9 @@
 	</a>
 </div>
 
-<ProductionDetails bilan={data.bilan} etablissement={data.etablissement}
+<ProductionDetails
+	declaration={data.declaration}
+	etablissement={data.etablissement}
 ></ProductionDetails>
 
 <div class="header-wrapper">
@@ -112,7 +114,7 @@
 	</a>
 </div>
 
-<StockDetails bilan={data.bilan} etablissement={data.etablissement}
+<StockDetails declaration={data.declaration} etablissement={data.etablissement}
 ></StockDetails>
 
 <div class="header-wrapper">
@@ -127,7 +129,8 @@
 
 <h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
 
-<BilanTable bilan={data.bilan} etablissement={data.etablissement}></BilanTable>
+<BilanTable declaration={data.declaration} etablissement={data.etablissement}
+></BilanTable>
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous eu des événements exceptionnels au cours de l'année 2024 ?

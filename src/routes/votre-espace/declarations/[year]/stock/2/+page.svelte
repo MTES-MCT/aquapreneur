@@ -25,7 +25,9 @@
 	chaque stade d’élevage.
 </p>
 <form method="POST" use:enhanceNoInvalidate>
-	<StockDetails bilan={data.bilan} etablissement={data.etablissement}
+	<StockDetails
+		declaration={data.declaration}
+		etablissement={data.etablissement}
 	></StockDetails>
 
 	<NavigationLinks prevHref="1" nextIsButton />

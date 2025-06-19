@@ -350,7 +350,7 @@ test("204 si un champ monétaire est une chaine où un nombre", async ({
 	});
 	expect(response.status()).toBe(204);
 	inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
-	expect(inserted.stock.StckValHNaisMi).toBe("12345.67");
+	expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
 		headers: { Authorization: `Bearer ${validAuthToken}` },
@@ -368,7 +368,7 @@ test("400 si un champ monétaire est invalide", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'stock.StckValHNaisMi must be a well-formed numeric string or "" (was "ABC")',
+		'stock.StckValHNaisMi must be "" or a well-formed numeric string (was "ABC")',
 	);
 });
 

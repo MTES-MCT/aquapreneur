@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { formatDate } from "$lib/utils";
 
-	let { etablissement, bilan } = $props();
+	let { etablissement, declaration } = $props();
 </script>
 
-{#if !bilan}
+{#if !declaration.dateBilan}
 	<div class="fr-alert fr-alert--warning fr-my-2v">
 		<h3 class="fr-alert__title">Données manquantes</h3>
 		<p>
@@ -22,15 +22,15 @@
 						<tbody>
 							<tr>
 								<th scope="row">Date de début d’exercice</th>
-								<td>{formatDate(bilan.debutExercice)}</td>
+								<td>{formatDate(declaration.debutExercice)}</td>
 							</tr>
 							<tr>
 								<th scope="row">Date de fin d’exercice</th>
-								<td>{formatDate(bilan.finExercice)}</td>
+								<td>{formatDate(declaration.finExercice)}</td>
 							</tr>
 							<tr>
 								<th scope="row">Date de soumission</th>
-								<td>{formatDate(bilan.dateBilan)}</td>
+								<td>{formatDate(declaration.dateBilan)}</td>
 							</tr>
 						</tbody>
 					</table>

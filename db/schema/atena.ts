@@ -132,13 +132,17 @@ export const concessions = atena.table(
 		codeExploitation: doublePrecision("code_exploitation"),
 		exploitation: varchar(),
 		familleExploitation: varchar("famille_exploitation"),
-		geom: geometry({ type: "multipolygon", srid: 4326 }),
+		// TODO: attendre le support officiel, ou voir
+		// https://github.com/drizzle-team/drizzle-orm/discussions/2383
+		// geom: geometry({ type: "multipolygon", srid: 4326 }),
 	},
 	(table) => [
-		index("concessions_geom_geom_idx").using(
-			"gist",
-			table.geom.asc().nullsLast().op("gist_geometry_ops_2d"),
-		),
+		// index("concessions_geom_geom_idx").using(
+		// 	"gist",
+		// 	table.geom.asc().nullsLast().op("gist_geometry_ops_2d"),
+		// ),
 		index("concessions_siren_idx").on(table.siren),
 	],
 );
+
+export type Concession = typeof concessions.$inferSelect;
