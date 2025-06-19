@@ -3,7 +3,7 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
 
-	const { data, editable = false } = $props();
+	const { editable = false } = $props();
 
 	const context = getDeclarationContext();
 

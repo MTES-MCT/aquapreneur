@@ -7,7 +7,7 @@
 
 	import ContactTable from "./contact-table.svelte";
 
-	const { data, form } = $props();
+	const { form } = $props();
 
 	$effect(() => {
 		if (form?.success) {
@@ -24,6 +24,6 @@
 	corriger ou les compléter.
 </p>
 <form method="POST" use:enhanceNoInvalidate>
-	<ContactTable {data} editable></ContactTable>
+	<ContactTable editable></ContactTable>
 	<NavigationLinks prevHref="2" nextIsButton />
 </form>

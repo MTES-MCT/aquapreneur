@@ -66,7 +66,7 @@
 
 <h3 class="fr-text--md fr-text--bold">Contact</h3>
 
-<ContactTable {data}></ContactTable>
+<ContactTable></ContactTable>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Concessions</h2>
@@ -99,10 +99,7 @@
 	</a>
 </div>
 
-<ProductionDetails
-	declaration={data.declaration}
-	etablissement={data.etablissement}
-></ProductionDetails>
+<ProductionDetails declaration={data.declaration}></ProductionDetails>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Stock</h2>

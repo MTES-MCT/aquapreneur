@@ -24,10 +24,7 @@
 	chaque stade d’élevage.
 </p>
 <form method="POST" use:enhanceNoInvalidate>
-	<ProductionDetails
-		declaration={data.declaration}
-		etablissement={data.etablissement}
-	></ProductionDetails>
+	<ProductionDetails declaration={data.declaration}></ProductionDetails>
 
 	<NavigationLinks prevHref="1" nextIsButton />
 </form>

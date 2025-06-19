@@ -5,7 +5,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { db } from "$db";
 
 import { bilans } from "$db/schema/api";
-import { type Concession, concessions } from "$db/schema/atena";
+import { concessions } from "$db/schema/atena";
 
 import * as logger from "$utils/logger";
 

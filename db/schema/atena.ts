@@ -7,7 +7,7 @@
 //
 import {
 	doublePrecision,
-	geometry,
+	// geometry,
 	index,
 	pgSchema,
 	serial,

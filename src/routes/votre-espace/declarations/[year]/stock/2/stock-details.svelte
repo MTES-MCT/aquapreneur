@@ -1,11 +1,8 @@
 <script lang="ts">
-	import type { bilansSelectSchema } from "$db/schema/api";
-
 	import type { Declaration } from "$lib/schemas/declaration-schema";
 
 	let {
 		declaration,
-		etablissement,
 	}: {
 		declaration: Declaration;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- en attente du typage des données SIRENE
@@ -22,17 +19,6 @@
 				)} ${unit}`
 			:	"n/a";
 	};
-
-	const formatValue = (value: number | string | null): string => {
-		return value != null ?
-				Intl.NumberFormat("fr-FR", {
-					style: "currency",
-					currency: "EUR",
-				}).format(typeof value === "string" ? Number.parseFloat(value) : value)
-			:	"n/a";
-	};
-
-	const s = {};
 
 	const template = $derived([
 		{

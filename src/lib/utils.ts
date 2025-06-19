@@ -28,8 +28,6 @@ export const dsfrLink = (picto: string, parent = "pictograms") => {
 	return `/dsfr-${DSFR_VERSION}/artwork/${parent}/${picto}.svg`;
 };
 
-
-
 export const formatNum = (value: number, unit = "", naValue = ""): string => {
 	if (value == null) return naValue;
 	const strNum = Intl.NumberFormat("fr-FR").format(value);

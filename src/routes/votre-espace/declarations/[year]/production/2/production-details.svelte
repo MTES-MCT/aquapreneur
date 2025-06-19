@@ -1,15 +1,10 @@
 <script lang="ts">
-	import type { bilansSelectSchema } from "$db/schema/api";
-
 	import type { Declaration } from "$lib/schemas/declaration-schema";
 
 	let {
 		declaration,
-		etablissement,
 	}: {
 		declaration: Declaration;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- en attente du typage des données SIRENE
-		etablissement: any;
 	} = $props();
 
 	const formatValue = (value: number | string | null): string => {
@@ -20,22 +15,6 @@
 				}).format(typeof value === "string" ? Number.parseFloat(value) : value)
 			:	"n/a";
 	};
-
-	const sum = (
-		values: (string | number | null | undefined)[],
-	): number | null => {
-		const filteredValues = values.filter((val) => val != null);
-		return filteredValues.length ?
-				filteredValues.reduce((total: number, current: string | number) => {
-					return (
-						total +
-						(typeof current === "string" ? Number.parseFloat(current) : current)
-					);
-				}, 0)
-			:	null;
-	};
-
-	const p = {};
 
 	const template = $derived(
 		[

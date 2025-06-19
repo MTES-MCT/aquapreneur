@@ -1,5 +1,5 @@
 import type { bilans } from "$db/schema/api";
-import type { Concession, concessions } from "$db/schema/atena";
+import type { Concession } from "$db/schema/atena";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
 import type { Declaration } from "./schemas/declaration-schema";
