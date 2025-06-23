@@ -93,7 +93,7 @@
 			{/if}
 
 			<p class="fr-text--lead">
-				Entreprise : {data.etablissement?.uniteLegale.denominationUniteLegale}
+				Entreprise : {data.etablissement?.denomination}
 			</p>
 		</div>
 	</div>

@@ -12,10 +12,7 @@
 <p>Veuillez confirmer les informations suivantes liées à votre entreprise.</p>
 
 <form method="POST" use:enhanceNoInvalidate>
-	<EtablissementDataTable
-		etablissement={data.etablissement}
-		activitePrincipale={data.activitePrincipale}
-		withEdit
+	<EtablissementDataTable etablissement={data.etablissement} withEdit
 	></EtablissementDataTable>
 	<NavigationLinks prevHref="1" nextIsButton />
 </form>

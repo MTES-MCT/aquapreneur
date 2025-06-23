@@ -59,9 +59,7 @@
 
 <h3 class="fr-text--md fr-text--bold">Informations</h3>
 
-<EtablissementDataTable
-	etablissement={data.etablissement}
-	activitePrincipale={data.activitePrincipale}
+<EtablissementDataTable etablissement={data.etablissement}
 ></EtablissementDataTable>
 
 <h3 class="fr-text--md fr-text--bold">Contact</h3>

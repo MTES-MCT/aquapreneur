@@ -172,7 +172,7 @@
 				Nous n’avons pas trouvé de données sur les concessions de
 				l’établissement
 				<br />
-				{data.etablissement.uniteLegale.denominationUniteLegale}.
+				{data.etablissement.denomination}.
 			</p>
 		</div>
 	{/each}
