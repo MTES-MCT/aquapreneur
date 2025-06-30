@@ -50,14 +50,14 @@ test.describe("Connecté mais non validés", () => {
 	test("Les utilisateurs non validés ne peuvent pas acceder au tableau de bord", async ({
 		page,
 	}) => {
-		await page.goto("/votre-espace");
+		await page.goto("/producteur");
 		await expect(page).toHaveURL("/validation");
 	});
 
 	test("Les utilisateurs non validés ne peuvent pas acceder aux déclarations", async ({
 		page,
 	}) => {
-		await page.goto("/votre-espace/declarations/2024/entreprise/1");
+		await page.goto("/producteur/declarations/2024/entreprise/1");
 		await expect(page).toHaveURL("/validation");
 	});
 });

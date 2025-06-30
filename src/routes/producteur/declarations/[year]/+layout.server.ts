@@ -15,7 +15,7 @@ export const load = async ({ parent, params }) => {
 	}
 
 	if (!etablissement) {
-		redirect(307, "/votre-espace");
+		redirect(307, "/producteur");
 	}
 
 	const declaration = await getOrCreateDeclaration(etablissement, safeYear);

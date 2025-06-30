@@ -130,7 +130,7 @@
 						<h3 class="fr-tile__title">
 							{#if data.siret && !creating && data.siret === selectedSiret && !data.sireneError}
 								<a
-									href="votre-espace/declarations/2024/entreprise/1"
+									href="producteur/declarations/2024/entreprise/1"
 									data-sveltekit-preload-data="off"
 								>
 									Déclaration 2024

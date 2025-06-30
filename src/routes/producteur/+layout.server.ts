@@ -33,8 +33,8 @@ export const load = async ({ parent, cookies, route }) => {
 		}
 	}
 
-	if (!etablissement && route.id != "/votre-espace") {
-		redirect(307, "/votre-espace");
+	if (!etablissement && route.id != "/producteur") {
+		redirect(307, "/producteur");
 	}
 
 	// TODO gérer le cas où l’utilisateur n’a pas de siret ?
