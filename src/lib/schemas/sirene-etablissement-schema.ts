@@ -9,12 +9,14 @@
 //
 import { type } from "arktype";
 
+import { Siret } from "$lib/types";
+
 export const SireneEtablissementResponse = type({
 	"+": "ignore",
 	etablissement: {
 		siren: "string",
 		nic: "string",
-		siret: "string",
+		siret: Siret,
 		"activitePrincipaleRegistreMetiersEtablissement?": "string | null",
 		"anneeEffectifsEtablissement?": "string | null",
 		"dateCreationEtablissement?": "string | null",
