@@ -3,15 +3,15 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
 
-	const { data, editable = false } = $props();
+	const { editable = false } = $props();
 
-	const context = getDeclarationContext();
+	const dc = getDeclarationContext();
 
-	// if (!context.emailEntreprise) {
-	//   context.emailEntreprise = data.utilisateur.courriel;
+	// if (!dc.emailEntreprise) {
+	//   dc.emailEntreprise = data.utilisateur.courriel;
 	// }
-	// if (!context.telEntreprise) {
-	//   context.telEntreprise = data.utilisateur.telephone ?? '';
+	// if (!dc.telEntreprise) {
+	//   dc.telEntreprise = data.utilisateur.telephone ?? '';
 	// }
 </script>
 
@@ -27,7 +27,7 @@
 			<InputGroup
 				name="courriel-entreprise"
 				type="email"
-				bind:value={context.emailEntreprise}
+				bind:value={dc.entreprise.emailEntreprise}
 				{fieldsetId}
 				required
 			>
@@ -42,9 +42,9 @@
           <button
             type="button"
             class="fr-btn fr-btn--tertiary fr-btn--sm"
-            disabled={context.emailEntreprise === data.utilisateur.courriel}
+            disabled={dc.emailEntreprise === data.utilisateur.courriel}
             onclick={() => (
-              context.emailEntreprise = data.utilisateur.courriel)}
+              dc.emailEntreprise = data.utilisateur.courriel)}
             >Réinitialiser</button
           >
         {/snippet} -->
@@ -54,7 +54,7 @@
 				name="courriel-contact"
 				type="email"
 				{fieldsetId}
-				bind:value={context.emailContact}
+				bind:value={dc.entreprise.emailContact}
 			>
 				{#snippet label()}
 					E-mail de contact
@@ -69,7 +69,7 @@
 				name="tel-entreprise"
 				type="tel"
 				{fieldsetId}
-				bind:value={context.telEntreprise}
+				bind:value={dc.entreprise.telEntreprise}
 				required
 			>
 				{#snippet label()}
@@ -84,8 +84,8 @@
           <button
             type="button"
             class="fr-btn fr-btn--tertiary fr-btn--sm"
-            disabled={context.telEntreprise === data.utilisateur.telephone}
-            onclick={() => (context.telEntreprise = data.utilisateur.telephone ?? '')}
+            disabled={dc.telEntreprise === data.utilisateur.telephone}
+            onclick={() => (dc.telEntreprise = data.utilisateur.telephone ?? '')}
             >Réinitialiser</button
           >
         {/snippet} -->
@@ -95,7 +95,7 @@
 				name="tel-contact"
 				type="tel"
 				{fieldsetId}
-				bind:value={context.telContact}
+				bind:value={dc.entreprise.telContact}
 			>
 				{#snippet label()}
 					Numéro de téléphone de contact
@@ -116,21 +116,21 @@
 						<tbody>
 							<tr>
 								<th scope="row">Email de l’entreprise</th>
-								<td>{context.emailEntreprise}</td>
+								<td>{dc.entreprise.emailEntreprise}</td>
 							</tr>
 							<tr>
 								<th scope="row">E-mail de contact</th>
-								<td>{context.emailContact}</td>
+								<td>{dc.entreprise.emailContact}</td>
 							</tr>
 							<tr>
 								<th scope="row">Téléphone de l’entreprise</th>
 								<td>
-									{context.telEntreprise}
+									{dc.entreprise.telEntreprise}
 								</td>
 							</tr>
 							<tr>
 								<th scope="row">Téléphone de contact</th>
-								<td>{context.telContact}</td>
+								<td>{dc.entreprise.telContact}</td>
 							</tr>
 						</tbody>
 					</table>

@@ -1,25 +1,13 @@
 <script lang="ts">
-	const { etablissement, activitePrincipale, withEdit = false } = $props();
+	import { getDeclarationContext } from "$lib/declaration-context";
 
-	function cleanSpaces(str: string) {
-		return str.replaceAll("  ", " ").trim();
-	}
+	const {
+		withEdit = false,
+	}: {
+		withEdit?: boolean;
+	} = $props();
 
-	function val(obj: Record<string, string>, field: string): string {
-		return (obj[field] as string | null) || "";
-	}
-
-	function getSireneCity(addr: Record<string, string>) {
-		return cleanSpaces(
-			`${val(addr, "libelleCedexEtablissement") || val(addr, "libelleCommuneEtablissement")} ${val(addr, "distributionSpecialeEtablissement")}`,
-		);
-	}
-
-	function getSireneStreetAddress(addr: Record<string, string>) {
-		return cleanSpaces(
-			`${val(addr, "numeroVoieEtablissement")} ${val(addr, "indiceRepetitionEtablissement")} ${val(addr, "typeVoieEtablissement")} ${val(addr, "libelleVoieEtablissement")}`,
-		);
-	}
+	const dc = getDeclarationContext();
 </script>
 
 {#snippet editBtn()}
@@ -42,14 +30,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">Dénomination</th>
-							<td>{etablissement.uniteLegale.denominationUniteLegale}</td>
+							<td>{dc.etablissement.denomination}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Numéro SIREN</th>
-							<td>{etablissement.siren}</td>
+							<th scope="row">Numéro SIRET</th>
+							<td>{dc.etablissement.siret}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
@@ -57,8 +45,8 @@
 						<tr>
 							<th scope="row">Activité principale</th>
 							<td>
-								{activitePrincipale}
-								({etablissement.uniteLegale.activitePrincipaleUniteLegale})
+								{dc.etablissement.activitePrincipale}
+								({dc.etablissement.codeActivitePrincipale})
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
@@ -67,9 +55,9 @@
 						<tr>
 							<th scope="row">Adresse postale</th>
 							<td>
-								{getSireneStreetAddress(etablissement.adresseEtablissement)},
-								{etablissement.adresseEtablissement.codePostalEtablissement}
-								{getSireneCity(etablissement.adresseEtablissement)}
+								{dc.etablissement.adresse},
+								{dc.etablissement.codePostal}
+								{dc.etablissement.commune}
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}

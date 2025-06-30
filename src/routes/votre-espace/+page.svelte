@@ -2,19 +2,17 @@
 	import { enhance } from "$app/forms";
 
 	import Pictogram from "$lib/components/pictogram.svelte";
-	import {
-		getDeclarationContext,
-		resetDeclarationContext,
-	} from "$lib/declaration-context";
+	import { resetDeclarationContext } from "$lib/declaration-context";
 
 	const { data } = $props();
 
 	let selectedSiret = $state(data.siret);
 	let creating = $state(false);
 
-	const context = getDeclarationContext();
-
 	let onlyIncomplete = $state(false);
+
+	// TODO: à ce niveau, on n’a pas accès au contexte => récupérer l’info de completion
+	// des bilans directement dans la DB
 </script>
 
 {#if data.sireneError}
@@ -48,7 +46,7 @@
 						use:enhance={() => {
 							creating = true;
 							return async ({ update }) => {
-								resetDeclarationContext(context);
+								resetDeclarationContext();
 								await update({ reset: false });
 								selectedSiret = data.siret;
 								creating = false;
@@ -93,7 +91,7 @@
 			{/if}
 
 			<p class="fr-text--lead">
-				Entreprise : {data.etablissement?.uniteLegale.denominationUniteLegale}
+				Entreprise : {data.etablissement?.denomination}
 			</p>
 		</div>
 	</div>
@@ -141,12 +139,12 @@
 								<a aria-disabled="true" role="link">Déclaration 2024</a>
 							{/if}
 						</h3>
-						<p class="fr-tile__detail">
-							{context.valide ? "Afficher" : "Commencer"}
+						<!-- <p class="fr-tile__detail">
+							{dc.valide ? "Afficher" : "Commencer"}
 						</p>
 
 						<div class="fr-tile__start">
-							{#if context.valide}
+							{#if dc.valide}
 								<p
 									class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
 								>
@@ -159,7 +157,7 @@
 									À compléter
 								</p>
 							{/if}
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="fr-tile__header">

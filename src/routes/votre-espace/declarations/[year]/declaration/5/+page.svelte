@@ -1,21 +1,19 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
-	import { enhanceNoInvalidate } from "$lib/utils";
+	import { submitDeclarationContext } from "$lib/utils";
 
 	import BilanTable from "./bilan-table.svelte";
 
-	let { data, form } = $props();
+	let { data } = $props();
+	const dc = getDeclarationContext();
 
-	$effect(() => {
-		if (form?.success) {
-			const context = getDeclarationContext();
-			context.declarationComplete = true;
-			goto("../envoi");
-		}
-	});
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		dc.etapes.declarationValidee = true;
+		submitDeclarationContext(event, data.idDeclarationCourante, dc, "../envoi");
+	};
 </script>
 
 <h1 class="fr-h2">Merci de confirmer les dates de votre exercice comptable</h1>
@@ -25,9 +23,8 @@
 	comptable.
 </p>
 
-<form method="POST" use:enhanceNoInvalidate>
-	<BilanTable bilan={data.bilan} etablissement={data.etablissement}
-	></BilanTable>
+<form method="POST" onsubmit={handleSubmit}>
+	<BilanTable></BilanTable>
 
 	<NavigationLinks prevHref="4" nextIsButton />
 </form>

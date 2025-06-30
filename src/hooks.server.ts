@@ -29,7 +29,7 @@ import {
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
 
-configure({ onUndeclaredKey: "reject" });
+configure({ onUndeclaredKey: "reject", jitless: true });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,

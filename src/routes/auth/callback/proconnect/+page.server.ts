@@ -27,6 +27,7 @@ import {
 	OIDC_ID_TOKEN_COOKIE_NAME,
 	OIDC_STATE_COOKIE_NAME,
 } from "$lib/constants";
+import { Email, Siret } from "$lib/types";
 
 // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
 
@@ -35,8 +36,8 @@ const UserInfoPayloadSchema = type({
 	sub: "string",
 	given_name: "string",
 	usual_name: "string",
-	email: "string.email & string.lower",
-	siret: "string",
+	email: Email,
+	siret: Siret,
 	"phone_number?": "string | null",
 });
 

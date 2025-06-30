@@ -3,7 +3,7 @@
 
 	const { step, baseUrl } = $props();
 
-	const context = getDeclarationContext();
+	const dc = getDeclarationContext();
 </script>
 
 {#snippet categoryTitle(text: string, isDone: boolean)}
@@ -41,7 +41,7 @@
 					>
 						{@render categoryTitle(
 							"Votre entreprise",
-							context.entrepriseComplete,
+							dc.etapes?.entrepriseValidee,
 						)}
 					</a>
 				</li>
@@ -53,7 +53,7 @@
 					>
 						{@render categoryTitle(
 							"Vos concessions",
-							context.concessionsComplete,
+							dc.etapes?.concessionValidee,
 						)}
 					</a>
 				</li>
@@ -65,7 +65,7 @@
 					>
 						{@render categoryTitle(
 							"Production aquacole vendue",
-							context.productionComplete,
+							dc.etapes?.productionValidee,
 						)}
 					</a>
 				</li>
@@ -75,7 +75,7 @@
 						href="{baseUrl}/stock"
 						aria-current={step === "stock" ? "page" : undefined}
 					>
-						{@render categoryTitle("Stock", context.stockComplete)}
+						{@render categoryTitle("Stock", dc.etapes?.stockValidee)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
@@ -86,7 +86,7 @@
 					>
 						{@render categoryTitle(
 							"Déclaration obligatoire",
-							context.declarationComplete,
+							dc.etapes?.declarationValidee,
 						)}
 					</a>
 				</li>
@@ -96,7 +96,7 @@
 						href="{baseUrl}/envoi"
 						aria-current={step === "envoi" ? "page" : undefined}
 					>
-						{@render categoryTitle("Envoi", context.envoiComplete)}
+						{@render categoryTitle("Envoi", dc.etapes?.envoiValidee)}
 					</a>
 				</li>
 			</ul>

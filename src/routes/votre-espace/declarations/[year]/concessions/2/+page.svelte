@@ -1,8 +1,18 @@
 <script lang="ts">
+	import type { FormEventHandler } from "svelte/elements";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
-	import { enhanceNoInvalidate } from "$lib/utils";
+	import { getDeclarationContext } from "$lib/declaration-context";
+	import { submitDeclarationContext } from "$lib/utils";
+
+	const { data } = $props();
+	const dc = getDeclarationContext();
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		submitDeclarationContext(event, data.idDeclarationCourante, dc, "3");
+	};
 </script>
 
 <h1 class="fr-h2">
@@ -17,7 +27,7 @@
 	concession…
 </p>
 
-<form method="POST" use:enhanceNoInvalidate>
+<form method="POST" onsubmit={handleSubmit}>
 	<Fieldset>
 		{#snippet inputs()}
 			<RadioGroup name="radio-inline" id="radio-oui" checked inline>

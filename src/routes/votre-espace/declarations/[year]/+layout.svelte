@@ -2,8 +2,13 @@
 	import { page } from "$app/state";
 
 	import MenuDeclaration from "$lib/components/menu-declaration.svelte";
+	import { setDeclarationContext } from "$lib/declaration-context";
 
 	let { data, children } = $props();
+
+	const donneesDeclaration = $state(data.donneesDeclaration);
+
+	setDeclarationContext(donneesDeclaration);
 </script>
 
 <div class="fr-container">

@@ -35,6 +35,7 @@
 				{name}
 				bind:value
 				{required}
+				autocomplete="off"
 			/>
 			{#if actionButton}
 				{@render actionButton()}

@@ -11,11 +11,10 @@ import {
 	text,
 } from "drizzle-orm/pg-core";
 
-import { IsoDate } from "$utils/types";
-
 import { type CGOData } from "$lib/schemas/cgo-schema";
 
 import { timestampCreation, timestamps } from ".";
+import { IsoDate } from "../../src/lib/types";
 
 // Authentification pour l’API
 export const jetonsApi = pgTable(

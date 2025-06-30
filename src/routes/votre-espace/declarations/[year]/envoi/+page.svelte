@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import { getDeclarationContext } from "$lib/declaration-context";
+	import { submitDeclarationContext } from "$lib/utils";
 
 	import BilanTable from "../declaration/5/bilan-table.svelte";
 	import EtablissementDataTable from "../entreprise/2/etablissement-data-table.svelte";
@@ -9,24 +10,24 @@
 	import ProductionDetails from "../production/2/production-details.svelte";
 	import StockDetails from "../stock/2/stock-details.svelte";
 
-	let { data } = $props();
+	const { data } = $props();
 
-	function handleCloseModal(modalId: string) {
+	function handleCloseModal(event: Event, modalId: string) {
+		event.preventDefault();
 		const element = document.getElementById(modalId);
 		// @ts-expect-error -- pas de type disponible
 		dsfr(element).modal.conceal();
 	}
 
-	const context = getDeclarationContext();
+	const dc = getDeclarationContext();
 
-	function handleSubmit() {
-		context.envoiComplete = true;
-		context.valide = true;
-		goto("/");
-	}
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		dc.etapes.envoiValidee = true;
+		submitDeclarationContext(event, data.idDeclarationCourante, dc, "/");
+	};
 </script>
 
-{#snippet fieldContent(content: string)}
+{#snippet fieldContent(content: string | null)}
 	{#if content}
 		<p>
 			{#each content.split("\n") as line (line)}
@@ -59,14 +60,11 @@
 
 <h3 class="fr-text--md fr-text--bold">Informations</h3>
 
-<EtablissementDataTable
-	etablissement={data.etablissement}
-	activitePrincipale={data.activitePrincipale}
-></EtablissementDataTable>
+<EtablissementDataTable></EtablissementDataTable>
 
 <h3 class="fr-text--md fr-text--bold">Contact</h3>
 
-<ContactTable {data}></ContactTable>
+<ContactTable></ContactTable>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Concessions</h2>
@@ -82,9 +80,9 @@
 	Vous avez effectué un ou plusieurs changements sur vos concessions cette
 	année.
 </p>
-{#if context.concessionsErreursComment}
+{#if dc.commentaires.erreursConcessions}
 	<h3 class="fr-text--md fr-text--bold">Changement(s) non pris en compte</h3>
-	{@render fieldContent(context.concessionsErreursComment)}
+	{@render fieldContent(dc.commentaires.erreursConcessions)}
 {:else}
 	<p>Les informations sur vos concessions sont à jour.</p>
 {/if}
@@ -99,8 +97,7 @@
 	</a>
 </div>
 
-<ProductionDetails bilan={data.bilan} etablissement={data.etablissement}
-></ProductionDetails>
+<ProductionDetails></ProductionDetails>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Stock</h2>
@@ -112,8 +109,7 @@
 	</a>
 </div>
 
-<StockDetails bilan={data.bilan} etablissement={data.etablissement}
-></StockDetails>
+<StockDetails></StockDetails>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Déclaration obligatoire</h2>
@@ -127,23 +123,23 @@
 
 <h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
 
-<BilanTable bilan={data.bilan} etablissement={data.etablissement}></BilanTable>
+<BilanTable></BilanTable>
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous eu des événements exceptionnels au cours de l'année 2024 ?
 </h3>
 
-{@render fieldContent(context.evtExceptionnelsComment)}
+{@render fieldContent(dc.commentaires.evnmtsExceptionnels)}
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous relevé des données erronées dans le formulaire ?
 </h3>
-{@render fieldContent(context.formErreursComment)}
+{@render fieldContent(dc.commentaires.erreursFormulaire)}
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous des remarques ou suggestions concernant l’outil ?
 </h3>
-{@render fieldContent(context.suggestionsComment)}
+{@render fieldContent(dc.commentaires.suggestions)}
 
 <!-- ####################################################################### -->
 
@@ -204,15 +200,18 @@
 						<div
 							class="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse fr-btns-group--inline-lg fr-btns-group--icon-left"
 						>
-							<button class="fr-btn fr-btn--icon-left" onclick={handleSubmit}>
-								Envoyer
-							</button>
-							<button
-								class="fr-btn fr-btn--secondary"
-								onclick={() => handleCloseModal("fr-modal-confirmation")}
-							>
-								Continuer la déclaration
-							</button>
+							<form method="POST" onsubmit={handleSubmit}>
+								<button
+									class="fr-btn fr-btn--secondary"
+									onclick={(event) =>
+										handleCloseModal(event, "fr-modal-confirmation")}
+								>
+									Continuer la déclaration
+								</button>
+								<button class="fr-btn fr-btn--icon-left" type="submit">
+									Envoyer
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>

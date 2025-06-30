@@ -1,0 +1,203 @@
+import { and, eq, sql } from "drizzle-orm";
+
+import { error } from "@sveltejs/kit";
+
+import { db } from "$db";
+
+import { bilans } from "$db/schema/api";
+import type { ConcessionSelect } from "$db/schema/atena";
+import { concessionsTable } from "$db/schema/atena";
+import type { EtablissementSelect } from "$db/schema/entreprise";
+
+import * as logger from "$utils/logger";
+
+import { type LaxNumValue } from "./schemas/cgo-schema";
+import { DeclarationSchema } from "./schemas/declaration-schema";
+
+const getSurfaceHa = (concessions: ConcessionSelect[]) => {
+	return Math.round(
+		concessions
+			.filter((c) => {
+				return c.estEspecePrincipale === 1 && c.espece === "Huître creuse";
+			})
+			.reduce((acc, current) => {
+				const surface = current.surfaceParcelle ?? 0;
+				const surfHa =
+					current.codeUniteMesure === "M2" ? surface * 0.0001 : surface * 0.01;
+				return acc + surfHa;
+			}, 0),
+	);
+};
+
+const sumAttrs = (
+	obj: Record<string, LaxNumValue | unknown> | undefined,
+	attrs: string[],
+) => {
+	if (obj == null) {
+		return null;
+	}
+	return attrs.reduce((acc, currentKey) => {
+		const val = obj[currentKey];
+		if (typeof val === "number") {
+			return acc + val;
+		}
+		return acc;
+	}, 0);
+};
+
+const getBilan = async (siret: string, annee: number) => {
+	const result = await db
+		.select()
+		.from(bilans)
+		.where(
+			and(
+				eq(bilans.siret, siret),
+				eq(sql<string>`DATE_PART('year', ${bilans.finExercice})`, annee),
+			),
+		);
+	if (result.length > 1) {
+		logger.error("Bilans multiples");
+		error(500, "Bilans multiples");
+	}
+
+	if (result.length === 1) {
+		return result[0];
+	}
+	return null;
+};
+
+const getConcessions = (siren: string) => {
+	return db
+		.select()
+		.from(concessionsTable)
+		.where(eq(concessionsTable.siren, siren))
+		.orderBy(
+			concessionsTable.quartierParcelle,
+			concessionsTable.libLocalite,
+			concessionsTable.nomLieuDit,
+			concessionsTable.numeroParcelle,
+		);
+};
+
+export const prefillDeclaration = async (
+	etablissement: EtablissementSelect,
+	annee: number,
+): Promise<DeclarationSchema> => {
+	const bilan = await getBilan(etablissement.siret, annee);
+	const concessions = await getConcessions(etablissement.siren);
+	const d = bilan?.donnees;
+
+	const declaration = DeclarationSchema.assert({
+		commentaires: {},
+		etapes: {
+			entrepriseValidee: false,
+			concessionValidee: false,
+			stockValidee: false,
+			productionValidee: false,
+			envoiValidee: false,
+			declarationValidee: false,
+		},
+		entreprise: {
+			emailEntreprise: null,
+		},
+		etablissement: {
+			siret: etablissement.siret,
+			denomination: etablissement.denomination,
+			codeActivitePrincipale: etablissement.codeActivitePrincipale,
+			activitePrincipale: etablissement.activitePrincipale,
+			adresse: etablissement.adresse,
+			codePostal: etablissement.codePostal,
+			commune: etablissement.commune,
+		},
+		dateBilan: bilan?.dateBilan ?? null,
+		debutExercice: bilan?.debutExercice ?? null,
+		finExercice: bilan?.finExercice ?? null,
+		especes: {
+			huitresCreuses: {
+				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
+				stock: {
+					naissains: {
+						quantite: d?.stock.StckVolHNaisMi ?? null,
+						repartition: [],
+					},
+					juveniles: {
+						quantite: d?.stock.StckVolHDElv ?? null,
+						repartition: [],
+					},
+					adultes: {
+						quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
+						repartition: [],
+					},
+				},
+				ventes: {
+					naissains: {
+						total: sumAttrs(d?.production, [
+							"CAHNaissFr",
+							"CAHNaissUE",
+							"CAHNaissAu",
+						]),
+					},
+					juveniles: {
+						total: sumAttrs(d?.production, [
+							"CAHDElvFr",
+							"CAHDElvUE",
+							"CAHDElvAU",
+						]),
+					},
+					adultes: {
+						total: sumAttrs(d?.production, [
+							// Elevage
+							"CAHElvFr",
+							"CAHElvUE",
+							"CAHElvAu",
+							// Consommation
+							"CAHCoFrPro",
+							"CAHCoFrDet",
+							"CAHCoFrGros",
+							"CAHCoFrPCE",
+							"CAHCoFrPGMS",
+							"CAHCoFrDeg",
+							"CAHCoUEPro",
+							"CAHCoUEGros",
+							"CAHCoAuPro",
+							"CAHCoAuGros",
+						]),
+						degustation: d?.production.CAHCoFrDeg ?? 0,
+						autres: 0,
+					},
+				},
+				achats: {
+					naissains: {
+						quantite: d?.donnees_economiques.VolAchHNaiss ?? 0,
+					},
+					juveniles: { quantite: d?.donnees_economiques.VolAchHDElv ?? 0 },
+					adultes: {
+						quantite:
+							(d?.donnees_economiques.VolAchHElv ?? 0) +
+							(d?.donnees_economiques.VolAchHConso ?? 0),
+					},
+				},
+			},
+		},
+		concessions: concessions.map((c) => ({
+			quartierParcelle: c.quartierParcelle,
+			libLocalite: c.libLocalite,
+			nomLieuDit: c.nomLieuDit,
+			numeroParcelle: c.numeroParcelle,
+			codeLocaliteInsee: c.codeLocaliteInsee,
+			nomSituation: c.nomSituation,
+			typeParcelle: c.typeParcelle,
+			surfaceParcelle: c.surfaceParcelle,
+			uniteMesure: c.uniteMesure,
+			etatParcelle: c.etatParcelle,
+			familleExploitation: c.familleExploitation,
+			exploitation: c.exploitation,
+			familleEspece: c.familleEspece,
+			espece: c.espece,
+			natureJuridique: c.natureJuridique,
+			numArrete: c.numArrete,
+			dateArrete: c.dateArrete,
+		})),
+	});
+	return declaration;
+};
