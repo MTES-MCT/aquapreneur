@@ -7,7 +7,7 @@ import { SIRENE_AUTH_TOKEN } from "$env/static/private";
 
 import { db } from "$db";
 
-import { entreprises, etablissements } from "$db/schema/entreprise";
+import { entreprises, etablissementsTable } from "$db/schema/entreprise";
 
 import * as logger from "$utils/logger";
 
@@ -31,8 +31,8 @@ export const getOrCreateEtablissement = async (siret: string) => {
 
 	const etablissementResult = await db
 		.select()
-		.from(etablissements)
-		.where(eq(etablissements.siret, siret));
+		.from(etablissementsTable)
+		.where(eq(etablissementsTable.siret, siret));
 
 	if (etablissementResult.length) {
 		etablissement = etablissementResult[0];
@@ -57,7 +57,6 @@ const createEtablissement = async (
 	entreprise: typeof entreprises.$inferSelect | null,
 ) => {
 	const sireneInfo = await getSireneInfo(siret);
-	// console.log(sireneInfo);
 	if (sireneInfo) {
 		const uniteLegale = sireneInfo.uniteLegale;
 		const periodeCourante = sireneInfo.periodesEtablissement?.find(
@@ -122,7 +121,7 @@ const createEtablissement = async (
 			entreprise.denomination;
 		return (
 			await db
-				.insert(etablissements)
+				.insert(etablissementsTable)
 				.values({
 					siret,
 					siren: sireneInfo.siren,

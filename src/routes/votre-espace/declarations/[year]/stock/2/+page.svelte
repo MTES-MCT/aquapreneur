@@ -1,21 +1,26 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
-	import { enhanceNoInvalidate } from "$lib/utils";
+	import { submitDeclarationContext } from "$lib/utils";
 
 	import StockDetails from "./stock-details.svelte";
 
-	const { data, form } = $props();
+	const { data } = $props();
 
-	$effect(() => {
-		if (form?.success) {
-			const context = getDeclarationContext();
-			context.stockComplete = true;
-			goto("../declaration");
-		}
-	});
+	const dc = getDeclarationContext();
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		dc.etapes.stockValidee = true;
+
+		submitDeclarationContext(
+			event,
+			data.idDeclarationCourante,
+			dc,
+			"../declaration",
+		);
+	};
 </script>
 
 <h1 class="fr-h2">Passons en revue votre stock en {data.year}</h1>
@@ -24,11 +29,8 @@
 	Veuillez vérifier les données relatives à vos stocks pour chaque espèce et
 	chaque stade d’élevage.
 </p>
-<form method="POST" use:enhanceNoInvalidate>
-	<StockDetails
-		declaration={data.declaration}
-		etablissement={data.etablissement}
-	></StockDetails>
+<form method="POST" onsubmit={handleSubmit}>
+	<StockDetails></StockDetails>
 
 	<NavigationLinks prevHref="1" nextIsButton />
 </form>

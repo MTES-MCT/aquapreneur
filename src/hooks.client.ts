@@ -8,7 +8,7 @@ import {
 	PUBLIC_SENTRY_TRACE_SAMPLE_RATE,
 } from "$env/static/public";
 
-configure({ onUndeclaredKey: "reject" });
+configure({ onUndeclaredKey: "reject", jitless: true });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,

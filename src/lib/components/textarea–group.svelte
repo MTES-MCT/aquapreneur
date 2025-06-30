@@ -10,7 +10,7 @@
 		label: Snippet;
 		name: string;
 		rows: number;
-		value?: string;
+		value?: string | null;
 	} = $props();
 	const id = $props.id();
 </script>

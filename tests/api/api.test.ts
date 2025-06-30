@@ -7,7 +7,10 @@ import { expect, test } from "@playwright/test";
 import { db } from "$db";
 
 import { bilans, evtsJournalReqs, jetonsApi } from "$db/schema/api";
+import { concessionsTable } from "$db/schema/atena";
 import { sessions, utilisateurs } from "$db/schema/auth";
+import { declarationsTable } from "$db/schema/declaration";
+import { entreprises, etablissementsTable } from "$db/schema/entreprise";
 import { getJetonApiFromToken } from "$db/utils";
 
 import { generateApiToken } from "$utils";
@@ -61,7 +64,11 @@ test.beforeAll(async () => {
 	}
 	// Remise à zero de la DBB de test
 	await reset(db, {
+		concessionsTable,
 		bilans,
+		declarationsTable,
+		entreprises,
+		etablissementsTable,
 		jetonsApi,
 		journalRequetes: evtsJournalReqs,
 		sessions,
@@ -368,7 +375,7 @@ test("400 si un champ monétaire est invalide", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		'stock.StckValHNaisMi must be "" or a well-formed numeric string (was "ABC")',
+		'stock.StckValHNaisMi must be a number, "", null or a well-formed numeric string (was "ABC")',
 	);
 });
 
@@ -475,7 +482,7 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"dirigeant_es[0].annee_naissance must be a number or null (was a string)",
+		'dirigeant_es[0].annee_naissance must be a number or null (was "abc")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -493,7 +500,7 @@ test("400 si le champ dirigeant_es est incorrect", async ({ request }) => {
 	});
 	expect(response.status()).toBe(400);
 	expect((await response.json()).message).toBe(
-		"dirigeant_es[0].annee_naissance must be a number or null (was a string)",
+		'dirigeant_es[0].annee_naissance must be a number or null (was "abc")',
 	);
 
 	response = await request.post(`/api/v0/bilan/cgo/${dummySiret}`, {

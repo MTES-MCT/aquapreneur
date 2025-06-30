@@ -1,21 +1,25 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	import { goto } from "$app/navigation";
-
-	import type { Concession } from "$db/schema/atena";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import Textareagroup from "$lib/components/textarea–group.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
-	import { enhanceNoInvalidate, formatDate } from "$lib/utils.js";
+	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import { formatDate, submitDeclarationContext } from "$lib/utils.js";
 
-	const { data, form } = $props();
+	const { data } = $props();
 
-	const groupedConcessions = new Map<string, Map<string, Concession[]>>();
+	const groupedConcessions = new Map<
+		string,
+		Map<string, DeclarationSchema["concessions"]>
+	>();
 
-	data.concessions.forEach((c) => {
+	const dc = getDeclarationContext();
+
+	dc.concessions.forEach((c) => {
 		const quartier = c.quartierParcelle ?? "";
 		const lieu =
 			`${c.libLocalite} – ${c.nomLieuDit}`
@@ -34,8 +38,6 @@
 		}
 	});
 
-	const context = getDeclarationContext();
-
 	// Le rendu des accordéons est extrêmement long. On charge donc la page en les
 	// masquant, et on les réactive de façon asynchrone, pour ne pas rester
 	// bloqués sur la page précédente le temps que Svelte finisse le rendu.
@@ -44,13 +46,15 @@
 		setTimeout(() => (delayed = false), 0);
 	});
 
-	$effect(() => {
-		if (form?.success) {
-			const context = getDeclarationContext();
-			context.concessionsComplete = true;
-			goto("../production");
-		}
-	});
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		dc.etapes.concessionValidee = true;
+		submitDeclarationContext(
+			event,
+			data.idDeclarationCourante,
+			dc,
+			"../production",
+		);
+	};
 </script>
 
 <h1 class="fr-h2">Vérifions les données de vos concessions</h1>
@@ -92,7 +96,7 @@
 	</div>
 </fieldset>
 
-<form method="POST" use:enhanceNoInvalidate>
+<form method="POST" onsubmit={handleSubmit}>
 	{#each groupedConcessions as cg (cg[0])}
 		<h2 class="fr-h6">
 			<span aria-hidden="true" class="fr-mr-3v fr-icon-community-line"></span>
@@ -172,7 +176,7 @@
 				Nous n’avons pas trouvé de données sur les concessions de
 				l’établissement
 				<br />
-				{data.etablissement.denomination}.
+				{dc.etablissement.denomination}.
 			</p>
 		</div>
 	{/each}
@@ -182,7 +186,7 @@
 			<Textareagroup
 				name="data-errors-txt"
 				rows={5}
-				bind:value={context.concessionsErreursComment}
+				bind:value={dc.commentaires.erreursConcessions}
 			>
 				{#snippet label()}Changement(s) à signaler
 					<span class="fr-hint-text">

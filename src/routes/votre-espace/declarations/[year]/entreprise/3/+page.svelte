@@ -1,21 +1,24 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { getDeclarationContext } from "$lib/declaration-context";
-	import { enhanceNoInvalidate } from "$lib/utils";
+	import { submitDeclarationContext } from "$lib/utils";
 
 	import ContactTable from "./contact-table.svelte";
 
-	const { form } = $props();
+	const { data } = $props();
+	const dc = getDeclarationContext();
 
-	$effect(() => {
-		if (form?.success) {
-			const context = getDeclarationContext();
-			context.entrepriseComplete = true;
-			goto("../concessions");
-		}
-	});
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		dc.etapes.entrepriseValidee = true;
+		submitDeclarationContext(
+			event,
+			data.idDeclarationCourante,
+			dc,
+			"../concessions",
+		);
+	};
 </script>
 
 <h1 class="fr-h2">Comment vous contacter</h1>
@@ -23,7 +26,7 @@
 	Merci de vérifier si vos coordonnées de contact sont exactes, et si besoin les
 	corriger ou les compléter.
 </p>
-<form method="POST" use:enhanceNoInvalidate>
+<form method="POST" onsubmit={handleSubmit}>
 	<ContactTable editable></ContactTable>
 	<NavigationLinks prevHref="2" nextIsButton />
 </form>

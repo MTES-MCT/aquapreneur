@@ -1,13 +1,7 @@
 <script lang="ts">
-	import type { Declaration } from "$lib/schemas/declaration-schema";
+	import { getDeclarationContext } from "$lib/declaration-context";
 
-	let {
-		declaration,
-	}: {
-		declaration: Declaration;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- en attente du typage des données SIRENE
-		etablissement: any;
-	} = $props();
+	const dc = getDeclarationContext();
 
 	const formatQty = (
 		value: number | string | null | undefined,
@@ -28,25 +22,25 @@
 					nom: "Stock d’huîtres de taille marchande destinées à la consommation",
 					description:
 						"Il s’agit de vos huîtres de taille marchande disponibles à la vente pour la consommation.",
-					qty: declaration.especes.huitresCreuses.stock.adultes.quantite,
+					qty: dc.especes.huitresCreuses.stock.adultes.quantite,
 				},
 				{
 					nom: "Stock d’huîtres de taille marchande pour l’élevage",
 					description:
 						"Il s’agit de vos huîtres de taille marchande disponibles à la vente pour l’élevage auprès d’autres exploitants",
-					qty: declaration.especes.huitresCreuses.stock.adultes.quantite,
+					qty: dc.especes.huitresCreuses.stock.adultes.quantite,
 				},
 				{
 					nom: "Ventes d’huîtres de demi-élevage",
 					description:
 						"Il s’agit de vos huîtres de 18 mois ou de demi-élevage disponible à l’élevage.",
-					qty: declaration.especes.huitresCreuses.stock.juveniles.quantite,
+					qty: dc.especes.huitresCreuses.stock.juveniles.quantite,
 				},
 				{
 					nom: "Stock de naissains",
 					description:
 						"Il s’agit de vos écloseries ou nurseries disponibles pour le grossissement auprès d'autres conchyliculteurs ou pour l'exportation.",
-					qty: declaration.especes.huitresCreuses.stock.naissains.quantite,
+					qty: dc.especes.huitresCreuses.stock.naissains.quantite,
 					unit: "milliers",
 				},
 			],

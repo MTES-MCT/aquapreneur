@@ -15,7 +15,7 @@ export const entreprises = pgTable(
 	(table) => [check("siren_check", sql`${table.siren} ~ '^\\d{9}$'`)],
 );
 
-export const etablissements = pgTable(
+export const etablissementsTable = pgTable(
 	"etablissements",
 	{
 		siret: text().primaryKey(),
@@ -41,4 +41,4 @@ export const etablissements = pgTable(
 	],
 );
 
-export type Etablissement = InferSelectModel<typeof etablissements>;
+export type EtablissementSelect = InferSelectModel<typeof etablissementsTable>;

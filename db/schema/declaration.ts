@@ -1,27 +1,23 @@
-// import {
-// 	boolean,
-// 	integer,
-// 	jsonb,
-// 	pgEnum,
-// 	pgTable,
-// 	text,
-// } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { check, integer, jsonb, pgTable, text } from "drizzle-orm/pg-core";
 
-// import type { Declaration } from "$lib/schemas/declaration-schema";
+import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 
-// import { timestamps } from ".";
-// import { etablissements } from "./entreprise";
+import { timestamps } from ".";
+import { etablissementsTable } from "./entreprise";
 
-// export const auteurEnum = pgEnum("auteur", ["comptable", "producteur"]);
+export const declarationsTable = pgTable(
+	"declarations",
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
-// // TODO: changer des noms pour éviter la confusion sur Declaration
-// export const declarations = pgTable("declarations", {
-// 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		siret: text().references(() => etablissementsTable.siret),
+		annee: integer().notNull(), // annee de la cloture
+		donnees: jsonb().$type<DeclarationSchema>().notNull(),
+		...timestamps,
+	},
+	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
+);
 
-// 	etablissementId: text().references(() => etablissements.siret),
-// 	annee: integer().notNull(), // annee de la cloture
-// 	data: jsonb().$type<Declaration>().notNull(),
-// 	auteur: auteurEnum(),
-// 	validé: boolean().notNull(),
-// 	...timestamps,
-// });
+export type DeclarationEntry = typeof declarationsTable.$inferSelect;
+export type DeclarationEntryInsert = typeof declarationsTable.$inferInsert;

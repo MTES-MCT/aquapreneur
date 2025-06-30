@@ -17,7 +17,7 @@ import {
 
 export const atena = pgSchema("atena");
 
-export const concessions = atena.table(
+export const concessionsTable = atena.table(
 	"concessions",
 	{
 		id: serial().primaryKey().notNull(),
@@ -145,4 +145,4 @@ export const concessions = atena.table(
 	],
 );
 
-export type Concession = typeof concessions.$inferSelect;
+export type ConcessionSelect = typeof concessionsTable.$inferSelect;

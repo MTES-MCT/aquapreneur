@@ -1,10 +1,20 @@
-import type { bilans } from "$db/schema/api";
-import type { Concession } from "$db/schema/atena";
+import { and, eq, sql } from "drizzle-orm";
+
+import { error } from "@sveltejs/kit";
+
+import { db } from "$db";
+
+import { bilans } from "$db/schema/api";
+import type { ConcessionSelect } from "$db/schema/atena";
+import { concessionsTable } from "$db/schema/atena";
+import type { EtablissementSelect } from "$db/schema/entreprise";
+
+import * as logger from "$utils/logger";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
-import type { Declaration } from "./schemas/declaration-schema";
+import { DeclarationSchema } from "./schemas/declaration-schema";
 
-const getSurfaceHa = (concessions: Concession[]) => {
+const getSurfaceHa = (concessions: ConcessionSelect[]) => {
 	return Math.round(
 		concessions
 			.filter((c) => {
@@ -35,20 +45,73 @@ const sumAttrs = (
 	}, 0);
 };
 
-export const prefillDeclaration = (
-	bilanComptable: typeof bilans.$inferSelect | null,
-	bilanComptableMoins1: typeof bilans.$inferSelect | null,
-	concessions: Concession[] | null,
-): Declaration => {
-	// TODO : vérifier si on a un bilan CGO, et brancher sur le parsing CGO.
-	// Sinon générer des valeurs nulles.
-	const d = bilanComptable?.donnees;
+const getBilan = async (siret: string, annee: number) => {
+	const result = await db
+		.select()
+		.from(bilans)
+		.where(
+			and(
+				eq(bilans.siret, siret),
+				eq(sql<string>`DATE_PART('year', ${bilans.finExercice})`, annee),
+			),
+		);
+	if (result.length > 1) {
+		logger.error("Bilans multiples");
+		error(500, "Bilans multiples");
+	}
 
-	const declaration: Declaration = {
-		entreprise: {},
-		dateBilan: bilanComptable?.dateBilan ?? null,
-		debutExercice: bilanComptable?.debutExercice ?? null,
-		finExercice: bilanComptable?.finExercice ?? null,
+	if (result.length === 1) {
+		return result[0];
+	}
+	return null;
+};
+
+const getConcessions = (siren: string) => {
+	return db
+		.select()
+		.from(concessionsTable)
+		.where(eq(concessionsTable.siren, siren))
+		.orderBy(
+			concessionsTable.quartierParcelle,
+			concessionsTable.libLocalite,
+			concessionsTable.nomLieuDit,
+			concessionsTable.numeroParcelle,
+		);
+};
+
+export const prefillDeclaration = async (
+	etablissement: EtablissementSelect,
+	annee: number,
+): Promise<DeclarationSchema> => {
+	const bilan = await getBilan(etablissement.siret, annee);
+	const concessions = await getConcessions(etablissement.siren);
+	const d = bilan?.donnees;
+
+	const declaration = DeclarationSchema.assert({
+		commentaires: {},
+		etapes: {
+			entrepriseValidee: false,
+			concessionValidee: false,
+			stockValidee: false,
+			productionValidee: false,
+			envoiValidee: false,
+			declarationValidee: false,
+		},
+		entreprise: {
+			emailEntreprise: null,
+		},
+		etablissement: {
+			siret: etablissement.siret,
+			denomination: etablissement.denomination,
+			codeActivitePrincipale: etablissement.codeActivitePrincipale,
+			activitePrincipale: etablissement.activitePrincipale,
+			adresse: etablissement.adresse,
+			codePostal: etablissement.codePostal,
+			commune: etablissement.commune,
+		},
+		dateBilan: bilan?.dateBilan ?? null,
+		debutExercice: bilan?.debutExercice ?? null,
+		finExercice: bilan?.finExercice ?? null,
 		especes: {
 			huitresCreuses: {
 				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
@@ -116,6 +179,25 @@ export const prefillDeclaration = (
 				},
 			},
 		},
-	};
+		concessions: concessions.map((c) => ({
+			quartierParcelle: c.quartierParcelle,
+			libLocalite: c.libLocalite,
+			nomLieuDit: c.nomLieuDit,
+			numeroParcelle: c.numeroParcelle,
+			codeLocaliteInsee: c.codeLocaliteInsee,
+			nomSituation: c.nomSituation,
+			typeParcelle: c.typeParcelle,
+			surfaceParcelle: c.surfaceParcelle,
+			uniteMesure: c.uniteMesure,
+			etatParcelle: c.etatParcelle,
+			familleExploitation: c.familleExploitation,
+			exploitation: c.exploitation,
+			familleEspece: c.familleEspece,
+			espece: c.espece,
+			natureJuridique: c.natureJuridique,
+			numArrete: c.numArrete,
+			dateArrete: c.dateArrete,
+		})),
+	});
 	return declaration;
 };

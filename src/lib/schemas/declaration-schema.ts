@@ -1,6 +1,6 @@
 import { type } from "arktype";
 
-import { IsoDate, Percent, PositiveInt, PositiveNumber } from "$lib/types";
+import { Email, IsoDate, Percent, PositiveNumber, Siret } from "$lib/types";
 
 export const Zone = type("'Nord - Pas-de-Calais' | 'Baie de Somme'");
 
@@ -12,32 +12,60 @@ export const Repartition = type(
 	"[]",
 );
 
-export const Declaration = type({
+export const DeclarationSchema = type({
+	etapes: {
+		entrepriseValidee: "boolean",
+		concessionValidee: "boolean",
+		stockValidee: "boolean",
+		productionValidee: "boolean",
+		envoiValidee: "boolean",
+		declarationValidee: "boolean",
+	},
+	commentaires: {
+		erreursConcessions: "string | null = null",
+		evnmtsExceptionnels: "string | null = null",
+		erreursFormulaire: "string | null = null",
+		suggestions: "string | null = null",
+	},
 	dateBilan: IsoDate.or(type.null),
 	debutExercice: IsoDate.or(type.null),
 	finExercice: IsoDate.or(type.null),
-	entreprise: {},
+	entreprise: {
+		emailEntreprise: Email.or(type.null).default(null),
+		telEntreprise: "string | null = null",
+		emailContact: Email.or(type.null).default(null),
+		telContact: "string | null = null",
+	},
+	etablissement: {
+		siret: Siret,
+		denomination: "string | null",
+		codeActivitePrincipale: "string | null",
+		activitePrincipale: "string | null",
+		adresse: "string | null",
+		codePostal: "string | null",
+		commune: "string | null",
+	},
 	especes: {
 		huitresCreuses: {
-			surfaceExploitation: PositiveInt.or(type.null),
+			surfaceExploitation: PositiveNumber.or(type.null),
 			achats: {
 				naissains: {
 					// en milliers
-					quantite: PositiveInt.or(type.null),
+					quantite: PositiveNumber.or(type.null),
 				},
 				juveniles: {
-					quantite: PositiveInt.or(type.null),
+					quantite: PositiveNumber.or(type.null),
 				},
 				adultes: {
-					quantite: PositiveInt.or(type.null),
+					quantite: PositiveNumber.or(type.null),
 				},
 			},
 			ventes: {
 				naissains: {
-					total: PositiveInt.or(type.null),
+					total: PositiveNumber.or(type.null),
 				},
 				juveniles: {
-					total: PositiveInt.or(type.null),
+					total: PositiveNumber.or(type.null),
 				},
 				adultes: {
 					total: PositiveNumber.or(type.null),
@@ -47,21 +75,42 @@ export const Declaration = type({
 			},
 			stock: {
 				naissains: {
-					quantite: PositiveInt.or(type.null).describe("en milliers"),
+					quantite: PositiveNumber.or(type.null).describe("en milliers"),
 					repartition: Repartition.or(type.null),
 				},
 				juveniles: {
-					quantite: PositiveInt.or(type.null).describe("en milliers"),
+					quantite: PositiveNumber.or(type.null).describe("en milliers"),
 					repartition: Repartition.or(type.null),
 				},
 				adultes: {
-					quantite: PositiveInt.or(type.null).describe("en milliers"),
+					quantite: PositiveNumber.or(type.null).describe("en milliers"),
 					repartition: Repartition.or(type.null),
 				},
 			},
 		},
 	},
+	concessions: type(
+		{
+			quartierParcelle: "string | null",
+			libLocalite: "string | null",
+			nomLieuDit: "string | null",
+			numeroParcelle: "string | null",
+			codeLocaliteInsee: "string | null",
+			nomSituation: "string | null",
+			typeParcelle: "string | null",
+			surfaceParcelle: "number | null",
+			uniteMesure: "string | null",
+			etatParcelle: "string | null",
+			familleExploitation: "string | null",
+			exploitation: "string | null",
+			familleEspece: "string | null",
+			espece: "string | null",
+			natureJuridique: "string | null",
+			numArrete: "string | null",
+			dateArrete: "string | null",
+		},
+		"[]",
+	),
 });
 
-console.dir(Declaration.toJsonSchema(), { depth: null });
-export type Declaration = typeof Declaration.infer;
+export type DeclarationSchema = typeof DeclarationSchema.infer;

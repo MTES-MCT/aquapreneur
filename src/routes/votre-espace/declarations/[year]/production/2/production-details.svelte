@@ -1,11 +1,7 @@
 <script lang="ts">
-	import type { Declaration } from "$lib/schemas/declaration-schema";
+	import { getDeclarationContext } from "$lib/declaration-context";
 
-	let {
-		declaration,
-	}: {
-		declaration: Declaration;
-	} = $props();
+	const dc = getDeclarationContext();
 
 	const formatValue = (value: number | string | null): string => {
 		return value != null ?
@@ -25,16 +21,15 @@
 						nom: "Ventes d’huîtres de taille marchande destinées à la consommation",
 						description:
 							"Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour la consommation.",
-						total: declaration.especes.huitresCreuses.ventes.adultes.total,
+						total: dc.especes.huitresCreuses.ventes.adultes.total,
 						destinations: [
 							{
 								nom: "En gros",
-								val: declaration.especes.huitresCreuses.ventes.adultes.total,
+								val: dc.especes.huitresCreuses.ventes.adultes.total,
 							},
 							{
 								nom: "Dégustation",
-								val: declaration.especes.huitresCreuses.ventes.adultes
-									.degustation,
+								val: dc.especes.huitresCreuses.ventes.adultes.degustation,
 							},
 						],
 					},

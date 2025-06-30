@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { etablissements } from "$db/schema/entreprise";
+	import { getDeclarationContext } from "$lib/declaration-context";
 
 	const {
-		etablissement,
 		withEdit = false,
 	}: {
-		etablissement: typeof etablissements.$inferSelect;
 		withEdit?: boolean;
 	} = $props();
+
+	const dc = getDeclarationContext();
 </script>
 
 {#snippet editBtn()}
@@ -30,14 +30,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">Dénomination</th>
-							<td>{etablissement.denomination}</td>
+							<td>{dc.etablissement.denomination}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">Numéro SIRET</th>
-							<td>{etablissement.siret}</td>
+							<td>{dc.etablissement.siret}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
@@ -45,8 +45,8 @@
 						<tr>
 							<th scope="row">Activité principale</th>
 							<td>
-								{etablissement.activitePrincipale}
-								({etablissement.codeActivitePrincipale})
+								{dc.etablissement.activitePrincipale}
+								({dc.etablissement.codeActivitePrincipale})
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
@@ -55,9 +55,9 @@
 						<tr>
 							<th scope="row">Adresse postale</th>
 							<td>
-								{etablissement.adresse},
-								{etablissement.codePostal}
-								{etablissement.commune}
+								{dc.etablissement.adresse},
+								{dc.etablissement.codePostal}
+								{dc.etablissement.commune}
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}

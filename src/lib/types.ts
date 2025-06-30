@@ -1,6 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { type } from "arktype";
 
+export const Email = type("string.trim").to("string.email & string.lower");
+export const Siret = type("string.digits == 14");
 export const Percent = type("0<=number<=100");
 export const PositiveInt = type("number.integer>=0");
 export const PositiveNumber = type("number>=0");
