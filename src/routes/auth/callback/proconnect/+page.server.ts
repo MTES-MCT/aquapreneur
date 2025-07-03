@@ -11,17 +11,14 @@ import {
 	PROCONNECT_USERINFO_ENDPOINT,
 } from "$env/static/private";
 
-import { db } from "$db";
-
-import { type Utilisateur, utilisateurs } from "$db/schema/auth";
-
-import { getShortId } from "$utils";
-
-import audit from "$utils/audit";
-import * as logger from "$utils/logger";
-
 import { proconnect } from "$lib/server/auth/proconnect";
 import { createSession, setSessionTokenCookie } from "$lib/server/auth/session";
+import { db } from "$lib/server/db";
+import { utilisateurs } from "$lib/server/db/schema/auth";
+import { type Utilisateur } from "$lib/server/db/types";
+import { getShortId } from "$lib/server/utils";
+import audit from "$lib/server/utils/audit";
+import * as logger from "$lib/server/utils/logger";
 
 import {
 	OIDC_ID_TOKEN_COOKIE_NAME,

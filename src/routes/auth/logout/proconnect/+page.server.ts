@@ -8,15 +8,13 @@ import {
 	PROCONNECT_POST_LOGOUT_REDIRECT_URI,
 } from "$env/static/private";
 
-import { getShortId } from "$utils";
-
-import audit from "$utils/audit";
-import * as logger from "$utils/logger";
-
 import {
 	deleteSessionTokenCookie,
 	invalidateSession,
 } from "$lib/server/auth/session";
+import { getShortId } from "$lib/server/utils";
+import audit from "$lib/server/utils/audit";
+import * as logger from "$lib/server/utils/logger";
 
 import {
 	ADMIN_CURRENT_SIRET_COOKIE_NAME,

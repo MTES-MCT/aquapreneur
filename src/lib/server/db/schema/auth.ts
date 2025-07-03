@@ -1,4 +1,3 @@
-import { type InferSelectModel } from "drizzle-orm";
 import {
 	boolean,
 	integer,
@@ -28,8 +27,6 @@ export const utilisateurs = pgTable("utilisateurs", {
 	estAdmin: boolean().default(false),
 });
 
-export type Utilisateur = InferSelectModel<typeof utilisateurs>;
-
 export const sessions = pgTable("sessions", {
 	id: text().primaryKey(),
 	idUtilisateur: integer()
@@ -42,5 +39,3 @@ export const sessions = pgTable("sessions", {
 		mode: "date",
 	}).notNull(),
 });
-
-export type Session = InferSelectModel<typeof sessions>;

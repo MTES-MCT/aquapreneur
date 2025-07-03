@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
-import * as logger from "$utils/logger";
+import * as logger from "$lib/server/utils/logger";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
 import { getOrCreateEtablissement } from "$lib/sirene";

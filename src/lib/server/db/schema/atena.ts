@@ -144,5 +144,3 @@ export const concessionsTable = atena.table(
 		index("concessions_siren_idx").on(table.siren),
 	],
 );
-
-export type ConcessionSelect = typeof concessionsTable.$inferSelect;

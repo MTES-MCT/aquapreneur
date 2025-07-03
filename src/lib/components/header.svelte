@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 
-	import type { Utilisateur } from "$db/schema/auth";
+	import type { Utilisateur } from "$lib/server/db/types";
 
 	import LogoAP from "$lib/assets/logo-aquapreneur.svg";
 

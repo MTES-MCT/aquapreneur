@@ -2,17 +2,14 @@ import assert from "assert";
 import equal from "deep-equal";
 import { and, eq } from "drizzle-orm";
 
-import { db } from "$db";
-
-import {
-	type DeclarationEntry,
-	declarationsTable,
-} from "$db/schema/declaration";
-import type { EtablissementSelect } from "$db/schema/entreprise";
+import { db } from "$lib/server/db";
+import { declarationsTable } from "$lib/server/db/schema/declaration";
 
 import { prefillDeclaration } from "$lib/prefill";
 
 import { DeclarationSchema } from "./schemas/declaration-schema";
+import { type DeclarationEntry } from "./server/db/types";
+import type { EtablissementSelect } from "./server/db/types";
 
 export const getOrCreateDeclaration = async (
 	etablissement: EtablissementSelect,
