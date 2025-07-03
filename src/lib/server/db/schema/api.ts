@@ -1,5 +1,4 @@
-import { createInsertSchema, createSelectSchema } from "drizzle-arktype";
-import { type InferSelectModel, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
 	boolean,
 	check,
@@ -14,7 +13,6 @@ import {
 import { type CGOData } from "$lib/schemas/cgo-schema";
 
 import { timestampCreation, timestamps } from ".";
-import { IsoDate } from "../../src/lib/types";
 
 // Authentification pour l’API
 export const jetonsApi = pgTable(
@@ -34,12 +32,6 @@ export const jetonsApi = pgTable(
 	],
 );
 
-export const jetonsApiInsertSchema = createInsertSchema(jetonsApi, {
-	siretPartenaire: (s) => s.to("string.digits == 14"),
-	courrielPartenaire: (s) =>
-		s.to("string.trim").to("string.email & string.lower"),
-});
-
 export const evtsJournalReqs = pgTable("journal_requetes", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	idJeton: integer()
@@ -55,8 +47,6 @@ export const evtsJournalReqs = pgTable("journal_requetes", {
 	// TODO: statut
 	status: integer(),
 });
-
-export type EvtJournalReqs = InferSelectModel<typeof evtsJournalReqs>;
 
 export const bilans = pgTable(
 	"bilans",
@@ -77,14 +67,3 @@ export const bilans = pgTable(
 	},
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
-
-export const bilansInsertSchema = createInsertSchema(bilans, {
-	siret: (s) => s.to("string.digits == 14"),
-	debutExercice: IsoDate,
-	finExercice: IsoDate,
-	dateBilan: IsoDate,
-});
-export type bilansInsertSchema = typeof bilansInsertSchema.infer;
-
-export const bilansSelectSchema = createSelectSchema(bilans);
-export type bilansSelectSchema = typeof bilansSelectSchema.infer;

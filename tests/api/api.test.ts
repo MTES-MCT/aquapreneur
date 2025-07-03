@@ -4,16 +4,17 @@ import { reset } from "drizzle-seed";
 
 import { expect, test } from "@playwright/test";
 
-import { db } from "$db";
-
-import { bilans, evtsJournalReqs, jetonsApi } from "$db/schema/api";
-import { concessionsTable } from "$db/schema/atena";
-import { sessions, utilisateurs } from "$db/schema/auth";
-import { declarationsTable } from "$db/schema/declaration";
-import { entreprises, etablissementsTable } from "$db/schema/entreprise";
-import { getJetonApiFromToken } from "$db/utils";
-
-import { generateApiToken } from "$utils";
+import { db } from "$lib/server/db";
+import { bilans, evtsJournalReqs, jetonsApi } from "$lib/server/db/schema/api";
+import { concessionsTable } from "$lib/server/db/schema/atena";
+import { sessions, utilisateurs } from "$lib/server/db/schema/auth";
+import { declarationsTable } from "$lib/server/db/schema/declaration";
+import {
+	entreprises,
+	etablissementsTable,
+} from "$lib/server/db/schema/entreprise";
+import { getJetonApiFromToken } from "$lib/server/db/utils";
+import { generateApiToken } from "$lib/server/utils";
 
 import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
 
@@ -62,7 +63,7 @@ test.beforeAll(async () => {
 		console.error(`Base de donnée utilisée : ${db.$client.options.database}`);
 		throw new Error("Les tests doivent utiliser une BDD dédiée");
 	}
-	// Remise à zero de la DBB de test
+	// Remise à zero de la BDD de test
 	await reset(db, {
 		concessionsTable,
 		bilans,

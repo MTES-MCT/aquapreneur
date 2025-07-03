@@ -1,14 +1,12 @@
 import { type } from "arktype";
 
-import { db } from "$db";
-
-import {
-	type EvtJournalReqs,
-	bilans,
-	bilansInsertSchema,
-} from "$db/schema/api";
+import { db } from "$lib/server/db";
+import { bilans } from "$lib/server/db/schema/api";
 
 import { CGORequestData } from "$lib/schemas/cgo-schema";
+
+import { type EvtJournalReqs } from "../db/types";
+import { bilansInsertSchema } from "../db/types";
 
 export const createBilanEntry = async (auditLogEntry: EvtJournalReqs) => {
 	const parsingResult = CGORequestData(auditLogEntry.data);

@@ -1,11 +1,9 @@
 import { eq } from "drizzle-orm";
 import colors from "yoctocolors";
 
-import { db } from "$db";
-
-import { bilans, evtsJournalReqs } from "$db/schema/api";
-
-import { createBilanEntry } from "$utils/convert-bilan";
+import { db } from "$lib/server/db";
+import { bilans, evtsJournalReqs } from "$lib/server/db/schema/api";
+import { createBilanEntry } from "$lib/server/utils/convert-bilan";
 
 async function main() {
 	try {

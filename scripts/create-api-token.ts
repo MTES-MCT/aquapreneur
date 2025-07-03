@@ -2,11 +2,10 @@ import { input } from "@inquirer/prompts";
 import { type } from "arktype";
 import colors from "yoctocolors";
 
-import { db } from "$db";
-
-import { jetonsApi, jetonsApiInsertSchema } from "$db/schema/api";
-
-import { generateApiToken } from "$utils";
+import { db } from "$lib/server/db";
+import { jetonsApi } from "$lib/server/db/schema/api";
+import { jetonsApiInsertSchema } from "$lib/server/db/types";
+import { generateApiToken } from "$lib/server/utils";
 
 const Email = type("string.trim").to("string.email & string.lower");
 const Siret = type("string.digits == 14");

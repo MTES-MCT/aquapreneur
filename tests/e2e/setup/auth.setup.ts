@@ -1,12 +1,11 @@
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/postgres-js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 import { expect, test as setup } from "@playwright/test";
 
-import { db } from "$db";
-
-import { utilisateurs } from "$db/schema/auth";
+import { utilisateurs } from "$lib/server/db/schema/auth";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +13,23 @@ const __dirname = path.dirname(__filename);
 const authFile = path.join(__dirname, "../.auth/user.json");
 
 const validUserEmail = process.env["PROCONNECT_TEST_USERNAME"]!;
+
+if (!process.env.DATABASE_URL) {
+	throw new Error(
+		"La variable d’environnement DATABASE_URL n’est pas renseignée",
+	);
+}
+
+if (!process.env.DATABASE_URL.includes("test")) {
+	throw new Error(
+		"La variable d’environnement DATABASE_URL n’est pas une URL de test",
+	);
+}
+
+const db = drizzle({
+	connection: process.env.DATABASE_URL,
+	casing: "snake_case",
+});
 
 setup("Authentification", async ({ page }) => {
 	expect(validUserEmail).toEqual(expect.stringContaining("@"));

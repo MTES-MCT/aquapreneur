@@ -1,17 +1,19 @@
-import nafRev2 from "$data/naf-rev2.json";
 import { type } from "arktype";
 import assert from "assert";
 import { eq } from "drizzle-orm";
 
 import { SIRENE_AUTH_TOKEN } from "$env/static/private";
 
-import { db } from "$db";
+import { db } from "$lib/server/db";
+import {
+	entreprises,
+	etablissementsTable,
+} from "$lib/server/db/schema/entreprise";
 
-import { entreprises, etablissementsTable } from "$db/schema/entreprise";
-
-import * as logger from "$utils/logger";
+import nafRev2 from "$lib/assets/data/naf-rev2.json";
 
 import { SireneEtablissementResponse } from "./schemas/sirene-etablissement-schema";
+import * as logger from "./server/utils/logger";
 
 export const getOrCreateEtablissement = async (siret: string) => {
 	assert(siret != "");
