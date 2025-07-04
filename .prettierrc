@@ -15,7 +15,9 @@
 		"^\\$env/(.*)$",
 		"^\\$lib/server/(.*)$",
 		"^\\$lib/(.*)$",
-		"^[./]"
+		"^[./]",
+		"<THIRD_PARTY_TS_TYPES>",
+		"<TS_TYPES>^[./]"
 	],
 	"importOrderSeparation": true,
 	"importOrderSortSpecifiers": true,
