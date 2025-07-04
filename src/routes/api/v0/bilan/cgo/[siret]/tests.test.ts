@@ -1,5 +1,4 @@
 import { Column, desc } from "drizzle-orm";
-import type { AnyPgTable } from "drizzle-orm/pg-core";
 import { beforeAll, describe, expect, inject, test } from "vitest";
 
 import { db } from "$lib/server/db";
@@ -8,6 +7,8 @@ import { getJetonApiFromToken } from "$lib/server/db/utils";
 import { generateApiToken } from "$lib/server/utils";
 
 import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
+
+import type { AnyPgTable } from "drizzle-orm/pg-core";
 
 let validAuthToken: string;
 

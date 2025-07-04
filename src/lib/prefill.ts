@@ -8,9 +8,10 @@ import { concessionsTable } from "$lib/server/db/schema/atena";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
+import * as logger from "./server/utils/logger";
+
 import type { EtablissementSelect } from "./server/db/types";
 import type { ConcessionSelect } from "./server/db/types";
-import * as logger from "./server/utils/logger";
 
 const getSurfaceHa = (concessions: ConcessionSelect[]) => {
 	return Math.round(

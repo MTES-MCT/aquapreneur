@@ -9,6 +9,7 @@ import { prefillDeclaration } from "$lib/prefill";
 
 import { DeclarationSchema } from "./schemas/declaration-schema";
 import { type DeclarationEntry } from "./server/db/types";
+
 import type { EtablissementSelect } from "./server/db/types";
 
 export const getOrCreateDeclaration = async (

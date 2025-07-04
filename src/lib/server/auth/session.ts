@@ -7,10 +7,11 @@ import { sessions, utilisateurs } from "$lib/server/db/schema/auth";
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
 
-import type { Session } from "../db/types";
-import type { Utilisateur } from "../db/types";
 import { getSecureRandomString, getSha256Digest, getShortId } from "../utils";
 import audit from "../utils/audit";
+
+import type { Session } from "../db/types";
+import type { Utilisateur } from "../db/types";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Gestion des sessions

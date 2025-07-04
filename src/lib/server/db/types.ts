@@ -1,9 +1,11 @@
 import { createInsertSchema, createSelectSchema } from "drizzle-arktype";
-import type { InferSelectModel } from "drizzle-orm";
 
 import { IsoDate } from "$lib/types";
 
 import { bilans, evtsJournalReqs, jetonsApi } from "./schema/api";
+
+import type { InferSelectModel } from "drizzle-orm";
+
 import type { concessionsTable } from "./schema/atena";
 import type { sessions, utilisateurs } from "./schema/auth";
 import type { declarationsTable } from "./schema/declaration";

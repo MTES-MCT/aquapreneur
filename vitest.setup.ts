@@ -1,7 +1,6 @@
 import { reset } from "drizzle-seed";
 import { resolve } from "path";
 import { ViteDevServer, createServer } from "vite";
-import type { TestProject } from "vitest/node";
 
 import { env } from "$env/dynamic/private";
 
@@ -14,6 +13,8 @@ import {
 	entreprises,
 	etablissementsTable,
 } from "$lib/server/db/schema/entreprise";
+
+import type { TestProject } from "vitest/node";
 
 let server: ViteDevServer;
 export async function setup(project: TestProject) {
