@@ -21,7 +21,9 @@
 		"./src/**/*.ts",
 		"./src/**/*.svelte",
 		"./tests/**/*.ts",
-		"./tests/**/*.svelte"
+		"./tests/**/*.svelte",
+		"playwright.config.ts",
+		"src/lib/arktype.config.ts"
 	]
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
