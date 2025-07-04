@@ -43,15 +43,17 @@ export const getRequestPath = () => {
 };
 
 export const log = (level: logLevels, msg: string, extra: object = {}) => {
-	console.log(
-		stringify({
-			level,
-			path: getRequestPath(),
-			msg,
-			...extra,
-			request_id: getRequestId(),
-		}),
-	);
+	if (import.meta.env.MODE !== "test") {
+		console.log(
+			stringify({
+				level,
+				path: getRequestPath(),
+				msg,
+				...extra,
+				request_id: getRequestId(),
+			}),
+		);
+	}
 };
 
 export const canonical = (

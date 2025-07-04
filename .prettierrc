@@ -19,6 +19,7 @@
 	],
 	"importOrderSeparation": true,
 	"importOrderSortSpecifiers": true,
+	"importOrderSideEffects": false,
 	"overrides": [
 		{
 			"files": "*.svelte",

@@ -1,14 +1,17 @@
+// sort-imports-ignore
+// La configuration d’arktype doit avoir lieu avant le premier import de {type}
+// Coté backend, elle est gérée dans vite.config.js,
+import "./lib/arktype.config.js";
+
+// Reste des imports
 import { handleErrorWithSentry } from "@sentry/sveltekit";
 import * as Sentry from "@sentry/sveltekit";
-import { configure } from "arktype/config";
 
 import {
 	PUBLIC_SENTRY_DSN,
 	PUBLIC_SENTRY_ENVIRONMENT,
 	PUBLIC_SENTRY_TRACE_SAMPLE_RATE,
 } from "$env/static/public";
-
-configure({ onUndeclaredKey: "reject", jitless: true });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,
