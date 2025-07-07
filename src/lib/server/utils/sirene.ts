@@ -2,7 +2,7 @@ import { type } from "arktype";
 import assert from "assert";
 import { eq } from "drizzle-orm";
 
-import { SIRENE_AUTH_TOKEN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 import { db } from "$lib/server/db";
 import {
@@ -12,8 +12,8 @@ import {
 
 import nafRev2 from "$lib/assets/data/naf-rev2.json";
 
-import { SireneEtablissementResponse } from "./schemas/sirene-etablissement-schema";
-import * as logger from "./server/utils/logger";
+import { SireneEtablissementResponse } from "../../schemas/sirene-etablissement-schema";
+import * as logger from "./logger";
 
 export const getOrCreateEtablissement = async (siret: string) => {
 	assert(siret != "");
@@ -148,7 +148,7 @@ const getSireneInfo = async (siret: string) => {
 		`https://api.insee.fr/api-sirene/3.11/siret/${siret}`,
 		{
 			headers: {
-				"x-insee-api-key-integration": SIRENE_AUTH_TOKEN,
+				"x-insee-api-key-integration": env.SIRENE_AUTH_TOKEN,
 			},
 		},
 	);

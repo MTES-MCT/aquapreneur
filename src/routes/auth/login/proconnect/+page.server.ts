@@ -2,10 +2,7 @@ import { generateState } from "arctic";
 
 import { redirect } from "@sveltejs/kit";
 
-import {
-	PROCONNECT_AUTHORIZATION_ENDPOINT,
-	PROCONNECT_DOMAIN,
-} from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 import { proconnect } from "$lib/server/auth/proconnect";
 
@@ -22,7 +19,7 @@ export const actions = {
 	default: async (event) => {
 		const state = generateState();
 		const url = proconnect.createAuthorizationURL(
-			`https://${PROCONNECT_DOMAIN}${PROCONNECT_AUTHORIZATION_ENDPOINT}`,
+			`https://${env.PROCONNECT_DOMAIN}${env.PROCONNECT_AUTHORIZATION_ENDPOINT}`,
 			state,
 			[
 				"openid",

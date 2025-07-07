@@ -2,11 +2,7 @@ import { generateState } from "arctic";
 
 import { redirect } from "@sveltejs/kit";
 
-import {
-	PROCONNECT_DOMAIN,
-	PROCONNECT_END_SESSION_ENDPOINT,
-	PROCONNECT_POST_LOGOUT_REDIRECT_URI,
-} from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 import {
 	deleteSessionTokenCookie,
@@ -70,12 +66,12 @@ export const actions = {
 			// On prépare l’URL de déconnexion ProConnect
 			const state = generateState();
 			const url = new URL(
-				`https://${PROCONNECT_DOMAIN}${PROCONNECT_END_SESSION_ENDPOINT}`,
+				`https://${env.PROCONNECT_DOMAIN}${env.PROCONNECT_END_SESSION_ENDPOINT}`,
 			);
 			url.searchParams.append("id_token_hint", idToken);
 			url.searchParams.append(
 				"post_logout_redirect_uri",
-				PROCONNECT_POST_LOGOUT_REDIRECT_URI,
+				env.PROCONNECT_POST_LOGOUT_REDIRECT_URI,
 			);
 			url.searchParams.append("state", state);
 
