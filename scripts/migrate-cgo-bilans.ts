@@ -10,7 +10,7 @@ async function main() {
 		const journalEvts = await db
 			.select()
 			.from(evtsJournalReqs)
-			.where(eq(evtsJournalReqs.status, 204))
+			.where(eq(evtsJournalReqs.statut, 204))
 			.orderBy(evtsJournalReqs.id);
 		for (const evt of journalEvts) {
 			if (

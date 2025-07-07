@@ -43,9 +43,10 @@ export const evtsJournalReqs = pgTable("journal_requetes", {
 	pathname: text().notNull(),
 	href: text().notNull(),
 	methode: text().notNull(),
-	data: json().notNull(),
-	// TODO: statut
-	status: integer(),
+	// On utilise une colonne json plutôt que jsonb pour rester aussi fidèles que
+	// possible aux données reçues
+	donnees: json().notNull(),
+	statut: integer(),
 });
 
 export const bilans = pgTable(

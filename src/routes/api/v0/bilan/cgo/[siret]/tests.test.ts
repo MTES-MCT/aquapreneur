@@ -159,8 +159,8 @@ describe("Tests de sauvegarde du journal de requêtes", async () => {
 		expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/${dummySiret}`);
 		expect(inserted.href).toBe(response.url);
 		expect(inserted.methode).toBe("POST");
-		expect(inserted.data).toEqual(dummyBilan);
-		expect(inserted.status).toBe(204);
+		expect(inserted.donnees).toEqual(dummyBilan);
+		expect(inserted.statut).toBe(204);
 		expect(Date.now() - inserted.dateCreation.getTime()).toBeGreaterThan(0);
 		expect(Date.now() - inserted.dateCreation.getTime()).toBeLessThan(100);
 	});
@@ -182,8 +182,8 @@ describe("Tests de sauvegarde du journal de requêtes", async () => {
 		expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/123`);
 		expect(inserted.href).toBe(response.url);
 		expect(inserted.methode).toBe("POST");
-		expect(inserted.data).toEqual({ ...dummyBilan, siret: "123" });
-		expect(inserted.status).toBe(400);
+		expect(inserted.donnees).toEqual({ ...dummyBilan, siret: "123" });
+		expect(inserted.statut).toBe(400);
 		expect(Date.now() - inserted.dateCreation.getTime()).toBeGreaterThan(0);
 		expect(Date.now() - inserted.dateCreation.getTime()).toBeLessThan(100);
 	});

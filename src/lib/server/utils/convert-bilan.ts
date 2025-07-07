@@ -9,7 +9,7 @@ import { type EvtJournalReqs } from "../db/types";
 import { bilansInsertSchema } from "../db/types";
 
 export const createBilanEntry = async (auditLogEntry: EvtJournalReqs) => {
-	const parsingResult = CGORequestData(auditLogEntry.data);
+	const parsingResult = CGORequestData(auditLogEntry.donnees);
 	if (parsingResult instanceof type.errors) {
 		throw new Error(parsingResult.summary);
 	}

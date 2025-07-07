@@ -27,10 +27,10 @@ const getApiVersion = (url: URL): number => {
 	error(500, "URL incorrecte");
 };
 
-const setLogEntryStatus = async (logEntry: EvtJournalReqs, status: number) => {
+const setLogEntryStatus = async (logEntry: EvtJournalReqs, statut: number) => {
 	await db
 		.update(evtsJournalReqs)
-		.set({ status })
+		.set({ statut })
 		.where(eq(evtsJournalReqs.id, logEntry.id));
 };
 
@@ -104,7 +104,7 @@ export const POST = wrapServerRouteWithSentry(
 					href: url.href,
 					pathname: url.pathname,
 					methode: request.method,
-					data: bilanData,
+					donnees: bilanData,
 				})
 				.returning()
 		)[0];
