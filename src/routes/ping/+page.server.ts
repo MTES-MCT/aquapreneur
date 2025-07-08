@@ -1,10 +1,8 @@
 import { error } from "@sveltejs/kit";
 
-import { db } from "$db";
-
-import { utilisateurs } from "$db/schema/auth";
-
-import * as logger from "$utils/logger";
+import { db } from "$lib/server/db";
+import { utilisateurs } from "$lib/server/db/schema/auth";
+import * as logger from "$lib/server/utils/logger";
 
 export const load = async () => {
 	// On fait une requête quelconque sur la BDD pour qu’une erreur soit déclenchée

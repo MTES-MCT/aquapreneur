@@ -2,9 +2,8 @@ import { asc } from "drizzle-orm";
 
 import { fail } from "@sveltejs/kit";
 
-import { db } from "$db";
-
-import { bilans } from "$db/schema/api";
+import { db } from "$lib/server/db";
+import { bilans } from "$lib/server/db/schema/api";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
 

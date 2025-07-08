@@ -2,16 +2,16 @@ import { eq } from "drizzle-orm";
 
 import type { Cookies } from "@sveltejs/kit";
 
-import { db } from "$db";
-
-import { sessions, utilisateurs } from "$db/schema/auth";
-import type { Session, Utilisateur } from "$db/schema/auth";
-
-import { getSecureRandomString, getSha256Digest, getShortId } from "$utils";
-
-import audit from "$utils/audit";
+import { db } from "$lib/server/db";
+import { sessions, utilisateurs } from "$lib/server/db/schema/auth";
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
+
+import { getSecureRandomString, getSha256Digest, getShortId } from "../utils";
+import audit from "../utils/audit";
+
+import type { Session } from "../db/types";
+import type { Utilisateur } from "../db/types";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Gestion des sessions

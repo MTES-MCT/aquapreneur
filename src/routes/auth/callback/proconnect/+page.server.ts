@@ -4,24 +4,16 @@ import { eq } from "drizzle-orm";
 
 import { error, redirect } from "@sveltejs/kit";
 
-import {
-	ENVIRONMENT,
-	PROCONNECT_DOMAIN,
-	PROCONNECT_TOKEN_ENDPOINT,
-	PROCONNECT_USERINFO_ENDPOINT,
-} from "$env/static/private";
-
-import { db } from "$db";
-
-import { type Utilisateur, utilisateurs } from "$db/schema/auth";
-
-import { getShortId } from "$utils";
-
-import audit from "$utils/audit";
-import * as logger from "$utils/logger";
+import { env } from "$env/dynamic/private";
 
 import { proconnect } from "$lib/server/auth/proconnect";
 import { createSession, setSessionTokenCookie } from "$lib/server/auth/session";
+import { db } from "$lib/server/db";
+import { utilisateurs } from "$lib/server/db/schema/auth";
+import { type Utilisateur } from "$lib/server/db/types";
+import { getShortId } from "$lib/server/utils";
+import audit from "$lib/server/utils/audit";
+import * as logger from "$lib/server/utils/logger";
 
 import {
 	OIDC_ID_TOKEN_COOKIE_NAME,
@@ -75,7 +67,7 @@ export const load = async ({ url, cookies }) => {
 
 	try {
 		tokens = await proconnect.validateAuthorizationCode(
-			`https://${PROCONNECT_DOMAIN}${PROCONNECT_TOKEN_ENDPOINT}`,
+			`https://${env.PROCONNECT_DOMAIN}${env.PROCONNECT_TOKEN_ENDPOINT}`,
 			code,
 			null,
 		);
@@ -104,7 +96,7 @@ export const load = async ({ url, cookies }) => {
 	});
 
 	const userInfoResponse = await fetch(
-		`https://${PROCONNECT_DOMAIN}${PROCONNECT_USERINFO_ENDPOINT}`,
+		`https://${env.PROCONNECT_DOMAIN}${env.PROCONNECT_USERINFO_ENDPOINT}`,
 		{
 			headers: {
 				Authorization: `Bearer ${tokens.accessToken()}`,
@@ -132,7 +124,7 @@ export const load = async ({ url, cookies }) => {
 			amr.includes("totp") || amr.includes("pop") || amr.includes("mfa");
 		if (utilisateur.estAdmin) {
 			// Les administateur·ices **doivent utiliser une authentification 2FA
-			if (ENVIRONMENT == "production" && !hasMFA) {
+			if (env.ENVIRONMENT == "production" && !hasMFA) {
 				audit("Tentative de connexion d’un administrateur sans MFA", {
 					user_id: utilisateur.id,
 					amr,

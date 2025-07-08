@@ -18,6 +18,3 @@ export const declarationsTable = pgTable(
 	},
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );
-
-export type DeclarationEntry = typeof declarationsTable.$inferSelect;
-export type DeclarationEntryInsert = typeof declarationsTable.$inferInsert;

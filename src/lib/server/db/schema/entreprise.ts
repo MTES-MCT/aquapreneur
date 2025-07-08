@@ -1,4 +1,4 @@
-import { type InferSelectModel, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { boolean, check, pgTable, text } from "drizzle-orm/pg-core";
 
 import { timestamps } from ".";
@@ -40,5 +40,3 @@ export const etablissementsTable = pgTable(
 		check("siren_check", sql`${table.siren} ~ '^\\d{9}$'`),
 	],
 );
-
-export type EtablissementSelect = InferSelectModel<typeof etablissementsTable>;

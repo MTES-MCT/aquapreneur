@@ -38,11 +38,6 @@ const config = {
 				"report-uri": [sentryReportURI?.toString() ?? ""],
 			},
 		},
-		alias: {
-			$db: "./db",
-			$data: "./data",
-			$utils: "./utils",
-		},
 	},
 
 	compilerOptions: {

@@ -1,9 +1,9 @@
 import { redirect } from "@sveltejs/kit";
 
-import * as logger from "$utils/logger";
+import * as logger from "$lib/server/utils/logger";
+import { getOrCreateEtablissement } from "$lib/server/utils/sirene";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
-import { getOrCreateEtablissement } from "$lib/sirene";
 
 export const load = async ({ parent, cookies, route }) => {
 	const { utilisateur } = await parent();

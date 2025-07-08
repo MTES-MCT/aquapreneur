@@ -3,14 +3,13 @@ import { eq } from "drizzle-orm";
 
 import { error, isHttpError } from "@sveltejs/kit";
 
-import { db } from "$db";
-
-import { type EvtJournalReqs, evtsJournalReqs } from "$db/schema/api";
-import { getJetonApiFromToken } from "$db/utils";
-
-import audit from "$utils/audit";
-import { createBilanEntry } from "$utils/convert-bilan";
-import * as logger from "$utils/logger";
+import { db } from "$lib/server/db";
+import { evtsJournalReqs } from "$lib/server/db/schema/api";
+import { type EvtJournalReqs } from "$lib/server/db/types";
+import { getJetonApiFromToken } from "$lib/server/db/utils";
+import audit from "$lib/server/utils/audit";
+import { createBilanEntry } from "$lib/server/utils/convert-bilan";
+import * as logger from "$lib/server/utils/logger";
 
 // TODO : utiliser l’algorithme de vérification complet
 // TODO: à mettre directement dans le type
@@ -28,10 +27,10 @@ const getApiVersion = (url: URL): number => {
 	error(500, "URL incorrecte");
 };
 
-const setLogEntryStatus = async (logEntry: EvtJournalReqs, status: number) => {
+const setLogEntryStatus = async (logEntry: EvtJournalReqs, statut: number) => {
 	await db
 		.update(evtsJournalReqs)
-		.set({ status })
+		.set({ statut })
 		.where(eq(evtsJournalReqs.id, logEntry.id));
 };
 
@@ -105,7 +104,7 @@ export const POST = wrapServerRouteWithSentry(
 					href: url.href,
 					pathname: url.pathname,
 					methode: request.method,
-					data: bilanData,
+					donnees: bilanData,
 				})
 				.returning()
 		)[0];

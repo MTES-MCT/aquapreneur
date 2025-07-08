@@ -1,13 +1,8 @@
 import * as dotenvx from "@dotenvx/dotenvx";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import { defineConfig, devices } from "@playwright/test";
 
 dotenvx.config({ path: [".env.test", ".env"], quiet: true });
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export default defineConfig({
 	projects: [
@@ -19,7 +14,7 @@ export default defineConfig({
 			name: "chrome",
 			testMatch: /web\/.*\.test\.ts/,
 			use: {
-				storageState: path.join(__dirname, ".auth/user.json"),
+				storageState: "./tests/.auth/user.json",
 				...devices["Desktop Chrome"],
 			},
 			dependencies: ["setup"],
@@ -34,6 +29,6 @@ export default defineConfig({
 		baseURL: "http://localhost:4173",
 		bypassCSP: true,
 	},
-	testDir: ".",
-	outputDir: "./_results",
+	testDir: "./tests",
+	outputDir: "./tests/_results",
 });

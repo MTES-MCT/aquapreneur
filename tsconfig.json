@@ -16,20 +16,14 @@
 		".svelte-kit/ambient.d.ts",
 		".svelte-kit/non-ambient.d.ts",
 		".svelte-kit/types/**/$types.d.ts",
-		"./vite.config.js",
 		"./vite.config.ts",
-		"./src/**/*.js",
+		"./scripts/**/*.ts",
 		"./src/**/*.ts",
 		"./src/**/*.svelte",
-		"./scripts/**/*.js",
-		"./scripts/**/*.ts",
-		"./utils/**/*.js",
-		"./utils/**/*.ts",
-		"./db/**/*.js",
-		"./db/**/*.ts",
-		"./tests/**/*.js",
 		"./tests/**/*.ts",
-		"./tests/**/*.svelte"
+		"./tests/**/*.svelte",
+		"playwright.config.ts",
+		"src/lib/arktype.config.ts"
 	]
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files

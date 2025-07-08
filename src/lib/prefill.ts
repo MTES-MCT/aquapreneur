@@ -2,17 +2,16 @@ import { and, eq, sql } from "drizzle-orm";
 
 import { error } from "@sveltejs/kit";
 
-import { db } from "$db";
-
-import { bilans } from "$db/schema/api";
-import type { ConcessionSelect } from "$db/schema/atena";
-import { concessionsTable } from "$db/schema/atena";
-import type { EtablissementSelect } from "$db/schema/entreprise";
-
-import * as logger from "$utils/logger";
+import { db } from "$lib/server/db";
+import { bilans } from "$lib/server/db/schema/api";
+import { concessionsTable } from "$lib/server/db/schema/atena";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
+import * as logger from "./server/utils/logger";
+
+import type { EtablissementSelect } from "./server/db/types";
+import type { ConcessionSelect } from "./server/db/types";
 
 const getSurfaceHa = (concessions: ConcessionSelect[]) => {
 	return Math.round(

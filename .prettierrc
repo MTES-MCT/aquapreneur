@@ -13,16 +13,15 @@
 		"^svelte/(.*)$",
 		"^\\$app/(.*)$",
 		"^\\$env/(.*)$",
-		"^\\$db$",
-		"^\\$db/(.*)$",
-		"^\\$utils$",
-		"^\\$utils/(.*)$",
 		"^\\$lib/server/(.*)$",
 		"^\\$lib/(.*)$",
-		"^[./]"
+		"^[./]",
+		"<THIRD_PARTY_TS_TYPES>",
+		"<TS_TYPES>^[./]"
 	],
 	"importOrderSeparation": true,
 	"importOrderSortSpecifiers": true,
+	"importOrderSideEffects": false,
 	"overrides": [
 		{
 			"files": "*.svelte",
