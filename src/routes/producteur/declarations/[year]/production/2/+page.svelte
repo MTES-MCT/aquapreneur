@@ -17,7 +17,7 @@
 	};
 </script>
 
-<h1 class="fr-h2">Passons en revue vos ventes en {data.year}</h1>
+<h1 class="fr-h2">Passons en revue vos ventes en {data.annee}</h1>
 
 <p>
 	Veuillez vérifier les données relatives à vos ventes pour chaque espèce et

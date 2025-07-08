@@ -18,7 +18,7 @@
 </script>
 
 <h1 class="fr-h2">
-	Avez-vous eu des événements exceptionnels au cours de l'année {data.year} ?
+	Avez-vous eu des événements exceptionnels au cours de l'année {data.annee} ?
 </h1>
 
 <p>

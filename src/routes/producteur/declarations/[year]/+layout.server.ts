@@ -1,28 +1,37 @@
 import { error, redirect } from "@sveltejs/kit";
 
-import { getOrCreateDeclaration } from "$lib/declaration-store";
+import * as logger from "$lib/server/utils/logger";
+
+import { ANNEES_DECLARATIVES } from "$lib/constants";
+import type { AnneeDeclarative } from "$lib/types";
 
 export const load = async ({ parent, params }) => {
-	const { etablissement } = await parent();
+	const { etablissement, declarations } = await parent();
 	const { year } = params;
+
+	if (!etablissement || !declarations) {
+		redirect(307, "/producteur");
+	}
 
 	const safeYear = Number.parseInt(year);
 
 	// récupérer l’année courante d’une variable d’environnement, mise à jour
 	// quand la campagne démarre
-	if (![2020, 2021, 2022, 2023, 2024].includes(safeYear)) {
+	if (!(ANNEES_DECLARATIVES as ReadonlyArray<number>).includes(safeYear)) {
 		error(404, "Not Found");
 	}
 
-	if (!etablissement) {
-		redirect(307, "/producteur");
+	const declaration = declarations.get(safeYear as AnneeDeclarative);
+	if (!declaration) {
+		logger.error("Impossible de trouver la déclaration", {
+			annee: safeYear,
+			siret: etablissement.siret,
+		});
+		error(500);
 	}
-
-	const declaration = await getOrCreateDeclaration(etablissement, safeYear);
-
 	return {
-		year: safeYear,
+		annee: safeYear as AnneeDeclarative,
 		donneesDeclaration: declaration.donnees,
-		idDeclarationCourante: declaration.id,
+		idDeclarationCourante: declaration?.id,
 	};
 };

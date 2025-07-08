@@ -4,6 +4,7 @@ import * as logger from "$lib/server/utils/logger";
 import { getOrCreateEtablissement } from "$lib/server/utils/sirene";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
+import { getOrCreateDeclarations } from "$lib/declaration-store";
 
 export const load = async ({ parent, cookies, route }) => {
 	const { utilisateur } = await parent();
@@ -37,11 +38,14 @@ export const load = async ({ parent, cookies, route }) => {
 		redirect(307, "/producteur");
 	}
 
+	const declarations =
+		etablissement ? await getOrCreateDeclarations(etablissement) : null;
+
 	// TODO gérer le cas où l’utilisateur n’a pas de siret ?
 	return {
-		siret,
 		sireneError,
 		etablissement,
+		declarations,
 		// on renvoie de nouveau l’objet utilisateur ici, au lieu de compter sur
 		// celui du layout global puisque son type est maintenant plus precis
 		// (non null)

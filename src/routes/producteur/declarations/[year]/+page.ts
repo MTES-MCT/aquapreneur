@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ parent }) => {
-	const { year } = await parent();
-	redirect(307, `${year}/entreprise/1`);
+	const { annee } = await parent();
+	redirect(307, `${annee}/entreprise/1`);
 };

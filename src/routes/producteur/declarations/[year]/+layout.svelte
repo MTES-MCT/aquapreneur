@@ -16,7 +16,7 @@
 		<div class="fr-col-md-4 fr-col-lg-3 fr-col-12">
 			<MenuDeclaration
 				step={page.data.step}
-				baseUrl="/producteur/declarations/{data.year}"
+				baseUrl="/producteur/declarations/{data.annee}"
 			></MenuDeclaration>
 		</div>
 

@@ -3,7 +3,7 @@ import { asc } from "drizzle-orm";
 import { fail } from "@sveltejs/kit";
 
 import { db } from "$lib/server/db";
-import { bilans } from "$lib/server/db/schema/api";
+import { etablissementsTable } from "$lib/server/db/schema/entreprise";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
 
@@ -12,9 +12,12 @@ export const load = async ({ parent }) => {
 	let exploitants;
 	if (utilisateur.estAdmin) {
 		exploitants = await db
-			.selectDistinct({ siret: bilans.siret, nom: bilans.nom })
-			.from(bilans)
-			.orderBy(asc(bilans.nom));
+			.selectDistinct({
+				siret: etablissementsTable.siret,
+				nom: etablissementsTable.denomination,
+			})
+			.from(etablissementsTable)
+			.orderBy(asc(etablissementsTable.denomination));
 	}
 
 	return {

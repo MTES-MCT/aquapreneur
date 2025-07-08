@@ -7,14 +7,29 @@ import { declarationsTable } from "$lib/server/db/schema/declaration";
 
 import { prefillDeclaration } from "$lib/prefill";
 
+import { ANNEES_DECLARATIVES } from "./constants";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 import { type DeclarationEntry } from "./server/db/types";
 
 import type { EtablissementSelect } from "./server/db/types";
+import type { AnneeDeclarative } from "./types";
+
+export const getOrCreateDeclarations = async (
+	etablissement: EtablissementSelect,
+) => {
+	const declarations: Map<AnneeDeclarative, DeclarationEntry> = new Map();
+
+	for (const annee of ANNEES_DECLARATIVES) {
+		const declaration = await getOrCreateDeclaration(etablissement, annee);
+		declarations.set(annee, declaration);
+	}
+
+	return declarations;
+};
 
 export const getOrCreateDeclaration = async (
 	etablissement: EtablissementSelect,
-	annee: number,
+	annee: AnneeDeclarative,
 ) => {
 	let declaration: DeclarationEntry;
 	const declarationsResult = await db

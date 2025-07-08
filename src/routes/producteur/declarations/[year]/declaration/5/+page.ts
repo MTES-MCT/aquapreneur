@@ -1,8 +1,8 @@
 export const load = async ({ parent }) => {
-	const { year } = await parent();
+	const { annee } = await parent();
 
 	return {
-		title: `Déclaration ${year} • Déclaration • 5`,
+		title: `Déclaration ${annee} • Déclaration • 5`,
 		step: "declaration",
 	};
 };

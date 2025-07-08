@@ -6,13 +6,10 @@
 
 	const { data } = $props();
 
-	let selectedSiret = $state(data.siret);
+	let selectedSiret = $state(data.etablissement?.siret);
 	let creating = $state(false);
 
 	let onlyIncomplete = $state(false);
-
-	// TODO: à ce niveau, on n’a pas accès au contexte => récupérer l’info de completion
-	// des bilans directement dans la DB
 </script>
 
 {#if data.sireneError}
@@ -48,7 +45,7 @@
 							return async ({ update }) => {
 								resetDeclarationContext();
 								await update({ reset: false });
-								selectedSiret = data.siret;
+								selectedSiret = data.etablissement?.siret;
 								creating = false;
 							};
 						}}
@@ -80,7 +77,8 @@
 							<div class="fr-fieldset__element">
 								<button
 									class="fr-btn"
-									disabled={creating || data.siret === selectedSiret}
+									disabled={creating ||
+										data.etablissement?.siret === selectedSiret}
 								>
 									Choisir
 								</button>
@@ -122,95 +120,96 @@
 		</div>
 	</div>
 
-	<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-		<div class="fr-col-12 fr-col-md-4">
-			<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
-				<div class="fr-tile__body">
-					<div class="fr-tile__content">
-						<h3 class="fr-tile__title">
-							{#if data.siret && !creating && data.siret === selectedSiret && !data.sireneError}
-								<a
-									href="producteur/declarations/2024/entreprise/1"
-									data-sveltekit-preload-data="off"
-								>
-									Déclaration 2024
-								</a>
-							{:else}
-								<a aria-disabled="true" role="link">Déclaration 2024</a>
-							{/if}
-						</h3>
-						<!-- <p class="fr-tile__detail">
-							{dc.valide ? "Afficher" : "Commencer"}
-						</p>
+	{#if data.declarations != null}
+		<div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+			<div class="fr-col-12 fr-col-md-4">
+				<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
+					<div class="fr-tile__body">
+						<div class="fr-tile__content">
+							<h3 class="fr-tile__title">
+								{#if data.etablissement?.siret && !creating && data.etablissement.siret === selectedSiret && !data.sireneError}
+									<a href="producteur/declarations/2024/entreprise/1">
+										Déclaration 2024
+									</a>
+								{:else}
+									<a aria-disabled="true" role="link">Déclaration 2024</a>
+								{/if}
+							</h3>
+							<p class="fr-tile__detail">
+								{data.declarations.get(2024)?.donnees.etapes.envoiValidee ?
+									"Afficher"
+								:	"Commencer"}
+							</p>
 
-						<div class="fr-tile__start">
-							{#if dc.valide}
-								<p
-									class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
-								>
-									Terminée
-								</p>
-							{:else}
-								<p
-									class="fr-badge fr-badge--sm fr-badge--new fr-badge--no-icon"
-								>
-									À compléter
-								</p>
-							{/if}
-						</div> -->
+							<div class="fr-tile__start">
+								{#if data.declarations.get(2024)?.donnees.etapes.envoiValidee}
+									<p
+										class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
+									>
+										Terminée
+									</p>
+								{:else}
+									<p
+										class="fr-badge fr-badge--sm fr-badge--new fr-badge--no-icon"
+									>
+										À compléter
+									</p>
+								{/if}
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="fr-tile__header">
-					<div class="fr-tile__pictogram">
-						<Pictogram pict="document/contract"></Pictogram>
+					<div class="fr-tile__header">
+						<div class="fr-tile__pictogram">
+							<Pictogram pict="document/contract"></Pictogram>
+						</div>
 					</div>
 				</div>
 			</div>
+
+			{#if !onlyIncomplete}
+				<div class="fr-col-6 fr-col-md-3">
+					<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
+						<div class="fr-tile__body">
+							<div class="fr-tile__content">
+								<h3 class="fr-tile__title">
+									<a aria-disabled="true" role="link">Déclaration 2023</a>
+								</h3>
+								<p class="fr-tile__detail">Détail</p>
+								<div class="fr-tile__start">
+									<p
+										class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
+									>
+										Terminée
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="fr-tile__header"></div>
+					</div>
+				</div>
+				<div class="fr-col-6 fr-col-md-3">
+					<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
+						<div class="fr-tile__body">
+							<div class="fr-tile__content">
+								<h3 class="fr-tile__title">
+									<a aria-disabled="true" role="link">Déclaration 2022</a>
+								</h3>
+								<p class="fr-tile__detail">Détail</p>
+								<div class="fr-tile__start">
+									<p
+										class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
+									>
+										Terminée
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="fr-tile__header"></div>
+					</div>
+				</div>
+			{:else}<div class="fr-col-6"></div>{/if}
 		</div>
-
-		{#if !onlyIncomplete}
-			<div class="fr-col-6 fr-col-md-3">
-				<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
-					<div class="fr-tile__body">
-						<div class="fr-tile__content">
-							<h3 class="fr-tile__title">
-								<a aria-disabled="true" role="link">Déclaration 2023</a>
-							</h3>
-							<p class="fr-tile__detail">Détail</p>
-							<div class="fr-tile__start">
-								<p
-									class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
-								>
-									Terminée
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="fr-tile__header"></div>
-				</div>
-			</div>
-			<div class="fr-col-6 fr-col-md-3">
-				<div class="fr-tile fr-tile--horizontal fr-enlarge-link">
-					<div class="fr-tile__body">
-						<div class="fr-tile__content">
-							<h3 class="fr-tile__title">
-								<a aria-disabled="true" role="link">Déclaration 2022</a>
-							</h3>
-							<p class="fr-tile__detail">Détail</p>
-							<div class="fr-tile__start">
-								<p
-									class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
-								>
-									Terminée
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="fr-tile__header"></div>
-				</div>
-			</div>
-		{:else}<div class="fr-col-6"></div>{/if}
-	</div>
+	{/if}
 
 	<div class="fr-grid-row fr-grid-row--center fr-mt-4v">
 		<div class="fr-col-12 fr-col-md-10">

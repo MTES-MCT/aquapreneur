@@ -23,7 +23,7 @@
 	};
 </script>
 
-<h1 class="fr-h2">Passons en revue votre stock en {data.year}</h1>
+<h1 class="fr-h2">Passons en revue votre stock en {data.annee}</h1>
 
 <p>
 	Veuillez vérifier les données relatives à vos stocks pour chaque espèce et
