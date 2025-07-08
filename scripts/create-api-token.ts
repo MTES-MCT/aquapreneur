@@ -1,3 +1,4 @@
+#!/usr/bin/env -S npx vite-node --options.transformMode.ssr="/.*/"
 import { input } from "@inquirer/prompts";
 import { type } from "arktype";
 import colors from "yoctocolors";

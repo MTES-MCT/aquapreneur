@@ -33,13 +33,23 @@ export const stringify = function (data: object) {
 
 export const getRequestId = () => {
 	// https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-	return getRequestEvent().request.headers.get("x-request-id");
+	try {
+		return getRequestEvent().request.headers.get("x-request-id");
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars -- l’erreur est attendue en mode script
+	} catch (error) {
+		return "";
+	}
 };
 
 export const getRequestPath = () => {
 	// https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
-	const url = getRequestEvent().url;
-	return url.pathname; //+ url.search;
+	try {
+		const url = getRequestEvent().url;
+		return url.pathname; //+ url.search;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars -- l’erreur est attendue en mode script
+	} catch (error) {
+		return "";
+	}
 };
 
 export const log = (level: logLevels, msg: string, extra: object = {}) => {
