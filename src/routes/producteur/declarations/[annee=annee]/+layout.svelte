@@ -5,7 +5,6 @@
 	import { setDeclarationContext } from "$lib/declaration-context";
 
 	let { data, children } = $props();
-
 	const donneesDeclaration = $state(data.donneesDeclaration);
 
 	setDeclarationContext(donneesDeclaration);

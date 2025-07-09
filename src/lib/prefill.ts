@@ -55,7 +55,11 @@ const getBilan = async (siret: string, annee: number) => {
 			),
 		);
 	if (result.length > 1) {
-		logger.error("Bilans multiples");
+		logger.error("Bilans multiples", {
+			siret,
+			annee,
+			ids: result.map((b) => b.id),
+		});
 		error(500, "Bilans multiples");
 	}
 

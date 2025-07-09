@@ -2,35 +2,30 @@ import { error, redirect } from "@sveltejs/kit";
 
 import * as logger from "$lib/server/utils/logger";
 
-import { ANNEES_DECLARATIVES } from "$lib/constants";
 import type { AnneeDeclarative } from "$lib/types";
 
 export const load = async ({ parent, params }) => {
 	const { etablissement, declarations } = await parent();
-	const { year } = params;
+	const { annee } = params;
 
 	if (!etablissement || !declarations) {
 		redirect(307, "/producteur");
 	}
 
-	const safeYear = Number.parseInt(year);
+	// Le ParamMatcher s’assure que l’année est correcte
+	const anneeNum = Number.parseInt(annee) as AnneeDeclarative;
 
-	// récupérer l’année courante d’une variable d’environnement, mise à jour
-	// quand la campagne démarre
-	if (!(ANNEES_DECLARATIVES as ReadonlyArray<number>).includes(safeYear)) {
-		error(404, "Not Found");
-	}
+	const declaration = declarations.get(anneeNum);
 
-	const declaration = declarations.get(safeYear as AnneeDeclarative);
 	if (!declaration) {
 		logger.error("Impossible de trouver la déclaration", {
-			annee: safeYear,
+			annee: anneeNum,
 			siret: etablissement.siret,
 		});
 		error(500);
 	}
 	return {
-		annee: safeYear as AnneeDeclarative,
+		annee: anneeNum,
 		donneesDeclaration: declaration.donnees,
 		idDeclarationCourante: declaration?.id,
 	};
