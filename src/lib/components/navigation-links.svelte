@@ -3,9 +3,11 @@
 		prevHref,
 		nextHref,
 		nextIsButton = false,
+		nextLabel = "Suivant",
 	}: {
 		prevHref?: string;
 		nextHref?: string;
+		nextLabel?: string;
 		nextIsButton?: boolean;
 	} = $props();
 
@@ -33,7 +35,7 @@
 			class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 			style="justify-self: end"
 		>
-			Suivant
+			{nextLabel}
 		</a>
 	{:else if nextIsButton}
 		<button class="fr-btn" disabled={clicked} type="submit">Valider</button>
