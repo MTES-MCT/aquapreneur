@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { FormEventHandler } from "svelte/elements";
 
-	import { getDeclarationContext } from "$lib/declaration-context";
-	import { submitDeclarationContext } from "$lib/utils";
+	import { goto } from "$app/navigation";
+
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	import BilanTable from "../declaration/5/bilan-table.svelte";
 	import EtablissementDataTable from "../entreprise/2/etablissement-data-table.svelte";
@@ -18,12 +19,16 @@
 		// @ts-expect-error -- pas de type disponible
 		dsfr(element).modal.conceal();
 	}
-
-	const dc = getDeclarationContext();
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		dc.etapes.envoiValidee = true;
-		submitDeclarationContext(event, data.idDeclarationCourante, dc, "/");
+		event.preventDefault();
+		donnees.etapes.envoiValidee = true;
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("/");
 	};
 </script>
 
@@ -60,11 +65,11 @@
 
 <h3 class="fr-text--md fr-text--bold">Informations</h3>
 
-<EtablissementDataTable></EtablissementDataTable>
+<EtablissementDataTable {donnees}></EtablissementDataTable>
 
 <h3 class="fr-text--md fr-text--bold">Contact</h3>
 
-<ContactTable></ContactTable>
+<ContactTable {donnees}></ContactTable>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Concessions</h2>
@@ -80,9 +85,11 @@
 	Vous avez effectué un ou plusieurs changements sur vos concessions cette
 	année.
 </p>
-{#if dc.commentaires.erreursConcessions}
+{#if data.declaration.donnees.commentaires.erreursConcessions}
 	<h3 class="fr-text--md fr-text--bold">Changement(s) non pris en compte</h3>
-	{@render fieldContent(dc.commentaires.erreursConcessions)}
+	{@render fieldContent(
+		data.declaration.donnees.commentaires.erreursConcessions,
+	)}
 {:else}
 	<p>Les informations sur vos concessions sont à jour.</p>
 {/if}
@@ -97,7 +104,7 @@
 	</a>
 </div>
 
-<ProductionDetails></ProductionDetails>
+<ProductionDetails {donnees}></ProductionDetails>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Stock</h2>
@@ -109,7 +116,7 @@
 	</a>
 </div>
 
-<StockDetails></StockDetails>
+<StockDetails {donnees}></StockDetails>
 
 <div class="header-wrapper">
 	<h2 class="fr-h5">Déclaration obligatoire</h2>
@@ -123,23 +130,25 @@
 
 <h3 class="fr-text--md fr-text--bold">Bilan comptable</h3>
 
-<BilanTable></BilanTable>
+<BilanTable {donnees}></BilanTable>
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous eu des événements exceptionnels au cours de l'année 2024 ?
 </h3>
 
-{@render fieldContent(dc.commentaires.evnmtsExceptionnels)}
+{@render fieldContent(
+	data.declaration.donnees.commentaires.evnmtsExceptionnels,
+)}
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous relevé des données erronées dans le formulaire ?
 </h3>
-{@render fieldContent(dc.commentaires.erreursFormulaire)}
+{@render fieldContent(data.declaration.donnees.commentaires.erreursFormulaire)}
 
 <h3 class="fr-text--md fr-text--bold">
 	Avez-vous des remarques ou suggestions concernant l’outil ?
 </h3>
-{@render fieldContent(dc.commentaires.suggestions)}
+{@render fieldContent(data.declaration.donnees.commentaires.suggestions)}
 
 <!-- ####################################################################### -->
 

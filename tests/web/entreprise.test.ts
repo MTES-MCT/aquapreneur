@@ -16,11 +16,11 @@ test.describe("entreprise", () => {
 	});
 
 	test("Les redirections intermédiaires sont correctes", async ({ page }) => {
-		let response = await page.goto("/producteur/declarations");
-		expect(response?.status()).toBe(404);
+		await page.goto("/producteur/declarations");
+		await expect(page).toHaveURL("/producteur/tableau-de-bord");
 
-		response = await page.goto("/producteur/declarations/");
-		expect(response?.status()).toBe(404);
+		await page.goto("/producteur/declarations/");
+		await expect(page).toHaveURL("/producteur/tableau-de-bord");
 
 		await page.goto("/producteur/declarations/2024");
 		await expect(page).toHaveURL("/producteur/declarations/2024/entreprise/1");

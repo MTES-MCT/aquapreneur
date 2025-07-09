@@ -1,17 +1,24 @@
 <script lang="ts">
 	import type { FormEventHandler } from "svelte/elements";
 
+	import { goto } from "$app/navigation";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import Textareagroup from "$lib/components/textarea–group.svelte";
-	import { getDeclarationContext } from "$lib/declaration-context";
-	import { submitDeclarationContext } from "$lib/utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
-	const dc = getDeclarationContext();
+
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		submitDeclarationContext(event, data.idDeclarationCourante, dc, "5");
+		event.preventDefault();
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("5");
 	};
 </script>
 
@@ -24,7 +31,7 @@
 			<Textareagroup
 				name="suggestions-txt"
 				rows={5}
-				bind:value={dc.commentaires.suggestions}
+				bind:value={donnees.commentaires.suggestions}
 			>
 				{#snippet label()}
 					Si oui, merci de les décrire dans le champ ci-dessous :

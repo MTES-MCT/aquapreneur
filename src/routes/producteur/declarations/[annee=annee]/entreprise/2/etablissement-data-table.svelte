@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { getDeclarationContext } from "$lib/declaration-context";
+	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 
 	const {
+		donnees,
 		withEdit = false,
 	}: {
+		donnees: DeclarationSchema;
 		withEdit?: boolean;
 	} = $props();
-
-	const dc = getDeclarationContext();
 </script>
 
 {#snippet editBtn()}
@@ -30,14 +30,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">Dénomination</th>
-							<td>{dc.etablissement.denomination}</td>
+							<td>{donnees.etablissement.denomination}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">Numéro SIRET</th>
-							<td>{dc.etablissement.siret}</td>
+							<td>{donnees.etablissement.siret}</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
 							</td>
@@ -45,8 +45,8 @@
 						<tr>
 							<th scope="row">Activité principale</th>
 							<td>
-								{dc.etablissement.activitePrincipale}
-								({dc.etablissement.codeActivitePrincipale})
+								{donnees.etablissement.activitePrincipale}
+								({donnees.etablissement.codeActivitePrincipale})
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}
@@ -55,9 +55,9 @@
 						<tr>
 							<th scope="row">Adresse postale</th>
 							<td>
-								{dc.etablissement.adresse},
-								{dc.etablissement.codePostal}
-								{dc.etablissement.commune}
+								{donnees.etablissement.adresse},
+								{donnees.etablissement.codePostal}
+								{donnees.etablissement.commune}
 							</td>
 							<td class="fr-cell--right">
 								{@render editBtn()}

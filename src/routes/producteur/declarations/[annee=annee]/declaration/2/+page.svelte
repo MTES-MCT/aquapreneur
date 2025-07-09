@@ -1,24 +1,31 @@
 <script lang="ts">
 	import type { FormEventHandler } from "svelte/elements";
 
+	import { goto } from "$app/navigation";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import TextareaGroup from "$lib/components/textarea–group.svelte";
-	import { getDeclarationContext } from "$lib/declaration-context";
-	import { submitDeclarationContext } from "$lib/utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	const dc = getDeclarationContext();
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		dc.etapes.concessionValidee = true;
-		submitDeclarationContext(event, data.idDeclarationCourante, dc, "3");
+		event.preventDefault();
+		donnees.etapes.concessionValidee = true;
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("3");
 	};
 </script>
 
 <h1 class="fr-h2">
-	Avez-vous eu des événements exceptionnels au cours de l'année {data.annee} ?
+	Avez-vous eu des événements exceptionnels au cours de l'année {data
+		.declaration.annee} ?
 </h1>
 
 <p>
@@ -31,7 +38,7 @@
 			<TextareaGroup
 				name="events-txt"
 				rows={5}
-				bind:value={dc.commentaires.evnmtsExceptionnels}
+				bind:value={donnees.commentaires.evnmtsExceptionnels}
 			>
 				{#snippet label()}Si oui, veuillez les préciser :{/snippet}
 			</TextareaGroup>

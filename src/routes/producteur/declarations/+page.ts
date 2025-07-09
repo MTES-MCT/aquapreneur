@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
 
 export const load = async () => {
-	redirect(307, `./producteur/tableau-de-bord`);
+	redirect(307, `./tableau-de-bord`);
 };

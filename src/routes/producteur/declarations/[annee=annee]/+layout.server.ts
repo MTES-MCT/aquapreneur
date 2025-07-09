@@ -1,32 +1,42 @@
-import { error, redirect } from "@sveltejs/kit";
+import assert from "assert";
+import { and, asc, eq } from "drizzle-orm";
 
-import * as logger from "$lib/server/utils/logger";
+import { redirect } from "@sveltejs/kit";
 
+import { db } from "$lib/server/db";
+import { etablissementsTable } from "$lib/server/db/schema/entreprise";
+
+import { getOrCreateDeclaration } from "$lib/declaration-store";
 import type { AnneeDeclarative } from "$lib/types";
 
 export const load = async ({ parent, params }) => {
-	const { etablissement, declarations } = await parent();
 	const { annee } = params;
 
-	if (!etablissement || !declarations) {
+	const { siret } = await parent();
+
+	if (!siret) {
+		// TODO log, display error, etc.
+		redirect(307, "/producteur/");
+	}
+
+	const etablissements = await db
+		.select()
+		.from(etablissementsTable)
+		.where(and(eq(etablissementsTable.siret, siret)))
+		.orderBy(asc(etablissementsTable.denomination));
+
+	if (!etablissements) {
+		// TODO log, display error, etc.
 		redirect(307, "/producteur");
 	}
+	assert(etablissements.length === 1);
+	const etablissement = etablissements[0];
 
 	// Le ParamMatcher s’assure que l’année est correcte
 	const anneeNum = Number.parseInt(annee) as AnneeDeclarative;
+	const declaration = await getOrCreateDeclaration(etablissement, anneeNum);
 
-	const declaration = declarations.get(anneeNum);
-
-	if (!declaration) {
-		logger.error("Impossible de trouver la déclaration", {
-			annee: anneeNum,
-			siret: etablissement.siret,
-		});
-		error(500);
-	}
 	return {
-		annee: anneeNum,
-		donneesDeclaration: declaration.donnees,
-		idDeclarationCourante: declaration?.id,
+		declaration,
 	};
 };

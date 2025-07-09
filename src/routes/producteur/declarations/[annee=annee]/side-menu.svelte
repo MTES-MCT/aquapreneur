@@ -1,9 +1,14 @@
 <script lang="ts">
-	import { getDeclarationContext } from "$lib/declaration-context";
+	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 
-	const { step, baseUrl } = $props();
+	import type { DeclarationStep } from "./types";
 
-	const dc = getDeclarationContext();
+	const {
+		step,
+		baseUrl,
+		donnees,
+	}: { step: DeclarationStep; baseUrl: string; donnees: DeclarationSchema } =
+		$props();
 </script>
 
 {#snippet categoryTitle(text: string, isDone: boolean)}
@@ -41,7 +46,7 @@
 					>
 						{@render categoryTitle(
 							"Votre entreprise",
-							dc.etapes?.entrepriseValidee,
+							donnees.etapes?.entrepriseValidee,
 						)}
 					</a>
 				</li>
@@ -53,7 +58,7 @@
 					>
 						{@render categoryTitle(
 							"Vos concessions",
-							dc.etapes?.concessionValidee,
+							donnees.etapes?.concessionValidee,
 						)}
 					</a>
 				</li>
@@ -65,7 +70,7 @@
 					>
 						{@render categoryTitle(
 							"Production aquacole vendue",
-							dc.etapes?.productionValidee,
+							donnees.etapes?.productionValidee,
 						)}
 					</a>
 				</li>
@@ -75,7 +80,7 @@
 						href="{baseUrl}/stock"
 						aria-current={step === "stock" ? "page" : undefined}
 					>
-						{@render categoryTitle("Stock", dc.etapes?.stockValidee)}
+						{@render categoryTitle("Stock", donnees.etapes?.stockValidee)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
@@ -86,7 +91,7 @@
 					>
 						{@render categoryTitle(
 							"Déclaration obligatoire",
-							dc.etapes?.declarationValidee,
+							donnees.etapes?.declarationValidee,
 						)}
 					</a>
 				</li>
@@ -96,7 +101,7 @@
 						href="{baseUrl}/envoi"
 						aria-current={step === "envoi" ? "page" : undefined}
 					>
-						{@render categoryTitle("Envoi", dc.etapes?.envoiValidee)}
+						{@render categoryTitle("Envoi", donnees.etapes?.envoiValidee)}
 					</a>
 				</li>
 			</ul>

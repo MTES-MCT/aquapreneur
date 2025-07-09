@@ -2,7 +2,6 @@
 	import { enhance } from "$app/forms";
 
 	import Pictogram from "$lib/components/pictogram.svelte";
-	import { resetDeclarationContext } from "$lib/declaration-context";
 
 	const { data } = $props();
 
@@ -43,7 +42,6 @@
 						use:enhance={() => {
 							creating = true;
 							return async ({ update }) => {
-								resetDeclarationContext();
 								await update({ reset: false });
 								selectedSiret = data.etablissement?.siret;
 								creating = false;
@@ -128,7 +126,7 @@
 						<div class="fr-tile__content">
 							<h3 class="fr-tile__title">
 								{#if data.etablissement?.siret && !creating && data.etablissement.siret === selectedSiret && !data.sireneError}
-									<a href="producteur/declarations/2024/entreprise/1">
+									<a href="./declarations/2024/entreprise/1">
 										Déclaration 2024
 									</a>
 								{:else}

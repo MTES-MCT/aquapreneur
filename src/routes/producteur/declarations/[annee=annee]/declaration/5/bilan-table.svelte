@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { getDeclarationContext } from "$lib/declaration-context";
+	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 	import { formatDate } from "$lib/utils";
 
-	const dc = getDeclarationContext();
+	const { donnees }: { donnees: DeclarationSchema } = $props();
 </script>
 
-{#if !dc.dateBilan}
+{#if !donnees.dateBilan}
 	<div class="fr-alert fr-alert--warning fr-my-2v">
 		<h3 class="fr-alert__title">Données manquantes</h3>
 		<p>
 			Nous n’avons pas trouvé de données sur le bilan de l’établissement
 			<br />
-			{dc.etablissement.denomination}.
+			{donnees.etablissement.denomination}.
 		</p>
 	</div>
 {:else}
@@ -23,15 +23,15 @@
 						<tbody>
 							<tr>
 								<th scope="row">Date de début d’exercice</th>
-								<td>{formatDate(dc.debutExercice)}</td>
+								<td>{formatDate(donnees.debutExercice)}</td>
 							</tr>
 							<tr>
 								<th scope="row">Date de fin d’exercice</th>
-								<td>{formatDate(dc.finExercice)}</td>
+								<td>{formatDate(donnees.finExercice)}</td>
 							</tr>
 							<tr>
 								<th scope="row">Date de soumission</th>
-								<td>{formatDate(dc.dateBilan)}</td>
+								<td>{formatDate(donnees.dateBilan)}</td>
 							</tr>
 						</tbody>
 					</table>

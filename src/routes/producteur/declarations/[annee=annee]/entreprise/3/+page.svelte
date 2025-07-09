@@ -1,23 +1,25 @@
 <script lang="ts">
 	import type { FormEventHandler } from "svelte/elements";
 
+	import { goto } from "$app/navigation";
+
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { getDeclarationContext } from "$lib/declaration-context";
-	import { submitDeclarationContext } from "$lib/utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	import ContactTable from "./contact-table.svelte";
 
 	const { data } = $props();
-	const dc = getDeclarationContext();
+
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		dc.etapes.entrepriseValidee = true;
-		submitDeclarationContext(
-			event,
-			data.idDeclarationCourante,
-			dc,
-			"../concessions",
+		event.preventDefault();
+		donnees.etapes.entrepriseValidee = true;
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
 		);
+		goto("../concessions");
 	};
 </script>
 
@@ -27,6 +29,7 @@
 	corriger ou les compléter.
 </p>
 <form method="POST" onsubmit={handleSubmit}>
-	<ContactTable editable></ContactTable>
+	<ContactTable bind:donnees editable></ContactTable>
+
 	<NavigationLinks prevHref="2" nextIsButton />
 </form>

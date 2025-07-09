@@ -1,5 +1,5 @@
-export const load = async ({ parent }) => {
-	const { annee } = await parent();
+export const load = async ({ params }) => {
+	const { annee } = params;
 
 	return {
 		title: `Déclaration ${annee} • Envoi`,

@@ -3,12 +3,13 @@
 
 	import type { FormEventHandler } from "svelte/elements";
 
+	import { goto } from "$app/navigation";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import Textareagroup from "$lib/components/textarea–group.svelte";
-	import { getDeclarationContext } from "$lib/declaration-context";
 	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
-	import { formatDate, submitDeclarationContext } from "$lib/utils.js";
+	import { formatDate, submitDeclarationUpdate } from "$lib/utils.js";
 
 	const { data } = $props();
 
@@ -17,9 +18,7 @@
 		Map<string, DeclarationSchema["concessions"]>
 	>();
 
-	const dc = getDeclarationContext();
-
-	dc.concessions.forEach((c) => {
+	data.declaration.donnees.concessions.forEach((c) => {
 		const quartier = c.quartierParcelle ?? "";
 		const lieu =
 			`${c.libLocalite} – ${c.nomLieuDit}`
@@ -46,14 +45,16 @@
 		setTimeout(() => (delayed = false), 0);
 	});
 
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
+
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		dc.etapes.concessionValidee = true;
-		submitDeclarationContext(
-			event,
-			data.idDeclarationCourante,
-			dc,
-			"../production",
+		event.preventDefault();
+		donnees.etapes.concessionValidee = true;
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
 		);
+		goto("../production");
 	};
 </script>
 
@@ -176,7 +177,7 @@
 				Nous n’avons pas trouvé de données sur les concessions de
 				l’établissement
 				<br />
-				{dc.etablissement.denomination}.
+				{data.declaration.donnees.etablissement.denomination}.
 			</p>
 		</div>
 	{/each}
@@ -186,7 +187,7 @@
 			<Textareagroup
 				name="data-errors-txt"
 				rows={5}
-				bind:value={dc.commentaires.erreursConcessions}
+				bind:value={donnees.commentaires.erreursConcessions}
 			>
 				{#snippet label()}Changement(s) à signaler
 					<span class="fr-hint-text">

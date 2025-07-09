@@ -1,22 +1,21 @@
 <script lang="ts">
 	import { page } from "$app/state";
 
-	import MenuDeclaration from "$lib/components/menu-declaration.svelte";
-	import { setDeclarationContext } from "$lib/declaration-context";
+	import SideMenu from "./side-menu.svelte";
 
 	let { data, children } = $props();
-	const donneesDeclaration = $state(data.donneesDeclaration);
 
-	setDeclarationContext(donneesDeclaration);
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 </script>
 
 <div class="fr-container">
 	<div class="fr-grid-row">
 		<div class="fr-col-md-4 fr-col-lg-3 fr-col-12">
-			<MenuDeclaration
+			<SideMenu
 				step={page.data.step}
-				baseUrl="/producteur/declarations/{data.annee}"
-			></MenuDeclaration>
+				baseUrl="/producteur/declarations/{data.declaration.annee}"
+				{donnees}
+			></SideMenu>
 		</div>
 
 		<div

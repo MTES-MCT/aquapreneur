@@ -1,17 +1,24 @@
 <script lang="ts">
 	import type { FormEventHandler } from "svelte/elements";
 
+	import { goto } from "$app/navigation";
+
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
-	import { getDeclarationContext } from "$lib/declaration-context";
-	import { submitDeclarationContext } from "$lib/utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
-	const dc = getDeclarationContext();
+
+	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		submitDeclarationContext(event, data.idDeclarationCourante, dc, "3");
+		event.preventDefault();
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("3");
 	};
 </script>
 
