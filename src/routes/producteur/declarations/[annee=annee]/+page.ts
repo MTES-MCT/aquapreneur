@@ -1,6 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 
-export const load = async ({ params }) => {
-	const { annee } = params;
-	redirect(307, `${annee}/entreprise/1`);
+export const trailingSlash = "always";
+
+export const load = async () => {
+	redirect(307, `./entreprise/`);
 };

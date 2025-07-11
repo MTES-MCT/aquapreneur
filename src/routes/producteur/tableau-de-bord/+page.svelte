@@ -126,9 +126,7 @@
 						<div class="fr-tile__content">
 							<h3 class="fr-tile__title">
 								{#if data.etablissement?.siret && !creating && data.etablissement.siret === selectedSiret && !data.sireneError}
-									<a href="./declarations/2024/entreprise/1">
-										Déclaration 2024
-									</a>
+									<a href="./declarations/2024/">Déclaration 2024</a>
 								{:else}
 									<a aria-disabled="true" role="link">Déclaration 2024</a>
 								{/if}

@@ -41,7 +41,7 @@
 				<li class="fr-sidemenu__item fr-sidemenu__item--active">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/entreprise"
+						href="{baseUrl}/entreprise/"
 						aria-current={step === "entreprise" ? "page" : undefined}
 					>
 						{@render categoryTitle(
@@ -53,7 +53,7 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/concessions"
+						href="{baseUrl}/concessions/"
 						aria-current={step === "concessions" ? "page" : undefined}
 					>
 						{@render categoryTitle(
@@ -65,7 +65,7 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/production"
+						href="{baseUrl}/production/"
 						aria-current={step === "production" ? "page" : undefined}
 					>
 						{@render categoryTitle(
@@ -77,7 +77,7 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/stock"
+						href="{baseUrl}/stock/"
 						aria-current={step === "stock" ? "page" : undefined}
 					>
 						{@render categoryTitle("Stock", donnees.etapes?.stockValidee)}
@@ -86,7 +86,7 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/declaration"
+						href="{baseUrl}/declaration/"
 						aria-current={step === "declaration" ? "page" : undefined}
 					>
 						{@render categoryTitle(

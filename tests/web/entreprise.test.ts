@@ -8,7 +8,7 @@ test.describe("entreprise", () => {
 	test("Le bouton Déclaration 2024 sur Votre espace ouvre la déclaration", async ({
 		page,
 	}) => {
-		await page.goto("/producteur");
+		await page.goto("/producteur/");
 
 		await page.getByRole("link", { name: "Déclaration 2024" }).click();
 

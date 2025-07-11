@@ -41,7 +41,7 @@
 										<tr>
 											<td>
 												<a
-													href="/comptable/declarations/{declaration.siret}/{declaration.annee}"
+													href="./declarations/{declaration.siret}/{declaration.annee}/"
 													class="fr-icon-store-line fr-link--icon-left fr-link fr-link--sm"
 													data-sveltekit-preload-data="off"
 												>

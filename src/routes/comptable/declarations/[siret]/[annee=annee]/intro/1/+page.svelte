@@ -13,4 +13,4 @@
 
 <p class="fr-h2">{data.declaration.donnees.etablissement.denomination}</p>
 
-<NavigationLinks nextHref="2" nextLabel="Commencer" />
+<NavigationLinks nextHref="./2" nextLabel="Commencer" />

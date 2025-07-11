@@ -18,7 +18,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("4");
+		goto("./4");
 	};
 </script>
 

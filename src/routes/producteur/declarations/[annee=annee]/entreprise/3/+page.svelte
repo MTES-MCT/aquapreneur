@@ -19,7 +19,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("../concessions");
+		goto("../concessions/");
 	};
 </script>
 
@@ -31,5 +31,5 @@
 <form method="POST" onsubmit={handleSubmit}>
 	<ContactTable bind:donnees editable></ContactTable>
 
-	<NavigationLinks prevHref="2" nextIsButton />
+	<NavigationLinks prevHref="./2" nextIsButton />
 </form>

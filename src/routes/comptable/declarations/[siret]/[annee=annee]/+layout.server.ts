@@ -20,7 +20,7 @@ export const load = async ({ params }) => {
 
 	if (!etablissements) {
 		// TODO log, display error, etc.
-		redirect(307, "/comptable");
+		redirect(307, "/comptable/");
 	}
 	assert(etablissements.length === 1);
 	const etablissement = etablissements[0];

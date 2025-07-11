@@ -19,7 +19,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("../stock");
+		goto("../stock/");
 	};
 </script>
 

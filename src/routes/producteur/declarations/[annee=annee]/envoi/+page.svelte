@@ -56,7 +56,7 @@
 <div class="header-wrapper">
 	<h2 class="fr-h5">Données entreprise</h2>
 	<a
-		href="entreprise/1"
+		href="./entreprise/"
 		class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 	>
 		Revoir
@@ -74,7 +74,7 @@
 <div class="header-wrapper">
 	<h2 class="fr-h5">Concessions</h2>
 	<a
-		href="concessions/1"
+		href="./concessions/"
 		class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 	>
 		Revoir
@@ -97,7 +97,7 @@
 <div class="header-wrapper">
 	<h2 class="fr-h5">Production aquacole vendue</h2>
 	<a
-		href="production/1"
+		href="./production/"
 		class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 	>
 		Revoir
@@ -109,7 +109,7 @@
 <div class="header-wrapper">
 	<h2 class="fr-h5">Stock</h2>
 	<a
-		href="stock/1"
+		href="./stock/"
 		class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 	>
 		Revoir
@@ -121,7 +121,7 @@
 <div class="header-wrapper">
 	<h2 class="fr-h5">Déclaration obligatoire</h2>
 	<a
-		href="declaration/1"
+		href="./declaration/"
 		class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 	>
 		Revoir
@@ -156,7 +156,7 @@
 
 <div class="fr-mt-8w" style="display:flex; justify-content: space-between;">
 	<a
-		href="declaration/5"
+		href="./declaration/5"
 		class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
 		style="justify-self: start; align-self: center;"
 	>

@@ -19,7 +19,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("../declaration");
+		goto("../declaration/");
 
 		donnees.etapes.stockValidee = true;
 	};

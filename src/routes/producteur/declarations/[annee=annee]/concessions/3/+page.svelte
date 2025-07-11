@@ -54,7 +54,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("../production");
+		goto("../production/");
 	};
 </script>
 

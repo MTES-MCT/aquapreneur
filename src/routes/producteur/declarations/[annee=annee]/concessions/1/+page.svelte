@@ -13,4 +13,4 @@
 	informations.
 </p>
 
-<NavigationLinks prevHref="../entreprise/3" nextHref="2" />
+<NavigationLinks prevHref="../entreprise/3" nextHref="./2" />
