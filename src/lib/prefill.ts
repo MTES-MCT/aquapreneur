@@ -9,6 +9,7 @@ import { concessionsTable } from "$lib/server/db/schema/atena";
 import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 import * as logger from "./server/utils/logger";
+import { deepClean } from "./utils";
 
 import type { EtablissementSelect } from "./server/db/types";
 import type { ConcessionSelect } from "./server/db/types";
@@ -115,20 +116,21 @@ export const prefillDeclaration = async (
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,
 		finExercice: bilan?.finExercice ?? null,
-		achats: {
+		achats: deepClean({
 			huitreCreuse: {
 				naissains: {
-					quantite: d?.donnees_economiques.VolAchHNaiss ?? 0,
+					quantite: d?.donnees_economiques.VolAchHNaiss,
 				},
-				juveniles: { quantite: d?.donnees_economiques.VolAchHDElv ?? 0 },
+				juveniles: { quantite: d?.donnees_economiques.VolAchHDElv },
 				adultes: {
-					quantite:
-						(d?.donnees_economiques.VolAchHElv ?? 0) +
-						(d?.donnees_economiques.VolAchHConso ?? 0),
+					quantite: sumAttrs(d?.donnees_economiques, [
+						"VolAchHElv",
+						"VolAchHConso",
+					]),
 				},
 			},
-		},
-		ventes: {
+		}),
+		ventes: deepClean({
 			huitreCreuse: {
 				naissains: {
 					total: sumAttrs(d?.production, [
@@ -162,77 +164,48 @@ export const prefillDeclaration = async (
 						"CAHCoAuPro",
 						"CAHCoAuGros",
 					]),
-					// TODO: consommation devrait être null si tout le contenu est 0 ou nulll
 					consommation: {
-						// TODO: destination devrait être null si tout le contenu est 0 ou nulll
 						destination: {
-							// TODO: france devrait être null si tout le contenu est 0 ou nulll
-							// TODO: envisager d’utiliser le pattern
-							// const a = {...(someCondition && {b: 5})}
 							france: {
-								degustation:
-									d?.production.CAHCoFrDeg ?
-										{ valeurHT: d.production.CAHCoFrDeg }
-									:	null,
-								autresVentesParticuliers:
-									d?.production.CAHCoFrDet ?
-										{
-											valeurHT: d.production.CAHCoFrDet,
-										}
-									:	null,
-								autresConchyliculteurs:
-									d?.production.CAHCoFrPro ?
-										{
-											valeurHT: d.production.CAHCoFrPro,
-										}
-									:	null,
+								degustation: { valeurHT: d?.production.CAHCoFrDeg },
+								autresVentesParticuliers: {
+									valeurHT: d?.production.CAHCoFrDet,
+								},
+								autresConchyliculteurs: {
+									valeurHT: d?.production.CAHCoFrPro,
+								},
 								restaurateursTraiteurs: null,
-								poissoniersEcaillers:
-									d?.production.CAHCoFrPCE ?
-										{
-											valeurHT: d.production.CAHCoFrPCE,
-										}
-									:	null,
-								grandesMoyennesSurfaces:
-									d?.production.CAHCoFrPGMS ?
-										{
-											valeurHT: d.production.CAHCoFrPGMS,
-										}
-									:	null,
-								mareyeursGrossistes:
-									d?.production.CAHCoFrGros ?
-										{
-											valeurHT: d.production.CAHCoFrGros,
-										}
-									:	null,
+								poissoniersEcaillers: {
+									valeurHT: d?.production.CAHCoFrPCE,
+								},
+								grandesMoyennesSurfaces: {
+									valeurHT: d?.production.CAHCoFrPGMS,
+								},
+								mareyeursGrossistes: {
+									valeurHT: d?.production.CAHCoFrGros,
+								},
 							},
-							unionEuropeenne:
-								d?.production.CAHCoUEGros ?
-									{
-										valeurHT: d.production.CAHCoUEGros,
-									}
-								:	null,
-							horsUnionEuropeenne:
-								d?.production.CAHCoAuGros ?
-									{
-										valeurHT: d.production.CAHCoAuGros,
-									}
-								:	null,
+							unionEuropeenne: {
+								valeurHT: d?.production.CAHCoUEGros,
+							},
+							horsUnionEuropeenne: {
+								valeurHT: d?.production.CAHCoAuGros,
+							},
 						},
 					},
 					elevage: {},
 				},
 			},
-		},
-		stocks: {
+		}),
+		stocks: deepClean({
 			huitreCreuse: {
 				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
 				naissains: {
-					quantite: d?.stock.StckVolHNaisMi ?? null,
+					quantite: d?.stock.StckVolHNaisMi,
 					repartition: [],
 				},
 				juveniles: {
-					quantite: d?.stock.StckVolHDElv ?? null,
+					quantite: d?.stock.StckVolHDElv,
 					repartition: [],
 				},
 				adultes: {
@@ -240,7 +213,7 @@ export const prefillDeclaration = async (
 					repartition: [],
 				},
 			},
-		},
+		}),
 
 		concessions: concessions.map((c) => ({
 			quartierParcelle: c.quartierParcelle,
