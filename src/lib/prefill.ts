@@ -214,26 +214,28 @@ export const prefillDeclaration = async (
 				},
 			},
 		}),
-
-		concessions: concessions.map((c) => ({
-			quartierParcelle: c.quartierParcelle,
-			libLocalite: c.libLocalite,
-			nomLieuDit: c.nomLieuDit,
-			numeroParcelle: c.numeroParcelle,
-			codeLocaliteInsee: c.codeLocaliteInsee,
-			nomSituation: c.nomSituation,
-			typeParcelle: c.typeParcelle,
-			surfaceParcelle: c.surfaceParcelle,
-			uniteMesure: c.uniteMesure,
-			etatParcelle: c.etatParcelle,
-			familleExploitation: c.familleExploitation,
-			exploitation: c.exploitation,
-			familleEspece: c.familleEspece,
-			espece: c.espece,
-			natureJuridique: c.natureJuridique,
-			numArrete: c.numArrete,
-			dateArrete: c.dateArrete,
-		})),
+		concessions: [],
+		// On exclue temporairement les concessions de la déclaration
+		// concessions: concessions.map((c) => ({
+		// 	quartierParcelle: c.quartierParcelle,
+		// 	libLocalite: c.libLocalite,
+		// 	nomLieuDit: c.nomLieuDit,
+		// 	numeroParcelle: c.numeroParcelle,
+		// 	codeLocaliteInsee: c.codeLocaliteInsee,
+		// 	nomSituation: c.nomSituation,
+		// 	typeParcelle: c.typeParcelle,
+		// 	surfaceParcelle: c.surfaceParcelle,
+		// 	uniteMesure: c.uniteMesure,
+		// 	etatParcelle: c.etatParcelle,
+		// 	familleExploitation: c.familleExploitation,
+		// 	exploitation: c.exploitation,
+		// 	familleEspece: c.familleEspece,
+		// 	espece: c.espece,
+		// 	natureJuridique: c.natureJuridique,
+		// 	numArrete: c.numArrete,
+		// 	dateArrete: c.dateArrete,
+		// })),
 	});
+
 	return declaration;
 };
