@@ -3,10 +3,14 @@
 		prevHref,
 		nextHref,
 		nextIsButton = false,
+		nextLabel = "Suivant",
+		cantAnswerBtn = false,
 	}: {
 		prevHref?: string;
 		nextHref?: string;
+		nextLabel?: string;
 		nextIsButton?: boolean;
+		cantAnswerBtn?: boolean;
 	} = $props();
 
 	let clicked = $state(false);
@@ -27,15 +31,26 @@
 			Précédent
 		</a>
 	{/if}
-	{#if nextHref}
-		<a
-			href={nextHref}
-			class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
-			style="justify-self: end"
-		>
-			Suivant
-		</a>
-	{:else if nextIsButton}
-		<button class="fr-btn" disabled={clicked} type="submit">Valider</button>
-	{/if}
+	<div>
+		{#if cantAnswerBtn}
+			<button
+				class="fr-btn fr-btn--secondary fr-mx-4v"
+				disabled={clicked}
+				type="submit"
+			>
+				Je ne peux pas répondre
+			</button>
+		{/if}
+		{#if nextHref}
+			<a
+				href={nextHref}
+				class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
+				style="justify-self: end"
+			>
+				{nextLabel}
+			</a>
+		{:else if nextIsButton}
+			<button class="fr-btn" disabled={clicked} type="submit">Valider</button>
+		{/if}
+	</div>
 </div>

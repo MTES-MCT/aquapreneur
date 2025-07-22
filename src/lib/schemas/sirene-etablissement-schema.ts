@@ -13,10 +13,10 @@ import { Siret } from "$lib/types";
 
 export const SireneEtablissementResponse = type({
 	"+": "ignore",
-	etablissement: {
-		siren: "string",
-		nic: "string",
-		siret: Siret,
+	"etablissement": {
+		"siren": "string",
+		"nic": "string",
+		"siret": Siret,
 		"activitePrincipaleRegistreMetiersEtablissement?": "string | null",
 		"anneeEffectifsEtablissement?": "string | null",
 		"dateCreationEtablissement?": "string | null",
@@ -25,7 +25,7 @@ export const SireneEtablissementResponse = type({
 		"nombrePeriodesEtablissement?": "number | null",
 		"statutDiffusionEtablissement?": "string | null",
 		"trancheEffectifsEtablissement?": "string | null",
-		uniteLegale: {
+		"uniteLegale": {
 			"activitePrincipaleUniteLegale?": "string | null",
 			"anneeCategorieEntreprise?": "string | null",
 			"anneeEffectifsUniteLegale?": "string | null",

@@ -1,6 +1,7 @@
-export const load = async ({ data }) => {
-	return {
-		title: "Votre espace",
-		exploitants: data.exploitants,
-	};
+import { redirect } from "@sveltejs/kit";
+
+export const trailingSlash = "always";
+
+export const load = async () => {
+	redirect(307, "./tableau-de-bord");
 };

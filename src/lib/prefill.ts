@@ -55,7 +55,11 @@ const getBilan = async (siret: string, annee: number) => {
 			),
 		);
 	if (result.length > 1) {
-		logger.error("Bilans multiples");
+		logger.error("Bilans multiples", {
+			siret,
+			annee,
+			ids: result.map((b) => b.id),
+		});
 		error(500, "Bilans multiples");
 	}
 
@@ -111,73 +115,133 @@ export const prefillDeclaration = async (
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,
 		finExercice: bilan?.finExercice ?? null,
-		especes: {
-			huitresCreuses: {
-				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
-				stock: {
-					naissains: {
-						quantite: d?.stock.StckVolHNaisMi ?? null,
-						repartition: [],
-					},
-					juveniles: {
-						quantite: d?.stock.StckVolHDElv ?? null,
-						repartition: [],
-					},
-					adultes: {
-						quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
-						repartition: [],
-					},
+		achats: {
+			huitreCreuse: {
+				naissains: {
+					quantite: d?.donnees_economiques.VolAchHNaiss ?? 0,
 				},
-				ventes: {
-					naissains: {
-						total: sumAttrs(d?.production, [
-							"CAHNaissFr",
-							"CAHNaissUE",
-							"CAHNaissAu",
-						]),
-					},
-					juveniles: {
-						total: sumAttrs(d?.production, [
-							"CAHDElvFr",
-							"CAHDElvUE",
-							"CAHDElvAU",
-						]),
-					},
-					adultes: {
-						total: sumAttrs(d?.production, [
-							// Elevage
-							"CAHElvFr",
-							"CAHElvUE",
-							"CAHElvAu",
-							// Consommation
-							"CAHCoFrPro",
-							"CAHCoFrDet",
-							"CAHCoFrGros",
-							"CAHCoFrPCE",
-							"CAHCoFrPGMS",
-							"CAHCoFrDeg",
-							"CAHCoUEPro",
-							"CAHCoUEGros",
-							"CAHCoAuPro",
-							"CAHCoAuGros",
-						]),
-						degustation: d?.production.CAHCoFrDeg ?? 0,
-						autres: 0,
-					},
-				},
-				achats: {
-					naissains: {
-						quantite: d?.donnees_economiques.VolAchHNaiss ?? 0,
-					},
-					juveniles: { quantite: d?.donnees_economiques.VolAchHDElv ?? 0 },
-					adultes: {
-						quantite:
-							(d?.donnees_economiques.VolAchHElv ?? 0) +
-							(d?.donnees_economiques.VolAchHConso ?? 0),
-					},
+				juveniles: { quantite: d?.donnees_economiques.VolAchHDElv ?? 0 },
+				adultes: {
+					quantite:
+						(d?.donnees_economiques.VolAchHElv ?? 0) +
+						(d?.donnees_economiques.VolAchHConso ?? 0),
 				},
 			},
 		},
+		ventes: {
+			huitreCreuse: {
+				naissains: {
+					total: sumAttrs(d?.production, [
+						"CAHNaissFr",
+						"CAHNaissUE",
+						"CAHNaissAu",
+					]),
+				},
+				juveniles: {
+					total: sumAttrs(d?.production, [
+						"CAHDElvFr",
+						"CAHDElvUE",
+						"CAHDElvAU",
+					]),
+				},
+				adultes: {
+					total: sumAttrs(d?.production, [
+						// Elevage
+						"CAHElvFr",
+						"CAHElvUE",
+						"CAHElvAu",
+						// Consommation
+						"CAHCoFrPro",
+						"CAHCoFrDet",
+						"CAHCoFrGros",
+						"CAHCoFrPCE",
+						"CAHCoFrPGMS",
+						"CAHCoFrDeg",
+						"CAHCoUEPro",
+						"CAHCoUEGros",
+						"CAHCoAuPro",
+						"CAHCoAuGros",
+					]),
+					// TODO: consommation devrait être null si tout le contenu est 0 ou nulll
+					consommation: {
+						// TODO: destination devrait être null si tout le contenu est 0 ou nulll
+						destination: {
+							// TODO: france devrait être null si tout le contenu est 0 ou nulll
+							// TODO: envisager d’utiliser le pattern
+							// const a = {...(someCondition && {b: 5})}
+							france: {
+								degustation:
+									d?.production.CAHCoFrDeg ?
+										{ valeurHT: d.production.CAHCoFrDeg }
+									:	null,
+								autresVentesParticuliers:
+									d?.production.CAHCoFrDet ?
+										{
+											valeurHT: d.production.CAHCoFrDet,
+										}
+									:	null,
+								autresConchyliculteurs:
+									d?.production.CAHCoFrPro ?
+										{
+											valeurHT: d.production.CAHCoFrPro,
+										}
+									:	null,
+								restaurateursTraiteurs: null,
+								poissoniersEcaillers:
+									d?.production.CAHCoFrPCE ?
+										{
+											valeurHT: d.production.CAHCoFrPCE,
+										}
+									:	null,
+								grandesMoyennesSurfaces:
+									d?.production.CAHCoFrPGMS ?
+										{
+											valeurHT: d.production.CAHCoFrPGMS,
+										}
+									:	null,
+								mareyeursGrossistes:
+									d?.production.CAHCoFrGros ?
+										{
+											valeurHT: d.production.CAHCoFrGros,
+										}
+									:	null,
+							},
+							unionEuropeenne:
+								d?.production.CAHCoUEGros ?
+									{
+										valeurHT: d.production.CAHCoUEGros,
+									}
+								:	null,
+							horsUnionEuropeenne:
+								d?.production.CAHCoAuGros ?
+									{
+										valeurHT: d.production.CAHCoAuGros,
+									}
+								:	null,
+						},
+					},
+					elevage: {},
+				},
+			},
+		},
+		stocks: {
+			huitreCreuse: {
+				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
+				naissains: {
+					quantite: d?.stock.StckVolHNaisMi ?? null,
+					repartition: [],
+				},
+				juveniles: {
+					quantite: d?.stock.StckVolHDElv ?? null,
+					repartition: [],
+				},
+				adultes: {
+					quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
+					repartition: [],
+				},
+			},
+		},
+
 		concessions: concessions.map((c) => ({
 			quartierParcelle: c.quartierParcelle,
 			libLocalite: c.libLocalite,

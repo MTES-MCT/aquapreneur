@@ -1,5 +1,3 @@
-import { goto } from "$app/navigation";
-
 import { DSFR_VERSION } from "./constants";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 
@@ -22,20 +20,15 @@ export const formatNum = (value: number, unit = "", naValue = ""): string => {
 	return unit ? `${strNum} ${unit}` : strNum;
 };
 
-export const submitDeclarationContext = async (
-	event: Event,
-	idDeclarationCourante: number,
-	dc: DeclarationSchema,
-	callbackUrl: string,
+export const submitDeclarationUpdate = async (
+	id: number,
+	donnees: DeclarationSchema,
 ) => {
-	event.preventDefault();
-	const req = await fetch(`/api/declarations/${idDeclarationCourante}`, {
+	const req = await fetch(`/api/declarations/${id}`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
-		body: JSON.stringify(dc),
+		body: JSON.stringify(donnees),
 	});
 	const res = await req.json();
-	const parsedRes = DeclarationSchema.assert(res.donnees);
-	Object.assign(dc, parsedRes);
-	goto(callbackUrl);
+	return DeclarationSchema.assert(res.donnees);
 };

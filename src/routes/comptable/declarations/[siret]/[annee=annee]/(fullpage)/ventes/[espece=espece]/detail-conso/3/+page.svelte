@@ -1,0 +1,182 @@
+<script lang="ts">
+	import cloneDeep from "lodash/cloneDeep";
+
+	import type { FormEventHandler } from "svelte/elements";
+
+	import { goto } from "$app/navigation";
+
+	import Fieldset from "$lib/components/fieldset.svelte";
+	import NavigationLinks from "$lib/components/navigation-links.svelte";
+	import { DESTINATION_VENTES_CONSO_FRANCE } from "$lib/constants";
+	import { ventesParEspece } from "$lib/declaration-utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
+
+	const { data } = $props();
+
+	let donnees = $state(cloneDeep(data.declaration.donnees));
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		event.preventDefault();
+		ventesParEspece(donnees, data.espece.id).consommation.rendValide();
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("../../recapitulatif");
+	};
+
+	let prevHref = $derived(
+		(
+			ventesParEspece(
+				donnees,
+				data.espece.id,
+			).consommation.destination.france.active()
+		) ?
+			"./2"
+		:	"./1",
+	);
+
+	const toNumber = (val: string | null | undefined) => {
+		return (
+			val != null ?
+				!Number.isNaN(Number.parseFloat(val)) ?
+					Number.parseFloat(val)
+				:	null
+			:	null
+		);
+	};
+</script>
+
+<div>
+	<p class="fr-text--xl">Comment le chiffre d’affaires est-il réparti ?</p>
+
+	<p>
+		Renseignez le montant des ventes pour chaque destination, ainsi que la
+		quantité lorsqu’elle est connue.
+	</p>
+
+	<form method="POST" onsubmit={handleSubmit}>
+		<Fieldset>
+			{#snippet inputs()}
+				<div class="fr-table fr-table--lg">
+					<div class="fr-table__wrapper">
+						<div class="fr-table__container">
+							<div class="fr-table__content">
+								<table class="fr-cell--multiline">
+									<thead>
+										<tr>
+											<th>Destination</th>
+											<th>
+												Montant des ventes <span class="fr-text--regular">
+													(€ HT)
+												</span>
+											</th>
+											<th>
+												Quantité <span class="fr-text--regular">(kg)</span>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.france?.active()}
+											<tr>
+												<td
+													colspan="3"
+													class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+												>
+													En France
+												</td>
+											</tr>
+											{#each DESTINATION_VENTES_CONSO_FRANCE as destination (destination.id)}
+												{#if ventesParEspece(donnees, data.espece.id)
+													.consommation.destination?.france?.detail(destination.id)
+													?.active()}
+													<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+															 toucher directement à la structure -->
+													{@const value =
+														donnees.ventes[data.espece.id]!.adultes!
+															.consommation!.destination!.france![
+															destination.id
+														]!}
+													<tr>
+														<td>{destination.label}</td>
+														<td>
+															<input
+																class="fr-input"
+																type="text"
+																value={value?.valeurHT}
+																onchange={(v) =>
+																	(value.valeurHT = toNumber(
+																		v.currentTarget.value,
+																	))}
+															/>
+														</td>
+														<td><input class="fr-input" disabled /></td>
+													</tr>
+												{/if}
+											{/each}
+										{/if}
+										{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active() || ventesParEspece(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
+											<tr>
+												<td
+													colspan="3"
+													class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+												>
+													À l’étranger
+												</td>
+											</tr>
+											{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active()}
+												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+										   			 toucher directement à la structure -->
+												{@const value =
+													donnees.ventes[data.espece.id]!.adultes!.consommation!
+														.destination!.unionEuropeenne!}
+												<tr>
+													<td>Au sein de l’Union Européenne</td>
+													<td>
+														<input
+															class="fr-input"
+															type="text"
+															value={value?.valeurHT}
+															onchange={(v) =>
+																(value.valeurHT = toNumber(
+																	v.currentTarget.value,
+																))}
+														/>
+													</td>
+													<td><input class="fr-input" disabled /></td>
+												</tr>
+											{/if}
+											{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
+												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+										   			 toucher directement à la structure -->
+												{@const value =
+													donnees.ventes[data.espece.id]!.adultes!.consommation!
+														.destination!.horsUnionEuropeenne!}
+												<tr>
+													<td>Hors de l’Union Européenne</td>
+													<td>
+														<input
+															class="fr-input"
+															type="text"
+															value={value?.valeurHT}
+															onchange={(v) =>
+																(value.valeurHT = toNumber(
+																	v.currentTarget.value,
+																))}
+														/>
+													</td>
+													<td><input class="fr-input" disabled /></td>
+												</tr>
+											{/if}
+										{/if}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>{/snippet}
+		</Fieldset>
+
+		<NavigationLinks {prevHref} nextIsButton cantAnswerBtn />
+	</form>
+</div>

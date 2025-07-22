@@ -25,11 +25,11 @@ import { Email, Siret } from "$lib/types";
 
 const UserInfoPayloadSchema = type({
 	"+": "ignore",
-	sub: "string",
-	given_name: "string",
-	usual_name: "string",
-	email: Email,
-	siret: Siret,
+	"sub": "string",
+	"given_name": "string",
+	"usual_name": "string",
+	"email": Email,
+	"siret": Siret,
 	"phone_number?": "string | null",
 });
 
@@ -39,7 +39,7 @@ type AmrEnum = typeof AmrEnum.infer;
 
 const IdTokenPayloadSchema = type({
 	"+": "ignore",
-	amr: AmrEnum,
+	"amr": AmrEnum,
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

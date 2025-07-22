@@ -35,8 +35,7 @@ export const getRequestId = () => {
 	// https://doc.scalingo.com/platform/app/x-request-id#definition-of-the-x-request-id-header
 	try {
 		return getRequestEvent().request.headers.get("x-request-id");
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars -- l’erreur est attendue en mode script
-	} catch (error) {
+	} catch (_err) {
 		return "";
 	}
 };
@@ -46,8 +45,7 @@ export const getRequestPath = () => {
 	try {
 		const url = getRequestEvent().url;
 		return url.pathname; //+ url.search;
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars -- l’erreur est attendue en mode script
-	} catch (error) {
+	} catch (_err) {
 		return "";
 	}
 };

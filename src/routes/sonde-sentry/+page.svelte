@@ -22,7 +22,7 @@ Cette page permet de tester l’envoi d’erreurs à Sentry
 </script>
 
 <svelte:head>
-	<title>Sonde Sentry | Aquapreneur</title>
+	<title>Sonde Sentry • Aquapreneur</title>
 </svelte:head>
 
 <div class="fr-container">

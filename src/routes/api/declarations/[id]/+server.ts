@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 
-import { updateDeclaration } from "$lib/declaration-store";
+import { updateDeclaration } from "$lib/server/declaration-store";
 
 export const POST = async ({ params, request, locals }) => {
 	const { utilisateur } = locals;

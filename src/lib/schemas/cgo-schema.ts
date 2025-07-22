@@ -13,8 +13,8 @@ export type LaxNumValue = typeof LaxNumValue.infer;
 export const CGODonneesBilan = type({
 	dirigeant_es: type(
 		{
-			nom: "string",
-			prenom: "string",
+			"nom": "string",
+			"prenom": "string",
 			"annee_naissance?": Year.or(type.null), // format YYYY.
 			"genre?": "'M' | 'F' | 'A' | null", // M, F ou A (autre). Peut être vide en l’absence d’information.
 			"annee_entree?": Year.or(type.null), // la date d’entrée dans l’entreprise, au format YYYY.
@@ -538,12 +538,12 @@ export const CGODonneesBilan = type({
 
 export const CGORequestData = type({
 	"...": CGODonneesBilan,
-	siret: "string", // le code SIRET de l’exploitant, 14 caractères.
-	nom: "string", // le nom de l’exploitation aquacole.
-	debut_exercice: IsoDate, // la date de début d’exercice, au format YYYY-MM-DD.
-	fin_exercice: IsoDate, // la date de fin d’exercice, au format YYYY-MM-DD.
-	version: PositiveInt, // la version du bilan, 1 dans le cas général, itéré en cas de corrections.
-	date_bilan: IsoDate,
+	"siret": "string", // le code SIRET de l’exploitant, 14 caractères.
+	"nom": "string", // le nom de l’exploitation aquacole.
+	"debut_exercice": IsoDate, // la date de début d’exercice, au format YYYY-MM-DD.
+	"fin_exercice": IsoDate, // la date de fin d’exercice, au format YYYY-MM-DD.
+	"version": PositiveInt, // la version du bilan, 1 dans le cas général, itéré en cas de corrections.
+	"date_bilan": IsoDate,
 });
 
 export type CGOData = typeof CGORequestData.infer;

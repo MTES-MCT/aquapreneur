@@ -13,6 +13,7 @@ export const declarationsTable = pgTable(
 
 		siret: text().references(() => etablissementsTable.siret),
 		annee: integer().notNull(), // annee de la cloture
+		denomination: text().notNull(),
 		donnees: jsonb().$type<DeclarationSchema>().notNull(),
 		...timestamps,
 	},
