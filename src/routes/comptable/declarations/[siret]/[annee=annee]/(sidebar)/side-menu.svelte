@@ -1,14 +1,18 @@
 <script lang="ts">
 	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 
-	import type { DeclarationStep } from "../../../../producteur/declarations/[annee=annee]/types";
+	import type { DeclarationStep } from "../type";
 
 	const {
 		step,
 		baseUrl,
-		donnees,
-	}: { step: DeclarationStep; baseUrl: string; donnees: DeclarationSchema } =
-		$props();
+		nomEtablissement,
+	}: {
+		step: DeclarationStep;
+		baseUrl: string;
+		donnees: DeclarationSchema;
+		nomEtablissement: string;
+	} = $props();
 </script>
 
 {#snippet categoryTitle(text: string, isDone: boolean)}
@@ -36,58 +40,62 @@
 		<div class="fr-collapse" id="fr-sidemenu-wrapper">
 			<div class="fr-sidemenu__title" id="fr-sidemenu-title">
 				<p class="fr-text--md fr-text--regular">Vous déclarez pour :</p>
-				<h2 class="fr-text--lg">{donnees.etablissement.denomination}</h2>
+				<h2 class="fr-text--lg">
+					{nomEtablissement}
+				</h2>
 			</div>
 			<ul class="fr-sidemenu__list">
-				<li class="fr-sidemenu__item fr-sidemenu__item--active">
+				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/entreprise/"
-						aria-current={step === "entreprise" ? "page" : undefined}
+						style="color: var(--text-disabled-grey)"
+						aria-current={step === "salaries" ? "page" : undefined}
+						role="link"
+						aria-disabled="true"
 					>
-						{@render categoryTitle(
-							"Salariés",
-							donnees.etapes?.entrepriseValidee,
-						)}
+						{@render categoryTitle("Salariés", false)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/concessions/"
-						aria-current={step === "concessions" ? "page" : undefined}
+						href="{baseUrl}/ventes/"
+						aria-current={step === "ventes" ? "page" : undefined}
 					>
-						{@render categoryTitle("Ventes", donnees.etapes?.concessionValidee)}
+						{@render categoryTitle("Ventes", false)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/production/"
+						style="color: var(--text-disabled-grey)"
 						aria-current={step === "production" ? "page" : undefined}
+						role="link"
+						aria-disabled="true"
 					>
-						{@render categoryTitle("Stock", donnees.etapes?.productionValidee)}
+						{@render categoryTitle("Production", false)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/stock/"
-						aria-current={step === "stock" ? "page" : undefined}
+						style="color: var(--text-disabled-grey)"
+						aria-current={step === "retour_annee" ? "page" : undefined}
+						role="link"
+						aria-disabled="true"
 					>
-						{@render categoryTitle(
-							"Retour sur l’année",
-							donnees.etapes?.stockValidee,
-						)}
+						{@render categoryTitle("Retour sur l’année", false)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						href="{baseUrl}/envoi"
+						style="color: var(--text-disabled-grey)"
 						aria-current={step === "envoi" ? "page" : undefined}
+						role="link"
+						aria-disabled="true"
 					>
-						{@render categoryTitle("Envoi", donnees.etapes?.envoiValidee)}
+						{@render categoryTitle("Envoi", false)}
 					</a>
 				</li>
 			</ul>

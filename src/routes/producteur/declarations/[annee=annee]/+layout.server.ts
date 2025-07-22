@@ -5,8 +5,8 @@ import { redirect } from "@sveltejs/kit";
 
 import { db } from "$lib/server/db";
 import { etablissementsTable } from "$lib/server/db/schema/entreprise";
+import { getOrCreateDeclaration } from "$lib/server/declaration-store";
 
-import { getOrCreateDeclaration } from "$lib/declaration-store";
 import type { AnneeDeclarative } from "$lib/types";
 
 export const load = async ({ parent, params }) => {

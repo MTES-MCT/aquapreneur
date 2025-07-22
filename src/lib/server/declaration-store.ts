@@ -7,12 +7,12 @@ import { declarationsTable } from "$lib/server/db/schema/declaration";
 
 import { prefillDeclaration } from "$lib/prefill";
 
-import { ANNEES_DECLARATIVES } from "./constants";
-import { DeclarationSchema } from "./schemas/declaration-schema";
-import { type DeclarationEntry } from "./server/db/types";
+import { ANNEES_DECLARATIVES } from "../constants";
+import { DeclarationSchema } from "../schemas/declaration-schema";
+import { type DeclarationEntry } from "./db/types";
 
-import type { EtablissementSelect } from "./server/db/types";
-import type { AnneeDeclarative } from "./types";
+import type { AnneeDeclarative } from "../types";
+import type { EtablissementSelect } from "./db/types";
 
 export const getOrCreateDeclarations = async (
 	etablissement: EtablissementSelect,
@@ -52,6 +52,7 @@ export const getOrCreateDeclaration = async (
 				.insert(declarationsTable)
 				.values({
 					annee,
+					denomination: etablissement.denomination,
 					siret: etablissement.siret,
 					donnees: await prefillDeclaration(etablissement, annee),
 				})
@@ -66,7 +67,6 @@ export const updateDeclaration = async (
 	donneesDeclaration: DeclarationSchema,
 ) => {
 	const parsedData = DeclarationSchema.assert(donneesDeclaration);
-
 	const currentValue = (
 		await db
 			.select()

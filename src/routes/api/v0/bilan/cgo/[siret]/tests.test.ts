@@ -1,4 +1,5 @@
 import { Column, desc } from "drizzle-orm";
+import cloneDeep from "lodash/cloneDeep";
 import { beforeAll, describe, expect, inject, test } from "vitest";
 
 import { db } from "$lib/server/db";
@@ -352,14 +353,13 @@ describe("Tests de validation du SIRET", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toBe(
-			'stock.StckValHNaisMi must be a number, "", null or a well-formed numeric string (was "ABC")',
+			'stock.StckValHNaisMi must be a number, "", null, a well-formed numeric string or undefined (was "ABC")',
 		);
 	});
 });
 
 describe("Tests de validation des champs dirigeant_es", async () => {
 	test("400 si le champ dirigeant_es n’est pas un tableau", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { dirigeant_es, ...dummyBilanNoDir } = dummyBilan;
 		let response;
 
@@ -389,7 +389,6 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 	});
 
 	test("400 si le champ dirigeant_es est incorrect", async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { dirigeant_es, ...dummyBilanNoDir } = dummyBilan;
 		let response;
 
@@ -453,7 +452,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toBe(
-			'dirigeant_es[0].annee_naissance must be a number or null (was "abc")',
+			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -471,7 +470,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toBe(
-			'dirigeant_es[0].annee_naissance must be a number or null (was "abc")',
+			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
@@ -1025,7 +1024,8 @@ describe("Tests de conversion des champs CGO", async () => {
 	});
 
 	test("400 si un champ ou catégorie est manquante", async () => {
-		const data = JSON.parse(JSON.stringify(testBilanCGO));
+		const data = cloneDeep(testBilanCGO);
+		// @ts-expect-error on veut tester une donnée incorrecte
 		delete data.stock;
 
 		const response = await post(`/api/v0/bilan/cgo/${testBilanCGO.siret}`, {

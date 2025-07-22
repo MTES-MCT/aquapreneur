@@ -2,11 +2,7 @@ import { isHttpError } from "@sveltejs/kit";
 
 import { log } from "./logger";
 
-export default (
-	msg: string,
-	extra: object = {},
-	exception: unknown = undefined,
-) => {
+export default (msg: string, extra: object = {}, exception?: unknown) => {
 	const parsedExc =
 		exception ?
 			isHttpError(exception) ?

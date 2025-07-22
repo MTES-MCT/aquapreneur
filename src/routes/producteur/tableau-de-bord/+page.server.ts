@@ -4,11 +4,11 @@ import { fail } from "@sveltejs/kit";
 
 import { db } from "$lib/server/db";
 import { etablissementsTable } from "$lib/server/db/schema/entreprise";
+import { getOrCreateDeclarations } from "$lib/server/declaration-store";
 import * as logger from "$lib/server/utils/logger";
 import { getOrCreateEtablissement } from "$lib/server/utils/sirene";
 
 import { ADMIN_CURRENT_SIRET_COOKIE_NAME } from "$lib/constants";
-import { getOrCreateDeclarations } from "$lib/declaration-store";
 
 export const load = async ({ parent, cookies }) => {
 	const { utilisateur } = await parent();

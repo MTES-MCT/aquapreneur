@@ -1,29 +1,32 @@
 <script lang="ts">
-	import { page } from "$app/state";
+	import { type SlideParams, slide } from "svelte/transition";
 
-	import SideMenu from "./side-menu.svelte";
+	import { navigating, page } from "$app/state";
 
-	let { data, children } = $props();
+	let { children } = $props();
 
-	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
+	function maybeSlide(
+		node: Element,
+		options: SlideParams & { shouldTransition: boolean },
+	) {
+		const previousDepth = navigating.from?.route?.id?.split("/").length ?? 0;
+		const currentDepth = navigating.to?.route?.id?.split("/").length ?? 0;
+
+		// TODO: transition dans l’autre sens
+		if (options.shouldTransition && currentDepth > previousDepth) {
+			return slide(node, options);
+		}
+		return {};
+	}
 </script>
 
-<div class="fr-container">
-	<div class="fr-grid-row">
-		<div class="fr-col-md-4 fr-col-lg-3 fr-col-12">
-			<SideMenu
-				step={page.data.step}
-				baseUrl="/comptable/declarations/{data.declaration.annee}"
-				{donnees}
-			></SideMenu>
-		</div>
-
-		<div
-			id="contenu"
-			class="fr-col-12 fr-col-md-8 fr-col-lg-7 fr-mx-auto fr-pt-md-12v fr-pt-8v fr-pb-12v"
-			style="min-height: 100vh; "
-		>
-			{@render children()}
-		</div>
+{#key page.url.pathname}
+	<div
+		transition:maybeSlide={{
+			axis: "y",
+			shouldTransition: page.data.shouldTransition,
+		}}
+	>
+		{@render children()}
 	</div>
-</div>
+{/key}

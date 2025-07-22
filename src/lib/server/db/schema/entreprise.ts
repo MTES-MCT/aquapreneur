@@ -9,7 +9,7 @@ export const entreprises = pgTable(
 		siren: text().primaryKey(),
 		codeActivitePrincipale: text(),
 		activitePrincipale: text(),
-		denomination: text(),
+		denomination: text().notNull(),
 		...timestamps,
 	},
 	(table) => [check("siren_check", sql`${table.siren} ~ '^\\d{9}$'`)],
@@ -24,7 +24,7 @@ export const etablissementsTable = pgTable(
 				onDelete: "restrict",
 			})
 			.notNull(),
-		denomination: text(),
+		denomination: text().notNull(),
 		siege: boolean(),
 		codeActivitePrincipale: text(),
 		activitePrincipale: text(),

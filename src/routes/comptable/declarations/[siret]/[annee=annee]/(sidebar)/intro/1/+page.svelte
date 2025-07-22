@@ -11,6 +11,8 @@
 	Cette déclaration annuelle de production aquacole concerne votre adhérent :
 </h2>
 
-<p class="fr-h2">{data.declaration.donnees.etablissement.denomination}</p>
+<p class="fr-h2">
+	{data.etablissement.denomination}
+</p>
 
 <NavigationLinks nextHref="./2" nextLabel="Commencer" />

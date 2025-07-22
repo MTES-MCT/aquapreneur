@@ -12,20 +12,11 @@
 
 	<div class="fr-grid-row fr-grid-row--gutters">
 		<div class="fr-col-12">
-			<h2 class="fr-h5">Déclarations en cours</h2>
-		</div>
-	</div>
-
-	<div class="fr-grid-row fr-grid-row--gutters">
-		<div class="fr-col-12">
 			<div class="fr-table">
 				<div class="fr-table__wrapper">
 					<div class="fr-table__container">
 						<div class="fr-table__content">
 							<table>
-								<caption>
-									<h2 class="fr-h5">Historique des déclarations</h2>
-								</caption>
 								<thead>
 									<tr>
 										<th scope="col">Adhérent</th>
@@ -45,7 +36,7 @@
 													class="fr-icon-store-line fr-link--icon-left fr-link fr-link--sm"
 													data-sveltekit-preload-data="off"
 												>
-													{declaration.donnees.etablissement.denomination}
+													{declaration.denomination}
 												</a>
 											</td>
 											<td>{declaration.siret}</td>

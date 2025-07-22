@@ -1,4 +1,5 @@
 <script lang="ts">
+	import cloneDeep from "lodash/cloneDeep";
 	import { onMount } from "svelte";
 
 	import type { FormEventHandler } from "svelte/elements";
@@ -45,7 +46,7 @@
 		setTimeout(() => (delayed = false), 0);
 	});
 
-	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
+	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
@@ -177,7 +178,7 @@
 				Nous n’avons pas trouvé de données sur les concessions de
 				l’établissement
 				<br />
-				{data.declaration.donnees.etablissement.denomination}.
+				{data.declaration.denomination}.
 			</p>
 		</div>
 	{/each}

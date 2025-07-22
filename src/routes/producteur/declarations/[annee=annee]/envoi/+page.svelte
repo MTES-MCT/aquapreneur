@@ -1,4 +1,6 @@
 <script lang="ts">
+	import cloneDeep from "lodash/cloneDeep";
+
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
@@ -19,7 +21,8 @@
 		// @ts-expect-error -- pas de type disponible
 		dsfr(element).modal.conceal();
 	}
-	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
+
+	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();

@@ -3,7 +3,7 @@
 
 	const { donnees }: { donnees: DeclarationSchema } = $props();
 
-	const formatValue = (value: number | string | null): string => {
+	const formatValue = (value: number | string | null | undefined): string => {
 		return value != null ?
 				Intl.NumberFormat("fr-FR", {
 					style: "currency",
@@ -21,15 +21,16 @@
 						nom: "Ventes d’huîtres de taille marchande destinées à la consommation",
 						description:
 							"Il s’agit de la production d’huîtres de taille marchande que vous avez vendue pour la consommation.",
-						total: donnees.especes.huitresCreuses.ventes.adultes.total,
+						total: donnees.ventes.huitreCreuse?.adultes?.total,
 						destinations: [
 							{
 								nom: "En gros",
-								val: donnees.especes.huitresCreuses.ventes.adultes.total,
+								val: donnees.ventes.huitreCreuse?.adultes?.total,
 							},
 							{
 								nom: "Dégustation",
-								val: donnees.especes.huitresCreuses.ventes.adultes.degustation,
+								val: donnees.ventes.huitreCreuse?.adultes?.consommation
+									?.destination?.france?.degustation?.valeurHT,
 							},
 						],
 					},

@@ -1,11 +1,13 @@
 <script lang="ts">
+	import cloneDeep from "lodash/cloneDeep";
+
 	import { page } from "$app/state";
 
 	import SideMenu from "./side-menu.svelte";
 
 	let { data, children } = $props();
 
-	let donnees = $state(JSON.parse(JSON.stringify(data.declaration.donnees)));
+	let donnees = $state(cloneDeep(data.declaration.donnees));
 </script>
 
 <div class="fr-container">
@@ -17,7 +19,6 @@
 				{donnees}
 			></SideMenu>
 		</div>
-
 		<div
 			id="contenu"
 			class="fr-col-12 fr-col-md-8 fr-col-lg-7 fr-mx-auto fr-pt-md-12v fr-pt-8v fr-pb-12v"

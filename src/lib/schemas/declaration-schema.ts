@@ -12,6 +12,71 @@ export const Repartition = type(
 	"[]",
 );
 
+export const EspeceAchatSchema = type({
+	"naissains?": {
+		// en milliers
+		quantite: PositiveNumber.or(type.null),
+	},
+	"juveniles?": {
+		quantite: PositiveNumber.or(type.null),
+	},
+	"adultes?": {
+		quantite: PositiveNumber.or(type.null),
+	},
+});
+
+export const ValeurHT = type({
+	"valeurHT?": PositiveNumber.or(type.null),
+}).or(type.null);
+
+export const EspeceVenteSchema = type({
+	"naissains?": {
+		"total?": PositiveNumber.or(type.null),
+	},
+	"juveniles?": {
+		"total?": PositiveNumber.or(type.null),
+	},
+	"adultes?": {
+		"total?": PositiveNumber.or(type.null),
+		"consommation?": {
+			"validé?": "boolean",
+			"destination?": {
+				"france?": {
+					"degustation?": ValeurHT,
+					"autresVentesParticuliers?": ValeurHT,
+					"autresConchyliculteurs?": ValeurHT,
+					"restaurateursTraiteurs?": ValeurHT,
+					"poissoniersEcaillers?": ValeurHT,
+					"grandesMoyennesSurfaces?": ValeurHT,
+					"mareyeursGrossistes?": ValeurHT,
+				},
+				"unionEuropeenne?": ValeurHT,
+				"horsUnionEuropeenne?": ValeurHT,
+			},
+		},
+		"elevage?": {
+			"france?": {},
+			"etranger?": {},
+		},
+	},
+});
+
+export const EspeceStockSchema = type({
+	"surfaceExploitation?": PositiveNumber.or(type.null),
+	"naissains?": {
+		quantite: PositiveNumber.or(type.null).describe("en milliers"),
+		repartition: Repartition.or(type.null),
+	},
+	"juveniles?": {
+		quantite: PositiveNumber.or(type.null).describe("en milliers"),
+		repartition: Repartition.or(type.null),
+	},
+	"adultes?": {
+		quantite: PositiveNumber.or(type.null).describe("en milliers"),
+		repartition: Repartition.or(type.null),
+	},
+});
+
 export const DeclarationSchema = type({
 	etapes: {
 		entrepriseValidee: "boolean",
@@ -38,56 +103,33 @@ export const DeclarationSchema = type({
 	},
 	etablissement: {
 		siret: Siret,
-		denomination: "string | null",
+		denomination: "string",
 		codeActivitePrincipale: "string | null",
 		activitePrincipale: "string | null",
 		adresse: "string | null",
 		codePostal: "string | null",
 		commune: "string | null",
 	},
-	especes: {
-		huitresCreuses: {
-			surfaceExploitation: PositiveNumber.or(type.null),
-			achats: {
-				naissains: {
-					// en milliers
-					quantite: PositiveNumber.or(type.null),
-				},
-				juveniles: {
-					quantite: PositiveNumber.or(type.null),
-				},
-				adultes: {
-					quantite: PositiveNumber.or(type.null),
-				},
-			},
-			ventes: {
-				naissains: {
-					total: PositiveNumber.or(type.null),
-				},
-				juveniles: {
-					total: PositiveNumber.or(type.null),
-				},
-				adultes: {
-					total: PositiveNumber.or(type.null),
-					degustation: PositiveNumber.or(type.null),
-					autres: PositiveNumber.or(type.null),
-				},
-			},
-			stock: {
-				naissains: {
-					quantite: PositiveNumber.or(type.null).describe("en milliers"),
-					repartition: Repartition.or(type.null),
-				},
-				juveniles: {
-					quantite: PositiveNumber.or(type.null).describe("en milliers"),
-					repartition: Repartition.or(type.null),
-				},
-				adultes: {
-					quantite: PositiveNumber.or(type.null).describe("en milliers"),
-					repartition: Repartition.or(type.null),
-				},
-			},
-		},
+	achats: {
+		"huitrePlate?": EspeceAchatSchema,
+		"huitreCreuse?": EspeceAchatSchema,
+		"mouleCommune?": EspeceAchatSchema,
+		"mouleMediterraneenne?": EspeceAchatSchema,
+		"palourde?": EspeceAchatSchema,
+	},
+	ventes: {
+		"huitrePlate?": EspeceVenteSchema,
+		"huitreCreuse?": EspeceVenteSchema,
+		"mouleCommune?": EspeceVenteSchema,
+		"mouleMediterraneenne?": EspeceVenteSchema,
+		"palourde?": EspeceVenteSchema,
+	},
+	stocks: {
+		"huitrePlate?": EspeceStockSchema,
+		"huitreCreuse?": EspeceStockSchema,
+		"mouleCommune?": EspeceStockSchema,
+		"mouleMediterraneenne?": EspeceStockSchema,
+		"palourde?": EspeceStockSchema,
 	},
 	concessions: type(
 		{

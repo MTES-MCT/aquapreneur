@@ -5,7 +5,7 @@ import {
 } from "@oslojs/encoding";
 import crypto from "crypto";
 
-export const getShortId = (sessionId: string | undefined) => {
+export const getShortId = (sessionId?: string) => {
 	return sessionId ? sessionId.substring(0, 7) : undefined;
 };
 

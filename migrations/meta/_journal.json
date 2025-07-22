@@ -113,6 +113,13 @@
       "when": 1751904231225,
       "tag": "0015_cleanup",
       "breakpoints": false
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1752770012526,
+      "tag": "0016_declaration_denom",
+      "breakpoints": false
     }
   ]
 }
