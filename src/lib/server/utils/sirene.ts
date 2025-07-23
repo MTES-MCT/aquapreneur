@@ -2,6 +2,8 @@ import { type } from "arktype";
 import assert from "assert";
 import { eq } from "drizzle-orm";
 
+import { error } from "@sveltejs/kit";
+
 import { env } from "$env/dynamic/private";
 
 import { db } from "$lib/server/db";
@@ -153,6 +155,9 @@ const getSireneInfo = async (siret: string) => {
 		},
 	);
 
+	if (res?.status == 404) {
+		error(404, "Numéro SIRET inexistant");
+	}
 	if (!res || !res.ok) {
 		throw new Error("Impossible de contacter l’API Sirene");
 	} else {

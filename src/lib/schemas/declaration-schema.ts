@@ -64,16 +64,16 @@ export const EspeceVenteSchema = type({
 export const EspeceStockSchema = type({
 	"surfaceExploitation?": PositiveNumber.or(type.null),
 	"naissains?": {
-		quantite: PositiveNumber.or(type.null).describe("en milliers"),
-		repartition: Repartition.or(type.null),
+		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
+		"repartition?": Repartition.or(type.null),
 	},
 	"juveniles?": {
-		quantite: PositiveNumber.or(type.null).describe("en milliers"),
-		repartition: Repartition.or(type.null),
+		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
+		"repartition?": Repartition.or(type.null),
 	},
 	"adultes?": {
-		quantite: PositiveNumber.or(type.null).describe("en milliers"),
-		repartition: Repartition.or(type.null),
+		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
+		"repartition?": Repartition.or(type.null),
 	},
 });
 

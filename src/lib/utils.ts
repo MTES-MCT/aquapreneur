@@ -1,3 +1,8 @@
+import isArray from "lodash/isArray";
+import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
+import isPlainObject from "lodash/isPlainObject";
+
 import { DSFR_VERSION } from "./constants";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 
@@ -31,4 +36,32 @@ export const submitDeclarationUpdate = async (
 	});
 	const res = await req.json();
 	return DeclarationSchema.assert(res.donnees);
+};
+
+export const deepClean = (obj: object) => {
+	// Supprime de façon récursive toutes les clés nulles, non-définies ou vides d’un objet
+	const deepCleanOnce = (obj: object) =>
+		Object.fromEntries(
+			Object.entries(obj)
+				.filter((entry) => {
+					const val = entry[1];
+					return (
+						val != null &&
+						val !== 0 &&
+						!(isArray(val) && isEmpty(val)) &&
+						!(isPlainObject(val) && isEmpty(val))
+					);
+				})
+				.map((entry) => [
+					entry[0],
+					isPlainObject(entry[1]) ? deepClean(entry[1]) : entry[1],
+				]),
+		);
+
+	let result = obj;
+	while (true) {
+		const newResult = deepCleanOnce(result);
+		if (isEqual(newResult, result)) return result;
+		result = newResult;
+	}
 };

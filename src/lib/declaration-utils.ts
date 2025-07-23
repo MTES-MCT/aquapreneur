@@ -133,15 +133,12 @@ export const ventesParEspece = (
 							[especeId]: {
 								adultes: {
 									consommation: {
-										destination: {},
+										destination: { unionEuropeenne: {} },
 									},
 								},
 							},
 						},
 					});
-					donnees.ventes[
-						especeId
-					]!.adultes!.consommation!.destination!.unionEuropeenne = {};
 				},
 				disable: () => {
 					delete donnees.ventes?.[especeId]?.adultes?.consommation?.destination
@@ -160,14 +157,11 @@ export const ventesParEspece = (
 						ventes: {
 							[especeId]: {
 								adultes: {
-									consommation: { destination: {} },
+									consommation: { destination: { horsUnionEuropeenne: {} } },
 								},
 							},
 						},
 					});
-					donnees.ventes[
-						especeId
-					]!.adultes!.consommation!.destination!.horsUnionEuropeenne = {};
 				},
 				disable: () => {
 					delete donnees.ventes?.[especeId]?.adultes?.consommation?.destination

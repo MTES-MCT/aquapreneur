@@ -1,9 +1,13 @@
-import { Column, desc } from "drizzle-orm";
+import { Column, desc, eq } from "drizzle-orm";
 import cloneDeep from "lodash/cloneDeep";
 import { beforeAll, describe, expect, inject, test } from "vitest";
 
 import { db } from "$lib/server/db";
 import { bilans, evtsJournalReqs, jetonsApi } from "$lib/server/db/schema/api";
+import {
+	entreprises,
+	etablissementsTable,
+} from "$lib/server/db/schema/entreprise";
 import { getJetonApiFromToken } from "$lib/server/db/utils";
 import { generateApiToken } from "$lib/server/utils";
 
@@ -23,9 +27,11 @@ async function getLastById<T extends AnyPgTable>(table: T) {
 	}
 }
 
-const dummySiret = "12345678901234";
+const dummySiret1 = "13002526500013";
+const dummySiret2 = "13003001800019";
+const dummySiret3 = "13001261000031";
 const dummyBilan = {
-	siret: dummySiret,
+	siret: dummySiret1,
 	nom: "producteur",
 	debut_exercice: "2020-01-01",
 	fin_exercice: "2020-12-31",
@@ -52,7 +58,7 @@ beforeAll(async () => {
 	const values = {
 		hachage: digest,
 		nomPartenaire: "partenaire test",
-		siretPartenaire: "12345678901234",
+		siretPartenaire: dummySiret3,
 		courrielPartenaire: "test@test.com",
 	};
 	await db.insert(jetonsApi).values(values);
@@ -69,9 +75,55 @@ const post = (
 	});
 };
 
+describe("Tests de création entreprise et établissement", async () => {
+	// On utilise un SIRET à part pour ces test pour éviter que les entreprises
+	// aient été créées par ailleur
+	const siret = "33071536800032";
+
+	test("L’entreprise n’existe pas a priori", async () => {
+		const result = await db
+			.select()
+			.from(entreprises)
+			.where(eq(entreprises.siren, siret.slice(0, 9)));
+		expect(result.length).toBe(0);
+	});
+
+	test("L’établissement n’existe pas a priori", async () => {
+		const result = await db
+			.select()
+			.from(etablissementsTable)
+			.where(eq(etablissementsTable.siret, siret));
+		expect(result.length).toBe(0);
+	});
+
+	test("Une requête API créé établissement et entreprise", async () => {
+		await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+			},
+		});
+
+		const result1 = await db
+			.select()
+			.from(entreprises)
+			.where(eq(entreprises.siren, siret.slice(0, 9)));
+		expect(result1.length).toBe(1);
+		expect(result1[0].siren).toBe(siret.slice(0, 9));
+
+		const result2 = await db
+			.select()
+			.from(etablissementsTable)
+			.where(eq(etablissementsTable.siret, siret));
+		expect(result2.length).toBe(1);
+		expect(result2[0].siret).toBe(siret);
+	});
+});
+
 describe("Tests d’autorisation", async () => {
 	test("401 pour les requêtes non authentifiées", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			data: dummyBilan,
 		});
 		expect(response.status).toBe(401);
@@ -81,7 +133,7 @@ describe("Tests d’autorisation", async () => {
 	});
 
 	test("401 pour les jetons inexistants", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer XXX` },
 			data: dummyBilan,
 		});
@@ -97,13 +149,13 @@ describe("Tests d’autorisation", async () => {
 		const values = {
 			hachage: digest,
 			nomPartenaire: "partenaire test",
-			siretPartenaire: "12345678901234",
+			siretPartenaire: dummySiret3,
 			courrielPartenaire: "test@test.com",
 			valide: false,
 		};
 		await db.insert(jetonsApi).values(values);
 
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${disabledAuthToken}` },
 			data: dummyBilan,
 		});
@@ -114,7 +166,7 @@ describe("Tests d’autorisation", async () => {
 	});
 
 	test("400 pour les en-têtes d’autorisation mal formés", async () => {
-		let response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		let response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `XXX` },
 			data: dummyBilan,
 		});
@@ -123,7 +175,7 @@ describe("Tests d’autorisation", async () => {
 			"En-tête `Authorization` incorrect. La valeur attendue est : `Bearer <YOUR TOKEN>`",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer` },
 			data: dummyBilan,
 		});
@@ -134,7 +186,7 @@ describe("Tests d’autorisation", async () => {
 	});
 
 	test("204 en cas de succès", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: dummyBilan,
 		});
@@ -144,7 +196,7 @@ describe("Tests d’autorisation", async () => {
 
 describe("Tests de sauvegarde du journal de requêtes", async () => {
 	test("Une entrée est ajoutée au journal de requêtes", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: dummyBilan,
 		});
@@ -157,7 +209,7 @@ describe("Tests de sauvegarde du journal de requêtes", async () => {
 
 		expect(inserted.idJeton).toBe(jeton!.id);
 		expect(inserted.versionApi).toBe(0);
-		expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/${dummySiret}`);
+		expect(inserted.pathname).toBe(`/api/v0/bilan/cgo/${dummySiret1}`);
 		expect(inserted.href).toBe(response.url);
 		expect(inserted.methode).toBe("POST");
 		expect(inserted.donnees).toEqual(dummyBilan);
@@ -217,8 +269,8 @@ describe("Tests de validation du SIRET", async () => {
 
 	test("400 si les sirets ne sont pas consistents", async () => {
 		let response;
-		const siret1 = "00000000000000";
-		const siret2 = "12345678901234";
+		const siret1 = dummySiret1;
+		const siret2 = dummySiret2;
 
 		response = await post(`/api/v0/bilan/cgo/${siret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
@@ -236,7 +288,7 @@ describe("Tests de validation du SIRET", async () => {
 	});
 
 	test("400 en l’absence de JSON dans la requête", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 		});
 		expect(response.status).toBe(400);
@@ -278,6 +330,18 @@ describe("Tests de validation du SIRET", async () => {
 				siret,
 			},
 		});
+
+		expect(response.status).toBe(404);
+		expect((await response.json()).message).toBe("Numéro SIRET inexistant");
+
+		siret = dummySiret1;
+		response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+			},
+		});
 		expect(response.status).toBe(204);
 	});
 });
@@ -287,7 +351,7 @@ describe("Tests de validation du SIRET", async () => {
 		let response;
 		let inserted;
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: {} },
 		});
@@ -295,7 +359,7 @@ describe("Tests de validation du SIRET", async () => {
 		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: { StckValHNaisMi: null } },
 		});
@@ -303,7 +367,7 @@ describe("Tests de validation du SIRET", async () => {
 		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeNull();
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } },
 		});
@@ -311,7 +375,7 @@ describe("Tests de validation du SIRET", async () => {
 		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: { StckValHNaisMi: "" } },
 		});
@@ -326,7 +390,7 @@ describe("Tests de validation du SIRET", async () => {
 
 		// On autorise à la fois les chaine de caractère et les nombres
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilan,
@@ -337,7 +401,7 @@ describe("Tests de validation du SIRET", async () => {
 		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } },
 		});
@@ -347,7 +411,7 @@ describe("Tests de validation du SIRET", async () => {
 	});
 
 	test("400 si un champ monétaire est invalide", async () => {
-		const response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		const response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, stock: { StckValHNaisMi: "ABC" } },
 		});
@@ -363,7 +427,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		const { dirigeant_es, ...dummyBilanNoDir } = dummyBilan;
 		let response;
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: dummyBilanNoDir,
 		});
@@ -372,7 +436,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			"dirigeant_es must be an array (was missing)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilanNoDir, dirigeant_es: "notAnArray" },
 		});
@@ -381,7 +445,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			"dirigeant_es must be an array (was string)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilanNoDir, dirigeant_es: [] },
 		});
@@ -392,7 +456,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		const { dirigeant_es, ...dummyBilanNoDir } = dummyBilan;
 		let response;
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -404,7 +468,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		expect(body.message).toContain("prenom must be a string (was missing)");
 		expect(body.message).toContain("nom must be a string (was missing)");
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -420,7 +484,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			"dirigeant_es[0].prenom must be a string (was missing)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -437,7 +501,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			"dirigeant_es[0].nom must be a string (was a number)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -455,7 +519,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -473,7 +537,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -491,7 +555,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			"dirigeant_es[0].anneeN must be removed",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: {
 				...dummyBilanNoDir,
@@ -511,7 +575,7 @@ describe("Tests de validation des champs date", async () => {
 	test("400 si un champ date n’est pas au bon format", async () => {
 		let response;
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: "" },
 		});
@@ -520,7 +584,7 @@ describe("Tests de validation des champs date", async () => {
 			'debut_exercice must be a valid date (invalid RFC 9557 string: ) (was "")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: null },
 		});
@@ -529,7 +593,7 @@ describe("Tests de validation des champs date", async () => {
 			"debut_exercice must be a string (was null)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: undefined },
 		});
@@ -538,7 +602,7 @@ describe("Tests de validation des champs date", async () => {
 			"debut_exercice must be a string (was missing)",
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: "12/31/2020" },
 		});
@@ -547,7 +611,7 @@ describe("Tests de validation des champs date", async () => {
 			'debut_exercice must be a valid date (invalid RFC 9557 string: 12/31/2020) (was "12/31/2020")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: "31/12/2020" },
 		});
@@ -556,7 +620,7 @@ describe("Tests de validation des champs date", async () => {
 			'debut_exercice must be a valid date (invalid RFC 9557 string: 31/12/2020) (was "31/12/2020")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: "2020-31-12" },
 		});
@@ -565,7 +629,7 @@ describe("Tests de validation des champs date", async () => {
 			'debut_exercice must be a valid date (invalid RFC 9557 string: 2020-31-12) (was "2020-31-12")',
 		);
 
-		response = await post(`/api/v0/bilan/cgo/${dummySiret}`, {
+		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: "2020-12-31" },
 		});
@@ -575,7 +639,7 @@ describe("Tests de validation des champs date", async () => {
 
 describe("Tests de conversion des champs CGO", async () => {
 	const testBilanCGO = {
-		siret: "12345678912345",
+		siret: dummySiret1,
 		nom: "NOM_ANONYME",
 		debut_exercice: "2024-01-01",
 		fin_exercice: "2024-12-31",
