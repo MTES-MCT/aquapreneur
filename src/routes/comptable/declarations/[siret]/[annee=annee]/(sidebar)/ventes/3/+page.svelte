@@ -5,11 +5,10 @@
 
 	import { goto } from "$app/navigation";
 
-	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
-	import { ESPECES, type ESPECES_ID } from "$lib/constants";
+	import { ESPECES } from "$lib/constants";
 	import { aVenduNaissains, ventesParEspece } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
@@ -30,15 +29,8 @@
 		goto("./recapitulatif");
 	};
 
-	const handleCheck = (checked: boolean, id: ESPECES_ID) => {
-		const v = ventesParEspece(donnees, id);
-		if (checked) {
-			v.naissain.enable();
-		} else {
-			v.naissain.disable();
-		}
-	};
-
+	// TODO si on modifie les espèces après-coup, les nouvelles espèces ne seront
+	// pas activées ici
 	const handleRadioChange: ChangeEventHandler<HTMLInputElement> = () => {
 		especesActives.forEach((e) => {
 			const v = ventesParEspece(donnees, e.id);
@@ -87,29 +79,6 @@
 			{/snippet}
 		</Fieldset>
 
-		{#if radioValue && especesActives.length > 1}
-			<p class="fr-text--xl">Veuillez préciser les espèces concernées :</p>
-
-			<Fieldset>
-				{#snippet legend()}
-					Vous pouvez sélectionner une ou plusieurs réponses.
-				{/snippet}
-
-				{#snippet inputs()}
-					{#each especesActives as espece (espece.id)}
-						<CheckboxGroup
-							name={espece.id}
-							id={espece.id}
-							checked={ventesParEspece(donnees, espece.id).active()}
-							onCheck={(event) =>
-								handleCheck(event.currentTarget.checked, espece.id)}
-						>
-							{#snippet label()}{espece.label}{/snippet}
-						</CheckboxGroup>
-					{/each}
-				{/snippet}
-			</Fieldset>
-		{/if}
 		<NavigationLinks prevHref="./2" nextIsButton />
 	</form>
 </div>
