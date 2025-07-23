@@ -84,3 +84,17 @@ export const updateDeclaration = async (
 	}
 	return currentValue;
 };
+
+export const deleteDeclaration = async (
+	siret: string,
+	annee: AnneeDeclarative,
+) => {
+	await db
+		.delete(declarationsTable)
+		.where(
+			and(
+				eq(declarationsTable.siret, siret),
+				eq(declarationsTable.annee, annee),
+			),
+		);
+};
