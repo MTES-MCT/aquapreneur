@@ -31,13 +31,27 @@ export const ValeurHT = type({
 
 export const EspeceVenteSchema = type({
 	"naissains?": {
-		"total?": PositiveNumber.or(type.null),
+		"destination?": {
+			"france?": ValeurHT,
+			"unionEuropeenne?": ValeurHT,
+			"horsUnionEuropeenne?": ValeurHT,
+		},
 	},
 	"juveniles?": {
-		"total?": PositiveNumber.or(type.null),
+		"destination?": {
+			"france?": ValeurHT,
+			"unionEuropeenne?": ValeurHT,
+			"horsUnionEuropeenne?": ValeurHT,
+		},
 	},
 	"adultes?": {
-		"total?": PositiveNumber.or(type.null),
+		"elevage?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"unionEuropeenne?": ValeurHT,
+				"horsUnionEuropeenne?": ValeurHT,
+			},
+		},
 		"consommation?": {
 			"validé?": "boolean",
 			"destination?": {
@@ -53,10 +67,6 @@ export const EspeceVenteSchema = type({
 				"unionEuropeenne?": ValeurHT,
 				"horsUnionEuropeenne?": ValeurHT,
 			},
-		},
-		"elevage?": {
-			"france?": {},
-			"etranger?": {},
 		},
 	},
 });

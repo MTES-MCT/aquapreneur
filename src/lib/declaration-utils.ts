@@ -36,10 +36,7 @@ export const ventesParEspece = (
 	},
 	naissain: {
 		active: () => {
-			return (
-				donnees.ventes?.[especeId]?.naissains != null &&
-				donnees.ventes?.[especeId]?.naissains.total != 0
-			);
+			return donnees.ventes?.[especeId]?.naissains != null;
 		},
 		enable: () => {
 			defaultsDeep(donnees, {

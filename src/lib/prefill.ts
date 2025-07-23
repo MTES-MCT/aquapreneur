@@ -4,46 +4,48 @@ import { error } from "@sveltejs/kit";
 
 import { db } from "$lib/server/db";
 import { bilans } from "$lib/server/db/schema/api";
-import { concessionsTable } from "$lib/server/db/schema/atena";
 
-import { type LaxNumValue } from "./schemas/cgo-schema";
+// import { concessionsTable } from "$lib/server/db/schema/atena";
+
+// import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 import * as logger from "./server/utils/logger";
 import { deepClean } from "./utils";
 
 import type { EtablissementSelect } from "./server/db/types";
-import type { ConcessionSelect } from "./server/db/types";
 
-const getSurfaceHa = (concessions: ConcessionSelect[]) => {
-	return Math.round(
-		concessions
-			.filter((c) => {
-				return c.estEspecePrincipale === 1 && c.espece === "Huître creuse";
-			})
-			.reduce((acc, current) => {
-				const surface = current.surfaceParcelle ?? 0;
-				const surfHa =
-					current.codeUniteMesure === "M2" ? surface * 0.0001 : surface * 0.01;
-				return acc + surfHa;
-			}, 0),
-	);
-};
+// import type { ConcessionSelect } from "./server/db/types";
 
-const sumAttrs = (
-	obj: Record<string, LaxNumValue | unknown> | undefined,
-	attrs: string[],
-) => {
-	if (obj == null) {
-		return null;
-	}
-	return attrs.reduce((acc, currentKey) => {
-		const val = obj[currentKey];
-		if (typeof val === "number") {
-			return acc + val;
-		}
-		return acc;
-	}, 0);
-};
+// const getSurfaceHa = (concessions: ConcessionSelect[]) => {
+// 	return Math.round(
+// 		concessions
+// 			.filter((c) => {
+// 				return c.estEspecePrincipale === 1 && c.espece === "Huître creuse";
+// 			})
+// 			.reduce((acc, current) => {
+// 				const surface = current.surfaceParcelle ?? 0;
+// 				const surfHa =
+// 					current.codeUniteMesure === "M2" ? surface * 0.0001 : surface * 0.01;
+// 				return acc + surfHa;
+// 			}, 0),
+// 	);
+// };
+
+// const sumAttrs = (
+// 	obj: Record<string, LaxNumValue | unknown> | undefined,
+// 	attrs: string[],
+// ) => {
+// 	if (obj == null) {
+// 		return null;
+// 	}
+// 	return attrs.reduce((acc, currentKey) => {
+// 		const val = obj[currentKey];
+// 		if (typeof val === "number") {
+// 			return acc + val;
+// 		}
+// 		return acc;
+// 	}, 0);
+// };
 
 const getBilan = async (siret: string, annee: number) => {
 	const result = await db
@@ -70,25 +72,25 @@ const getBilan = async (siret: string, annee: number) => {
 	return null;
 };
 
-const getConcessions = (siren: string) => {
-	return db
-		.select()
-		.from(concessionsTable)
-		.where(eq(concessionsTable.siren, siren))
-		.orderBy(
-			concessionsTable.quartierParcelle,
-			concessionsTable.libLocalite,
-			concessionsTable.nomLieuDit,
-			concessionsTable.numeroParcelle,
-		);
-};
+// const getConcessions = (siren: string) => {
+// 	return db
+// 		.select()
+// 		.from(concessionsTable)
+// 		.where(eq(concessionsTable.siren, siren))
+// 		.orderBy(
+// 			concessionsTable.quartierParcelle,
+// 			concessionsTable.libLocalite,
+// 			concessionsTable.nomLieuDit,
+// 			concessionsTable.numeroParcelle,
+// 		);
+// };
 
 export const prefillDeclaration = async (
 	etablissement: EtablissementSelect,
 	annee: number,
 ): Promise<DeclarationSchema> => {
 	const bilan = await getBilan(etablissement.siret, annee);
-	const concessions = await getConcessions(etablissement.siren);
+	// const concessions = await getConcessions(etablissement.siren);
 	const d = bilan?.donnees;
 
 	const declaration = DeclarationSchema.assert({
@@ -116,54 +118,46 @@ export const prefillDeclaration = async (
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,
 		finExercice: bilan?.finExercice ?? null,
-		achats: deepClean({
-			huitreCreuse: {
-				naissains: {
-					quantite: d?.donnees_economiques.VolAchHNaiss,
-				},
-				juveniles: { quantite: d?.donnees_economiques.VolAchHDElv },
-				adultes: {
-					quantite: sumAttrs(d?.donnees_economiques, [
-						"VolAchHElv",
-						"VolAchHConso",
-					]),
-				},
-			},
-		}),
+		achats: {},
+		// TODO
+		// deepClean({
+		// 	huitreCreuse: {
+		// 		naissains: {
+		// 			quantite: d?.donnees_economiques.VolAchHNaiss,
+		// 		},
+		// 		juveniles: { quantite: d?.donnees_economiques.VolAchHDElv },
+		// 		adultes: {
+		// 			quantite: sumAttrs(d?.donnees_economiques, [
+		// 				"VolAchHElv",
+		// 				"VolAchHConso",
+		// 			]),
+		// 		},
+		// 	},
+		// }),
 		ventes: deepClean({
 			huitreCreuse: {
 				naissains: {
-					total: sumAttrs(d?.production, [
-						"CAHNaissFr",
-						"CAHNaissUE",
-						"CAHNaissAu",
-					]),
+					destination: {
+						france: { valeurHT: d?.production.CAHNaissFr },
+						unionEuropeenne: { valeurHT: d?.production.CAHNaissUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAHNaissAu },
+					},
 				},
 				juveniles: {
-					total: sumAttrs(d?.production, [
-						"CAHDElvFr",
-						"CAHDElvUE",
-						"CAHDElvAU",
-					]),
+					destination: {
+						france: { valeurHT: d?.production.CAHDElvFr },
+						unionEuropeenne: { valeurHT: d?.production.CAHDElvUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAHDElvAU },
+					},
 				},
 				adultes: {
-					total: sumAttrs(d?.production, [
-						// Elevage
-						"CAHElvFr",
-						"CAHElvUE",
-						"CAHElvAu",
-						// Consommation
-						"CAHCoFrPro",
-						"CAHCoFrDet",
-						"CAHCoFrGros",
-						"CAHCoFrPCE",
-						"CAHCoFrPGMS",
-						"CAHCoFrDeg",
-						"CAHCoUEPro",
-						"CAHCoUEGros",
-						"CAHCoAuPro",
-						"CAHCoAuGros",
-					]),
+					elevage: {
+						destination: {
+							france: { valeurHT: d?.production.CAHElvFr },
+							unionEuropeenne: { valeurHT: d?.production.CAHElvUE },
+							horsUnionEuropeenne: { valeurHT: d?.production.CAHElvAu },
+						},
+					},
 					consommation: {
 						destination: {
 							france: {
@@ -191,29 +185,130 @@ export const prefillDeclaration = async (
 							horsUnionEuropeenne: {
 								valeurHT: d?.production.CAHCoAuGros,
 							},
+							// TODO: manque CAHCoUEPro et CAHCoAuPro (export en gros, UE et non UE)
 						},
 					},
-					elevage: {},
 				},
+				// Manque “Non catégorisées” CAHFrNCat
 			},
-		}),
-		stocks: deepClean({
-			huitreCreuse: {
-				surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
+			mouleCommune: {
 				naissains: {
-					quantite: d?.stock.StckVolHNaisMi,
-					repartition: [],
+					destination: {
+						france: { valeurHT: d?.production.CAMNaissFr },
+						unionEuropeenne: { valeurHT: d?.production.CAMNaissUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAMNaissAu },
+					},
 				},
 				juveniles: {
-					quantite: d?.stock.StckVolHDElv,
-					repartition: [],
+					destination: {
+						france: { valeurHT: d?.production.CAMDElvFr },
+						unionEuropeenne: { valeurHT: d?.production.CAMDElvUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAMDElvAU },
+					},
 				},
 				adultes: {
-					quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
-					repartition: [],
+					consommation: {
+						destination: {
+							france: {
+								degustation: { valeurHT: d?.production.CAMCoFrDeg },
+								autresVentesParticuliers: {
+									valeurHT: d?.production.CAMCoFrDet,
+								},
+								autresConchyliculteurs: {
+									valeurHT: d?.production.CAMCoFrPro,
+								},
+								restaurateursTraiteurs: null,
+								poissoniersEcaillers: {
+									valeurHT: d?.production.CAMCoFrPCE,
+								},
+								grandesMoyennesSurfaces: {
+									valeurHT: d?.production.CAMCoFrPGMS,
+								},
+								mareyeursGrossistes: {
+									valeurHT: d?.production.CAMCoFrGros,
+								},
+							},
+							unionEuropeenne: {
+								valeurHT: d?.production.CAMCoUEGros,
+							},
+							horsUnionEuropeenne: {
+								valeurHT: d?.production.CAMCoAuGros,
+							},
+							// TODO: manque CAMCoUEPro et CAMCoAuPro (export en gros, UE et non UE)
+						},
+					},
 				},
+				// Manque “Non catégorisées” CAMFrNCat
+			},
+			palourde: {
+				naissains: {
+					destination: {
+						france: { valeurHT: d?.production.CAPNaissFr },
+						unionEuropeenne: { valeurHT: d?.production.CAPNaissUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAPNaissAu },
+					},
+				},
+				juveniles: {
+					destination: {
+						france: { valeurHT: d?.production.CAPDElvFr },
+						unionEuropeenne: { valeurHT: d?.production.CAPDElvUE },
+						horsUnionEuropeenne: { valeurHT: d?.production.CAPDElvAU },
+					},
+				},
+				adultes: {
+					consommation: {
+						destination: {
+							france: {
+								degustation: { valeurHT: d?.production.CAPCoFrDeg },
+								autresVentesParticuliers: {
+									valeurHT: d?.production.CAPCoFrDet,
+								},
+								autresConchyliculteurs: {
+									valeurHT: d?.production.CAPCoFrPro,
+								},
+								restaurateursTraiteurs: null,
+								poissoniersEcaillers: {
+									valeurHT: d?.production.CAPCoFrPCE,
+								},
+								grandesMoyennesSurfaces: {
+									valeurHT: d?.production.CAPCoFrPGMS,
+								},
+								mareyeursGrossistes: {
+									valeurHT: d?.production.CAPCoFrGros,
+								},
+							},
+							unionEuropeenne: {
+								valeurHT: d?.production.CAPCoUEGros,
+							},
+							horsUnionEuropeenne: {
+								valeurHT: d?.production.CAPCoAuGros,
+							},
+							// TODO: manque CAPCoUEPro et CAPCoAuPro (export en gros, UE et non UE)
+						},
+					},
+				},
+				// Manque “Non catégorisées” CAPFrNCat
 			},
 		}),
+		stocks: {},
+		// TODO
+		// deepClean({
+		// 	huitreCreuse: {
+		// 		surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
+		// 		naissains: {
+		// 			quantite: d?.stock.StckVolHNaisMi,
+		// 			repartition: [],
+		// 		},
+		// 		juveniles: {
+		// 			quantite: d?.stock.StckVolHDElv,
+		// 			repartition: [],
+		// 		},
+		// 		adultes: {
+		// 			quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
+		// 			repartition: [],
+		// 		},
+		// 	},
+		// }),
 		concessions: [],
 		// On exclue temporairement les concessions de la déclaration
 		// concessions: concessions.map((c) => ({
@@ -236,6 +331,7 @@ export const prefillDeclaration = async (
 		// 	dateArrete: c.dateArrete,
 		// })),
 	});
-
+	console.dir(deepClean(d?.production ?? {}), { depth: null });
+	console.dir(declaration.ventes, { depth: null });
 	return declaration;
 };
