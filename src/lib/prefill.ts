@@ -7,7 +7,7 @@ import { bilans } from "$lib/server/db/schema/api";
 
 // import { concessionsTable } from "$lib/server/db/schema/atena";
 
-// import { type LaxNumValue } from "./schemas/cgo-schema";
+import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 import * as logger from "./server/utils/logger";
 import { deepClean } from "./utils";
@@ -31,21 +31,21 @@ import type { EtablissementSelect } from "./server/db/types";
 // 	);
 // };
 
-// const sumAttrs = (
-// 	obj: Record<string, LaxNumValue | unknown> | undefined,
-// 	attrs: string[],
-// ) => {
-// 	if (obj == null) {
-// 		return null;
-// 	}
-// 	return attrs.reduce((acc, currentKey) => {
-// 		const val = obj[currentKey];
-// 		if (typeof val === "number") {
-// 			return acc + val;
-// 		}
-// 		return acc;
-// 	}, 0);
-// };
+const sumAttrs = (
+	obj: Record<string, LaxNumValue | unknown> | undefined,
+	attrs: string[],
+) => {
+	if (obj == null) {
+		return null;
+	}
+	return attrs.reduce((acc, currentKey) => {
+		const val = obj[currentKey];
+		if (typeof val === "number") {
+			return acc + val;
+		}
+		return acc;
+	}, 0);
+};
 
 const getBilan = async (siret: string, annee: number) => {
 	const result = await db
@@ -122,11 +122,11 @@ export const prefillDeclaration = async (
 		// TODO
 		// deepClean({
 		// 	huitreCreuse: {
-		// 		naissains: {
+		// 		naissain: {
 		// 			quantite: d?.donnees_economiques.VolAchHNaiss,
 		// 		},
-		// 		juveniles: { quantite: d?.donnees_economiques.VolAchHDElv },
-		// 		adultes: {
+		// 		demiElevage: { quantite: d?.donnees_economiques.VolAchHDElv },
+		// 		adulte: {
 		// 			quantite: sumAttrs(d?.donnees_economiques, [
 		// 				"VolAchHElv",
 		// 				"VolAchHConso",
@@ -136,157 +136,164 @@ export const prefillDeclaration = async (
 		// }),
 		ventes: deepClean({
 			huitreCreuse: {
-				naissains: {
+				naissain: {
 					destination: {
 						france: { valeurHT: d?.production.CAHNaissFr },
 						unionEuropeenne: { valeurHT: d?.production.CAHNaissUE },
 						horsUnionEuropeenne: { valeurHT: d?.production.CAHNaissAu },
 					},
 				},
-				juveniles: {
-					destination: {
-						france: { valeurHT: d?.production.CAHDElvFr },
-						unionEuropeenne: { valeurHT: d?.production.CAHDElvUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAHDElvAU },
+				elevage: {
+					demiElevage: {
+						destination: {
+							france: { valeurHT: d?.production.CAHDElvFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAHDElvUE", "CAHDElvAU"]),
+							},
+						},
 					},
-				},
-				adultes: {
-					elevage: {
+					adulte: {
 						destination: {
 							france: { valeurHT: d?.production.CAHElvFr },
-							unionEuropeenne: { valeurHT: d?.production.CAHElvUE },
-							horsUnionEuropeenne: { valeurHT: d?.production.CAHElvAu },
-						},
-					},
-					consommation: {
-						destination: {
-							france: {
-								degustation: { valeurHT: d?.production.CAHCoFrDeg },
-								autresVentesParticuliers: {
-									valeurHT: d?.production.CAHCoFrDet,
-								},
-								autresConchyliculteurs: {
-									valeurHT: d?.production.CAHCoFrPro,
-								},
-								restaurateursTraiteurs: null,
-								poissoniersEcaillers: {
-									valeurHT: d?.production.CAHCoFrPCE,
-								},
-								grandesMoyennesSurfaces: {
-									valeurHT: d?.production.CAHCoFrPGMS,
-								},
-								mareyeursGrossistes: {
-									valeurHT: d?.production.CAHCoFrGros,
-								},
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAHElvUE", "CAHElvAu"]),
 							},
-							unionEuropeenne: {
-								valeurHT: d?.production.CAHCoUEGros,
-							},
-							horsUnionEuropeenne: {
-								valeurHT: d?.production.CAHCoAuGros,
-							},
-							// TODO: manque CAHCoUEPro et CAHCoAuPro (export en gros, UE et non UE)
 						},
 					},
 				},
+				consommation: {
+					destination: {
+						france: {
+							degustation: { valeurHT: d?.production.CAHCoFrDeg },
+							autresVentesParticuliers: {
+								valeurHT: d?.production.CAHCoFrDet,
+							},
+							autresConchyliculteurs: {
+								valeurHT: d?.production.CAHCoFrPro,
+							},
+							restaurateursTraiteurs: null,
+							poissoniersEcaillers: {
+								valeurHT: d?.production.CAHCoFrPCE,
+							},
+							grandesMoyennesSurfaces: {
+								valeurHT: d?.production.CAHCoFrPGMS,
+							},
+							mareyeursGrossistes: {
+								valeurHT: d?.production.CAHCoFrGros,
+							},
+						},
+						unionEuropeenne: {
+							valeurHT: d?.production.CAHCoUEGros,
+						},
+						horsUnionEuropeenne: {
+							valeurHT: d?.production.CAHCoAuGros,
+						},
+						// TODO: manque CAHCoUEPro et CAHCoAuPro (export en gros, UE et non UE)
+					},
+				},
+
 				// Manque “Non catégorisées” CAHFrNCat
 			},
 			mouleCommune: {
-				naissains: {
+				naissain: {
 					destination: {
 						france: { valeurHT: d?.production.CAMNaissFr },
 						unionEuropeenne: { valeurHT: d?.production.CAMNaissUE },
 						horsUnionEuropeenne: { valeurHT: d?.production.CAMNaissAu },
 					},
 				},
-				juveniles: {
-					destination: {
-						france: { valeurHT: d?.production.CAMDElvFr },
-						unionEuropeenne: { valeurHT: d?.production.CAMDElvUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAMDElvAU },
+
+				elevage: {
+					demiElevage: {
+						destination: {
+							france: { valeurHT: d?.production.CAMDElvFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAMDElvUE", "CAMDElvAU"]),
+							},
+						},
 					},
 				},
-				adultes: {
-					consommation: {
-						destination: {
-							france: {
-								degustation: { valeurHT: d?.production.CAMCoFrDeg },
-								autresVentesParticuliers: {
-									valeurHT: d?.production.CAMCoFrDet,
-								},
-								autresConchyliculteurs: {
-									valeurHT: d?.production.CAMCoFrPro,
-								},
-								restaurateursTraiteurs: null,
-								poissoniersEcaillers: {
-									valeurHT: d?.production.CAMCoFrPCE,
-								},
-								grandesMoyennesSurfaces: {
-									valeurHT: d?.production.CAMCoFrPGMS,
-								},
-								mareyeursGrossistes: {
-									valeurHT: d?.production.CAMCoFrGros,
-								},
+				consommation: {
+					destination: {
+						france: {
+							degustation: { valeurHT: d?.production.CAMCoFrDeg },
+							autresVentesParticuliers: {
+								valeurHT: d?.production.CAMCoFrDet,
 							},
-							unionEuropeenne: {
-								valeurHT: d?.production.CAMCoUEGros,
+							autresConchyliculteurs: {
+								valeurHT: d?.production.CAMCoFrPro,
 							},
-							horsUnionEuropeenne: {
-								valeurHT: d?.production.CAMCoAuGros,
+							restaurateursTraiteurs: null,
+							poissoniersEcaillers: {
+								valeurHT: d?.production.CAMCoFrPCE,
 							},
-							// TODO: manque CAMCoUEPro et CAMCoAuPro (export en gros, UE et non UE)
+							grandesMoyennesSurfaces: {
+								valeurHT: d?.production.CAMCoFrPGMS,
+							},
+							mareyeursGrossistes: {
+								valeurHT: d?.production.CAMCoFrGros,
+							},
 						},
+						unionEuropeenne: {
+							valeurHT: d?.production.CAMCoUEGros,
+						},
+						horsUnionEuropeenne: {
+							valeurHT: d?.production.CAMCoAuGros,
+						},
+						// TODO: manque CAMCoUEPro et CAMCoAuPro (export en gros, UE et non UE)
 					},
 				},
 				// Manque “Non catégorisées” CAMFrNCat
 			},
 			palourde: {
-				naissains: {
+				naissain: {
 					destination: {
 						france: { valeurHT: d?.production.CAPNaissFr },
 						unionEuropeenne: { valeurHT: d?.production.CAPNaissUE },
 						horsUnionEuropeenne: { valeurHT: d?.production.CAPNaissAu },
 					},
 				},
-				juveniles: {
-					destination: {
-						france: { valeurHT: d?.production.CAPDElvFr },
-						unionEuropeenne: { valeurHT: d?.production.CAPDElvUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAPDElvAU },
-					},
-				},
-				adultes: {
-					consommation: {
+				elevage: {
+					demiElevage: {
 						destination: {
-							france: {
-								degustation: { valeurHT: d?.production.CAPCoFrDeg },
-								autresVentesParticuliers: {
-									valeurHT: d?.production.CAPCoFrDet,
-								},
-								autresConchyliculteurs: {
-									valeurHT: d?.production.CAPCoFrPro,
-								},
-								restaurateursTraiteurs: null,
-								poissoniersEcaillers: {
-									valeurHT: d?.production.CAPCoFrPCE,
-								},
-								grandesMoyennesSurfaces: {
-									valeurHT: d?.production.CAPCoFrPGMS,
-								},
-								mareyeursGrossistes: {
-									valeurHT: d?.production.CAPCoFrGros,
-								},
+							france: { valeurHT: d?.production.CAPDElvFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAPDElvUE", "CAPDElvAU"]),
 							},
-							unionEuropeenne: {
-								valeurHT: d?.production.CAPCoUEGros,
-							},
-							horsUnionEuropeenne: {
-								valeurHT: d?.production.CAPCoAuGros,
-							},
-							// TODO: manque CAPCoUEPro et CAPCoAuPro (export en gros, UE et non UE)
 						},
 					},
 				},
+				consommation: {
+					destination: {
+						france: {
+							degustation: { valeurHT: d?.production.CAPCoFrDeg },
+							autresVentesParticuliers: {
+								valeurHT: d?.production.CAPCoFrDet,
+							},
+							autresConchyliculteurs: {
+								valeurHT: d?.production.CAPCoFrPro,
+							},
+							restaurateursTraiteurs: null,
+							poissoniersEcaillers: {
+								valeurHT: d?.production.CAPCoFrPCE,
+							},
+							grandesMoyennesSurfaces: {
+								valeurHT: d?.production.CAPCoFrPGMS,
+							},
+							mareyeursGrossistes: {
+								valeurHT: d?.production.CAPCoFrGros,
+							},
+						},
+						unionEuropeenne: {
+							valeurHT: d?.production.CAPCoUEGros,
+						},
+						horsUnionEuropeenne: {
+							valeurHT: d?.production.CAPCoAuGros,
+						},
+						// TODO: manque CAPCoUEPro et CAPCoAuPro (export en gros, UE et non UE)
+					},
+				},
+
 				// Manque “Non catégorisées” CAPFrNCat
 			},
 		}),
@@ -295,15 +302,15 @@ export const prefillDeclaration = async (
 		// deepClean({
 		// 	huitreCreuse: {
 		// 		surfaceExploitation: concessions ? getSurfaceHa(concessions) : null,
-		// 		naissains: {
+		// 		naissain: {
 		// 			quantite: d?.stock.StckVolHNaisMi,
 		// 			repartition: [],
 		// 		},
-		// 		juveniles: {
+		// 		demiElevage: {
 		// 			quantite: d?.stock.StckVolHDElv,
 		// 			repartition: [],
 		// 		},
-		// 		adultes: {
+		// 		adulte: {
 		// 			quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
 		// 			repartition: [],
 		// 		},

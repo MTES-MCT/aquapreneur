@@ -28,10 +28,8 @@
 					<div style="flex: 1">Ventes à la consommation</div>
 				{/snippet}
 				{#snippet headerAction()}
-					{@const validé = ventesParEspece(
-						donnees,
-						espece.id,
-					).consommation.validé()}
+					{@const validé = ventesParEspece(donnees, espece.id).consommation
+						.validé}
 					<button
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
@@ -49,14 +47,15 @@
 					<div style="flex: 1">Ventes à l’élevage</div>
 				{/snippet}
 				{#snippet headerAction()}
+					{@const validé = ventesParEspece(donnees, espece.id).elevage.validé}
 					<button
 						class="fr-btn fr-mx-2v"
-						disabled
+						class:fr-btn--tertiary={validé}
 						onclick={() => {
 							goto(`./${espece.slug}/detail-elevage/`);
 						}}
 					>
-						Compléter
+						{validé ? "Validé" : "Compléter"}
 					</button>
 				{/snippet}
 				{#snippet content()}{/snippet}
@@ -68,7 +67,6 @@
 				{#snippet headerAction()}
 					<button
 						class="fr-btn fr-mx-2v"
-						disabled
 						onclick={() => {
 							goto(`./${espece.slug}/detail-naissain/`);
 						}}
@@ -85,7 +83,6 @@
 				{#snippet headerAction()}
 					<button
 						class="fr-btn fr-mx-2v"
-						disabled
 						onclick={() => {
 							goto(`./${espece.slug}/detail-origine/`);
 						}}

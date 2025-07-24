@@ -30,43 +30,49 @@ export const ValeurHT = type({
 }).or(type.null);
 
 export const EspeceVenteSchema = type({
-	"naissains?": {
+	"naissain?": {
+		"validé?": "boolean",
 		"destination?": {
 			"france?": ValeurHT,
 			"unionEuropeenne?": ValeurHT,
 			"horsUnionEuropeenne?": ValeurHT,
 		},
 	},
-	"juveniles?": {
-		"destination?": {
-			"france?": ValeurHT,
-			"unionEuropeenne?": ValeurHT,
-			"horsUnionEuropeenne?": ValeurHT,
-		},
-	},
-	"adultes?": {
-		"elevage?": {
+	"elevage?": {
+		"validé?": "boolean",
+		"pregrossi?": {
 			"destination?": {
 				"france?": ValeurHT,
-				"unionEuropeenne?": ValeurHT,
-				"horsUnionEuropeenne?": ValeurHT,
+				"etranger?": ValeurHT,
 			},
 		},
-		"consommation?": {
-			"validé?": "boolean",
+		"demiElevage?": {
 			"destination?": {
-				"france?": {
-					"degustation?": ValeurHT,
-					"autresVentesParticuliers?": ValeurHT,
-					"autresConchyliculteurs?": ValeurHT,
-					"restaurateursTraiteurs?": ValeurHT,
-					"poissoniersEcaillers?": ValeurHT,
-					"grandesMoyennesSurfaces?": ValeurHT,
-					"mareyeursGrossistes?": ValeurHT,
-				},
-				"unionEuropeenne?": ValeurHT,
-				"horsUnionEuropeenne?": ValeurHT,
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
 			},
+		},
+		"adulte?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+	},
+	"consommation?": {
+		"validé?": "boolean",
+		"destination?": {
+			"france?": {
+				"degustation?": ValeurHT,
+				"autresVentesParticuliers?": ValeurHT,
+				"autresConchyliculteurs?": ValeurHT,
+				"restaurateursTraiteurs?": ValeurHT,
+				"poissoniersEcaillers?": ValeurHT,
+				"grandesMoyennesSurfaces?": ValeurHT,
+				"mareyeursGrossistes?": ValeurHT,
+			},
+			"unionEuropeenne?": ValeurHT,
+			"horsUnionEuropeenne?": ValeurHT,
 		},
 	},
 });

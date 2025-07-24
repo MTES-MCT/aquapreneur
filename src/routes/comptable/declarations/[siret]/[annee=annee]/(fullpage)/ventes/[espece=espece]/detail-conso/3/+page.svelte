@@ -17,7 +17,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		ventesParEspece(donnees, data.espece.id).consommation.rendValide();
+		ventesParEspece(donnees, data.espece.id).consommation.validé = true;
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
@@ -93,10 +93,8 @@
 													<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
 															 toucher directement à la structure -->
 													{@const value =
-														donnees.ventes[data.espece.id]!.adultes!
-															.consommation!.destination!.france![
-															destination.id
-														]!}
+														donnees.ventes[data.espece.id]!.consommation!
+															.destination!.france![destination.id]!}
 													<tr>
 														<td>{destination.label}</td>
 														<td>
@@ -128,7 +126,7 @@
 												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.adultes!.consommation!
+													donnees.ventes[data.espece.id]!.consommation!
 														.destination!.unionEuropeenne!}
 												<tr>
 													<td>Au sein de l’Union Européenne</td>
@@ -150,7 +148,7 @@
 												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.adultes!.consommation!
+													donnees.ventes[data.espece.id]!.consommation!
 														.destination!.horsUnionEuropeenne!}
 												<tr>
 													<td>Hors de l’Union Européenne</td>
