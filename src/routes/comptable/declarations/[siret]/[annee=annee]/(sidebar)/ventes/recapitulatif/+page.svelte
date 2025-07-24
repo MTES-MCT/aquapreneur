@@ -5,14 +5,14 @@
 
 	import Accordion from "$lib/components/accordion.svelte";
 	import { ESPECES } from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 
 	const { data } = $props();
 
 	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const especes = $derived(
-		ESPECES.filter((e) => ventesParEspece(donnees, e.id).active()),
+		ESPECES.filter((e) => dVentes(donnees, e.id).active()),
 	);
 </script>
 
@@ -28,8 +28,7 @@
 					<div style="flex: 1">Ventes à la consommation</div>
 				{/snippet}
 				{#snippet headerAction()}
-					{@const validé = ventesParEspece(donnees, espece.id).consommation
-						.validé}
+					{@const validé = dVentes(donnees, espece.id).consommation.validé}
 					<button
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
@@ -47,7 +46,7 @@
 					<div style="flex: 1">Ventes à l’élevage</div>
 				{/snippet}
 				{#snippet headerAction()}
-					{@const validé = ventesParEspece(donnees, espece.id).elevage.validé}
+					{@const validé = dVentes(donnees, espece.id).elevage.validé}
 					<button
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}

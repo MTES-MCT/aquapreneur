@@ -12,7 +12,7 @@
 		DESTINATION_VENTES_CONSO_FRANCE,
 		type DESTINATION_VENTES_CONSO_FRANCE_ID,
 	} from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -32,7 +32,7 @@
 		checked: boolean,
 		id: DESTINATION_VENTES_CONSO_FRANCE_ID,
 	) => {
-		const v = ventesParEspece(
+		const v = dVentes(
 			donnees,
 			data.espece.id,
 		).consommation.destination.france.detail(id);
@@ -60,7 +60,7 @@
 					<CheckboxGroup
 						name={destId}
 						id={destId}
-						checked={ventesParEspece(donnees, data.espece.id)
+						checked={dVentes(donnees, data.espece.id)
 							.consommation.destination.france.detail(destId)
 							.active()}
 						onCheck={(event) =>

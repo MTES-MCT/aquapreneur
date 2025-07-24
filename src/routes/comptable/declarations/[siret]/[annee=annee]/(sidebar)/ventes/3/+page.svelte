@@ -9,7 +9,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { ESPECES } from "$lib/constants";
-	import { aVenduNaissains, ventesParEspece } from "$lib/declaration-utils";
+	import { aVenduNaissains, dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -17,7 +17,7 @@
 	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const especesActives = $derived(
-		ESPECES.filter((e) => ventesParEspece(donnees, e.id).active()),
+		ESPECES.filter((e) => dVentes(donnees, e.id).active()),
 	);
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -33,7 +33,7 @@
 	// pas activées ici
 	const handleRadioChange: ChangeEventHandler<HTMLInputElement> = () => {
 		especesActives.forEach((e) => {
-			const v = ventesParEspece(donnees, e.id);
+			const v = dVentes(donnees, e.id);
 			if (radioValue === true) {
 				v.naissain.enable();
 			} else {

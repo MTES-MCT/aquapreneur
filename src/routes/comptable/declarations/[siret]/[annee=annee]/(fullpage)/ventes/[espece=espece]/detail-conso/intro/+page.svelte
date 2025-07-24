@@ -8,7 +8,7 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -21,13 +21,12 @@
 			data.declaration.id,
 			donnees,
 		);
-		if (ventesParEspece(donnees, data.espece.id).consommation.active())
-			goto("./1");
+		if (dVentes(donnees, data.espece.id).consommation.active()) goto("./1");
 		else goto("../../recapitulatif");
 	};
 
 	const handleRadioChange = () => {
-		const v = ventesParEspece(donnees, data.espece.id);
+		const v = dVentes(donnees, data.espece.id);
 		if (radioValue) {
 			v.consommation.enable();
 		} else {
@@ -35,9 +34,7 @@
 		}
 	};
 	let radioValue: boolean | undefined = $state(
-		ventesParEspece(donnees, data.espece.id).consommation.active() ?
-			true
-		:	false,
+		dVentes(donnees, data.espece.id).consommation.active() ? true : false,
 	);
 </script>
 

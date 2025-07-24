@@ -10,14 +10,11 @@ import type { DeclarationSchema } from "./schemas/declaration-schema";
 
 export const aVenduNaissains = (donnees: DeclarationSchema) => {
 	return ESPECES_IDS.some((especeId) =>
-		ventesParEspece(donnees, especeId).naissain.active(),
+		dVentes(donnees, especeId).naissain.active(),
 	);
 };
 
-export const ventesParEspece = (
-	donnees: DeclarationSchema,
-	especeId: ESPECES_ID,
-) => {
+export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 	const d = donnees.ventes?.[especeId];
 	return {
 		active: () => {

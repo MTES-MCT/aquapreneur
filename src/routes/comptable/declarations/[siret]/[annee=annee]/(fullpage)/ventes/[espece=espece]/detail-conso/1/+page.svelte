@@ -12,7 +12,7 @@
 		DESTINATION_VENTES_CONSO,
 		type DESTINATION_VENTES_CONSO_ID,
 	} from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -26,10 +26,7 @@
 			donnees,
 		);
 		if (
-			ventesParEspece(
-				donnees,
-				data.espece.id,
-			).consommation.destination.france.active()
+			dVentes(donnees, data.espece.id).consommation.destination.france.active()
 		) {
 			goto("./2");
 		} else {
@@ -38,9 +35,7 @@
 	};
 
 	const handleCheck = (checked: boolean, id: DESTINATION_VENTES_CONSO_ID) => {
-		const v = ventesParEspece(donnees, data.espece.id).consommation.destination[
-			id
-		];
+		const v = dVentes(donnees, data.espece.id).consommation.destination[id];
 		if (checked) {
 			v.enable();
 		} else {
@@ -65,7 +60,7 @@
 					<CheckboxGroup
 						name={destId}
 						id={destId}
-						checked={ventesParEspece(
+						checked={dVentes(
 							donnees,
 							data.espece.id,
 						).consommation.destination?.[destId].active()}
