@@ -97,3 +97,35 @@ export const DESTINATIONS_VENTES_CONSO_FRANCE_IDS =
 	DESTINATIONS_VENTES_CONSO_FRANCE.map((e) => e.id);
 export type DESTINATIONS_VENTES_CONSO_FRANCE_ID =
 	(typeof DESTINATIONS_VENTES_CONSO_FRANCE_IDS)[number];
+
+export const STADES_ELEVAGE = [
+	{
+		label: "Prégrossi (18 mois)",
+		id: "pregrossi",
+	},
+	{
+		label: "Demi-élevage (24 mois)",
+		id: "demiElevage",
+	},
+	{
+		label: "Élevage (30 mois)",
+		id: "adulte",
+	},
+] as const;
+
+export const STADES_ELEVAGE_IDS = STADES_ELEVAGE.map((e) => e.id);
+export type STADES_ELEVAGE_ID = (typeof STADES_ELEVAGE_IDS)[number];
+
+export const DESTINATIONS_ELEVAGE = [
+	{
+		label: "En France",
+		id: "france",
+	},
+	{
+		label: "À l’étranger",
+		id: "etranger",
+	},
+] as const;
+
+export const DESTINATIONS_ELEVAGE_IDS = DESTINATIONS_ELEVAGE.map((e) => e.id);
+export type DESTINATIONS_ELEVAGE_ID = (typeof DESTINATIONS_ELEVAGE_IDS)[number];

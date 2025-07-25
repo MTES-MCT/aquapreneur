@@ -162,7 +162,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					defaultsDeep(donnees, {
 						ventes: {
 							[especeId]: {
-								elevage: { pregrossi: {} },
+								elevage: { pregrossi: { destination: {} } },
 							},
 						},
 					});
@@ -217,7 +217,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					defaultsDeep(donnees, {
 						ventes: {
 							[especeId]: {
-								elevage: { demiElevage: {} },
+								elevage: { demiElevage: { destination: {} } },
 							},
 						},
 					});
@@ -272,7 +272,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					defaultsDeep(donnees, {
 						ventes: {
 							[especeId]: {
-								elevage: { adulte: {} },
+								elevage: { adulte: { destination: {} } },
 							},
 						},
 					});
