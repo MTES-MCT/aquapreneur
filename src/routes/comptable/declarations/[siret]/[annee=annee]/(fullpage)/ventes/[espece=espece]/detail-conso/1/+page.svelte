@@ -9,8 +9,8 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
-		DESTINATION_VENTES_CONSO,
-		type DESTINATION_VENTES_CONSO_ID,
+		DESTINATIONS_VENTES_CONSO,
+		type DESTINATIONS_VENTES_CONSO_ID,
 	} from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
@@ -34,7 +34,7 @@
 		}
 	};
 
-	const handleCheck = (checked: boolean, id: DESTINATION_VENTES_CONSO_ID) => {
+	const handleCheck = (checked: boolean, id: DESTINATIONS_VENTES_CONSO_ID) => {
 		const v = dVentes(donnees, data.espece.id).consommation.destination[id];
 		if (checked) {
 			v.enable();
@@ -55,7 +55,7 @@
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			{/snippet}
 			{#snippet inputs()}
-				{#each DESTINATION_VENTES_CONSO as destination (destination.id)}
+				{#each DESTINATIONS_VENTES_CONSO as destination (destination.id)}
 					{@const destId = destination.id}
 					<CheckboxGroup
 						name={destId}

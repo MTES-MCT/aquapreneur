@@ -9,8 +9,8 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
-		DESTINATION_VENTES_CONSO_FRANCE,
-		type DESTINATION_VENTES_CONSO_FRANCE_ID,
+		DESTINATIONS_VENTES_CONSO_FRANCE,
+		type DESTINATIONS_VENTES_CONSO_FRANCE_ID,
 	} from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
@@ -30,7 +30,7 @@
 
 	const handleCheck = (
 		checked: boolean,
-		id: DESTINATION_VENTES_CONSO_FRANCE_ID,
+		id: DESTINATIONS_VENTES_CONSO_FRANCE_ID,
 	) => {
 		const v = dVentes(
 			donnees,
@@ -55,7 +55,7 @@
 			{/snippet}
 
 			{#snippet inputs()}
-				{#each DESTINATION_VENTES_CONSO_FRANCE as destination (destination.id)}
+				{#each DESTINATIONS_VENTES_CONSO_FRANCE as destination (destination.id)}
 					{@const destId = destination.id}
 					<CheckboxGroup
 						name={destId}

@@ -41,7 +41,7 @@ export type ESPECES_ID = (typeof ESPECES_IDS)[number];
 export const ESPECES_SLUGS = ESPECES.map((e) => e.slug);
 export type ESPECES_SLUG = (typeof ESPECES_SLUGS)[number];
 
-export const DESTINATION_VENTES_CONSO = [
+export const DESTINATIONS_VENTES_CONSO = [
 	{
 		label: "En France",
 		id: "france",
@@ -56,13 +56,13 @@ export const DESTINATION_VENTES_CONSO = [
 	},
 ] as const;
 
-export const DESTINATION_VENTES_CONSO_IDS = DESTINATION_VENTES_CONSO.map(
+export const DESTINATIONS_VENTES_CONSO_IDS = DESTINATIONS_VENTES_CONSO.map(
 	(e) => e.id,
 );
-export type DESTINATION_VENTES_CONSO_ID =
-	(typeof DESTINATION_VENTES_CONSO_IDS)[number];
+export type DESTINATIONS_VENTES_CONSO_ID =
+	(typeof DESTINATIONS_VENTES_CONSO_IDS)[number];
 
-export const DESTINATION_VENTES_CONSO_FRANCE = [
+export const DESTINATIONS_VENTES_CONSO_FRANCE = [
 	{
 		label: "Dégustation",
 		id: "degustation",
@@ -93,7 +93,7 @@ export const DESTINATION_VENTES_CONSO_FRANCE = [
 	},
 ] as const;
 
-export const DESTINATION_VENTES_CONSO_FRANCE_IDS =
-	DESTINATION_VENTES_CONSO_FRANCE.map((e) => e.id);
-export type DESTINATION_VENTES_CONSO_FRANCE_ID =
-	(typeof DESTINATION_VENTES_CONSO_FRANCE_IDS)[number];
+export const DESTINATIONS_VENTES_CONSO_FRANCE_IDS =
+	DESTINATIONS_VENTES_CONSO_FRANCE.map((e) => e.id);
+export type DESTINATIONS_VENTES_CONSO_FRANCE_ID =
+	(typeof DESTINATIONS_VENTES_CONSO_FRANCE_IDS)[number];

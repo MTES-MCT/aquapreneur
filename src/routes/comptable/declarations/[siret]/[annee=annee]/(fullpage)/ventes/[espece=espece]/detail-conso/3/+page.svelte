@@ -7,7 +7,7 @@
 
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { DESTINATION_VENTES_CONSO_FRANCE } from "$lib/constants";
+	import { DESTINATIONS_VENTES_CONSO_FRANCE } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
@@ -81,7 +81,7 @@
 													En France
 												</td>
 											</tr>
-											{#each DESTINATION_VENTES_CONSO_FRANCE as destination (destination.id)}
+											{#each DESTINATIONS_VENTES_CONSO_FRANCE as destination (destination.id)}
 												{#if dVentes(donnees, data.espece.id)
 													.consommation.destination?.france?.detail(destination.id)
 													?.active()}

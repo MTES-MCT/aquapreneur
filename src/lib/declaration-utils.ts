@@ -1,7 +1,7 @@
 import defaultsDeep from "lodash/defaultsDeep";
 
 import {
-	type DESTINATION_VENTES_CONSO_FRANCE_ID,
+	type DESTINATIONS_VENTES_CONSO_FRANCE_ID,
 	type ESPECES_ID,
 	ESPECES_IDS,
 } from "./constants";
@@ -76,7 +76,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					disable: () => {
 						delete d?.consommation?.destination?.france;
 					},
-					detail: (detailId: DESTINATION_VENTES_CONSO_FRANCE_ID) => ({
+					detail: (detailId: DESTINATIONS_VENTES_CONSO_FRANCE_ID) => ({
 						active: () => {
 							return d?.consommation?.destination?.france?.[detailId] != null;
 						},
