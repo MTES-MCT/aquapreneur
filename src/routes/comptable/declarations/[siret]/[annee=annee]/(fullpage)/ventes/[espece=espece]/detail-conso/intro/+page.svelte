@@ -69,6 +69,10 @@
 			{/snippet}
 		</Fieldset>
 
-		<NavigationLinks prevHref="../../recapitulatif" nextIsButton />
+		<NavigationLinks
+			prevHref="../../recapitulatif"
+			nextIsButton
+			cantAnswerBtn
+		/>
 	</form>
 </div>

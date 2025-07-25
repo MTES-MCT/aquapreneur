@@ -73,6 +73,6 @@
 			{/snippet}
 		</Fieldset>
 
-		<NavigationLinks prevHref="./intro" nextIsButton />
+		<NavigationLinks prevHref="./intro" nextIsButton cantAnswerBtn />
 	</form>
 </div>

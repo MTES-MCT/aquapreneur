@@ -71,6 +71,6 @@
 				{/each}
 			{/snippet}
 		</Fieldset>
-		<NavigationLinks prevHref="./1" nextIsButton />
+		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>
 </div>
