@@ -9,7 +9,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { DESTINATIONS_VENTES_CONSO_FRANCE } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -30,16 +30,6 @@
 			"./2"
 		:	"./1",
 	);
-
-	const toNumber = (val: string | null | undefined) => {
-		return (
-			val != null ?
-				!Number.isNaN(Number.parseFloat(val)) ?
-					Number.parseFloat(val)
-				:	null
-			:	null
-		);
-	};
 </script>
 
 <div>

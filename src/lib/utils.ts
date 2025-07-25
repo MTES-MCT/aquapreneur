@@ -74,3 +74,13 @@ export const estAnneeDeclarative = (
 	const numVal = typeof val === "number" ? val : Number.parseInt(val);
 	return (ANNEES_DECLARATIVES as ReadonlyArray<number>).includes(numVal);
 };
+
+export const toNumber = (val: string | null | undefined) => {
+	return (
+		val != null ?
+			!Number.isNaN(Number.parseFloat(val)) ?
+				Number.parseFloat(val)
+			:	null
+		:	null
+	);
+};
