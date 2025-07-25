@@ -1,7 +1,7 @@
 <script lang="ts">
 	import cloneDeep from "lodash/cloneDeep";
 
-	import type { ChangeEventHandler, FormEventHandler } from "svelte/elements";
+	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
 
@@ -22,16 +22,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./recapitulatif");
-	};
 
-	// TODO si on modifie les espèces après-coup, les nouvelles espèces ne seront
-	// pas activées ici
-	const handleRadioChange: ChangeEventHandler<HTMLInputElement> = () => {
 		especesActives.forEach((e) => {
 			const v = dVentes(donnees, e.id);
 			if (radioValue === true) {
@@ -40,6 +31,12 @@
 				v.naissain.disable();
 			}
 		});
+
+		data.declaration.donnees = await submitDeclarationUpdate(
+			data.declaration.id,
+			donnees,
+		);
+		goto("./recapitulatif");
 	};
 
 	let radioValue: boolean | undefined = $state(aVenduNaissains(donnees));
@@ -57,7 +54,6 @@
 					name="radio-inline"
 					id="radio-oui"
 					inline
-					onChange={handleRadioChange}
 					value={true}
 					required
 					bind:group={radioValue}
@@ -69,7 +65,6 @@
 					name="radio-inline"
 					id="radio-non"
 					inline
-					onChange={handleRadioChange}
 					value={false}
 					required
 					bind:group={radioValue}
