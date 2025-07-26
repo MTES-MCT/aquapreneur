@@ -7,11 +7,13 @@
 		step,
 		baseUrl,
 		nomEtablissement,
+		resetActionUrl,
 	}: {
 		step: DeclarationStep;
 		baseUrl: string;
 		donnees: DeclarationSchema;
 		nomEtablissement: string;
+		resetActionUrl: string;
 	} = $props();
 </script>
 
@@ -99,6 +101,15 @@
 					</a>
 				</li>
 			</ul>
+		</div>
+		<div class="fr-mt-10v">
+			<form method="POST" action={resetActionUrl}>
+				<button
+					class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-arrow-go-forward-fill"
+				>
+					Réinitialiser
+				</button>
+			</form>
 		</div>
 	</div>
 </nav>

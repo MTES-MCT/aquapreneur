@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/sveltekit";
 import { eq } from "drizzle-orm";
 
 import type { Handle, HandleServerError, RequestEvent } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
 import { env } from "$env/dynamic/private";
@@ -18,6 +19,7 @@ import {
 } from "$lib/server/auth/session";
 import { db } from "$lib/server/db";
 import { utilisateurs } from "$lib/server/db/schema/auth";
+import type { Utilisateur } from "$lib/server/db/types";
 import { getShortId } from "$lib/server/utils";
 import audit from "$lib/server/utils/audit";
 import * as logger from "$lib/server/utils/logger";
@@ -61,11 +63,46 @@ const handleAuth = async (event: RequestEvent) => {
 	return { session, utilisateur };
 };
 
+const checkPermissions = (
+	utilisateur: Utilisateur | null,
+	routeId: string | null,
+) => {
+	// On utilise cette méthode pour protéger des sections entière.
+	// Quand on veut protéger une seule page, la vérification des permissions est
+	// faite sur la page elle même
+	// (note: il faut éviter de faire ces vérifications dans les +layout.*.ts, car
+	// ils peuvent être évalués en parallèle des layouts fils, et ces derniers risquent
+	// d’exécuter du code non protégé. Voir par ex : https://github.com/sveltejs/kit/issues/6315
+	// toujours ouvert à ce jour.
+
+	// Seuls les administrateur·ices peuvent aux pages comptables
+	if (routeId?.startsWith("/comptable")) {
+		if (!utilisateur) {
+			redirect(307, "/");
+		} else if (!utilisateur.valide) {
+			redirect(307, "/validation");
+		} else if (!utilisateur.estAdmin) {
+			redirect(307, "/");
+		}
+	}
+
+	// Seuls les utilisateur·ices connecté·es peuvent accéder aux pages producteurs
+	if (routeId?.startsWith("/producteur")) {
+		if (!utilisateur) {
+			redirect(307, "/");
+		} else if (!utilisateur.valide) {
+			redirect(307, "/validation");
+		}
+	}
+};
+
 export const appHandle: Handle = async ({ event, resolve }) => {
 	const { session, utilisateur } = await handleAuth(event);
 
 	event.locals.utilisateur = utilisateur;
 	event.locals.session = session;
+
+	checkPermissions(utilisateur, event.route.id);
 
 	const response = await resolve(event);
 

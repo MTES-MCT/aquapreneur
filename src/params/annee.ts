@@ -1,8 +1,5 @@
-import { ANNEES_DECLARATIVES } from "$lib/constants";
+import { estAnneeDeclarative } from "$lib/utils";
 
 export function match(value) {
-	const result = (ANNEES_DECLARATIVES as ReadonlyArray<number>).includes(
-		Number.parseInt(value),
-	);
-	return result;
+	return estAnneeDeclarative(value);
 }

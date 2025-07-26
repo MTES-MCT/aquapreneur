@@ -9,10 +9,10 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
-		DESTINATION_VENTES_CONSO,
-		type DESTINATION_VENTES_CONSO_ID,
+		DESTINATIONS_VENTES_CONSO,
+		type DESTINATIONS_VENTES_CONSO_ID,
 	} from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -26,10 +26,7 @@
 			donnees,
 		);
 		if (
-			ventesParEspece(
-				donnees,
-				data.espece.id,
-			).consommation.destination.france.active()
+			dVentes(donnees, data.espece.id).consommation.destination.france.active()
 		) {
 			goto("./2");
 		} else {
@@ -37,10 +34,8 @@
 		}
 	};
 
-	const handleCheck = (checked: boolean, id: DESTINATION_VENTES_CONSO_ID) => {
-		const v = ventesParEspece(donnees, data.espece.id).consommation.destination[
-			id
-		];
+	const handleCheck = (checked: boolean, id: DESTINATIONS_VENTES_CONSO_ID) => {
+		const v = dVentes(donnees, data.espece.id).consommation.destination[id];
 		if (checked) {
 			v.enable();
 		} else {
@@ -60,12 +55,12 @@
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			{/snippet}
 			{#snippet inputs()}
-				{#each DESTINATION_VENTES_CONSO as destination (destination.id)}
+				{#each DESTINATIONS_VENTES_CONSO as destination (destination.id)}
 					{@const destId = destination.id}
 					<CheckboxGroup
 						name={destId}
 						id={destId}
-						checked={ventesParEspece(
+						checked={dVentes(
 							donnees,
 							data.espece.id,
 						).consommation.destination?.[destId].active()}
@@ -78,6 +73,6 @@
 			{/snippet}
 		</Fieldset>
 
-		<NavigationLinks prevHref="./intro" nextIsButton />
+		<NavigationLinks prevHref="./intro" nextIsButton cantAnswerBtn />
 	</form>
 </div>

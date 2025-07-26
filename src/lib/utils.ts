@@ -3,8 +3,10 @@ import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
 import isPlainObject from "lodash/isPlainObject";
 
-import { DSFR_VERSION } from "./constants";
+import { ANNEES_DECLARATIVES, DSFR_VERSION } from "./constants";
 import { DeclarationSchema } from "./schemas/declaration-schema";
+
+import type { AnneeDeclarative } from "./types";
 
 export const formatDate = (date: string | null) => {
 	if (date == null) return "";
@@ -64,4 +66,21 @@ export const deepClean = (obj: object) => {
 		if (isEqual(newResult, result)) return result;
 		result = newResult;
 	}
+};
+
+export const estAnneeDeclarative = (
+	val: string | number,
+): val is AnneeDeclarative => {
+	const numVal = typeof val === "number" ? val : Number.parseInt(val);
+	return (ANNEES_DECLARATIVES as ReadonlyArray<number>).includes(numVal);
+};
+
+export const toNumber = (val: string | null | undefined) => {
+	return (
+		val != null ?
+			!Number.isNaN(Number.parseFloat(val)) ?
+				Number.parseFloat(val)
+			:	null
+		:	null
+	);
 };

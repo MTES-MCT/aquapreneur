@@ -41,7 +41,7 @@ export type ESPECES_ID = (typeof ESPECES_IDS)[number];
 export const ESPECES_SLUGS = ESPECES.map((e) => e.slug);
 export type ESPECES_SLUG = (typeof ESPECES_SLUGS)[number];
 
-export const DESTINATION_VENTES_CONSO = [
+export const DESTINATIONS_VENTES_CONSO = [
 	{
 		label: "En France",
 		id: "france",
@@ -56,13 +56,13 @@ export const DESTINATION_VENTES_CONSO = [
 	},
 ] as const;
 
-export const DESTINATION_VENTES_CONSO_IDS = DESTINATION_VENTES_CONSO.map(
+export const DESTINATIONS_VENTES_CONSO_IDS = DESTINATIONS_VENTES_CONSO.map(
 	(e) => e.id,
 );
-export type DESTINATION_VENTES_CONSO_ID =
-	(typeof DESTINATION_VENTES_CONSO_IDS)[number];
+export type DESTINATIONS_VENTES_CONSO_ID =
+	(typeof DESTINATIONS_VENTES_CONSO_IDS)[number];
 
-export const DESTINATION_VENTES_CONSO_FRANCE = [
+export const DESTINATIONS_VENTES_CONSO_FRANCE = [
 	{
 		label: "Dégustation",
 		id: "degustation",
@@ -93,7 +93,71 @@ export const DESTINATION_VENTES_CONSO_FRANCE = [
 	},
 ] as const;
 
-export const DESTINATION_VENTES_CONSO_FRANCE_IDS =
-	DESTINATION_VENTES_CONSO_FRANCE.map((e) => e.id);
-export type DESTINATION_VENTES_CONSO_FRANCE_ID =
-	(typeof DESTINATION_VENTES_CONSO_FRANCE_IDS)[number];
+export const DESTINATIONS_VENTES_CONSO_FRANCE_IDS =
+	DESTINATIONS_VENTES_CONSO_FRANCE.map((e) => e.id);
+export type DESTINATIONS_VENTES_CONSO_FRANCE_ID =
+	(typeof DESTINATIONS_VENTES_CONSO_FRANCE_IDS)[number];
+
+export const STADES_ELEVAGE = [
+	{
+		label: "Prégrossi (18 mois)",
+		id: "pregrossi",
+	},
+	{
+		label: "Demi-élevage (24 mois)",
+		id: "demiElevage",
+	},
+	{
+		label: "Élevage (30 mois)",
+		id: "adulte",
+	},
+] as const;
+
+export const STADES_ELEVAGE_IDS = STADES_ELEVAGE.map((e) => e.id);
+export type STADES_ELEVAGE_ID = (typeof STADES_ELEVAGE_IDS)[number];
+
+export const DESTINATIONS_ELEVAGE = [
+	{
+		label: "En France",
+		id: "france",
+	},
+	{
+		label: "À l’étranger",
+		id: "etranger",
+	},
+] as const;
+
+export const DESTINATIONS_ELEVAGE_IDS = DESTINATIONS_ELEVAGE.map((e) => e.id);
+export type DESTINATIONS_ELEVAGE_ID = (typeof DESTINATIONS_ELEVAGE_IDS)[number];
+
+export const ORIGINES_NAISSAIN = [
+	{
+		label: "Par captage en milieu naturel",
+		id: "captage",
+	},
+	{
+		label: "Écloserie/nurserie – diploïde",
+		id: "ecloserieDiploide",
+	},
+	{
+		label: "Écloserie/nurserie – triploïde",
+		id: "ecloserieTriploide",
+	},
+] as const;
+export const ORIGINES_NAISSAIN_IDS = ORIGINES_NAISSAIN.map((e) => e.id);
+export type ORIGINES_NAISSAIN_ID = (typeof ORIGINES_NAISSAIN_IDS)[number];
+
+export const DESTINATIONS_NAISSAIN = [
+	{
+		label: "En France",
+		id: "france",
+	},
+	{
+		label: "À l’étranger",
+		id: "etranger",
+	},
+] as const;
+
+export const DESTINATIONS_NAISSAIN_IDS = DESTINATIONS_NAISSAIN.map((e) => e.id);
+export type DESTINATIONS_NAISSAIN_ID =
+	(typeof DESTINATIONS_NAISSAIN_IDS)[number];

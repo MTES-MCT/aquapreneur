@@ -47,17 +47,18 @@ test.describe("Connecté mais non validés", () => {
 		await expect(page).toHaveURL("/validation");
 	});
 
-	test("Les utilisateurs non validés ne peuvent pas acceder au tableau de bord", async ({
-		page,
-	}) => {
-		await page.goto("/producteur");
-		await expect(page).toHaveURL("/validation");
-	});
+	// TODO à reprendre quand on mettra en place le nouveau parcours producteur
+	// test("Les utilisateurs non validés ne peuvent pas acceder au tableau de bord", async ({
+	// 	page,
+	// }) => {
+	// 	await page.goto("/producteur");
+	// 	await expect(page).toHaveURL("/validation");
+	// });
 
-	test("Les utilisateurs non validés ne peuvent pas acceder aux déclarations", async ({
-		page,
-	}) => {
-		await page.goto("/producteur/declarations/2024/entreprise/1");
-		await expect(page).toHaveURL("/validation");
-	});
+	// test("Les utilisateurs non validés ne peuvent pas acceder aux déclarations", async ({
+	// 	page,
+	// }) => {
+	// 	await page.goto("/producteur/declarations/2024/entreprise/1");
+	// 	await expect(page).toHaveURL("/validation");
+	// });
 });

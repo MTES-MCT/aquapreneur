@@ -10,7 +10,7 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ESPECES, type ESPECES_ID } from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
+	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -27,7 +27,7 @@
 	};
 
 	const handleCheck = (checked: boolean, id: ESPECES_ID) => {
-		const v = ventesParEspece(donnees, id);
+		const v = dVentes(donnees, id);
 		if (checked) {
 			v.enable();
 		} else {
@@ -51,7 +51,7 @@
 				<CheckboxGroup
 					name={espece.id}
 					id={espece.id}
-					checked={ventesParEspece(donnees, espece.id).active()}
+					checked={dVentes(donnees, espece.id).active()}
 					onCheck={(event) =>
 						handleCheck(event.currentTarget.checked, espece.id)}
 				>

@@ -7,9 +7,9 @@
 
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { DESTINATION_VENTES_CONSO_FRANCE } from "$lib/constants";
-	import { ventesParEspece } from "$lib/declaration-utils";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { DESTINATIONS_VENTES_CONSO_FRANCE } from "$lib/constants";
+	import { dVentes } from "$lib/declaration-utils";
+	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -17,7 +17,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		ventesParEspece(donnees, data.espece.id).consommation.rendValide();
+		dVentes(donnees, data.espece.id).consommation.validé = true;
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
@@ -26,25 +26,10 @@
 	};
 
 	let prevHref = $derived(
-		(
-			ventesParEspece(
-				donnees,
-				data.espece.id,
-			).consommation.destination.france.active()
-		) ?
+		dVentes(donnees, data.espece.id).consommation.destination.france.active() ?
 			"./2"
 		:	"./1",
 	);
-
-	const toNumber = (val: string | null | undefined) => {
-		return (
-			val != null ?
-				!Number.isNaN(Number.parseFloat(val)) ?
-					Number.parseFloat(val)
-				:	null
-			:	null
-		);
-	};
 </script>
 
 <div>
@@ -77,7 +62,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.france?.active()}
+										{#if dVentes(donnees, data.espece.id).consommation.destination?.france?.active()}
 											<tr>
 												<td
 													colspan="3"
@@ -86,17 +71,15 @@
 													En France
 												</td>
 											</tr>
-											{#each DESTINATION_VENTES_CONSO_FRANCE as destination (destination.id)}
-												{#if ventesParEspece(donnees, data.espece.id)
+											{#each DESTINATIONS_VENTES_CONSO_FRANCE as destination (destination.id)}
+												{#if dVentes(donnees, data.espece.id)
 													.consommation.destination?.france?.detail(destination.id)
 													?.active()}
-													<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+													<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 															 toucher directement à la structure -->
 													{@const value =
-														donnees.ventes[data.espece.id]!.adultes!
-															.consommation!.destination!.france![
-															destination.id
-														]!}
+														donnees.ventes[data.espece.id]!.consommation!
+															.destination!.france![destination.id]!}
 													<tr>
 														<td>{destination.label}</td>
 														<td>
@@ -115,7 +98,7 @@
 												{/if}
 											{/each}
 										{/if}
-										{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active() || ventesParEspece(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
+										{#if dVentes(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active() || dVentes(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
 											<tr>
 												<td
 													colspan="3"
@@ -124,11 +107,11 @@
 													À l’étranger
 												</td>
 											</tr>
-											{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active()}
-												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+											{#if dVentes(donnees, data.espece.id).consommation.destination?.unionEuropeenne?.active()}
+												<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.adultes!.consommation!
+													donnees.ventes[data.espece.id]!.consommation!
 														.destination!.unionEuropeenne!}
 												<tr>
 													<td>Au sein de l’Union Européenne</td>
@@ -146,11 +129,11 @@
 													<td><input class="fr-input" disabled /></td>
 												</tr>
 											{/if}
-											{#if ventesParEspece(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
-												<!-- TODO. ajouter des getter/setter sur ventesParEspece plutot que de
+											{#if dVentes(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
+												<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.adultes!.consommation!
+													donnees.ventes[data.espece.id]!.consommation!
 														.destination!.horsUnionEuropeenne!}
 												<tr>
 													<td>Hors de l’Union Européenne</td>

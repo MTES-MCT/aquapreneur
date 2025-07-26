@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { ChangeEventHandler } from "svelte/elements";
+
 	import type { Snippet } from "svelte";
 
 	let {
@@ -9,14 +11,16 @@
 		fieldsetId,
 		required,
 		actionButton,
+		onChange,
 	}: {
 		label: Snippet;
 		type: "text" | "email" | "tel";
 		name: string;
-		value?: string | null;
+		value?: number | string | null;
 		fieldsetId: string;
 		required?: boolean;
 		actionButton?: Snippet;
+		onChange?: ChangeEventHandler<HTMLInputElement>;
 	} = $props();
 	const id = $props.id();
 </script>
@@ -35,6 +39,7 @@
 				{name}
 				bind:value
 				{required}
+				onchange={onChange}
 				autocomplete="off"
 			/>
 			{#if actionButton}

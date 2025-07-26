@@ -37,6 +37,8 @@
 					baseUrl="/comptable/declarations/{data.etablissement
 						.siret}/{data.annee}"
 					nomEtablissement={data.etablissement.denomination}
+					resetActionUrl="/comptable/declarations/{data.etablissement
+						.siret}/{data.annee}"
 					{donnees}
 				></SideMenu>
 			</div>

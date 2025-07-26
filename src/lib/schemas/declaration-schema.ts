@@ -30,33 +30,84 @@ export const ValeurHT = type({
 }).or(type.null);
 
 export const EspeceVenteSchema = type({
-	"naissains?": {
-		"total?": PositiveNumber.or(type.null),
+	"validation?": {
+		"naissain?": "boolean",
+		"elevage?": "boolean",
+		"consommation?": "boolean",
+		"origine?": "boolean",
 	},
-	"juveniles?": {
-		"total?": PositiveNumber.or(type.null),
-	},
-	"adultes?": {
-		"total?": PositiveNumber.or(type.null),
-		"consommation?": {
-			"validé?": "boolean",
+
+	"naissain?": {
+		"captage?": {
 			"destination?": {
-				"france?": {
-					"degustation?": ValeurHT,
-					"autresVentesParticuliers?": ValeurHT,
-					"autresConchyliculteurs?": ValeurHT,
-					"restaurateursTraiteurs?": ValeurHT,
-					"poissoniersEcaillers?": ValeurHT,
-					"grandesMoyennesSurfaces?": ValeurHT,
-					"mareyeursGrossistes?": ValeurHT,
-				},
-				"unionEuropeenne?": ValeurHT,
-				"horsUnionEuropeenne?": ValeurHT,
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
 			},
 		},
-		"elevage?": {
-			"france?": {},
-			"etranger?": {},
+		"ecloserieDiploide?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+		"ecloserieTriploide?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+	},
+	"elevage?": {
+		"pregrossi?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+		"demiElevage?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+		"adulte?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+	},
+	"consommation?": {
+		"destination?": {
+			"france?": {
+				"degustation?": ValeurHT,
+				"autresVentesParticuliers?": ValeurHT,
+				"autresConchyliculteurs?": ValeurHT,
+				"restaurateursTraiteurs?": ValeurHT,
+				"poissoniersEcaillers?": ValeurHT,
+				"grandesMoyennesSurfaces?": ValeurHT,
+				"mareyeursGrossistes?": ValeurHT,
+			},
+			"unionEuropeenne?": ValeurHT,
+			"horsUnionEuropeenne?": ValeurHT,
+		},
+		"affinage?": {
+			"claires?": {
+				"part?": Percent.or(type.null),
+				"surfaceHa?": PositiveNumber.or(type.null),
+			},
+			"parcs?": {
+				"part?": Percent.or(type.null),
+				"surfaceHa?": PositiveNumber.or(type.null),
+			},
+		},
+		"bio?": {
+			"part?": Percent.or(type.null),
+		},
+		"origine?": {
+			"captage?": Percent.or(type.null),
+			"ecloserieDiploide?": Percent.or(type.null),
+			"ecloserieTriploide?": Percent.or(type.null),
 		},
 	},
 });
