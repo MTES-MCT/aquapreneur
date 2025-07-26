@@ -30,8 +30,14 @@ export const ValeurHT = type({
 }).or(type.null);
 
 export const EspeceVenteSchema = type({
+	"validation?": {
+		"naissain?": "boolean",
+		"elevage?": "boolean",
+		"consommation?": "boolean",
+		"origine?": "boolean",
+	},
+
 	"naissain?": {
-		"validé?": "boolean",
 		"captage?": {
 			"destination?": {
 				"france?": ValeurHT,
@@ -52,7 +58,6 @@ export const EspeceVenteSchema = type({
 		},
 	},
 	"elevage?": {
-		"validé?": "boolean",
 		"pregrossi?": {
 			"destination?": {
 				"france?": ValeurHT,
@@ -73,8 +78,6 @@ export const EspeceVenteSchema = type({
 		},
 	},
 	"consommation?": {
-		"validé?": "boolean",
-		"origineValidé?": "boolean",
 		"destination?": {
 			"france?": {
 				"degustation?": ValeurHT,

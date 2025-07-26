@@ -17,6 +17,9 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (!dVentes(donnees, data.espece.id).naissain.active()) {
+			dVentes(donnees, data.espece.id).naissain.validé = true;
+		}
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
@@ -34,7 +37,7 @@
 		}
 	};
 	let radioValue: boolean | undefined = $state(
-		dVentes(donnees, data.espece.id).elevage.active() ? true : false,
+		dVentes(donnees, data.espece.id).naissain.active() ? true : false,
 	);
 </script>
 

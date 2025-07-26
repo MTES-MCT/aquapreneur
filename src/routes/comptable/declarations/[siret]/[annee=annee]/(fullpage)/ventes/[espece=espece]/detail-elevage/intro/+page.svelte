@@ -17,6 +17,9 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (!dVentes(donnees, data.espece.id).elevage.active()) {
+			dVentes(donnees, data.espece.id).elevage.validé = true;
+		}
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
