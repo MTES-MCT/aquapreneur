@@ -352,7 +352,7 @@ export const prefillDeclaration = async (
 		// 	dateArrete: c.dateArrete,
 		// })),
 	});
-	console.dir(deepClean(d?.production ?? {}), { depth: null });
-	console.dir(declaration.ventes, { depth: null });
+	// console.dir(deepClean(d?.production ?? {}), { depth: null });
+	// console.dir(declaration.ventes, { depth: null });
 	return declaration;
 };
