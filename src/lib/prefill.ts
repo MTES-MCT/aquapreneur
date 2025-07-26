@@ -137,10 +137,15 @@ export const prefillDeclaration = async (
 		ventes: deepClean({
 			huitreCreuse: {
 				naissain: {
-					destination: {
-						france: { valeurHT: d?.production.CAHNaissFr },
-						unionEuropeenne: { valeurHT: d?.production.CAHNaissUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAHNaissAu },
+					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+					// on n’a pas la ventilation par origine
+					captage: {
+						destination: {
+							france: { valeurHT: d?.production.CAHNaissFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAHNaissUE", "CAHNaissAu"]),
+							},
+						},
 					},
 				},
 				elevage: {
@@ -196,13 +201,17 @@ export const prefillDeclaration = async (
 			},
 			mouleCommune: {
 				naissain: {
-					destination: {
-						france: { valeurHT: d?.production.CAMNaissFr },
-						unionEuropeenne: { valeurHT: d?.production.CAMNaissUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAMNaissAu },
+					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+					// on n’a pas la ventilation par origine
+					captage: {
+						destination: {
+							france: { valeurHT: d?.production.CAMNaissFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAMNaissUE", "CAMNaissAu"]),
+							},
+						},
 					},
 				},
-
 				elevage: {
 					demiElevage: {
 						destination: {
@@ -247,10 +256,15 @@ export const prefillDeclaration = async (
 			},
 			palourde: {
 				naissain: {
-					destination: {
-						france: { valeurHT: d?.production.CAPNaissFr },
-						unionEuropeenne: { valeurHT: d?.production.CAPNaissUE },
-						horsUnionEuropeenne: { valeurHT: d?.production.CAPNaissAu },
+					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+					// on n’a pas la ventilation par origine
+					captage: {
+						destination: {
+							france: { valeurHT: d?.production.CAPNaissFr },
+							etranger: {
+								valeurHT: sumAttrs(d?.production, ["CAPNaissUE", "CAPNaissAu"]),
+							},
+						},
 					},
 				},
 				elevage: {
