@@ -36,12 +36,31 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					ventes: { [especeId]: { consommation: { validé: val } } },
 				});
 			},
+			get origineValidé() {
+				return d?.consommation?.origineValidé != null;
+			},
+			set origineValidé(val: boolean) {
+				defaultsDeep(donnees, {
+					ventes: { [especeId]: { consommation: { origineValidé: val } } },
+				});
+			},
 			active: () => {
 				return d?.consommation != null;
 			},
 			enable: () => {
 				defaultsDeep(donnees, {
-					ventes: { [especeId]: { consommation: {} } },
+					ventes: {
+						[especeId]: {
+							consommation: {
+								affinage: {
+									claires: {},
+									parcs: {},
+								},
+								bio: {},
+								origine: {},
+							},
+						},
+					},
 				});
 			},
 			disable: () => {

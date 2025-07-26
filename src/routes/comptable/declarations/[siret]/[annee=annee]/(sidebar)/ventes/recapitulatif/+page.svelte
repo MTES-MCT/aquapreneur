@@ -84,13 +84,16 @@
 					<div style="flex: 1">Origine, finition et certification</div>
 				{/snippet}
 				{#snippet headerAction()}
+					{@const validé = dVentes(donnees, espece.id).consommation
+						.origineValidé}
 					<button
 						class="fr-btn fr-mx-2v"
+						class:fr-btn--tertiary={validé}
 						onclick={() => {
 							goto(`./${espece.slug}/detail-origine/`);
 						}}
 					>
-						Compléter
+						{validé ? "Validé" : "Compléter"}
 					</button>
 				{/snippet}
 				{#snippet content()}{/snippet}

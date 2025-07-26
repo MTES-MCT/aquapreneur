@@ -74,6 +74,7 @@ export const EspeceVenteSchema = type({
 	},
 	"consommation?": {
 		"validé?": "boolean",
+		"origineValidé?": "boolean",
 		"destination?": {
 			"france?": {
 				"degustation?": ValeurHT,
@@ -86,6 +87,24 @@ export const EspeceVenteSchema = type({
 			},
 			"unionEuropeenne?": ValeurHT,
 			"horsUnionEuropeenne?": ValeurHT,
+		},
+		"affinage?": {
+			"claires?": {
+				"part?": Percent.or(type.null),
+				"surfaceHa?": PositiveNumber.or(type.null),
+			},
+			"parcs?": {
+				"part?": Percent.or(type.null),
+				"surfaceHa?": PositiveNumber.or(type.null),
+			},
+		},
+		"bio?": {
+			"part?": Percent.or(type.null),
+		},
+		"origine?": {
+			"captage?": Percent.or(type.null),
+			"ecloserieDiploide?": Percent.or(type.null),
+			"ecloserieTriploide?": Percent.or(type.null),
 		},
 	},
 });
