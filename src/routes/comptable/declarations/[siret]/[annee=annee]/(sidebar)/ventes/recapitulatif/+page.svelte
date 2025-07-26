@@ -17,7 +17,17 @@
 </script>
 
 <div>
-	<h1 class="fr-h2">Ventes</h1>
+	<div class="bandeau-titre">
+		<h1 class="fr-h2">Ventes</h1>
+		<button
+			class="fr-btn fr-btn--tertiary fr-btn--sm"
+			onclick={() => {
+				goto(`./2`);
+			}}
+		>
+			Modifier les espèces
+		</button>
+	</div>
 
 	{#each especes as espece (espece.id)}
 		<h2 class="fr-h6 fr-mt-10v">{espece.label}</h2>
@@ -101,3 +111,11 @@
 		</div>
 	{/each}
 </div>
+
+<style>
+	.bandeau-titre {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+</style>
