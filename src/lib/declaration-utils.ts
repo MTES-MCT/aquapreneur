@@ -26,19 +26,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 		disable: () => {
 			delete donnees.ventes?.[especeId];
 		},
-		naissain: {
-			active: () => {
-				return d?.naissain != null;
-			},
-			enable: () => {
-				defaultsDeep(donnees, {
-					ventes: { [especeId]: { naissains: {} } },
-				});
-			},
-			disable: () => {
-				delete d?.naissain;
-			},
-		},
+
 		consommation: {
 			get validé() {
 				return d?.consommation?.validé != null;
@@ -317,6 +305,206 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 						},
 						disable: () => {
 							delete d?.elevage?.adulte?.destination?.etranger;
+						},
+					},
+				},
+			},
+		},
+		naissain: {
+			get validé() {
+				return d?.naissain?.validé != null;
+			},
+			set validé(val: boolean) {
+				defaultsDeep(donnees, {
+					ventes: { [especeId]: { naissain: { validé: val } } },
+				});
+			},
+			active: () => {
+				return d?.naissain != null;
+			},
+			enable: () => {
+				defaultsDeep(donnees, {
+					ventes: { [especeId]: { naissain: {} } },
+				});
+			},
+			disable: () => {
+				delete d?.naissain;
+			},
+			captage: {
+				active: () => {
+					return d?.naissain?.captage != null;
+				},
+				enable: () => {
+					defaultsDeep(donnees, {
+						ventes: {
+							[especeId]: {
+								naissain: { captage: { destination: {} } },
+							},
+						},
+					});
+				},
+				disable: () => {
+					delete d?.naissain?.captage;
+				},
+				destination: {
+					france: {
+						active: () => {
+							return d?.naissain?.captage?.destination?.france != null;
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: { captage: { destination: { france: {} } } },
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.captage?.destination?.france;
+						},
+					},
+					etranger: {
+						active: () => {
+							return d?.naissain?.captage?.destination?.etranger != null;
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: {
+											captage: { destination: { etranger: {} } },
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.captage?.destination?.etranger;
+						},
+					},
+				},
+			},
+			ecloserieDiploide: {
+				active: () => {
+					return d?.naissain?.ecloserieDiploide != null;
+				},
+				enable: () => {
+					defaultsDeep(donnees, {
+						ventes: {
+							[especeId]: {
+								naissain: { ecloserieDiploide: { destination: {} } },
+							},
+						},
+					});
+				},
+				disable: () => {
+					delete d?.naissain?.ecloserieDiploide;
+				},
+				destination: {
+					france: {
+						active: () => {
+							return (
+								d?.naissain?.ecloserieDiploide?.destination?.france != null
+							);
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: {
+											ecloserieDiploide: { destination: { france: {} } },
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.ecloserieDiploide?.destination?.france;
+						},
+					},
+					etranger: {
+						active: () => {
+							return (
+								d?.naissain?.ecloserieDiploide?.destination?.etranger != null
+							);
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: {
+											ecloserieDiploide: { destination: { etranger: {} } },
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.ecloserieDiploide?.destination?.etranger;
+						},
+					},
+				},
+			},
+			ecloserieTriploide: {
+				active: () => {
+					return d?.naissain?.ecloserieTriploide != null;
+				},
+				enable: () => {
+					defaultsDeep(donnees, {
+						ventes: {
+							[especeId]: {
+								naissain: { ecloserieTriploide: { destination: {} } },
+							},
+						},
+					});
+				},
+				disable: () => {
+					delete d?.naissain?.ecloserieTriploide;
+				},
+				destination: {
+					france: {
+						active: () => {
+							return (
+								d?.naissain?.ecloserieTriploide?.destination?.france != null
+							);
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: {
+											ecloserieTriploide: { destination: { france: {} } },
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.ecloserieTriploide?.destination?.france;
+						},
+					},
+					etranger: {
+						active: () => {
+							return (
+								d?.naissain?.ecloserieTriploide?.destination?.etranger != null
+							);
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										naissain: {
+											ecloserieTriploide: {
+												destination: { etranger: {} },
+											},
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.naissain?.ecloserieTriploide?.destination?.etranger;
 						},
 					},
 				},

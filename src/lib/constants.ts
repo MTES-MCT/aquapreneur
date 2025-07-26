@@ -129,3 +129,35 @@ export const DESTINATIONS_ELEVAGE = [
 
 export const DESTINATIONS_ELEVAGE_IDS = DESTINATIONS_ELEVAGE.map((e) => e.id);
 export type DESTINATIONS_ELEVAGE_ID = (typeof DESTINATIONS_ELEVAGE_IDS)[number];
+
+export const ORIGINES_NAISSAIN = [
+	{
+		label: "Par captage en milieu naturel",
+		id: "captage",
+	},
+	{
+		label: "Écloserie/nurserie – diploïde",
+		id: "ecloserieDiploide",
+	},
+	{
+		label: "Écloserie/nurserie – triploïde",
+		id: "ecloserieTriploide",
+	},
+] as const;
+export const ORIGINES_NAISSAIN_IDS = ORIGINES_NAISSAIN.map((e) => e.id);
+export type ORIGINES_NAISSAIN_ID = (typeof ORIGINES_NAISSAIN_IDS)[number];
+
+export const DESTINATIONS_NAISSAIN = [
+	{
+		label: "En France",
+		id: "france",
+	},
+	{
+		label: "À l’étranger",
+		id: "etranger",
+	},
+] as const;
+
+export const DESTINATIONS_NAISSAIN_IDS = DESTINATIONS_NAISSAIN.map((e) => e.id);
+export type DESTINATIONS_NAISSAIN_ID =
+	(typeof DESTINATIONS_NAISSAIN_IDS)[number];

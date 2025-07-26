@@ -59,22 +59,26 @@
 				{/snippet}
 				{#snippet content()}{/snippet}
 			</Accordion>
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Vente de naissain</div>
-				{/snippet}
-				{#snippet headerAction()}
-					<button
-						class="fr-btn fr-mx-2v"
-						onclick={() => {
-							goto(`./${espece.slug}/detail-naissain/`);
-						}}
-					>
-						Compléter
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
+			{#if dVentes(donnees, espece.id).naissain.active()}
+				<Accordion>
+					{#snippet header()}
+						<div style="flex: 1">Vente de naissain</div>
+					{/snippet}
+					{#snippet headerAction()}
+						{@const validé = dVentes(donnees, espece.id).naissain.validé}
+						<button
+							class="fr-btn fr-mx-2v"
+							class:fr-btn--tertiary={validé}
+							onclick={() => {
+								goto(`./${espece.slug}/detail-naissain/`);
+							}}
+						>
+							{validé ? "Validé" : "Compléter"}
+						</button>
+					{/snippet}
+					{#snippet content()}{/snippet}
+				</Accordion>
+			{/if}
 			<Accordion>
 				{#snippet header()}
 					<div style="flex: 1">Origine, finition et certification</div>

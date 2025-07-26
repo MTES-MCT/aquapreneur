@@ -32,10 +32,23 @@ export const ValeurHT = type({
 export const EspeceVenteSchema = type({
 	"naissain?": {
 		"validé?": "boolean",
-		"destination?": {
-			"france?": ValeurHT,
-			"unionEuropeenne?": ValeurHT,
-			"horsUnionEuropeenne?": ValeurHT,
+		"captage?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+		"ecloserieDiploide?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
+		},
+		"ecloserieTriploide?": {
+			"destination?": {
+				"france?": ValeurHT,
+				"etranger?": ValeurHT,
+			},
 		},
 	},
 	"elevage?": {
