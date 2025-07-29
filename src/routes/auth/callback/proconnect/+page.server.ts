@@ -120,18 +120,19 @@ export const load = async ({ url, cookies }) => {
 	let utilisateur: Utilisateur;
 	if (query.length) {
 		utilisateur = query[0];
-		const hasMFA =
-			amr.includes("totp") || amr.includes("pop") || amr.includes("mfa");
-		if (utilisateur.estAdmin) {
-			// Les administateur·ices **doivent utiliser une authentification 2FA
-			if (env.ENVIRONMENT == "production" && !hasMFA) {
-				audit("Tentative de connexion d’un administrateur sans MFA", {
-					user_id: utilisateur.id,
-					amr,
-				});
-				redirect(307, "/mfa");
-			}
-		}
+		// TODO désactivé provisoirement
+		// const hasMFA =
+		// 	amr.includes("totp") || amr.includes("pop") || amr.includes("mfa");
+		// if (utilisateur.estAdmin) {
+		// 	// Les administateur·ices **doivent utiliser une authentification 2FA
+		// 	if (env.ENVIRONMENT == "production" && !hasMFA) {
+		// 		audit("Tentative de connexion d’un administrateur sans MFA", {
+		// 			user_id: utilisateur.id,
+		// 			amr,
+		// 		});
+		// 		redirect(307, "/mfa");
+		// 	}
+		// }
 		// Le compte correspondant au `sub` existe déjà, on le met à jour.
 		// TODO gérer le changement d’adresse email, de service, etc ?
 		await db
