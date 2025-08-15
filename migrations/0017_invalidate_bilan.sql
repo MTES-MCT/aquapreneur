@@ -1,0 +1,1 @@
+ALTER TABLE "bilans" ADD COLUMN "invalide" boolean DEFAULT false NOT NULL;

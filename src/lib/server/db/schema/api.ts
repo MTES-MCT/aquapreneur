@@ -65,6 +65,7 @@ export const bilans = pgTable(
 		version: integer().notNull(),
 		dateBilan: date().notNull(),
 		donnees: jsonb().$type<CGOData>().notNull(),
+		invalide: boolean().notNull().default(false),
 	},
 	(table) => [check("siret_check", sql`${table.siret} ~ '^\\d{14}$'`)],
 );

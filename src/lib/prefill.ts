@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, ne, sql } from "drizzle-orm";
 
 import { error } from "@sveltejs/kit";
 
@@ -53,6 +53,7 @@ const getBilan = async (siret: string, annee: number) => {
 		.from(bilans)
 		.where(
 			and(
+				ne(bilans.invalide, true),
 				eq(bilans.siret, siret),
 				eq(sql<string>`DATE_PART('year', ${bilans.finExercice})`, annee),
 			),
