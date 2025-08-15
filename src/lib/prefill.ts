@@ -1,6 +1,4 @@
-import { and, eq, ne, sql } from "drizzle-orm";
-
-import { error } from "@sveltejs/kit";
+import { and, desc, eq, ne, sql } from "drizzle-orm";
 
 import { db } from "$lib/server/db";
 import { bilans } from "$lib/server/db/schema/api";
@@ -9,7 +7,6 @@ import { bilans } from "$lib/server/db/schema/api";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DeclarationSchema } from "./schemas/declaration-schema";
-import * as logger from "./server/utils/logger";
 import { deepClean } from "./utils";
 
 import type { EtablissementSelect } from "./server/db/types";
@@ -47,7 +44,7 @@ const sumAttrs = (
 	}, 0);
 };
 
-const getBilan = async (siret: string, annee: number) => {
+export const getBilan = async (siret: string, annee: number) => {
 	const result = await db
 		.select()
 		.from(bilans)
@@ -57,17 +54,23 @@ const getBilan = async (siret: string, annee: number) => {
 				eq(bilans.siret, siret),
 				eq(sql<string>`DATE_PART('year', ${bilans.finExercice})`, annee),
 			),
-		);
-	if (result.length > 1) {
-		logger.error("Bilans multiples", {
-			siret,
-			annee,
-			ids: result.map((b) => b.id),
-		});
-		error(500, "Bilans multiples");
-	}
+		)
+		.orderBy(desc(bilans.version))
+		.limit(1);
 
 	if (result.length === 1) {
+		// TODO log à supprimer après tests
+		const bilan = result[0];
+		console.log(
+			bilan.id,
+			bilan.siret,
+			bilan.nom,
+			bilan.debutExercice,
+			bilan.finExercice,
+			bilan.version,
+			bilan.invalide,
+			bilan.dateBilan,
+		);
 		return result[0];
 	}
 	return null;

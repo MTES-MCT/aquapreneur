@@ -1,4 +1,4 @@
-import { Column, desc, eq } from "drizzle-orm";
+import { Column, and, desc, eq } from "drizzle-orm";
 import cloneDeep from "lodash/cloneDeep";
 import { beforeAll, describe, expect, inject, test } from "vitest";
 
@@ -11,6 +11,7 @@ import {
 import { getJetonApiFromToken } from "$lib/server/db/utils";
 import { generateApiToken } from "$lib/server/utils";
 
+import { getBilan } from "$lib/prefill";
 import { CGODonneesBilan } from "$lib/schemas/cgo-schema";
 
 import type { AnyPgTable } from "drizzle-orm/pg-core";
@@ -76,8 +77,8 @@ const post = (
 };
 
 describe("Tests de création entreprise et établissement", async () => {
-	// On utilise un SIRET à part pour ces test pour éviter que les entreprises
-	// aient été créées par ailleur
+	// On utilise un SIRET différent dans ces tests pour éviter que les entreprises
+	// n’aient été créées par ailleurs
 	const siret = "33071536800032";
 
 	test("L’entreprise n’existe pas a priori", async () => {
@@ -346,7 +347,7 @@ describe("Tests de validation du SIRET", async () => {
 	});
 });
 
-describe("Tests de validation du SIRET", async () => {
+describe("Tests des champs monétaires", async () => {
 	test("204 si un champ monétaire est manquant", async () => {
 		let response;
 		let inserted;
@@ -571,6 +572,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		expect(response.status).toBe(204);
 	});
 });
+
 describe("Tests de validation des champs date", async () => {
 	test("400 si un champ date n’est pas au bon format", async () => {
 		let response;
@@ -1100,6 +1102,101 @@ describe("Tests de conversion des champs CGO", async () => {
 			"stock must be an object (was missing)",
 		);
 		expect(response.status).toBe(400);
+	});
+});
+
+describe("Tests du champ `invalide` et du versioning", async () => {
+	// On utilise un SIRET différent dans ces tests pour éviter que les entreprises
+	// n’aient été créées par ailleurs
+	const siret = "78438569200040";
+
+	test("un bilan invalide n’est pas pris en compte par getBilan", async () => {
+		const response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+			},
+		});
+		expect(response.status).toBe(204);
+
+		const inserted = await getLastById(bilans);
+
+		let getBilanResult = await getBilan(
+			siret,
+			new Date(dummyBilan.fin_exercice).getFullYear(),
+		);
+
+		expect(getBilanResult).not.toBeNull();
+		expect(getBilanResult!.version).toBe(dummyBilan.version);
+
+		await db
+			.update(bilans)
+			.set({ invalide: true })
+			.where(eq(bilans.id, inserted.id));
+
+		getBilanResult = await getBilan(
+			siret,
+			new Date(dummyBilan.fin_exercice).getFullYear(),
+		);
+		expect(getBilanResult).toBeNull();
+	});
+
+	test("getBilan renvoie uniquement la version valide la plus récente", async () => {
+		let response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+				version: 3,
+			},
+		});
+		expect(response.status).toBe(204);
+		response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+				version: 5,
+			},
+		});
+		expect(response.status).toBe(204);
+		response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+				version: 4,
+			},
+		});
+		expect(response.status).toBe(204);
+		response = await post(`/api/v0/bilan/cgo/${siret}`, {
+			headers: { Authorization: `Bearer ${validAuthToken}` },
+			data: {
+				...dummyBilan,
+				siret,
+				version: 2,
+			},
+		});
+		expect(response.status).toBe(204);
+
+		let getBilanResult = await getBilan(
+			siret,
+			new Date(dummyBilan.fin_exercice).getFullYear(),
+		);
+
+		expect(getBilanResult!.version).toBe(5);
+
+		await db
+			.update(bilans)
+			.set({ invalide: true })
+			.where(and(eq(bilans.siret, siret), eq(bilans.version, 5)));
+
+		getBilanResult = await getBilan(
+			siret,
+			new Date(dummyBilan.fin_exercice).getFullYear(),
+		);
+		expect(getBilanResult!.version).toBe(4);
 	});
 });
 
