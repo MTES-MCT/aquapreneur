@@ -120,6 +120,13 @@
       "when": 1752770012526,
       "tag": "0016_declaration_denom",
       "breakpoints": false
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1755268149160,
+      "tag": "0017_invalidate_bilan",
+      "breakpoints": false
     }
   ]
 }
