@@ -122,13 +122,14 @@ export const load = async ({ url, cookies }) => {
 		utilisateur = query[0];
 		const hasMFA =
 			amr.includes("totp") || amr.includes("pop") || amr.includes("mfa");
-		if (utilisateur.estAdmin) {
+		if (env.PROCONNECT_FORCE_ADMIN_MFA === "1" && utilisateur.estAdmin) {
 			// Les administateur·ices **doivent utiliser une authentification 2FA
-			if (env.ENVIRONMENT == "production" && !hasMFA) {
+			if (!hasMFA) {
 				audit("Tentative de connexion d’un administrateur sans MFA", {
 					user_id: utilisateur.id,
 					amr,
 				});
+				// TODO forcer le logout de ProConnect ?
 				redirect(307, "/mfa");
 			}
 		}
