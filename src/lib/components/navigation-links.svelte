@@ -19,7 +19,7 @@
 <div
 	class="fr-mt-8w"
 	style="display:flex; justify-content: {prevHref ? 'space-between' : (
-		'flex-end'
+		'center'
 	)};"
 >
 	{#if prevHref}
