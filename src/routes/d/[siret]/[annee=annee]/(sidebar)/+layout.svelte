@@ -34,11 +34,9 @@
 			<div class="fr-col-md-4 fr-col-lg-3 fr-col-12">
 				<SideMenu
 					step={page.data.step}
-					baseUrl="/comptable/declarations/{data.etablissement
-						.siret}/{data.annee}"
+					baseUrl="/d/{data.etablissement.siret}/{data.annee}"
 					nomEtablissement={data.etablissement.denomination}
-					resetActionUrl="/comptable/declarations/{data.etablissement
-						.siret}/{data.annee}"
+					resetActionUrl="/d/{data.etablissement.siret}/{data.annee}"
 					{donnees}
 				></SideMenu>
 			</div>

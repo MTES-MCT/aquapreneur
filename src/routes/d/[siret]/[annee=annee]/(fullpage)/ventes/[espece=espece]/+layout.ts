@@ -15,6 +15,6 @@ export const load = async ({ params, parent }) => {
 	}
 	return {
 		espece,
-		returnUrl: `/comptable/declarations/${etablissement.siret}/${annee}/ventes/recapitulatif`,
+		returnUrl: `/d/${etablissement.siret}/${annee}/ventes/recapitulatif`,
 	};
 };

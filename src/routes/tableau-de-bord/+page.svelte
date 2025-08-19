@@ -32,7 +32,7 @@
 										<tr>
 											<td>
 												<a
-													href="./declarations/{declaration.siret}/{declaration.annee}/"
+													href="./d/{declaration.siret}/{declaration.annee}/"
 													class="fr-icon-store-line fr-link--icon-left fr-link fr-link--sm"
 													data-sveltekit-preload-data="off"
 												>
