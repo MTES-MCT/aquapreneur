@@ -14,6 +14,7 @@ export const load = async ({ params, parent }) => {
 		redirect(307, "../");
 	}
 	return {
+		wide: true,
 		espece,
 		returnUrl: `/d/${etablissement.siret}/${annee}/ventes/recapitulatif`,
 	};

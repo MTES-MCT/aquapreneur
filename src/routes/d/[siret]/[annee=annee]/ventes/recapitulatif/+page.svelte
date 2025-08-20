@@ -43,7 +43,7 @@
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
 						onclick={() => {
-							goto(`./${espece.slug}/detail-conso/`);
+							goto(`./${espece.slug}/conso/`);
 						}}
 					>
 						{validé ? "Validé" : "Compléter"}
@@ -61,7 +61,7 @@
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
 						onclick={() => {
-							goto(`./${espece.slug}/detail-elevage/`);
+							goto(`./${espece.slug}/elevage/`);
 						}}
 					>
 						{validé ? "Validé" : "Compléter"}
@@ -80,7 +80,7 @@
 							class="fr-btn fr-mx-2v"
 							class:fr-btn--tertiary={validé}
 							onclick={() => {
-								goto(`./${espece.slug}/detail-naissain/`);
+								goto(`./${espece.slug}/naissain/`);
 							}}
 						>
 							{validé ? "Validé" : "Compléter"}
@@ -100,7 +100,7 @@
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
 						onclick={() => {
-							goto(`./${espece.slug}/detail-origine/`);
+							goto(`./${espece.slug}/origine/`);
 						}}
 					>
 						{validé ? "Validé" : "Compléter"}

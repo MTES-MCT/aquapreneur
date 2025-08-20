@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
 
-	import type { DeclarationStep } from "../type";
+	import type { DeclarationStep } from "./type";
 
 	const {
 		step,
