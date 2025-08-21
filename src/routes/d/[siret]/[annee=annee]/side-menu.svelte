@@ -55,7 +55,16 @@
 						role="link"
 						aria-disabled="true"
 					>
-						{@render categoryTitle("Salariés", false)}
+						{@render categoryTitle("Équipe et direction", false)}
+					</a>
+				</li>
+				<li class="fr-sidemenu__item">
+					<a
+						class="fr-sidemenu__link"
+						href="{baseUrl}/production/"
+						aria-current={step === "production" ? "page" : undefined}
+					>
+						{@render categoryTitle("Production", false)}
 					</a>
 				</li>
 				<li class="fr-sidemenu__item">
@@ -67,17 +76,7 @@
 						{@render categoryTitle("Ventes", false)}
 					</a>
 				</li>
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						style="color: var(--text-disabled-grey)"
-						aria-current={step === "production" ? "page" : undefined}
-						role="link"
-						aria-disabled="true"
-					>
-						{@render categoryTitle("Production", false)}
-					</a>
-				</li>
+
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
