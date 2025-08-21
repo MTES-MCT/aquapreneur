@@ -1,4 +1,5 @@
 <script lang="ts">
+	import capitalize from "lodash/capitalize";
 	import cloneDeep from "lodash/cloneDeep";
 
 	import { goto } from "$app/navigation";
@@ -30,7 +31,7 @@
 	</div>
 
 	{#each especes as espece (espece.id)}
-		<h2 class="fr-h6 fr-mt-10v">{espece.label}</h2>
+		<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
 
 		<div data-fr-group="true" class="fr-accordions-group">
 			<Accordion>

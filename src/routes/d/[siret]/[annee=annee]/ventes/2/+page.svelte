@@ -1,5 +1,6 @@
 <script lang="ts">
 	// import assert from "assert";
+	import capitalize from "lodash/capitalize";
 	import cloneDeep from "lodash/cloneDeep";
 
 	import type { FormEventHandler } from "svelte/elements";
@@ -55,7 +56,7 @@
 					onCheck={(event) =>
 						handleCheck(event.currentTarget.checked, espece.id)}
 				>
-					{#snippet label()}{espece.label}{/snippet}
+					{#snippet label()}{capitalize(espece.label)}{/snippet}
 				</CheckboxGroup>
 			{/each}
 		{/snippet}

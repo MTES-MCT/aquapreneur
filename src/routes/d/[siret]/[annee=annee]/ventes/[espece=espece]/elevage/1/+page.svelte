@@ -38,7 +38,7 @@
 
 <div>
 	<p class="fr-text--xl">
-		À quels stades d’élevage ont été vendues les huîtres creuses ?
+		À quels stades d’élevage ont été vendues les {data.espece.label} ?
 	</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>

@@ -10,27 +10,27 @@ export const ANNEES_DECLARATIVES = [2024, 2023, 2022, 2021, 2020] as const;
 
 export const ESPECES = [
 	{
-		label: "Huître plate",
+		label: "huître plate",
 		id: "huitrePlate",
 		slug: "huitre-plate",
 	},
 	{
-		label: "Huître creuse",
+		label: "huître creuse",
 		id: "huitreCreuse",
 		slug: "huitre-creuse",
 	},
 	{
-		label: "Moule commune",
+		label: "moule commune",
 		id: "mouleCommune",
 		slug: "moule-commune",
 	},
 	{
-		label: "Moule méditerranéenne",
+		label: "moule méditerranéenne",
 		id: "mouleMediterraneenne",
 		slug: "moule-mediterraneenne",
 	},
 	{
-		label: "Palourde",
+		label: "palourde",
 		id: "palourde",
 		slug: "palourde",
 	},
