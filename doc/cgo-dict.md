@@ -1,6 +1,6 @@
 # Correspondance des données CGO
 
-## Données de Stock
+## Stocks
 
 | Espèce                     | Stade               | Unité   | Nom CGO          |
 | -------------------------- | ------------------- | ------- | ---------------- |
@@ -44,7 +44,7 @@
 
 ---
 
-## Données de Production
+## Ventes
 
 | Espèce                | Stade               | Destination    | Détail       | Unité   | Nom CGO          |
 | --------------------- | ------------------- | -------------- | ------------ | ------- | ---------------- |

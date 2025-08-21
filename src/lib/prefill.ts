@@ -138,6 +138,62 @@ export const prefillDeclaration = async (
 		// 		},
 		// 	},
 		// }),
+		production: deepClean({
+			huitreCreuse: {
+				naissain: {
+					valeurHTMi: d?.stock.StckValHNaisMi,
+					valeurHT: d?.stock.StckValHNaisKg,
+					volumeMi: d?.stock.StckVolHNaisMi,
+					volume: d?.stock.StckVolHNaisKg,
+				},
+				elevage: {
+					demiElevage: {
+						valeurHT: d?.stock.StckValHDElv,
+						volume: d?.stock.StckVolHDElv,
+					},
+					adulte: {
+						valeurHT: d?.stock.StckValHElv,
+						volume: d?.stock.StckVolHElv,
+					},
+				},
+				consommation: {
+					valeurHT: d?.stock.StckValHConso,
+					volume: d?.stock.StckVolHConso,
+				},
+			},
+			mouleCommune: {
+				naissain: {
+					valeurHT: d?.stock.StckValMNaiss,
+					volume: d?.stock.StckVolMNaiss,
+				},
+				elevage: {
+					demiElevage: {
+						valeurHT: d?.stock.StckValMDElv,
+						volume: d?.stock.StckVolMDElv,
+					},
+				},
+				consommation: {
+					valeurHT: d?.stock.StckValMConso,
+					volume: d?.stock.StckVolMConso,
+				},
+			},
+			palourde: {
+				naissain: {
+					valeurHT: d?.stock.StckValPNaiss,
+					volume: d?.stock.StckVolPNaiss,
+				},
+				elevage: {
+					demiElevage: {
+						valeurHT: d?.stock.StckValPDElv,
+						volume: d?.stock.StckVolPDElv,
+					},
+				},
+				consommation: {
+					valeurHT: d?.stock.StckValPConso,
+					volume: d?.stock.StckVolPConso,
+				},
+			},
+		}),
 		ventes: deepClean({
 			huitreCreuse: {
 				naissain: {
@@ -315,7 +371,6 @@ export const prefillDeclaration = async (
 				// Manque “Non catégorisées” CAPFrNCat
 			},
 		}),
-		stocks: {},
 		// TODO
 		// deepClean({
 		// 	huitreCreuse: {
@@ -357,6 +412,6 @@ export const prefillDeclaration = async (
 		// })),
 	});
 	// console.dir(deepClean(d?.production ?? {}), { depth: null });
-	// console.dir(declaration.ventes, { depth: null });
+	// console.dir(declaration.production, { depth: null });
 	return declaration;
 };

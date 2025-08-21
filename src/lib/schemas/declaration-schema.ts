@@ -29,6 +29,10 @@ export const ValeurHT = type({
 	"valeurHT?": PositiveNumber.or(type.null),
 }).or(type.null);
 
+export const Volume = type({
+	"volume?": PositiveNumber.or(type.null),
+}).or(type.null);
+
 export const EspeceVenteSchema = type({
 	"validation?": {
 		"naissain?": "boolean",
@@ -112,20 +116,20 @@ export const EspeceVenteSchema = type({
 	},
 });
 
-export const EspeceStockSchema = type({
-	"surfaceExploitation?": PositiveNumber.or(type.null),
-	"naissains?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
+export const ProdValues = type({
+	"valeurHT?": PositiveNumber.or(type.null),
+	"volume?": PositiveNumber.or(type.null),
+	"valeurHTMi?": PositiveNumber.or(type.null).describe("en milliers"),
+	"volumeMi?": PositiveNumber.or(type.null).describe("en milliers"),
+}).or(type.null);
+
+export const EspeceProdSchema = type({
+	"naissain?": ProdValues,
+	"elevage?": {
+		"demiElevage?": ProdValues,
+		"adulte?": ProdValues,
 	},
-	"juveniles?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
-	},
-	"adultes?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
-	},
+	"consommation?": ProdValues,
 });
 
 export const DeclarationSchema = type({
@@ -177,13 +181,13 @@ export const DeclarationSchema = type({
 		"palourde?": EspeceVenteSchema,
 		"coque?": EspeceVenteSchema,
 	},
-	stocks: {
-		"huitrePlate?": EspeceStockSchema,
-		"huitreCreuse?": EspeceStockSchema,
-		"mouleCommune?": EspeceStockSchema,
-		"mouleMediterraneenne?": EspeceStockSchema,
-		"palourde?": EspeceStockSchema,
-		"coque?": EspeceStockSchema,
+	production: {
+		"huitrePlate?": EspeceProdSchema,
+		"huitreCreuse?": EspeceProdSchema,
+		"mouleCommune?": EspeceProdSchema,
+		"mouleMediterraneenne?": EspeceProdSchema,
+		"palourde?": EspeceProdSchema,
+		"coque?": EspeceProdSchema,
 	},
 	concessions: type(
 		{
