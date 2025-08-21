@@ -167,6 +167,7 @@ export const DeclarationSchema = type({
 		"mouleCommune?": EspeceAchatSchema,
 		"mouleMediterraneenne?": EspeceAchatSchema,
 		"palourde?": EspeceAchatSchema,
+		"coque?": EspeceAchatSchema,
 	},
 	ventes: {
 		"huitrePlate?": EspeceVenteSchema,
@@ -174,6 +175,7 @@ export const DeclarationSchema = type({
 		"mouleCommune?": EspeceVenteSchema,
 		"mouleMediterraneenne?": EspeceVenteSchema,
 		"palourde?": EspeceVenteSchema,
+		"coque?": EspeceVenteSchema,
 	},
 	stocks: {
 		"huitrePlate?": EspeceStockSchema,
@@ -181,6 +183,7 @@ export const DeclarationSchema = type({
 		"mouleCommune?": EspeceStockSchema,
 		"mouleMediterraneenne?": EspeceStockSchema,
 		"palourde?": EspeceStockSchema,
+		"coque?": EspeceStockSchema,
 	},
 	concessions: type(
 		{

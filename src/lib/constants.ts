@@ -34,6 +34,11 @@ export const ESPECES = [
 		id: "palourde",
 		slug: "palourde",
 	},
+	{
+		label: "coque",
+		id: "coque",
+		slug: "coque",
+	},
 ] as const;
 
 export const ESPECES_IDS = ESPECES.map((e) => e.id);
