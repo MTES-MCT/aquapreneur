@@ -87,12 +87,8 @@ export const CGODonneesBilan = type({
 		"CAHCoFrPro?": LaxNumValue, // prod__huitre__conso__fr__pro__val,
 		"VolVtHCoFrDet?": LaxNumValue, // prod__huitre__conso__fr__detail__qt,
 		"CAHCoFrDet?": LaxNumValue, // prod__huitre__conso__fr__detail__val,
-		"VolVtHCoFrGros?": LaxNumValue.describe(
-			"prod__huitre__conso__fr__grossiste__qt",
-		),
-		"CAHCoFrGros?": LaxNumValue.describe(
-			"prod__huitre__conso__fr__grossiste__val",
-		),
+		"VolVtHCoFrGros?": LaxNumValue, // prod__huitre__conso__fr__grossiste__qt,
+		"CAHCoFrGros?": LaxNumValue, // prod__huitre__conso__fr__grossiste__val,
 		"VolVtHCoFrPCE?": LaxNumValue, // prod__huitre__conso__fr__poiss__qt,
 		"CAHCoFrPCE?": LaxNumValue, // prod__huitre__conso__fr__poiss__val,
 		"VolVtHCoFrPGMS?": LaxNumValue, // prod__huitre__conso__fr__pgms__qt,
@@ -125,9 +121,7 @@ export const CGODonneesBilan = type({
 		"CAMCoFrPro?": LaxNumValue, // prod__moule__conso__fr__pro__val,
 		"VolVtMCoFrDet?": LaxNumValue, // prod__moule__conso__fr__detail__qt,
 		"CAMCoFrDet?": LaxNumValue, // prod__moule__conso__fr__detail__val,
-		"VolVtMCoFrGros?": LaxNumValue.describe(
-			"prod__moule__conso__fr__grossiste__qt",
-		),
+		"VolVtMCoFrGros?": LaxNumValue, // prod__moule__conso__fr__grossiste__qt,
 		"CAMCoFrGros?": LaxNumValue, // prod__moule__conso__fr__grossiste__val,
 		"VolVtMCoFrPCE?": LaxNumValue, // prod__moule__conso__fr__poiss__qt,
 		"CAMCoFrPCE?": LaxNumValue, // prod__moule__conso__fr__poiss__val,
@@ -159,23 +153,15 @@ export const CGODonneesBilan = type({
 		"CAPDElvAU?": LaxNumValue, // prod__palourde__demi_elv__nue__val,
 		"VolVtPCoFrPro?": LaxNumValue, // prod__palourde__conso__fr__pro__qt,
 		"CAPCoFrPro?": LaxNumValue, // prod__palourde__conso__fr__pro__val,
-		"VolVtPCoFrDet?": LaxNumValue.describe(
-			"prod__palourde__conso__fr__detail__qt",
-		),
+		"VolVtPCoFrDet?": LaxNumValue, // prod__palourde__conso__fr__detail__qt,
 		"CAPCoFrDet?": LaxNumValue, // prod__palourde__conso__fr__detail__val,
-		"VolVtPCoFrGros?": LaxNumValue.describe(
-			"prod__palourde__conso__fr__grossiste__qt",
-		),
-		"CAPCoFrGros?": LaxNumValue.describe(
-			"prod__palourde__conso__fr__grossiste__val",
-		),
+		"VolVtPCoFrGros?": LaxNumValue, // prod__palourde__conso__fr__grossiste__qt,
+		"CAPCoFrGros?": LaxNumValue, // prod__palourde__conso__fr__grossiste__val,
 		"VolVtPCoFrPCE?": LaxNumValue, // prod__palourde__conso__fr__poiss__qt,
 		"CAPCoFrPCE?": LaxNumValue, // prod__palourde__conso__fr__poiss__val,
 		"VolVtPCoFrPGMS?": LaxNumValue, // prod__palourde__conso__fr__pgms__qt,
 		"CAPCoFrPGMS?": LaxNumValue, // prod__palourde__conso__fr__pgms__val,
-		"VolVtPCoFrDeg?": LaxNumValue.describe(
-			"prod__palourde__conso__fr__degust__qt",
-		),
+		"VolVtPCoFrDeg?": LaxNumValue, // prod__palourde__conso__fr__degust__qt,
 		"CAPCoFrDeg?": LaxNumValue, // prod__palourde__conso__fr__degust__val,
 		"VolVtPCoUEPro?": LaxNumValue, // prod__palourde__conso__ue__pro__qt,
 		"CAPCoUEPro?": LaxNumValue, // prod__palourde__conso__ue__pro__val,
@@ -183,9 +169,7 @@ export const CGODonneesBilan = type({
 		"CAPCoUEGros?": LaxNumValue, // prod__palourde__conso__ue__expe__val,
 		"VolVtPCoAuPro?": LaxNumValue, // prod__palourde__conso__nue__pro__qt,
 		"CAPCoAuPro?": LaxNumValue, // prod__palourde__conso__nue__pro__val,
-		"VolVtPCoAuGros?": LaxNumValue.describe(
-			"prod__palourde__conso__nue__expe__qt",
-		),
+		"VolVtPCoAuGros?": LaxNumValue, // prod__palourde__conso__nue__expe__qt,
 		"CAPCoAuGros?": LaxNumValue, // prod__palourde__conso__nue__expe__val,
 		"VolVtPFrNCat?": LaxNumValue, // prod__palourde__autre__qt,
 		"CAPFrNCat?": LaxNumValue, // prod__palourde__autre__val,
@@ -205,12 +189,8 @@ export const CGODonneesBilan = type({
 		"CAGCoFrPro?": LaxNumValue, // prod__gambas__conso__fr__pro__val,
 		"VolVtGCoFrDet?": LaxNumValue, // prod__gambas__conso__fr__detail__qt,
 		"CAGCoFrDet?": LaxNumValue, // prod__gambas__conso__fr__detail__val,
-		"VolVtGCoFrGros?": LaxNumValue.describe(
-			"prod__gambas__conso__fr__grossiste__qt",
-		),
-		"CAGCoFrGros?": LaxNumValue.describe(
-			"prod__gambas__conso__fr__grossiste__val",
-		),
+		"VolVtGCoFrGros?": LaxNumValue, // prod__gambas__conso__fr__grossiste__qt,
+		"CAGCoFrGros?": LaxNumValue, // prod__gambas__conso__fr__grossiste__val,
 		"VolVtGCoFrPCE?": LaxNumValue, // prod__gambas__conso__fr__poiss__qt,
 		"CAGCoFrPCE?": LaxNumValue, // prod__gambas__conso__fr__poiss__val,
 		"VolVtGCoFrPGMS?": LaxNumValue, // prod__gambas__conso__fr__pgms__qt,
@@ -243,228 +223,80 @@ export const CGODonneesBilan = type({
 		"CAAPAquaAu?": LaxNumValue, // prod__autre__nue__val,
 	},
 	destination: {
-		"PctCAHNaissFr?": Percent.or(type.null).describe(
-			"pct__prod__huitre__nais__fr__val",
-		),
-		"PctCAHNaissUE?": Percent.or(type.null).describe(
-			"pct__prod__huitre__nais__ue__val",
-		),
-		"PctCAHNaissAu?": Percent.or(type.null).describe(
-			"pct__prod__huitre__nais__nue__val",
-		),
-		"PctCAHDElvFr?": Percent.or(type.null).describe(
-			"pct__prod__huitre__demi_elv__fr__val",
-		),
-		"PctCAHDElvUE?": Percent.or(type.null).describe(
-			"pct__prod__huitre__demi_elv__ue__val",
-		),
-		"PctCAHDElvAu?": Percent.or(type.null).describe(
-			"pct__prod__huitre__demi_elv__nue__val",
-		),
-		"PctCAHElvFr?": Percent.or(type.null).describe(
-			"pct__prod__huitre__elv__fr__val",
-		),
-		"PctCAHElvUE?": Percent.or(type.null).describe(
-			"pct__prod__huitre__elv__ue__val",
-		),
-		"PctCAHElvAu?": Percent.or(type.null).describe(
-			"pct__prod__huitre__elv__nue__val",
-		),
-		"PctCAHCoFrPro?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__pro__val",
-		),
-		"PctCAHCoFrDet?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__detail__val",
-		),
-		"PctCAHCoFrGros?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__grossiste__val",
-		),
-		"PctCAHCoFrPCE?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__poiss__val",
-		),
-		"PctCAHCoFrPGMS?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__pgms__val",
-		),
-		"PctCAHCoFrDeg?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__fr__degust__val",
-		),
-		"PctCAHCoUEPro?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__ue__pro__val",
-		),
-		"PctCAHCoUEGros?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__ue__expe__val",
-		),
-		"PctCAHCoAuPro?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__nue__pro__val",
-		),
-		"PctCAHCoAuGros?": Percent.or(type.null).describe(
-			"pct__prod__huitre__conso__nue__expe__val",
-		),
-		"PctCAMNaissFr?": Percent.or(type.null).describe(
-			"pct__prod__moule__nais__fr__val",
-		),
-		"PctCAMNaissUE?": Percent.or(type.null).describe(
-			"pct__prod__moule__nais__ue__val",
-		),
-		"PctCAMNaissAu?": Percent.or(type.null).describe(
-			"pct__prod__moule__nais__nue__val",
-		),
-		"PctCAMDElvFr?": Percent.or(type.null).describe(
-			"pct__prod__moule__demi_elv__fr__val",
-		),
-		"PctCAMDElvUE?": Percent.or(type.null).describe(
-			"pct__prod__moule__demi_elv__ue__val",
-		),
-		"PctCAMDElvAu?": Percent.or(type.null).describe(
-			"pct__prod__moule__demi_elv__nue__val",
-		),
-		"PctCAMCoFrPro?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__pro__val",
-		),
-		"PctCAMCoFrDet?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__detail__val",
-		),
-		"PctCAMCoFrGros?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__grossiste__val",
-		),
-		"PctCAMCoFrPCE?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__poiss__val",
-		),
-		"PctCAMCoFrPGMS?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__pgms__val",
-		),
-		"PctCAMCoFrDeg?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__fr__degust__val",
-		),
-		"PctCAMCoUEPro?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__ue__pro__val",
-		),
-		"PctCAMCoUEGros?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__ue__expe__val",
-		),
-		"PctCAMCoAuPro?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__nue__pro__val",
-		),
-		"PctCAMCoAuGros?": Percent.or(type.null).describe(
-			"pct__prod__moule__conso__nue__expe__val",
-		),
-		"PctCAPNaissFr?": Percent.or(type.null).describe(
-			"pct__prod__palourde__nais__fr__val",
-		),
-		"PctCAPNaissUE?": Percent.or(type.null).describe(
-			"pct__prod__palourde__nais__ue__val",
-		),
-		"PctCAPNaissAu?": Percent.or(type.null).describe(
-			"pct__prod__palourde__nais__nue__val",
-		),
-		"PctCAPDElvFr?": Percent.or(type.null).describe(
-			"pct__prod__palourde__demi_elv__fr__val",
-		),
-		"PctCAPDElvUE?": Percent.or(type.null).describe(
-			"pct__prod__palourde__demi_elv__ue__val",
-		),
-		"PctCAPDElvAu?": Percent.or(type.null).describe(
-			"pct__prod__palourde__demi_elv__nue__val",
-		),
-		"PctCAPCoFrPro?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__pro__val",
-		),
-		"PctCAPCoFrDet?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__detail__val",
-		),
-		"PctCAPCoFrGros?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__grossiste__val",
-		),
-		"PctCAPCoFrPCE?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__poiss__val",
-		),
-		"PctCAPCoFrPGMS?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__pgms__val",
-		),
-		"PctCAPCoFrDeg?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__fr__degust__val",
-		),
-		"PctCAPCoUEPro?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__ue__pro__val",
-		),
-		"PctCAPCoUEGros?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__ue__expe__val",
-		),
-		"PctCAPCoAuPro?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__nue__pro__val",
-		),
-		"PctCAPCoAuGros?": Percent.or(type.null).describe(
-			"pct__prod__palourde__conso__nue__expe__val",
-		),
-		"PctCAGNaissFr?": Percent.or(type.null).describe(
-			"pct__prod__gambas__larve__fr__val",
-		),
-		"PctCAGNaissUE?": Percent.or(type.null).describe(
-			"pct__prod__gambas__larve__ue__val",
-		),
-		"PctCAGNaissAu?": Percent.or(type.null).describe(
-			"pct__prod__gambas__larve__nue__val",
-		),
-		"PctCAGDElvFr?": Percent.or(type.null).describe(
-			"pct__prod__gambas__pregros__fr__val",
-		),
-		"PctCAGDElvUE?": Percent.or(type.null).describe(
-			"pct__prod__gambas__pregros__ue__val",
-		),
-		"PctCAGDElvAu?": Percent.or(type.null).describe(
-			"pct__prod__gambas__pregros__nue__val",
-		),
-		"PctCAGCoFrPro?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__pro__val",
-		),
-		"PctCAGCoFrDet?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__detail__val",
-		),
-		"PctCAGCoFrGros?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__grossiste__val",
-		),
-		"PctCAGCoFrPCE?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__poiss__val",
-		),
-		"PctCAGCoFrPGMS?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__pgms__val",
-		),
-		"PctCAGCoFrDeg?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__fr__degust__val",
-		),
-		"PctCAGCoUEPro?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__ue__pro__val",
-		),
-		"PctCAGCoUEGros?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__ue__expe__val",
-		),
-		"PctCAGCoAuPro?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__nue__pro__val",
-		),
-		"PctCAGCoAuGros?": Percent.or(type.null).describe(
-			"pct__prod__gambas__conso__nue__expe__val",
-		),
-		"PctCAPoisFr?": Percent.or(type.null).describe(
-			"pct__prod__poisson__fr__val",
-		),
-		"PctCAACoqFr?": Percent.or(type.null).describe(
-			"pct__prod__autre_coq__fr__val",
-		),
-		"PctCAACoqUE?": Percent.or(type.null).describe(
-			"pct__prod__autre_coq__ue__val",
-		),
-		"PctCAACoqAu?": Percent.or(type.null).describe(
-			"pct__prod__autre_coq__nue__val",
-		),
-		"PctCAAPAquaFr?": Percent.or(type.null).describe(
-			"pct__prod__autre__fr__val",
-		),
-		"PctCAAPAquaUE?": Percent.or(type.null).describe(
-			"pct__prod__autre__ue__val",
-		),
-		"PctCAAPAquaAu?": Percent.or(type.null).describe(
-			"pct__prod__autre__nue__val",
-		),
+		"PctCAHNaissFr?": Percent.or(type.null), // pct__prod__huitre__nais__fr__val,
+		"PctCAHNaissUE?": Percent.or(type.null), // pct__prod__huitre__nais__ue__val,
+		"PctCAHNaissAu?": Percent.or(type.null), // pct__prod__huitre__nais__nue__val,
+		"PctCAHDElvFr?": Percent.or(type.null), // pct__prod__huitre__demi_elv__fr__val,
+		"PctCAHDElvUE?": Percent.or(type.null), // pct__prod__huitre__demi_elv__ue__val,
+		"PctCAHDElvAu?": Percent.or(type.null), // pct__prod__huitre__demi_elv__nue__val,
+		"PctCAHElvFr?": Percent.or(type.null), // pct__prod__huitre__elv__fr__val,
+		"PctCAHElvUE?": Percent.or(type.null), // pct__prod__huitre__elv__ue__val,
+		"PctCAHElvAu?": Percent.or(type.null), // pct__prod__huitre__elv__nue__val,
+		"PctCAHCoFrPro?": Percent.or(type.null), // pct__prod__huitre__conso__fr__pro__val,
+		"PctCAHCoFrDet?": Percent.or(type.null), // pct__prod__huitre__conso__fr__detail__val,
+		"PctCAHCoFrGros?": Percent.or(type.null), // pct__prod__huitre__conso__fr__grossiste__val,
+		"PctCAHCoFrPCE?": Percent.or(type.null), // pct__prod__huitre__conso__fr__poiss__val,
+		"PctCAHCoFrPGMS?": Percent.or(type.null), // pct__prod__huitre__conso__fr__pgms__val,
+		"PctCAHCoFrDeg?": Percent.or(type.null), // pct__prod__huitre__conso__fr__degust__val,
+		"PctCAHCoUEPro?": Percent.or(type.null), // pct__prod__huitre__conso__ue__pro__val,
+		"PctCAHCoUEGros?": Percent.or(type.null), // pct__prod__huitre__conso__ue__expe__val,
+		"PctCAHCoAuPro?": Percent.or(type.null), // pct__prod__huitre__conso__nue__pro__val,
+		"PctCAHCoAuGros?": Percent.or(type.null), // pct__prod__huitre__conso__nue__expe__val,
+		"PctCAMNaissFr?": Percent.or(type.null), // pct__prod__moule__nais__fr__val,
+		"PctCAMNaissUE?": Percent.or(type.null), // pct__prod__moule__nais__ue__val,
+		"PctCAMNaissAu?": Percent.or(type.null), // pct__prod__moule__nais__nue__val,
+		"PctCAMDElvFr?": Percent.or(type.null), // pct__prod__moule__demi_elv__fr__val,
+		"PctCAMDElvUE?": Percent.or(type.null), // pct__prod__moule__demi_elv__ue__val,
+		"PctCAMDElvAu?": Percent.or(type.null), // pct__prod__moule__demi_elv__nue__val,
+		"PctCAMCoFrPro?": Percent.or(type.null), // pct__prod__moule__conso__fr__pro__val,
+		"PctCAMCoFrDet?": Percent.or(type.null), // pct__prod__moule__conso__fr__detail__val,
+		"PctCAMCoFrGros?": Percent.or(type.null), // pct__prod__moule__conso__fr__grossiste__val,
+		"PctCAMCoFrPCE?": Percent.or(type.null), // pct__prod__moule__conso__fr__poiss__val,
+		"PctCAMCoFrPGMS?": Percent.or(type.null), // pct__prod__moule__conso__fr__pgms__val,
+		"PctCAMCoFrDeg?": Percent.or(type.null), // pct__prod__moule__conso__fr__degust__val,
+		"PctCAMCoUEPro?": Percent.or(type.null), // pct__prod__moule__conso__ue__pro__val,
+		"PctCAMCoUEGros?": Percent.or(type.null), // pct__prod__moule__conso__ue__expe__val,
+		"PctCAMCoAuPro?": Percent.or(type.null), // pct__prod__moule__conso__nue__pro__val,
+		"PctCAMCoAuGros?": Percent.or(type.null), // pct__prod__moule__conso__nue__expe__val,
+		"PctCAPNaissFr?": Percent.or(type.null), // pct__prod__palourde__nais__fr__val,
+		"PctCAPNaissUE?": Percent.or(type.null), // pct__prod__palourde__nais__ue__val,
+		"PctCAPNaissAu?": Percent.or(type.null), // pct__prod__palourde__nais__nue__val,
+		"PctCAPDElvFr?": Percent.or(type.null), // pct__prod__palourde__demi_elv__fr__val,
+		"PctCAPDElvUE?": Percent.or(type.null), // pct__prod__palourde__demi_elv__ue__val,
+		"PctCAPDElvAu?": Percent.or(type.null), // pct__prod__palourde__demi_elv__nue__val,
+		"PctCAPCoFrPro?": Percent.or(type.null), // pct__prod__palourde__conso__fr__pro__val,
+		"PctCAPCoFrDet?": Percent.or(type.null), // pct__prod__palourde__conso__fr__detail__val,
+		"PctCAPCoFrGros?": Percent.or(type.null), // pct__prod__palourde__conso__fr__grossiste__val,
+		"PctCAPCoFrPCE?": Percent.or(type.null), // pct__prod__palourde__conso__fr__poiss__val,
+		"PctCAPCoFrPGMS?": Percent.or(type.null), // pct__prod__palourde__conso__fr__pgms__val,
+		"PctCAPCoFrDeg?": Percent.or(type.null), // pct__prod__palourde__conso__fr__degust__val,
+		"PctCAPCoUEPro?": Percent.or(type.null), // pct__prod__palourde__conso__ue__pro__val,
+		"PctCAPCoUEGros?": Percent.or(type.null), // pct__prod__palourde__conso__ue__expe__val,
+		"PctCAPCoAuPro?": Percent.or(type.null), // pct__prod__palourde__conso__nue__pro__val,
+		"PctCAPCoAuGros?": Percent.or(type.null), // pct__prod__palourde__conso__nue__expe__val,
+		"PctCAGNaissFr?": Percent.or(type.null), // pct__prod__gambas__larve__fr__val,
+		"PctCAGNaissUE?": Percent.or(type.null), // pct__prod__gambas__larve__ue__val,
+		"PctCAGNaissAu?": Percent.or(type.null), // pct__prod__gambas__larve__nue__val,
+		"PctCAGDElvFr?": Percent.or(type.null), // pct__prod__gambas__pregros__fr__val,
+		"PctCAGDElvUE?": Percent.or(type.null), // pct__prod__gambas__pregros__ue__val,
+		"PctCAGDElvAu?": Percent.or(type.null), // pct__prod__gambas__pregros__nue__val,
+		"PctCAGCoFrPro?": Percent.or(type.null), // pct__prod__gambas__conso__fr__pro__val,
+		"PctCAGCoFrDet?": Percent.or(type.null), // pct__prod__gambas__conso__fr__detail__val,
+		"PctCAGCoFrGros?": Percent.or(type.null), // pct__prod__gambas__conso__fr__grossiste__val,
+		"PctCAGCoFrPCE?": Percent.or(type.null), // pct__prod__gambas__conso__fr__poiss__val,
+		"PctCAGCoFrPGMS?": Percent.or(type.null), // pct__prod__gambas__conso__fr__pgms__val,
+		"PctCAGCoFrDeg?": Percent.or(type.null), // pct__prod__gambas__conso__fr__degust__val,
+		"PctCAGCoUEPro?": Percent.or(type.null), // pct__prod__gambas__conso__ue__pro__val,
+		"PctCAGCoUEGros?": Percent.or(type.null), // pct__prod__gambas__conso__ue__expe__val,
+		"PctCAGCoAuPro?": Percent.or(type.null), // pct__prod__gambas__conso__nue__pro__val,
+		"PctCAGCoAuGros?": Percent.or(type.null), // pct__prod__gambas__conso__nue__expe__val,
+		"PctCAPoisFr?": Percent.or(type.null), // pct__prod__poisson__fr__val,
+		"PctCAACoqFr?": Percent.or(type.null), // pct__prod__autre_coq__fr__val,
+		"PctCAACoqUE?": Percent.or(type.null), // pct__prod__autre_coq__ue__val,
+		"PctCAACoqAu?": Percent.or(type.null), // pct__prod__autre_coq__nue__val,
+		"PctCAAPAquaFr?": Percent.or(type.null), // pct__prod__autre__fr__val,
+		"PctCAAPAquaUE?": Percent.or(type.null), // pct__prod__autre__ue__val,
+		"PctCAAPAquaAu?": Percent.or(type.null), // pct__prod__autre__nue__val,
 	},
 	donnees_economiques: {
 		"CATot?": LaxNumValue, // eco__revs__total_production_vendue,
@@ -474,12 +306,8 @@ export const CGODonneesBilan = type({
 		"SubInvest?": LaxNumValue, // eco__revs__subvention_investissement,
 		"Salaire?": LaxNumValue, // eco__rh__traitements_salaires_personnels,
 		"MOExt?": LaxNumValue, // eco__rh__main_oeuvre_exterieure,
-		"CHSocNonSal?": LaxNumValue.describe(
-			"eco__rh__charges_sociales_main_oeuvre_non_salariee",
-		),
-		"NonSal?": LaxNumValue.describe(
-			"eco__rh__valeur_imputee_main_oeuvre_non_salariee",
-		),
+		"CHSocNonSal?": LaxNumValue, // eco__rh__charges_sociales_main_oeuvre_non_salariee,
+		"NonSal?": LaxNumValue, // eco__rh__valeur_imputee_main_oeuvre_non_salariee,
 		"Energie?": LaxNumValue, // eco__couts_energetiques,
 		"AchHNaiss?": LaxNumValue, // eco__achat__huitre__nais__val,
 		"VolAchHNaiss?": LaxNumValue, // eco__achat__huitre__nais__qt,
