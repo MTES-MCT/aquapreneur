@@ -5,7 +5,7 @@
 	let { data } = $props();
 
 	const getNextPage = () => {
-		return "production/selection-especes";
+		return "production/verification-especes";
 	};
 </script>
 

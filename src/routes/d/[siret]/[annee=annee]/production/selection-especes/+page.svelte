@@ -19,7 +19,7 @@
 
 	const getNextPage = () => {
 		// TODO
-		return ".";
+		return "./recapitulatif";
 	};
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -43,7 +43,7 @@
 
 <h1 class="fr-h2">Production</h1>
 
-<p class="fr-text--xl">Quelles espèces de coquillages avez-vous produit ?</p>
+<p class="fr-text--lead">Quelles espèces de coquillages avez-vous produit ?</p>
 
 <form method="POST" onsubmit={handleSubmit}>
 	<Fieldset>
@@ -66,5 +66,5 @@
 		{/snippet}
 	</Fieldset>
 
-	<NavigationLinks prevHref="../production" nextIsButton />
+	<NavigationLinks prevHref="./verification-especes" nextIsButton />
 </form>
