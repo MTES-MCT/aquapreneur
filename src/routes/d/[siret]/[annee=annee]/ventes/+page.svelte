@@ -17,5 +17,9 @@
 		Données relatives aux ventes réalisées au cours de l’année {data.annee}
 	</p>
 
-	<NavigationLinks nextHref="2" nextLabel="Commencer" />
+	<NavigationLinks
+		nextHref="ventes/selection-especes"
+		nextLabel="Commencer"
+		center
+	/>
 </div>

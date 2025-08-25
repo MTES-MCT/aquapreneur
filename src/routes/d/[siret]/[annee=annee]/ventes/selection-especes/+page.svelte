@@ -24,7 +24,7 @@
 			data.declaration.id,
 			donnees,
 		);
-		goto("./3");
+		goto("./naissain");
 	};
 
 	const handleCheck = (checked: boolean, id: ESPECES_ID) => {
@@ -62,5 +62,5 @@
 		{/snippet}
 	</Fieldset>
 
-	<NavigationLinks prevHref="./1" nextIsButton />
+	<NavigationLinks nextIsButton />
 </form>
