@@ -3,10 +3,6 @@
 	import Pictogram from "$lib/components/pictogram.svelte";
 
 	let { data } = $props();
-
-	const getNextPage = () => {
-		return "production/verification-especes";
-	};
 </script>
 
 <div
@@ -21,5 +17,9 @@
 		Informations relatives aux volumes produits pour chaque espèce en {data.annee}
 	</p>
 
-	<NavigationLinks nextHref={getNextPage()} nextLabel="Commencer" />
+	<NavigationLinks
+		nextHref="production/verification-especes"
+		nextLabel="Commencer"
+		center
+	/>
 </div>

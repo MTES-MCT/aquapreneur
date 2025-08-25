@@ -8,6 +8,7 @@
 		nextIsButton = false,
 		nextLabel = "Suivant",
 		cantAnswerBtn = false,
+		center = false,
 	}: {
 		children?: Snippet;
 		prevHref?: string;
@@ -15,6 +16,7 @@
 		nextLabel?: string;
 		nextIsButton?: boolean;
 		cantAnswerBtn?: boolean;
+		center?: boolean;
 	} = $props();
 
 	let clicked = $state(false);
@@ -27,9 +29,9 @@
 {:else}
 	<div
 		class="fr-mt-8w"
-		style="display:flex; justify-content: {prevHref ? 'space-between' : (
-			'center'
-		)};"
+		style="display:flex; justify-content: {prevHref ? 'space-between'
+		: center ? 'center'
+		: 'right'};"
 	>
 		{#if prevHref}
 			<a
