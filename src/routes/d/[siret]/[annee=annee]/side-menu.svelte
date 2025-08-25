@@ -80,10 +80,8 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						style="color: var(--text-disabled-grey)"
-						aria-current={step === "retour_annee" ? "page" : undefined}
-						role="link"
-						aria-disabled="true"
+						href="{baseUrl}/retour-annee/"
+						aria-current={step === "retourAnnee" ? "page" : undefined}
 					>
 						{@render categoryTitle("Retour sur l’année", false)}
 					</a>
