@@ -1,5 +1,6 @@
 import { type } from "arktype";
 
+import { ALEAS_IDS } from "$lib/constants";
 import { Email, IsoDate, Percent, PositiveNumber, Siret } from "$lib/types";
 
 export const Zone = type("'Nord - Pas-de-Calais' | 'Baie de Somme'");
@@ -142,11 +143,13 @@ export const DeclarationSchema = type({
 		declarationValidee: "boolean",
 	},
 	commentaires: {
-		erreursConcessions: "string | null = null",
-		evnmtsExceptionnels: "string | null = null",
-		erreursFormulaire: "string | null = null",
+		aleas: type.enumerated(...ALEAS_IDS).array(),
+		aleasDetails: "string | null = null",
+		difficultes: "string | null = null",
 		suggestions: "string | null = null",
+		raisonsInactivite: "string | null = null",
 	},
+	aProduit: "boolean | null = null",
 	dateBilan: IsoDate.or(type.null),
 	debutExercice: IsoDate.or(type.null),
 	finExercice: IsoDate.or(type.null),

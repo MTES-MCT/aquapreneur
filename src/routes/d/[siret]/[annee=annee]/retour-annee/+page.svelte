@@ -3,6 +3,12 @@
 	import Pictogram from "$lib/components/pictogram.svelte";
 
 	let { data } = $props();
+
+	const getNextPage = () => {
+		return data.declaration.donnees.aProduit ?
+				"retour-annee/1"
+			:	"retour-annee/inactif";
+	};
 </script>
 
 <div
@@ -17,5 +23,5 @@
 		Ressenti et observations sur l’activité de l’année {data.annee}
 	</p>
 
-	<NavigationLinks nextHref="retour-annee/1" nextLabel="Commencer" center />
+	<NavigationLinks nextHref={getNextPage()} nextLabel="Commencer" center />
 </div>

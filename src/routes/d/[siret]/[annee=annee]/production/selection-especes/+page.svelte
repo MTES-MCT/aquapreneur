@@ -17,18 +17,13 @@
 
 	let donnees = $state(cloneDeep(data.declaration.donnees));
 
-	const getNextPage = () => {
-		// TODO
-		return "./recapitulatif";
-	};
-
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
 		);
-		goto(getNextPage());
+		goto("./recapitulatif");
 	};
 
 	const handleCheck = (checked: boolean, id: ESPECES_ID) => {

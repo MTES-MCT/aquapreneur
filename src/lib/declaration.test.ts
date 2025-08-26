@@ -52,11 +52,13 @@ describe("Tests de manipulation des déclarations", async () => {
 
 	test("`test réel", async () => {
 		const declaration = {
+			aProduit: true,
 			commentaires: {
-				erreursConcessions: null,
-				erreursFormulaire: null,
-				evnmtsExceptionnels: null,
+				aleas: [],
+				aleasDetails: null,
+				difficultes: null,
 				suggestions: null,
+				raisonsInactivite: null,
 			},
 			etapes: {
 				entrepriseValidee: false,
@@ -123,6 +125,7 @@ describe("Tests de manipulation des déclarations", async () => {
 		};
 
 		expect(deepClean(declaration)).toEqual({
+			aProduit: true,
 			etapes: {
 				concessionValidee: false,
 				declarationValidee: false,

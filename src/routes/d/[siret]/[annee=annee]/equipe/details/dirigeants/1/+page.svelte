@@ -26,7 +26,7 @@
 <div>
 	<p class="fr-text--xl">
 		Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
-		2024 ?
+		{data.annee} ?
 	</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>

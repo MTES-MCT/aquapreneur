@@ -166,3 +166,29 @@ export const DESTINATIONS_NAISSAIN = [
 export const DESTINATIONS_NAISSAIN_IDS = DESTINATIONS_NAISSAIN.map((e) => e.id);
 export type DESTINATIONS_NAISSAIN_ID =
 	(typeof DESTINATIONS_NAISSAIN_IDS)[number];
+
+export const ALEAS = [
+	{
+		label: "Prédation",
+		id: "predation",
+	},
+	{
+		label: "Problèmes sanitaires",
+		id: "problemesSanitaires",
+	},
+	{
+		label: "Conditions climatiques extrêmes",
+		id: "conditionsClimatiques",
+	},
+	{
+		label: "Pollution ou contamination de l’eau",
+		id: "pollution",
+	},
+	{
+		label: "Panne ou défaillance d’équipement",
+		id: "panne",
+	},
+] as const;
+
+export const ALEAS_IDS = ALEAS.map((e) => e.id);
+export type ALEAS_ID = (typeof ALEAS_IDS)[number];

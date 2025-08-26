@@ -98,7 +98,14 @@ export const prefillDeclaration = async (
 	const d = bilan?.donnees;
 
 	const declaration = DeclarationSchema.assert({
-		commentaires: {},
+		aProduit: true, // TODO
+		commentaires: {
+			aleas: [],
+			aleasDetails: null,
+			difficultes: null,
+			suggestions: null,
+			raisonsInactivite: null,
+		},
 		etapes: {
 			entrepriseValidee: false,
 			concessionValidee: false,
