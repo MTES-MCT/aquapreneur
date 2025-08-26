@@ -9,9 +9,11 @@
 <div style="background-color: var(--background-alt-grey); ">
 	<div class="fr-container">
 		<div class="fr-grid-row fr-py-6v fr-grid-row--center">
-			<div class="fr-col-4 fr-col-md-2">
-				<p class="fr-tag">{capitalize(page.data.espece.label)}</p>
-			</div>
+			{#if page.data.espece}
+				<div class="fr-col-4 fr-col-md-2">
+					<p class="fr-tag">{capitalize(page.data.espece.label)}</p>
+				</div>
+			{/if}
 			{#if !page.data.currentStep}
 				<div class="fr-col-6 fr-col-md-8">
 					<p class="fr-text--lg fr-text--bold fr-m-0">{page.data.sousTitre}</p>

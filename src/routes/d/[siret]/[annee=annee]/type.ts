@@ -1,5 +1,5 @@
 export type DeclarationStep =
-	| "salaries"
+	| "equipe"
 	| "ventes"
 	| "production"
 	| "retourAnnee"

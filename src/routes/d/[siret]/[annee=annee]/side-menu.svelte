@@ -50,10 +50,8 @@
 				<li class="fr-sidemenu__item">
 					<a
 						class="fr-sidemenu__link"
-						style="color: var(--text-disabled-grey)"
-						aria-current={step === "salaries" ? "page" : undefined}
-						role="link"
-						aria-disabled="true"
+						href="{baseUrl}/equipe/"
+						aria-current={step === "equipe" ? "page" : undefined}
 					>
 						{@render categoryTitle("Équipe et direction", false)}
 					</a>
