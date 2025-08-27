@@ -74,6 +74,6 @@
 			{/snippet}
 		</Fieldset>
 
-		<NavigationLinks prevHref="./2" nextIsButton />
+		<NavigationLinks prevHref="./selection-especes" nextIsButton />
 	</form>
 </div>

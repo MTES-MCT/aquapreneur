@@ -22,4 +22,4 @@
 	afin qu’il procède au remplissage des données manquantes.
 </p>
 
-<NavigationLinks nextHref="../ventes/" />
+<NavigationLinks nextHref="../equipe" />
