@@ -14,7 +14,7 @@
 		onChange,
 	}: {
 		label: Snippet;
-		type: "text" | "email" | "tel";
+		type: "text" | "email" | "tel" | "number";
 		name: string;
 		value?: number | string | null;
 		fieldsetId: string;

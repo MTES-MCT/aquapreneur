@@ -7,6 +7,7 @@
 
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
+	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -21,6 +22,7 @@
 		);
 		goto("./2");
 	};
+	let radioValue: boolean | undefined = $state(false);
 </script>
 
 <div>
@@ -30,7 +32,29 @@
 	</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>
-			{#snippet inputs()}{/snippet}
+			{#snippet inputs()}
+				<RadioGroup
+					name="radio-inline"
+					id="radio-oui"
+					inline
+					value={true}
+					required
+					bind:group={radioValue}
+				>
+					{#snippet label()}Oui{/snippet}
+				</RadioGroup>
+
+				<RadioGroup
+					name="radio-inline"
+					id="radio-non"
+					inline
+					value={false}
+					required
+					bind:group={radioValue}
+				>
+					{#snippet label()}Non{/snippet}
+				</RadioGroup>
+			{/snippet}
 		</Fieldset>
 
 		<NavigationLinks nextIsButton cantAnswerBtn />

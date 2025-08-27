@@ -22,13 +22,51 @@
 		// TODO: marquer comme validé
 		goto("../../recapitulatif");
 	};
+
+	const contrats = [
+		"Temps plein",
+		"Plus d’un 1/2 temps",
+		"Mi-temps",
+		"Moins d’un 1/2 temps",
+	];
 </script>
 
 <div>
 	<p class="fr-text--xl">Combien d’hommes travaillent pour l’entreprise ?</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>
-			{#snippet inputs()}{/snippet}
+			{#snippet inputs()}
+				<div class="fr-table fr-table--lg">
+					<div class="fr-table__wrapper">
+						<div class="fr-table__container">
+							<div class="fr-table__content">
+								<table class="fr-cell">
+									<thead>
+										<tr style="cell-w:20rem">
+											<th style="min-width: 15rem">Type de contrat</th>
+											<th>Homme salariée</th>
+											<th>Homme non-salariée</th>
+										</tr>
+									</thead>
+									<tbody>
+										{#each contrats as c (c)}
+											<tr>
+												<td>{c}</td>
+												<td>
+													<input class="fr-input" type="text" />
+												</td>
+												<td>
+													<input class="fr-input" type="text" />
+												</td>
+											</tr>
+										{/each}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			{/snippet}
 		</Fieldset>
 		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>
