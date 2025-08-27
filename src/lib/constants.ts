@@ -10,34 +10,40 @@ export const ANNEES_DECLARATIVES = [2024, 2023, 2022, 2021, 2020] as const;
 
 export const ESPECES = [
 	{
-		label: "huître plate",
-		id: "huitrePlate",
-		slug: "huitre-plate",
-	},
-	{
 		label: "huître creuse",
 		id: "huitreCreuse",
 		slug: "huitre-creuse",
+		scientificName: "Magallana gigas",
+	},
+	{
+		label: "huître plate",
+		id: "huitrePlate",
+		slug: "huitre-plate",
+		scientificName: "Ostrea edulis",
 	},
 	{
 		label: "moule commune",
 		id: "mouleCommune",
 		slug: "moule-commune",
+		scientificName: "Mytilus edulis",
 	},
 	{
 		label: "moule méditerranéenne",
 		id: "mouleMediterraneenne",
 		slug: "moule-mediterraneenne",
+		scientificName: "Mytilus galloprovincialis",
 	},
 	{
 		label: "palourde",
 		id: "palourde",
 		slug: "palourde",
+		scientificName: "",
 	},
 	{
 		label: "coque",
 		id: "coque",
 		slug: "coque",
+		scientificName: "",
 	},
 ] as const;
 
@@ -105,7 +111,7 @@ export type DESTINATIONS_VENTES_CONSO_FRANCE_ID =
 
 export const STADES_ELEVAGE = [
 	{
-		label: "Prégrossi (18 mois)",
+		label: "Prégrossissement (18 mois)",
 		id: "pregrossi",
 	},
 	{
@@ -113,7 +119,7 @@ export const STADES_ELEVAGE = [
 		id: "demiElevage",
 	},
 	{
-		label: "Élevage (30 mois)",
+		label: "Élevage jusqu’à taille marchande",
 		id: "adulte",
 	},
 ] as const;
@@ -192,3 +198,102 @@ export const ALEAS = [
 
 export const ALEAS_IDS = ALEAS.map((e) => e.id);
 export type ALEAS_ID = (typeof ALEAS_IDS)[number];
+
+export const MODE_ELEVAGE = [
+	{
+		label: "À plat",
+		groupe: "decouvrant",
+		id: "aPlat",
+		especes: null,
+	},
+	{
+		label: "Tables sur estran",
+		groupe: "decouvrant",
+		id: "tablesEstran",
+		especes: null,
+	},
+	{
+		label: "Tables méditerranéennes",
+		groupe: "decouvrant",
+		id: "tablesMediterraneennes",
+		especes: null,
+	},
+	{
+		label: "Pieux (dont bouchots)",
+		groupe: "decouvrant",
+		id: "pieux",
+		especes: ["mouleCommune"],
+	},
+	{
+		label: "Au sol, en cages",
+		groupe: "pleineMer",
+		id: "auSol",
+		especes: null,
+	},
+	{
+		label: "Filière",
+		groupe: "pleineMer",
+		id: "filiere",
+		especes: null,
+	},
+] as const;
+
+// https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
+export const QUARTIERS_IMMATRICULATION = [
+	{ code: "AC", nom: "Arcachon", localisation: "Atlantique" },
+	{ code: "AD", nom: "Audierne", localisation: "Atlantique" },
+	{ code: "AY", nom: "Auray", localisation: "Atlantique" },
+	{ code: "BA", nom: "Bayonne", localisation: "Atlantique" },
+	{ code: "BR", nom: "Brest", localisation: "Atlantique" },
+	{ code: "BX", nom: "Bordeaux", localisation: "Atlantique" },
+	{ code: "CM", nom: "Camaret", localisation: "Atlantique" },
+	{ code: "CC", nom: "Concarneau", localisation: "Atlantique" },
+	{ code: "DZ", nom: "Douarnenez", localisation: "Atlantique" },
+	{ code: "GV", nom: "Le Guilvinec", localisation: "Atlantique" },
+	{ code: "IO", nom: "Île d'Oléron", localisation: "Atlantique" },
+	{ code: "YE", nom: "Île d'Yeu", localisation: "Atlantique" },
+	{ code: "LR", nom: "La Rochelle", localisation: "Atlantique" },
+	{ code: "LS", nom: "Les Sables-d'Olonne", localisation: "Atlantique" },
+	{ code: "LO", nom: "Lorient", localisation: "Atlantique" },
+	{ code: "MN", nom: "Marennes", localisation: "Atlantique" },
+	{ code: "NA", nom: "Nantes", localisation: "Atlantique" },
+	{ code: "NO", nom: "Noirmoutier", localisation: "Atlantique" },
+	{ code: "SN", nom: "Saint-Nazaire", localisation: "Atlantique" },
+	{ code: "VA", nom: "Vannes", localisation: "Atlantique" },
+
+	{ code: "BL", nom: "Boulogne-sur-Mer", localisation: "Manche" },
+	{ code: "CN", nom: "Caen", localisation: "Manche" },
+	{ code: "CH", nom: "Cherbourg", localisation: "Manche" },
+	{ code: "DP", nom: "Dieppe", localisation: "Manche" },
+	{ code: "FC", nom: "Fécamp", localisation: "Manche" },
+	{ code: "LH", nom: "Le Havre", localisation: "Manche" },
+	{ code: "MX", nom: "Morlaix", localisation: "Manche" },
+	{ code: "PL", nom: "Paimpol", localisation: "Manche" },
+	{ code: "RO", nom: "Rouen", localisation: "Manche" },
+	{ code: "SB", nom: "Saint-Brieuc", localisation: "Manche" },
+	{ code: "SM", nom: "Saint-Malo", localisation: "Manche" },
+
+	{ code: "DK", nom: "Dunkerque", localisation: "Mer du Nord" },
+
+	{ code: "AJ", nom: "Ajaccio", localisation: "Méditerranée" },
+	{ code: "BI", nom: "Bastia", localisation: "Méditerranée" },
+	{ code: "MA", nom: "Marseille", localisation: "Méditerranée" },
+	{ code: "MT", nom: "Martigues", localisation: "Méditerranée" },
+	{ code: "NI", nom: "Nice", localisation: "Méditerranée" },
+	{ code: "PV", nom: "Port-Vendres", localisation: "Méditerranée" },
+	{ code: "ST", nom: "Sète", localisation: "Méditerranée" },
+	{ code: "TL", nom: "Toulon", localisation: "Méditerranée" },
+
+	{ code: "CY", nom: "Cayenne", localisation: "Outre-Mer" },
+	{ code: "FF", nom: "Fort-de-France", localisation: "Outre-Mer" },
+	{ code: "RU", nom: "La Réunion", localisation: "Outre-Mer" },
+	{ code: "PP", nom: "Pointe-à-Pitre", localisation: "Outre-Mer" },
+	{ code: "BY", nom: "Saint-Barthélemy ", localisation: "Outre-Mer" },
+	{ code: "SP", nom: "Saint-Pierre-et-Miquelon", localisation: "Outre-Mer" },
+] as const;
+
+export const QUARTIERS_IMMATRICULATION_IDS = QUARTIERS_IMMATRICULATION.map(
+	(e) => e.code,
+);
+export type QUARTIERS_IMMATRICULATION_ID =
+	(typeof QUARTIERS_IMMATRICULATION_IDS)[number];

@@ -5,8 +5,10 @@
 
 	import { goto } from "$app/navigation";
 
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
+	import { ORIGINES_NAISSAIN } from "$lib/constants";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -30,7 +32,14 @@
 	</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>
-			{#snippet inputs()}{/snippet}
+			{#snippet inputs()}
+				{#each ORIGINES_NAISSAIN as origine (origine.id)}
+					{@const origineId = origine.id}
+					<CheckboxGroup name={origineId} id={origineId} onCheck={() => {}}>
+						{#snippet label()}{origine.label}{/snippet}
+					</CheckboxGroup>
+				{/each}
+			{/snippet}
 		</Fieldset>
 		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>

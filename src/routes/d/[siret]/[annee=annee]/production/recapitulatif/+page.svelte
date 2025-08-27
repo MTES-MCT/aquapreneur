@@ -17,8 +17,32 @@
 	);
 </script>
 
+{#snippet recapLine(title: string, link: string)}
+	<Accordion>
+		{#snippet header()}
+			<div style="flex: 1">
+				<span class="fr-icon-list-unordered" aria-hidden="true"></span>
+				{title}
+			</div>
+		{/snippet}
+		{#snippet headerAction()}
+			{@const validé = false}
+			<button
+				class="fr-btn fr-mx-2v"
+				class:fr-btn--tertiary={validé}
+				onclick={() => {
+					goto(link);
+				}}
+			>
+				{validé ? "Validé" : "Compléter"}
+			</button>
+		{/snippet}
+		{#snippet content()}{/snippet}
+	</Accordion>
+{/snippet}
+
 <div>
-	<div class="bandeau-titre">
+	<div class="titre">
 		<h1 class="fr-h2">Production</h1>
 		<button
 			class="fr-btn fr-btn--tertiary fr-btn--sm"
@@ -34,67 +58,21 @@
 		<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
 
 		<div data-fr-group="true" class="fr-accordions-group">
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Origine et mode d’élevage</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = false}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/origine/1/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Volume en stock</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = false}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/elevage/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
-
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Zones de production et pertes</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = false}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/zones/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
+			{@render recapLine(
+				"Origine et mode d’élevage",
+				`./${espece.slug}/origine/1`,
+			)}
+			{@render recapLine("Volume en stock", `./${espece.slug}/elevage/1`)}
+			{@render recapLine(
+				"Zones de production et pertes",
+				`./${espece.slug}/zones/1`,
+			)}
 		</div>
 	{/each}
 </div>
 
 <style>
-	.bandeau-titre {
+	.titre {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
