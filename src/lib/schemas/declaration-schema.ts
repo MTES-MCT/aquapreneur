@@ -142,7 +142,7 @@ export const DeclarationSchema = type({
 		envoiValidee: "boolean",
 		declarationValidee: "boolean",
 	},
-	commentaires: {
+	retourAnnee: {
 		aleas: type.enumerated(...ALEAS_IDS).array(),
 		aleasDetails: "string | null = null",
 		difficultes: "string | null = null",

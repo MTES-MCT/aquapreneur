@@ -50,7 +50,7 @@
 			<TextareaGroup
 				name="details"
 				rows={4}
-				bind:value={donnees.commentaires.suggestions}
+				bind:value={donnees.retourAnnee.suggestions}
 			>
 				{#snippet label()}Si oui, merci de les décrire dans le champ ci-dessous{/snippet}
 			</TextareaGroup>{/snippet}

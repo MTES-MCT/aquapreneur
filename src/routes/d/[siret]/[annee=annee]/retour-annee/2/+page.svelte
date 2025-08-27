@@ -47,7 +47,7 @@
 		{#snippet inputs()}
 			<TextareaGroup
 				name="details"
-				bind:value={donnees.commentaires.difficultes}
+				bind:value={donnees.retourAnnee.difficultes}
 				rows={4}
 			>
 				{#snippet label()}Si oui, merci de les décrire dans le champ ci-dessous{/snippet}

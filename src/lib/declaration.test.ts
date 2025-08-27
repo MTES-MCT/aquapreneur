@@ -53,7 +53,7 @@ describe("Tests de manipulation des déclarations", async () => {
 	test("`test réel", async () => {
 		const declaration = {
 			aProduit: true,
-			commentaires: {
+			retourAnnee: {
 				aleas: [],
 				aleasDetails: null,
 				difficultes: null,

@@ -17,7 +17,7 @@
 	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const handleCheck = (checked: boolean, id: ALEAS_ID) => {
-		const c = donnees.commentaires;
+		const c = donnees.retourAnnee;
 		const aleas = c.aleas == null ? [] : c.aleas.filter((a) => a !== id);
 		if (checked) {
 			aleas.push(id);
@@ -66,7 +66,7 @@
 				<CheckboxGroup
 					name={aleaId}
 					id={aleaId}
-					checked={donnees.commentaires.aleas?.includes(aleaId)}
+					checked={donnees.retourAnnee.aleas?.includes(aleaId)}
 					onCheck={(event) => handleCheck(event.currentTarget.checked, aleaId)}
 				>
 					{#snippet label()}{alea.label}{/snippet}
@@ -74,11 +74,11 @@
 			{/each}
 
 			<div class="fr-mb-4w"></div>
-			{#if donnees.commentaires.aleas.length}
+			{#if donnees.retourAnnee.aleas.length}
 				<TextareaGroup
 					name="details"
 					rows={3}
-					bind:value={donnees.commentaires.aleasDetails}
+					bind:value={donnees.retourAnnee.aleasDetails}
 				>
 					{#snippet label()}Détails supplémentaires (facultatif) :{/snippet}
 				</TextareaGroup>

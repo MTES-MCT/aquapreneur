@@ -99,7 +99,7 @@ export const prefillDeclaration = async (
 
 	const declaration = DeclarationSchema.assert({
 		aProduit: true, // TODO
-		commentaires: {
+		retourAnnee: {
 			aleas: [],
 			aleasDetails: null,
 			difficultes: null,

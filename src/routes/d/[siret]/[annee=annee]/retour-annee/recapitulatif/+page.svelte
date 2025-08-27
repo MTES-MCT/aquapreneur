@@ -9,12 +9,12 @@
 
 	const getAleasDesc = () => {
 		const part1 =
-			donnees.commentaires.aleas?.length ?
-				`${donnees.commentaires.aleas?.map((id) => ALEAS.find((a) => a.id === id)?.label).join(", ")}. `
+			donnees.retourAnnee.aleas?.length ?
+				`${donnees.retourAnnee.aleas?.map((id) => ALEAS.find((a) => a.id === id)?.label).join(", ")}. `
 			:	"";
 		const part2 =
-			donnees.commentaires.aleasDetails ?
-				`Détails : ${donnees.commentaires.aleasDetails}`
+			donnees.retourAnnee.aleasDetails ?
+				`Détails : ${donnees.retourAnnee.aleasDetails}`
 			:	"";
 		return `${part1}${part2}`;
 	};
@@ -54,20 +54,20 @@
 	{@render recapLine(
 		"Avez-vous rencontré d’autres défis ou difficultés cette année ?",
 		"./2",
-		donnees.commentaires.difficultes,
+		donnees.retourAnnee.difficultes,
 	)}
 
 	<hr />
 	{@render recapLine(
 		"Avez-vous des suggestions d’amélioration pour la prochaine enquête ?",
 		"./3",
-		donnees.commentaires.suggestions,
+		donnees.retourAnnee.suggestions,
 	)}
 {:else}
 	{@render recapLine(
 		`Pourquoi n’avez-vous pas réalisé de ventes en ${data.annee} ?`,
 		"./inactif",
-		donnees.commentaires.raisonsInactivite,
+		donnees.retourAnnee.raisonsInactivite,
 	)}
 {/if}
 <hr />

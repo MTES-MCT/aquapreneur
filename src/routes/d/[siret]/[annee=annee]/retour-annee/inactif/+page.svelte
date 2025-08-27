@@ -36,7 +36,7 @@
 			<TextareaGroup
 				name="details"
 				rows={4}
-				bind:value={donnees.commentaires.raisonsInactivite}
+				bind:value={donnees.retourAnnee.raisonsInactivite}
 			>
 				{#snippet label()}Indiquez les raisons dans le champs ci-dessous :
 				{/snippet}
