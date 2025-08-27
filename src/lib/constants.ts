@@ -83,10 +83,6 @@ export const DESTINATIONS_VENTES_CONSO_FRANCE = [
 		id: "autresVentesParticuliers",
 	},
 	{
-		label: "Autres conchyliculteurs en achat/revente",
-		id: "autresConchyliculteurs",
-	},
-	{
 		label: "Restaurateurs, traiteurs",
 		id: "restaurateursTraiteurs",
 	},
@@ -101,6 +97,10 @@ export const DESTINATIONS_VENTES_CONSO_FRANCE = [
 	{
 		label: "Mareyeurs, grossistes",
 		id: "mareyeursGrossistes",
+	},
+	{
+		label: "En gros",
+		id: "enGros",
 	},
 ] as const;
 
