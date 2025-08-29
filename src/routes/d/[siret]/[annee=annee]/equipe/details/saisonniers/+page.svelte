@@ -62,7 +62,6 @@
 					id="radio-oui"
 					inline
 					value={true}
-					required
 					bind:group={aSaisonniers}
 				>
 					{#snippet label()}Oui{/snippet}
@@ -73,7 +72,6 @@
 					id="radio-non"
 					inline
 					value={false}
-					required
 					bind:group={aSaisonniers}
 				>
 					{#snippet label()}Non{/snippet}

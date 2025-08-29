@@ -1,3 +1,9 @@
+// sort-imports-ignore
+// La configuration d’arktype doit avoir lieu avant le premier import de {type}
+// Coté client, elle est gérée dans hooks.client.ts,
+import "./lib/arktype.config.js";
+
+// Reste des imports
 import * as Sentry from "@sentry/sveltekit";
 import { eq } from "drizzle-orm";
 

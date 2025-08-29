@@ -11,7 +11,7 @@
 		max,
 		value = $bindable(),
 		fieldsetId,
-		required,
+		required = false,
 		actionButton,
 		onChange,
 	}: {

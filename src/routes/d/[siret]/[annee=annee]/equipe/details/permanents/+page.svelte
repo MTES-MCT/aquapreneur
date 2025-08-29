@@ -50,9 +50,9 @@
 	</p>
 
 	<p>
-		Tout personnel présent au 31 décembre 2023, quel que soit le temps de
-		travail. Attention : exclure CDD, intérimaires et stagiaires, et dirigeants
-		et associés.
+		Tout personnel présent au 31 décembre {data.annee - 1}, quel que soit le
+		temps de travail. Attention : exclure CDD, intérimaires et stagiaires, et
+		dirigeants et associés.
 	</p>
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>
@@ -62,7 +62,6 @@
 					id="radio-oui"
 					inline
 					value={true}
-					required
 					bind:group={aPermanents}
 				>
 					{#snippet label()}Oui{/snippet}
@@ -73,7 +72,6 @@
 					id="radio-non"
 					inline
 					value={false}
-					required
 					bind:group={aPermanents}
 				>
 					{#snippet label()}Non{/snippet}

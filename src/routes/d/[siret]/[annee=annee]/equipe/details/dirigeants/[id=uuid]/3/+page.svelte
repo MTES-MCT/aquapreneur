@@ -23,6 +23,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (dirigeant.tempsTravail == null) dirigeant.tempsTravail = undefined;
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
@@ -43,7 +44,6 @@
 					id="radio-salarie"
 					inline
 					value="salarie"
-					required
 					bind:group={dirigeant.statut}
 				>
 					{#snippet label()}Salarié{/snippet}
@@ -54,7 +54,6 @@
 					id="radio-non-salarie"
 					inline
 					value="nonSalarie"
-					required
 					bind:group={dirigeant.statut}
 				>
 					{#snippet label()}Non salarié{/snippet}

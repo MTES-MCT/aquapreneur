@@ -24,6 +24,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (dirigeant.anneeNaissance == null) dirigeant.anneeNaissance = undefined;
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
@@ -53,7 +54,6 @@
 					max={data.annee}
 					fieldsetId="naissance"
 					bind:value={dirigeant.anneeNaissance}
-					required
 				>
 					{#snippet label()}Année de naissance{/snippet}
 				</InputGroup>
@@ -93,7 +93,6 @@
 					id="radio-f"
 					inline
 					value="F"
-					required
 					bind:group={dirigeant.sexe}
 				>
 					{#snippet label()}Féminin{/snippet}
@@ -104,7 +103,6 @@
 					id="radio-m"
 					inline
 					value="M"
-					required
 					bind:group={dirigeant.sexe}
 				>
 					{#snippet label()}Masculin{/snippet}

@@ -48,7 +48,6 @@
 					id="radio-oui"
 					inline
 					value={true}
-					required
 					bind:group={dirigeant.nouveauDirigeant}
 				>
 					{#snippet label()}Oui{/snippet}
@@ -59,7 +58,6 @@
 					id="radio-non"
 					inline
 					value={false}
-					required
 					bind:group={dirigeant.nouveauDirigeant}
 				>
 					{#snippet label()}Non{/snippet}

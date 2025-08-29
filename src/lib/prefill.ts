@@ -132,7 +132,7 @@ export const prefillDeclaration = async (
 						d?.genre
 					:	undefined,
 				tempsTravail: d?.taux_travail || undefined,
-				diplome: d?.diplome_aquacole || undefined,
+				diplome: d?.diplome || undefined,
 				regimeSocial: d?.regime_social || undefined,
 				nouveauDirigeant: d?.annee_entree === annee,
 			})),

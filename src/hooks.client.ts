@@ -1,6 +1,6 @@
 // sort-imports-ignore
 // La configuration d’arktype doit avoir lieu avant le premier import de {type}
-// Coté backend, elle est gérée dans vite.config.js,
+// Coté backend, elle est gérée dans hooks.server.js,
 import "./lib/arktype.config.js";
 
 // Reste des imports
