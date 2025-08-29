@@ -7,6 +7,8 @@
 		label,
 		type,
 		name,
+		min,
+		max,
 		value = $bindable(),
 		fieldsetId,
 		required,
@@ -14,8 +16,10 @@
 		onChange,
 	}: {
 		label: Snippet;
-		type: "text" | "email" | "tel";
+		type: "text" | "email" | "tel" | "number";
 		name: string;
+		min?: number;
+		max?: number;
 		value?: number | string | null;
 		fieldsetId: string;
 		required?: boolean;
@@ -39,6 +43,8 @@
 				{name}
 				bind:value
 				{required}
+				{min}
+				{max}
 				onchange={onChange}
 				autocomplete="off"
 			/>

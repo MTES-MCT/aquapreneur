@@ -98,7 +98,6 @@ export const prefillDeclaration = async (
 	const d = bilan?.donnees;
 
 	const declaration = DeclarationSchema.assert({
-		commentaires: {},
 		etapes: {
 			entrepriseValidee: false,
 			concessionValidee: false,
@@ -107,6 +106,10 @@ export const prefillDeclaration = async (
 			envoiValidee: false,
 			declarationValidee: false,
 		},
+		aProduit: true, // TODO
+		dateBilan: bilan?.dateBilan ?? null,
+		debutExercice: bilan?.debutExercice ?? null,
+		finExercice: bilan?.finExercice ?? null,
 		entreprise: {
 			emailEntreprise: null,
 		},
@@ -119,25 +122,81 @@ export const prefillDeclaration = async (
 			codePostal: etablissement.codePostal,
 			commune: etablissement.commune,
 		},
-		dateBilan: bilan?.dateBilan ?? null,
-		debutExercice: bilan?.debutExercice ?? null,
-		finExercice: bilan?.finExercice ?? null,
-		achats: {},
-		// TODO
-		// deepClean({
-		// 	huitreCreuse: {
-		// 		naissain: {
-		// 			quantite: d?.donnees_economiques.VolAchHNaiss,
-		// 		},
-		// 		demiElevage: { quantite: d?.donnees_economiques.VolAchHDElv },
-		// 		adulte: {
-		// 			quantite: sumAttrs(d?.donnees_economiques, [
-		// 				"VolAchHElv",
-		// 				"VolAchHConso",
-		// 			]),
-		// 		},
-		// 	},
-		// }),
+		equipe: {
+			dirigeants: d?.dirigeant_es.map((d) => ({
+				id: crypto.randomUUID(),
+				prenomNom: `${d?.prenom} ${d?.nom}`, // TODO à nettoyer si une des valeurs est vide
+				anneeNaissance: d?.annee_naissance || undefined,
+				sexe:
+					(["M", "F"] as ReadonlyArray<string>).includes(d?.genre ?? "") ?
+						d?.genre
+					:	undefined,
+				tempsTravail: d?.taux_travail || undefined,
+				diplome: d?.diplome_aquacole || undefined,
+				regimeSocial: d?.regime_social || undefined,
+				nouveauDirigeant: d?.annee_entree === annee,
+			})),
+		},
+		production: deepClean({
+			huitreCreuse: {
+				naissain: {
+					total: {
+						// valeurHTMi: d?.stock.StckValHNaisMi,
+						// valeurHT: d?.stock.StckValHNaisKg,
+						stockMilliers: d?.stock.StckVolHNaisMi,
+						// stockKg: d?.stock.StckVolHNaisKg,
+					},
+				},
+				elevage: {
+					demiElevage: {
+						// valeurHT: d?.stock.StckValHDElv,
+						stockKg: d?.stock.StckVolHDElv,
+					},
+					adulte: {
+						// valeurHT: d?.stock.StckValHElv,
+						stockKg: d?.stock.StckVolHElv,
+					},
+				},
+				// consommation: {
+				// 	// valeurHT: d?.stock.StckValHConso,
+				// 	stockKg: d?.stock.StckVolHConso,
+				// },
+			},
+			mouleCommune: {
+				naissain: {
+					total: {
+						// valeurHT: d?.stock.StckValMNaiss,
+						stockM: d?.stock.StckVolMNaiss,
+					},
+				},
+				elevage: {
+					demiElevage: {
+						// valeurHT: d?.stock.StckValMDElv,
+						stockKg: d?.stock.StckVolMDElv,
+					},
+				},
+				// consommation: {
+				// 	// valeurHT: d?.stock.StckValMConso,
+				// 	stockKg: d?.stock.StckVolMConso,
+				// },
+			},
+			palourde: {
+				naissain: {
+					valeurHT: d?.stock.StckValPNaiss,
+					stockKg: d?.stock.StckVolPNaiss,
+				},
+				elevage: {
+					demiElevage: {
+						valeurHT: d?.stock.StckValPDElv,
+						stockKg: d?.stock.StckVolPDElv,
+					},
+				},
+				// consommation: {
+				// 	valeurHT: d?.stock.StckValPConso,
+				// 	stockKg: d?.stock.StckVolPConso,
+				// },
+			},
+		}),
 		ventes: deepClean({
 			huitreCreuse: {
 				naissain: {
@@ -177,7 +236,7 @@ export const prefillDeclaration = async (
 							autresVentesParticuliers: {
 								valeurHT: d?.production.CAHCoFrDet,
 							},
-							autresConchyliculteurs: {
+							enGros: {
 								valeurHT: d?.production.CAHCoFrPro,
 							},
 							restaurateursTraiteurs: null,
@@ -233,7 +292,7 @@ export const prefillDeclaration = async (
 							autresVentesParticuliers: {
 								valeurHT: d?.production.CAMCoFrDet,
 							},
-							autresConchyliculteurs: {
+							enGros: {
 								valeurHT: d?.production.CAMCoFrPro,
 							},
 							restaurateursTraiteurs: null,
@@ -288,7 +347,7 @@ export const prefillDeclaration = async (
 							autresVentesParticuliers: {
 								valeurHT: d?.production.CAPCoFrDet,
 							},
-							autresConchyliculteurs: {
+							enGros: {
 								valeurHT: d?.production.CAPCoFrPro,
 							},
 							restaurateursTraiteurs: null,
@@ -315,7 +374,14 @@ export const prefillDeclaration = async (
 				// Manque “Non catégorisées” CAPFrNCat
 			},
 		}),
-		stocks: {},
+		retourAnnee: {
+			aleas: [],
+			aleasDetails: null,
+			difficultes: null,
+			suggestions: null,
+			raisonsInactivite: null,
+		},
+
 		// TODO
 		// deepClean({
 		// 	huitreCreuse: {
@@ -334,7 +400,7 @@ export const prefillDeclaration = async (
 		// 		},
 		// 	},
 		// }),
-		concessions: [],
+		// concessions: [],
 		// On exclue temporairement les concessions de la déclaration
 		// concessions: concessions.map((c) => ({
 		// 	quartierParcelle: c.quartierParcelle,
@@ -357,6 +423,6 @@ export const prefillDeclaration = async (
 		// })),
 	});
 	// console.dir(deepClean(d?.production ?? {}), { depth: null });
-	// console.dir(declaration.ventes, { depth: null });
+	// console.dir(declaration.production, { depth: null });
 	return declaration;
 };

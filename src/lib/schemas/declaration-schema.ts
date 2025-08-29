@@ -1,132 +1,44 @@
 import { type } from "arktype";
 
-import { Email, IsoDate, Percent, PositiveNumber, Siret } from "$lib/types";
+import {
+	ALEAS_IDS,
+	DIPLOMES_IDS,
+	QUARTIERS_IMMATRICULATION_IDS,
+	REGIMES_SOCIAUX_IDS,
+} from "$lib/constants";
+import {
+	Email,
+	IsoDate,
+	Percent,
+	PositiveNumber,
+	Siret,
+	Year,
+} from "$lib/types";
 
-export const Zone = type("'Nord - Pas-de-Calais' | 'Baie de Somme'");
+// https://github.com/arktypeio/arktype/discussions/758#discussioncomment-5897693
+function enumerateStrings<T extends readonly string[]>(values: T) {
+	return values.map((v) => `'${v}'`).join("|") as `"${T[number]}"`;
+}
 
-export const Repartition = type(
-	{
-		part: Percent,
-		repartition: Zone,
-	},
-	"[]",
-);
-
-export const EspeceAchatSchema = type({
-	"naissains?": {
-		// en milliers
-		quantite: PositiveNumber.or(type.null),
-	},
-	"juveniles?": {
-		quantite: PositiveNumber.or(type.null),
-	},
-	"adultes?": {
-		quantite: PositiveNumber.or(type.null),
-	},
-});
-
-export const ValeurHT = type({
+export const ValeurVente = type({
 	"valeurHT?": PositiveNumber.or(type.null),
+	"quantiteKg?": PositiveNumber.or(type.null),
 }).or(type.null);
 
-export const EspeceVenteSchema = type({
-	"validation?": {
-		"naissain?": "boolean",
-		"elevage?": "boolean",
-		"consommation?": "boolean",
-		"origine?": "boolean",
-	},
+export const Volume = type({
+	"volume?": PositiveNumber.or(type.null),
+}).or(type.null);
 
-	"naissain?": {
-		"captage?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-		"ecloserieDiploide?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-		"ecloserieTriploide?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-	},
-	"elevage?": {
-		"pregrossi?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-		"demiElevage?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-		"adulte?": {
-			"destination?": {
-				"france?": ValeurHT,
-				"etranger?": ValeurHT,
-			},
-		},
-	},
-	"consommation?": {
-		"destination?": {
-			"france?": {
-				"degustation?": ValeurHT,
-				"autresVentesParticuliers?": ValeurHT,
-				"autresConchyliculteurs?": ValeurHT,
-				"restaurateursTraiteurs?": ValeurHT,
-				"poissoniersEcaillers?": ValeurHT,
-				"grandesMoyennesSurfaces?": ValeurHT,
-				"mareyeursGrossistes?": ValeurHT,
-			},
-			"unionEuropeenne?": ValeurHT,
-			"horsUnionEuropeenne?": ValeurHT,
-		},
-		"affinage?": {
-			"claires?": {
-				"part?": Percent.or(type.null),
-				"surfaceHa?": PositiveNumber.or(type.null),
-			},
-			"parcs?": {
-				"part?": Percent.or(type.null),
-				"surfaceHa?": PositiveNumber.or(type.null),
-			},
-		},
-		"bio?": {
-			"part?": Percent.or(type.null),
-		},
-		"origine?": {
-			"captage?": Percent.or(type.null),
-			"ecloserieDiploide?": Percent.or(type.null),
-			"ecloserieTriploide?": Percent.or(type.null),
-		},
-	},
-});
+export const StockValues = type({
+	"stockKg?": PositiveNumber.or(type.null),
+	"stockNmoins1kg?": PositiveNumber.or(type.null),
+}).or(type.null);
 
-export const EspeceStockSchema = type({
-	"surfaceExploitation?": PositiveNumber.or(type.null),
-	"naissains?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
-	},
-	"juveniles?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
-	},
-	"adultes?": {
-		"quantite?": PositiveNumber.or(type.null).describe("en milliers"),
-		"repartition?": Repartition.or(type.null),
-	},
-});
+export const StockValuesNaissain = type({
+	"stockMilliers?": PositiveNumber.or(type.null),
+	"stockM?": PositiveNumber.or(type.null),
+	"stockNmoins1milliers?": PositiveNumber.or(type.null),
+}).or(type.null);
 
 export const DeclarationSchema = type({
 	etapes: {
@@ -137,12 +49,7 @@ export const DeclarationSchema = type({
 		envoiValidee: "boolean",
 		declarationValidee: "boolean",
 	},
-	commentaires: {
-		erreursConcessions: "string | null = null",
-		evnmtsExceptionnels: "string | null = null",
-		erreursFormulaire: "string | null = null",
-		suggestions: "string | null = null",
-	},
+	aProduit: "boolean | null = null",
 	dateBilan: IsoDate.or(type.null),
 	debutExercice: IsoDate.or(type.null),
 	finExercice: IsoDate.or(type.null),
@@ -161,49 +68,198 @@ export const DeclarationSchema = type({
 		codePostal: "string | null",
 		commune: "string | null",
 	},
-	achats: {
-		"huitrePlate?": EspeceAchatSchema,
-		"huitreCreuse?": EspeceAchatSchema,
-		"mouleCommune?": EspeceAchatSchema,
-		"mouleMediterraneenne?": EspeceAchatSchema,
-		"palourde?": EspeceAchatSchema,
+	equipe: {
+		"dirigeants": type(
+			{
+				"id": "string.uuid.v4",
+				"prenomNom?": "string",
+				"anneeNaissance?": Year,
+				"nationalite?": "string",
+				"sexe?": "'M' | 'F'",
+				"statut?": "'salarie' | 'nonSalarie'",
+				"tempsTravail?": Percent,
+				"diplome?": enumerateStrings(DIPLOMES_IDS),
+				"regimeSocial?": enumerateStrings(REGIMES_SOCIAUX_IDS),
+				"nouveauDirigeant?": "boolean",
+			},
+			"[]",
+		),
+		"permanents?": {
+			"femmes?": {
+				"salarie?": {
+					// TYPES_DUREE_TRAVAIL
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+				"nonSalarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+			},
+			"hommes?": {
+				"salarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+				"nonSalarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+			},
+		},
+		"saisonniers?": {
+			"femmes?": {
+				"cdd?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+				"interim?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+			},
+			"hommes?": {
+				"cdd?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+				"interim?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+			},
+		},
+	},
+	production: {
+		// TODO ESPECES.id
+		"[string]": type({
+			"validation?": {
+				"elevage?": "boolean",
+				"origine?": "boolean",
+				"zones?": "boolean",
+			},
+			"naissain?": {
+				"total?": StockValuesNaissain,
+				"captage?": StockValuesNaissain,
+				"ecloserie?": StockValuesNaissain,
+			},
+			"elevage?": {
+				"pregrossissement?": StockValues,
+				"demiElevage?": StockValues,
+				"adulte?": StockValues,
+			},
+			"origine?": {},
+			"zonesProduction?": [
+				{
+					zone: type.enumerated(QUARTIERS_IMMATRICULATION_IDS),
+					surfaceHa: PositiveNumber,
+				},
+			],
+		}),
 	},
 	ventes: {
-		"huitrePlate?": EspeceVenteSchema,
-		"huitreCreuse?": EspeceVenteSchema,
-		"mouleCommune?": EspeceVenteSchema,
-		"mouleMediterraneenne?": EspeceVenteSchema,
-		"palourde?": EspeceVenteSchema,
-	},
-	stocks: {
-		"huitrePlate?": EspeceStockSchema,
-		"huitreCreuse?": EspeceStockSchema,
-		"mouleCommune?": EspeceStockSchema,
-		"mouleMediterraneenne?": EspeceStockSchema,
-		"palourde?": EspeceStockSchema,
-	},
-	concessions: type(
-		{
-			quartierParcelle: "string | null",
-			libLocalite: "string | null",
-			nomLieuDit: "string | null",
-			numeroParcelle: "string | null",
-			codeLocaliteInsee: "string | null",
-			nomSituation: "string | null",
-			typeParcelle: "string | null",
-			surfaceParcelle: "number | null",
-			uniteMesure: "string | null",
-			etatParcelle: "string | null",
-			familleExploitation: "string | null",
-			exploitation: "string | null",
-			familleEspece: "string | null",
-			espece: "string | null",
-			natureJuridique: "string | null",
-			numArrete: "string | null",
-			dateArrete: "string | null",
+		// TODO ESPECES.id
+		"[string]": {
+			"validation?": {
+				"naissain?": "boolean",
+				"elevage?": "boolean",
+				"consommation?": "boolean",
+				"origine?": "boolean",
+			},
+
+			"naissain?": {
+				"captage?": {
+					"destination?": {
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+				"ecloserieDiploide?": {
+					"destination?": {
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+				"ecloserieTriploide?": {
+					"destination?": {
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+			},
+			"elevage?": {
+				"pregrossi?": {
+					"destination?": {
+						// 1.2 + Agreste 1.7.2,
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+				"demiElevage?": {
+					"destination?": {
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+				"adulte?": {
+					"destination?": {
+						"france?": ValeurVente,
+						"etranger?": ValeurVente,
+					},
+				},
+			},
+			"consommation?": {
+				"modeElevage?": {
+					// TODO MODE_ELEVAGE.id
+					"[string]": {
+						// pourcentage OU
+						// valeurHT
+					},
+				},
+				"destination?": {
+					"france?": {
+						// TODO DESTINATIONS_VENTES_CONSO_FRANCE.id
+						"[string]": ValeurVente,
+					},
+					"unionEuropeenne?": ValeurVente,
+					"horsUnionEuropeenne?": ValeurVente,
+				},
+				"affinage?": {
+					"claires?": {
+						"part?": Percent.or(type.null),
+						"surfaceHa?": PositiveNumber.or(type.null),
+					},
+					"parcs?": {
+						"part?": Percent.or(type.null),
+						"surfaceHa?": PositiveNumber.or(type.null),
+					},
+				},
+				"bio?": {
+					"part?": Percent.or(type.null),
+				},
+				"origine?": {
+					"captage?": Percent.or(type.null),
+					"ecloserieDiploide?": Percent.or(type.null),
+					"ecloserieTriploide?": Percent.or(type.null),
+				},
+			},
 		},
-		"[]",
-	),
+	},
+	retourAnnee: {
+		aleas: type.enumerated(...ALEAS_IDS).array(),
+		aleasDetails: "string | null = null",
+		difficultes: "string | null = null",
+		suggestions: "string | null = null",
+		raisonsInactivite: "string | null = null",
+	},
 });
 
 export type DeclarationSchema = typeof DeclarationSchema.infer;

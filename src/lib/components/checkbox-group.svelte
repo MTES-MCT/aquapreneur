@@ -10,6 +10,7 @@
 		checked,
 		disabled,
 		onCheck,
+		small = false,
 	}: {
 		label: Snippet;
 		name: string;
@@ -17,10 +18,11 @@
 		checked?: boolean;
 		disabled?: boolean;
 		onCheck: FormEventHandler<HTMLInputElement>;
+		small?: boolean;
 	} = $props();
 </script>
 
-<div class="fr-fieldset__element">
+<div class={["fr-fieldset__element", small && "fr-checkbox-group--sm"]}>
 	<div class="fr-checkbox-group">
 		<input
 			{id}

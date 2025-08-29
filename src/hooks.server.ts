@@ -75,23 +75,14 @@ const checkPermissions = (
 	// d’exécuter du code non protégé. Voir par ex : https://github.com/sveltejs/kit/issues/6315
 	// toujours ouvert à ce jour.
 
-	// Seuls les administrateur·ices peuvent aux pages comptables
-	if (routeId?.startsWith("/comptable")) {
+	// Seuls les administrateur·ices peuvent aux pages déclaration
+	if (routeId === "/tableau-de-bord" || routeId?.startsWith("/d/")) {
 		if (!utilisateur) {
 			redirect(307, "/");
 		} else if (!utilisateur.valide) {
 			redirect(307, "/validation");
 		} else if (!utilisateur.estAdmin) {
 			redirect(307, "/");
-		}
-	}
-
-	// Seuls les utilisateur·ices connecté·es peuvent accéder aux pages producteurs
-	if (routeId?.startsWith("/producteur")) {
-		if (!utilisateur) {
-			redirect(307, "/");
-		} else if (!utilisateur.valide) {
-			redirect(307, "/validation");
 		}
 	}
 };

@@ -14,6 +14,22 @@ export const aVenduNaissains = (donnees: DeclarationSchema) => {
 	);
 };
 
+export const dProd = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
+	const d = donnees.production?.[especeId];
+
+	return {
+		active: () => {
+			return d != null;
+		},
+		enable: () => {
+			defaultsDeep(donnees, { production: { [especeId]: {} } });
+		},
+		disable: () => {
+			delete donnees.production?.[especeId];
+		},
+	};
+};
+
 export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 	const d = donnees.ventes?.[especeId];
 	return {
