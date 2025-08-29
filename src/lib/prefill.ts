@@ -122,7 +122,21 @@ export const prefillDeclaration = async (
 			codePostal: etablissement.codePostal,
 			commune: etablissement.commune,
 		},
-		equipe: {},
+		equipe: {
+			dirigeants: d?.dirigeant_es.map((d) => ({
+				id: crypto.randomUUID(),
+				prenomNom: `${d?.prenom} ${d?.nom}`, // TODO à nettoyer si une des valeurs est vide
+				anneeNaissance: d?.annee_naissance || undefined,
+				sexe:
+					(["M", "F"] as ReadonlyArray<string>).includes(d?.genre ?? "") ?
+						d?.genre
+					:	undefined,
+				tempsTravail: d?.taux_travail || undefined,
+				diplome: d?.diplome_aquacole || undefined,
+				regimeSocial: d?.regime_social || undefined,
+				nouveauDirigeant: d?.annee_entree === annee,
+			})),
+		},
 		production: deepClean({
 			huitreCreuse: {
 				naissain: {

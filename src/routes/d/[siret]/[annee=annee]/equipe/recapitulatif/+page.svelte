@@ -2,6 +2,8 @@
 	import { goto } from "$app/navigation";
 
 	import Accordion from "$lib/components/accordion.svelte";
+
+	const { data } = $props();
 </script>
 
 <div>
@@ -12,30 +14,33 @@
 	<h2 class="fr-h6 fr-mt-10v">Dirigeants et associés</h2>
 
 	<div data-fr-group="true" class="fr-accordions-group">
-		<Accordion>
-			{#snippet header()}
-				<div style="flex: 1">Nom Prenom</div>
-			{/snippet}
-			{#snippet headerAction()}
-				{@const validé = false}
-				<button
-					class="fr-btn fr-mx-2v"
-					class:fr-btn--tertiary={validé}
-					onclick={() => {
-						goto(`./details/dirigeants/1`);
-					}}
-				>
-					{validé ? "Validé" : "Compléter"}
-				</button>
-			{/snippet}
-			{#snippet content()}{/snippet}
-		</Accordion>
+		{#each data.declaration.donnees.equipe.dirigeants as dir (dir.id)}
+			<Accordion>
+				{#snippet header()}
+					<div style="flex: 1">{dir.prenomNom}</div>
+				{/snippet}
+				{#snippet headerAction()}
+					{@const validé = false}
+					<button
+						class="fr-btn fr-mx-2v"
+						class:fr-btn--tertiary={validé}
+						onclick={() => {
+							goto(`./details/dirigeants/${dir.id}/1`);
+						}}
+					>
+						{validé ? "Validé" : "Compléter"}
+					</button>
+				{/snippet}
+				{#snippet content()}{/snippet}
+			</Accordion>
+		{/each}
 	</div>
 
 	<button
 		class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-2w fr-icon-add-line fr-btn--icon-right"
 		onclick={() => {
-			goto(`./details/dirigeants/1?nouveau`);
+			const newId = window.crypto.randomUUID();
+			goto(`./details/dirigeants/${newId}/1`);
 		}}
 	>
 		Ajouter un mandataires

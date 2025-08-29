@@ -1,7 +1,24 @@
 import { type } from "arktype";
 
-import { ALEAS_IDS, QUARTIERS_IMMATRICULATION_IDS } from "$lib/constants";
-import { Email, IsoDate, Percent, PositiveNumber, Siret } from "$lib/types";
+import {
+	ALEAS_IDS,
+	DIPLOMES_IDS,
+	QUARTIERS_IMMATRICULATION_IDS,
+	REGIMES_SOCIAUX_IDS,
+} from "$lib/constants";
+import {
+	Email,
+	IsoDate,
+	Percent,
+	PositiveNumber,
+	Siret,
+	Year,
+} from "$lib/types";
+
+// https://github.com/arktypeio/arktype/discussions/758#discussioncomment-5897693
+function enumerateStrings<T extends readonly string[]>(values: T) {
+	return values.map((v) => `'${v}'`).join("|") as `"${T[number]}"`;
+}
 
 export const ValeurVente = type({
 	"valeurHT?": PositiveNumber.or(type.null),
@@ -51,7 +68,76 @@ export const DeclarationSchema = type({
 		codePostal: "string | null",
 		commune: "string | null",
 	},
-	equipe: {},
+	equipe: {
+		"dirigeants": type(
+			{
+				"id": "string.uuid.v4",
+				"prenomNom?": "string",
+				"anneeNaissance?": Year,
+				"nationalite?": "string",
+				"sexe?": "'M' | 'F'",
+				"statut?": "'salarie' | 'nonSalarie'",
+				"tempsTravail?": Percent,
+				"diplome?": enumerateStrings(DIPLOMES_IDS),
+				"regimeSocial?": enumerateStrings(REGIMES_SOCIAUX_IDS),
+				"nouveauDirigeant?": "boolean",
+			},
+			"[]",
+		),
+		"permanents?": {
+			"femmes?": {
+				"salarie?": {
+					// TYPES_DUREE_TRAVAIL
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+				"nonSalarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+			},
+			"hommes?": {
+				"salarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+				"nonSalarie?": {
+					"tempsPlein?": PositiveNumber.or(type.null),
+					"plusDunMiTemps?": PositiveNumber.or(type.null),
+					"miTemps?": PositiveNumber.or(type.null),
+					"moinsDunMiTemps?": PositiveNumber.or(type.null),
+				},
+			},
+		},
+		"saisonniers?": {
+			"femmes?": {
+				"cdd?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+				"interim?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+			},
+			"hommes?": {
+				"cdd?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+				"interim?": {
+					"nbJours?": PositiveNumber.or(type.null),
+					"nbPersonnes?": PositiveNumber.or(type.null),
+				},
+			},
+		},
+	},
 	production: {
 		// TODO ESPECES.id
 		"[string]": type({

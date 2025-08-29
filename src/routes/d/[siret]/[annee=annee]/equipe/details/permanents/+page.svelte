@@ -1,5 +1,6 @@
 <script lang="ts">
 	import cloneDeep from "lodash/cloneDeep";
+	import defaultsDeep from "lodash/defaultsDeep";
 
 	import type { FormEventHandler } from "svelte/elements";
 
@@ -16,14 +17,31 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (aPermanents) {
+			defaultsDeep(donnees, {
+				equipe: {
+					permanents: {
+						femmes: { salarie: {}, nonSalarie: {} },
+						hommes: { salarie: {}, nonSalarie: {} },
+					},
+				},
+			});
+		} else {
+			delete donnees.equipe.permanents;
+		}
+
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
 		);
-		goto("./permanents/1");
+		if (data.declaration.donnees.equipe.permanents) {
+			goto("./permanents/1");
+		} else {
+			goto("../recapitulatif");
+		}
 	};
 
-	let radioValue: boolean | undefined = $state(false);
+	let aPermanents: boolean | undefined = $state(!!donnees.equipe.permanents);
 </script>
 
 <div>
@@ -45,7 +63,7 @@
 					inline
 					value={true}
 					required
-					bind:group={radioValue}
+					bind:group={aPermanents}
 				>
 					{#snippet label()}Oui{/snippet}
 				</RadioGroup>
@@ -56,7 +74,7 @@
 					inline
 					value={false}
 					required
-					bind:group={radioValue}
+					bind:group={aPermanents}
 				>
 					{#snippet label()}Non{/snippet}
 				</RadioGroup>

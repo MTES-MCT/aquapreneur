@@ -30,7 +30,7 @@ export const load = async ({ params }) => {
 	const declaration = await getOrCreateDeclaration(etablissement, anneeNum);
 
 	return {
-		annee,
+		annee: anneeNum,
 		etablissement,
 		declaration,
 		title: `${etablissement.denomination} • Déclaration ${annee}`,

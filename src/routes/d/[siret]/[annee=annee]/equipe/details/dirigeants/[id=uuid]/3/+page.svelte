@@ -9,11 +9,17 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
+	import { DIPLOMES, REGIMES_SOCIAUX } from "$lib/constants";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	let donnees = $state(cloneDeep(data.declaration.donnees));
+	let dirigeant = $derived(
+		// TODO hors manipulation de l’URL, le dirigeant devrait exister
+		// mais il faut gérer ce cas correctement
+		donnees.equipe.dirigeants.find((d) => d.id === data.dirigeantId)!,
+	);
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
@@ -22,19 +28,8 @@
 			donnees,
 		);
 		// TODO: validation
-		goto("../../recapitulatif");
+		goto("../../../recapitulatif");
 	};
-
-	let radioValue: boolean | undefined = $state(false);
-
-	const diplomes = [
-		"Sans diplôme qualifiant",
-		"CAP / BEP",
-		"Bac",
-		"Bac +2",
-		"Licence et plus",
-	];
-	const regimes = ["Général", "Enim", "MSA"];
 </script>
 
 <div>
@@ -45,22 +40,22 @@
 			{#snippet inputs()}
 				<RadioGroup
 					name="radio-inline"
-					id="radio-oui"
+					id="radio-salarie"
 					inline
-					value={true}
+					value="salarie"
 					required
-					bind:group={radioValue}
+					bind:group={dirigeant.statut}
 				>
 					{#snippet label()}Salarié{/snippet}
 				</RadioGroup>
 
 				<RadioGroup
 					name="radio-inline"
-					id="radio-non"
+					id="radio-non-salarie"
 					inline
-					value={false}
+					value="nonSalarie"
 					required
-					bind:group={radioValue}
+					bind:group={dirigeant.statut}
 				>
 					{#snippet label()}Non salarié{/snippet}
 				</RadioGroup>
@@ -68,54 +63,64 @@
 		</Fieldset>
 		<Fieldset>
 			{#snippet inputs()}
-				<InputGroup name="part-bio" type="number" fieldsetId="nom">
+				<InputGroup
+					name="temps-travail"
+					type="number"
+					min={0}
+					max={100}
+					fieldsetId="temps-travail"
+					bind:value={dirigeant.tempsTravail}
+				>
 					{#snippet label()}Temps de travail (%){/snippet}
 				</InputGroup>
 
 				<div class="fr-fieldset__element">
 					<div class="fr-select-group">
-						<label class="fr-label" for="select-1">
+						<label class="fr-label" for="diplome">
 							Diplôme le plus élevé obtenu
 						</label>
 						<select
 							class="fr-select"
-							aria-describedby="select-1-messages"
-							id="select-1"
-							name="select-1"
+							aria-describedby="diplome-messages"
+							id="diplome"
+							name="diplome"
+							bind:value={dirigeant.diplome}
 						>
-							<option value="" selected disabled>
+							<option value={undefined} selected disabled>
 								Sélectionnez une option
 							</option>
-							{#each diplomes as d (d)}
-								<option value="d">{d}</option>
+							{#each DIPLOMES as d (d.id)}
+								<option value={d.id}>{d.label}</option>
 							{/each}
 						</select>
 						<div
 							class="fr-messages-group"
-							id="select-1-messages"
+							id="diplome-messages"
 							aria-live="polite"
 						></div>
 					</div>
 				</div>
+
 				<div class="fr-fieldset__element">
 					<div class="fr-select-group">
-						<label class="fr-label" for="select-1">Régime social</label>
+						<label class="fr-label" for="regime">Régime social</label>
 						<select
 							class="fr-select"
-							aria-describedby="select-1-messages"
-							id="select-1"
-							name="select-1"
+							aria-describedby="regime-messages"
+							id="regime"
+							name="regime"
+							bind:value={dirigeant.regimeSocial}
 						>
-							<option value="" selected disabled>
+							<option value={undefined} selected disabled>
 								Sélectionnez une option
 							</option>
-							{#each regimes as r (r)}
-								<option value="r">{r}</option>
+							{#each REGIMES_SOCIAUX as r (r.id)}
+								<option value={r.id}>{r.label}</option>
 							{/each}
 						</select>
 						<div
 							class="fr-messages-group"
-							id="select-1-messages"
+							id="regime-messages"
 							aria-live="polite"
 						></div>
 					</div>

@@ -7,11 +7,12 @@
 
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
+	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	const donnees = $state(cloneDeep(data.declaration.donnees));
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
@@ -21,12 +22,6 @@
 		);
 		goto("./2");
 	};
-	const contrats = [
-		"Temps plein",
-		"Plus d’un 1/2 temps",
-		"Mi-temps",
-		"Moins d’un 1/2 temps",
-	];
 </script>
 
 <div>
@@ -47,14 +42,33 @@
 										</tr>
 									</thead>
 									<tbody>
-										{#each contrats as c (c)}
+										{#each TYPES_DUREE_TRAVAIL as duree (duree.id)}
 											<tr>
-												<td>{c}</td>
+												<td>{duree.label}</td>
 												<td>
-													<input class="fr-input" type="text" />
+													<input
+														class="fr-input"
+														type="text"
+														value={donnees.equipe.permanents!.femmes!.salarie![
+															duree.id
+														]}
+														onchange={(v) =>
+															(donnees.equipe.permanents!.femmes!.salarie![
+																duree.id
+															] = toNumber(v.currentTarget.value))}
+													/>
 												</td>
 												<td>
-													<input class="fr-input" type="text" />
+													<input
+														class="fr-input"
+														type="text"
+														value={donnees.equipe.permanents!.femmes!
+															.nonSalarie![duree.id]}
+														onchange={(v) =>
+															(donnees.equipe.permanents!.femmes!.nonSalarie![
+																duree.id
+															] = toNumber(v.currentTarget.value))}
+													/>
 												</td>
 											</tr>
 										{/each}

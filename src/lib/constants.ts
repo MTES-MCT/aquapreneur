@@ -1,3 +1,6 @@
+// https://www.data.gouv.fr/datasets/referentiel-des-pays-et-des-territoires/
+import countries_data from "$lib/assets/data/referentiel-pays.json";
+
 // Cookies
 
 export const OIDC_STATE_COOKIE_NAME = "oidc_state";
@@ -199,6 +202,7 @@ export const ALEAS = [
 export const ALEAS_IDS = ALEAS.map((e) => e.id);
 export type ALEAS_ID = (typeof ALEAS_IDS)[number];
 
+// TODO: pluriel
 export const MODE_ELEVAGE = [
 	{
 		label: "À plat",
@@ -239,6 +243,7 @@ export const MODE_ELEVAGE = [
 ] as const;
 
 // https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
+// TODO standardiser les clés: id / label
 export const QUARTIERS_IMMATRICULATION = [
 	{ code: "AC", nom: "Arcachon", localisation: "Atlantique" },
 	{ code: "AD", nom: "Audierne", localisation: "Atlantique" },
@@ -297,3 +302,80 @@ export const QUARTIERS_IMMATRICULATION_IDS = QUARTIERS_IMMATRICULATION.map(
 );
 export type QUARTIERS_IMMATRICULATION_ID =
 	(typeof QUARTIERS_IMMATRICULATION_IDS)[number];
+
+export const DIPLOMES = [
+	{
+		id: "aucun",
+		label: "Sans diplôme qualifiant",
+	},
+	{
+		id: "cap/bep",
+		label: "CAP / BEP",
+	},
+	{
+		id: "bac",
+		label: "Bac",
+	},
+	{
+		id: "bac+2",
+		label: "Bac +2",
+	},
+	{
+		id: "licence+",
+		label: "Licence et plus",
+	},
+] as const;
+export const DIPLOMES_IDS = DIPLOMES.map((e) => e.id);
+
+export const REGIMES_SOCIAUX = [
+	{
+		id: "general",
+		label: "Général",
+	},
+	{
+		id: "enim",
+		label: "Enim",
+	},
+	{
+		id: "msa",
+		label: "MSA",
+	},
+] as const;
+export const REGIMES_SOCIAUX_IDS = REGIMES_SOCIAUX.map((e) => e.id);
+
+export const COUNTRIES = [
+	countries_data.find((c) => c.iso_alpha2 === "FR")!,
+	...countries_data.filter((c) => c.iso_alpha2 !== "FR"),
+];
+
+export const TYPES_CONTRAT = [
+	{
+		id: "cdd",
+		label: "CDD",
+	},
+	{
+		id: "interim",
+		label: "Intérim",
+	},
+] as const;
+export const TYPES_CONTRAT_IDS = TYPES_CONTRAT.map((e) => e.id);
+
+export const TYPES_DUREE_TRAVAIL = [
+	{
+		id: "tempsPlein",
+		label: "Temps plein",
+	},
+	{
+		id: "plusDunMiTemps",
+		label: "Plus d’un 1/2 temps",
+	},
+	{
+		id: "miTemps",
+		label: "Mi-temps",
+	},
+	{
+		id: "moinsDunMiTemps",
+		label: "Moins d’un 1/2 temps",
+	},
+] as const;
+export const TYPES_DUREE_TRAVAILIDS = TYPES_DUREE_TRAVAIL.map((e) => e.id);

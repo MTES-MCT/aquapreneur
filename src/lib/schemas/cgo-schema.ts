@@ -18,8 +18,11 @@ export const CGODonneesBilan = type({
 			"annee_naissance?": Year.or(type.null), // format YYYY.
 			"genre?": "'M' | 'F' | 'A' | null", // M, F ou A (autre). Peut être vide en l’absence d’information.
 			"annee_entree?": Year.or(type.null), // la date d’entrée dans l’entreprise, au format YYYY.
+			// TODO documenter les valeurs
 			"diplome?": "string| null", // diplome le plus élevé
+			// TODO cette valeur n’est pas utilisée ?
 			"diplome_aquacole?": "string| null", // diplome aquacole le plus élevé
+			// TODO documenter les valeurs
 			"regime_social?": "string | null",
 			"taux_travail?": Percent.or(type.null),
 		},

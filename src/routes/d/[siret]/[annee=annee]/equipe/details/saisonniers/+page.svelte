@@ -1,5 +1,6 @@
 <script lang="ts">
 	import cloneDeep from "lodash/cloneDeep";
+	import defaultsDeep from "lodash/defaultsDeep";
 
 	import type { FormEventHandler } from "svelte/elements";
 
@@ -16,20 +17,38 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		if (aSaisonniers) {
+			defaultsDeep(donnees, {
+				equipe: {
+					saisonniers: {
+						femmes: { cdd: {}, interim: {} },
+						hommes: { cdd: {}, interim: {} },
+					},
+				},
+			});
+		} else {
+			delete donnees.equipe.saisonniers;
+		}
+
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,
 		);
-		goto("./saisonniers/1");
+		if (data.declaration.donnees.equipe.saisonniers) {
+			goto("./saisonniers/1");
+		} else {
+			goto("../recapitulatif");
+		}
 	};
 
-	let radioValue: boolean | undefined = $state(false);
+	let aSaisonniers: boolean | undefined = $state(!!donnees.equipe.saisonniers);
 </script>
 
 <div>
 	<p class="fr-text--xl">
-		L’entreprise a-t-elle disposé d’une main d’oeuvre saisonnière ?
+		L’entreprise a-t-elle disposé d’une main d’oeuvre saisonnière ?
 	</p>
+
 	<p>
 		Tout personnel ayant travaillé pour l’entreprise sur une période limitée,
 		par exemple à Noël. Sont concernés les CDD, intérimaires, stagiaires,
@@ -44,7 +63,7 @@
 					inline
 					value={true}
 					required
-					bind:group={radioValue}
+					bind:group={aSaisonniers}
 				>
 					{#snippet label()}Oui{/snippet}
 				</RadioGroup>
@@ -55,7 +74,7 @@
 					inline
 					value={false}
 					required
-					bind:group={radioValue}
+					bind:group={aSaisonniers}
 				>
 					{#snippet label()}Non{/snippet}
 				</RadioGroup>
