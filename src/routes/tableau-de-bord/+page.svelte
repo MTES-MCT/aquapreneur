@@ -23,8 +23,6 @@
 										<th scope="col">N° SIRET</th>
 										<th scope="col">Période</th>
 										<th scope="col">Statut</th>
-										<th scope="col">Échéance comptable</th>
-										<th scope="col">Échéance adhérent</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -41,9 +39,15 @@
 											</td>
 											<td>{declaration.siret}</td>
 											<td>{declaration.annee}</td>
-											<td></td>
-											<td></td>
-											<td></td>
+											<td>
+												<a
+													target="_blank"
+													download={`aquapreneur-decl-${declaration.siret}-${declaration.annee}.json`}
+													href="./d/{declaration.siret}/{declaration.annee}/download"
+												>
+													Télécharger
+												</a>
+											</td>
 										</tr>
 									{/each}
 								</tbody>
