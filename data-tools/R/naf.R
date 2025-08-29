@@ -19,5 +19,5 @@ with_tempfile("naf_xls_filename", {
 		filter(!is.na(code) & str_length(code) == 6)
 	json_data = toJSON(xls_data)
 
-	writeLines(json_data, "../data/naf-rev2.json")
+	writeLines(json_data, "../src/lib/assets/data/naf-rev2.json")
 })
