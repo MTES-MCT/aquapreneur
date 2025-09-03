@@ -11,6 +11,7 @@
 - copier le ficher `.env.example` vers un fichier `.env`.
 - renseignez les valeurs des variables d’environnement.
 - exécutez la commande `npm install`
+- puis `npm run prepare`
 - lancez le serveur de développement en exécutant `npm run dev`
 
 ## Tests
