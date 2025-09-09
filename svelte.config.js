@@ -41,7 +41,6 @@ const config = {
 	},
 
 	compilerOptions: {
-		runes: true,
 		sourcemap: true,
 	},
 };

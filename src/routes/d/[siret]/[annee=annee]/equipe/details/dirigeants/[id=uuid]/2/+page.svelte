@@ -38,21 +38,14 @@
 	<form method="POST" onsubmit={handleSubmit}>
 		<Fieldset>
 			{#snippet inputs()}
-				<InputGroup
-					name="nom"
-					type="text"
-					fieldsetId="nom"
-					bind:value={dirigeant.prenomNom}
-				>
+				<InputGroup type="text" bind:value={dirigeant.prenomNom}>
 					{#snippet label()}Nom et prénom{/snippet}
 				</InputGroup>
 
 				<InputGroup
-					name="naissance"
 					type="number"
 					min={1900}
 					max={data.annee}
-					fieldsetId="naissance"
 					bind:value={dirigeant.anneeNaissance}
 				>
 					{#snippet label()}Année de naissance{/snippet}

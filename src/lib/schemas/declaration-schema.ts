@@ -99,14 +99,14 @@ export const venteSchema = optObject({
 		}),
 
 		origine: z
-			.partialRecord(z.enum(ORIGINES_NAISSAIN_IDS), Percent.nullish())
+			.partialRecord(
+				z.enum(ORIGINES_NAISSAIN_IDS),
+				z.object({
+					part: Percent.nullish(),
+					value: PositiveNumber.nullish(),
+				}),
+			)
 			.optional(),
-
-		// optObject({
-		// 	captage: Percent.nullish(),
-		// 	ecloserieDiploide: Percent.nullish(),
-		// 	ecloserieTriploide: Percent.nullish(),
-		// }),
 	}),
 });
 

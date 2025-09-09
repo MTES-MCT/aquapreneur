@@ -6,22 +6,20 @@
 	let {
 		label,
 		type,
-		name,
+		errors,
 		min,
 		max,
 		value = $bindable(),
-		fieldsetId,
 		required = false,
 		actionButton,
 		onChange,
 	}: {
-		label: Snippet;
+		label?: Snippet;
 		type: "text" | "email" | "tel" | "number";
-		name: string;
+		errors?: string[];
 		min?: number;
 		max?: number;
 		value?: number | string | null;
-		fieldsetId: string;
 		required?: boolean;
 		actionButton?: Snippet;
 		onChange?: ChangeEventHandler<HTMLInputElement>;
@@ -30,17 +28,19 @@
 </script>
 
 <div class="fr-fieldset__element">
-	<div class="fr-input-group">
-		<label class="fr-label" for={id}>
-			{@render label()}
-		</label>
+	<div class={["fr-input-group", errors && "fr-input-group--error"]}>
+		{#if label}
+			<label class="fr-label" for={id}>
+				{@render label()}
+			</label>
+		{/if}
 		<div class:wbtn={!!actionButton} class="fr-mt-2v">
 			<input
 				class="fr-input"
-				aria-describedby="{fieldsetId}-messages"
+				aria-describedby="{id}-messages"
+				aria-invalid={errors?.length ? "true" : undefined}
 				{type}
 				{id}
-				{name}
 				bind:value
 				{required}
 				{min}
@@ -54,6 +54,11 @@
 		</div>
 	</div>
 </div>
+{#if errors?.length}
+	<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+		<p class="fr-message fr-message--error">{errors.join(", ")}</p>
+	</div>
+{/if}
 
 <style>
 	.wbtn {

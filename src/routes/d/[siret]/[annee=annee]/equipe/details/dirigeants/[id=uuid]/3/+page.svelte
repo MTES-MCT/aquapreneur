@@ -63,11 +63,9 @@
 		<Fieldset>
 			{#snippet inputs()}
 				<InputGroup
-					name="temps-travail"
 					type="number"
 					min={0}
 					max={100}
-					fieldsetId="temps-travail"
 					bind:value={dirigeant.tempsTravail}
 				>
 					{#snippet label()}Temps de travail (%){/snippet}

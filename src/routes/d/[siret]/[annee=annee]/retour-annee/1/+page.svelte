@@ -1,41 +1,55 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
-	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import TextareaGroup from "$lib/components/textarea–group.svelte";
-	import { ALEAS, type ALEAS_ID } from "$lib/constants";
+	import { ALEAS, ALEAS_IDS } from "$lib/constants";
+	import { nestedSpaForm } from "$lib/form-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	const retour = data.declaration.donnees.retourAnnee;
 
-	const handleCheck = (checked: boolean, id: ALEAS_ID) => {
-		const c = donnees.retourAnnee;
-		const aleas = c.aleas == null ? [] : c.aleas.filter((a) => a !== id);
-		if (checked) {
-			aleas.push(id);
-		}
-		c.aleas = aleas;
-		if (c.aleas.length === 0) {
-			c.aleasDetails = null;
-		}
-	};
+	const schema = z.object({
+		aleas: z
+			.enum(ALEAS_IDS)
+			.array()
+			.min(1, "Veuillez selectionner au moins une réponse")
+			.default(retour.aleas),
+		aleasDetails: z.string().nullable().default(retour.aleasDetails),
+	});
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./2");
-	};
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.declaration.donnees.retourAnnee, { ...form.data });
+
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("./2");
+			}
+		},
+	});
 </script>
 
 <div class="fr-stepper">
@@ -54,31 +68,42 @@
 	</p>
 </div>
 
-<form method="POST" onsubmit={handleSubmit}>
-	<Fieldset>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.aleas?._errors}>
 		{#snippet legend()}
 			Vous pouvez sélectionner une ou plusieurs réponses.
 		{/snippet}
 
-		{#snippet inputs()}
+		{#snippet inputs(id)}
 			{#each ALEAS as alea (alea.id)}
 				{@const aleaId = alea.id}
-				<CheckboxGroup
-					name={aleaId}
-					id={aleaId}
-					checked={donnees.retourAnnee.aleas?.includes(aleaId)}
-					onCheck={(event) => handleCheck(event.currentTarget.checked, aleaId)}
-				>
+				<CheckboxGroup>
+					{#snippet input(id)}
+						<input
+							type="checkbox"
+							aria-describedby="checkbox-1-messages"
+							{id}
+							value={aleaId}
+							bind:group={$form.aleas}
+						/>
+					{/snippet}
 					{#snippet label()}{alea.label}{/snippet}
 				</CheckboxGroup>
 			{/each}
-
+			{#if $errors?.aleas?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.aleas._errors}
+					</p>
+				</div>
+			{/if}
 			<div class="fr-mb-4w"></div>
-			{#if donnees.retourAnnee.aleas.length}
+			{#if $form.aleas.length}
 				<TextareaGroup
 					name="details"
 					rows={3}
-					bind:value={donnees.retourAnnee.aleasDetails}
+					bind:value={$form.aleasDetails}
+					errors={$errors?.aleasDetails}
 				>
 					{#snippet label()}Détails supplémentaires (facultatif) :{/snippet}
 				</TextareaGroup>
@@ -88,3 +113,6 @@
 
 	<NavigationLinks nextIsButton />
 </form>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.retourAnnee}
+></FormDebug>

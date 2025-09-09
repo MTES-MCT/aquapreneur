@@ -159,7 +159,6 @@ export const ORIGINES_NAISSAIN = [
 	},
 ] as const;
 export const ORIGINES_NAISSAIN_IDS = ORIGINES_NAISSAIN.map((e) => e.id);
-export type ORIGINES_NAISSAIN_ID = (typeof ORIGINES_NAISSAIN_IDS)[number];
 
 export const DESTINATIONS_NAISSAIN = [
 	{
