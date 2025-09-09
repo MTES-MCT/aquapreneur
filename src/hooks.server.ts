@@ -1,11 +1,6 @@
-// sort-imports-ignore
-// La configuration d’arktype doit avoir lieu avant le premier import de {type}
-// Coté client, elle est gérée dans hooks.client.ts,
-import "./lib/arktype.config.js";
-
-// Reste des imports
 import * as Sentry from "@sentry/sveltekit";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 import type { Handle, HandleServerError, RequestEvent } from "@sveltejs/kit";
 import { redirect } from "@sveltejs/kit";
@@ -31,6 +26,8 @@ import audit from "$lib/server/utils/audit";
 import * as logger from "$lib/server/utils/logger";
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
+
+z.config({ jitless: true });
 
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,

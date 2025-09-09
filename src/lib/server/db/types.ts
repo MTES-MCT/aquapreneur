@@ -1,6 +1,7 @@
-import { createInsertSchema, createSelectSchema } from "drizzle-arktype";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
-import { IsoDate } from "$lib/types";
+import { IsoDate, Siret } from "$lib/types";
 
 import { bilans, evtsJournalReqs, jetonsApi } from "./schema/api";
 
@@ -12,22 +13,21 @@ import type { declarationsTable } from "./schema/declaration";
 import type { etablissementsTable } from "./schema/entreprise";
 
 export const bilansInsertSchema = createInsertSchema(bilans, {
-	siret: (s) => s.to("string.digits == 14"),
+	siret: Siret,
 	debutExercice: IsoDate,
 	finExercice: IsoDate,
-	dateBilan: IsoDate,
+	dateBilan: z.iso.date(),
 });
-export type bilansInsertSchema = typeof bilansInsertSchema.infer;
+export type bilansInsertSchema = z.infer<typeof bilansInsertSchema>;
 
 export const bilansSelectSchema = createSelectSchema(bilans);
-export type bilansSelectSchema = typeof bilansSelectSchema.infer;
+export type bilansSelectSchema = z.infer<typeof bilansSelectSchema>;
 
 export type EvtJournalReqs = InferSelectModel<typeof evtsJournalReqs>;
 
 export const jetonsApiInsertSchema = createInsertSchema(jetonsApi, {
-	siretPartenaire: (s) => s.to("string.digits == 14"),
-	courrielPartenaire: (s) =>
-		s.to("string.trim").to("string.email & string.lower"),
+	siretPartenaire: Siret,
+	courrielPartenaire: z.string().trim().toLowerCase(),
 });
 
 export type ConcessionSelect = typeof concessionsTable.$inferSelect;

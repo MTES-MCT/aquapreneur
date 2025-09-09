@@ -1,265 +1,260 @@
-import { type } from "arktype";
+import { z } from "zod";
 
 import {
 	ALEAS_IDS,
+	DESTINATIONS_VENTES_CONSO_FRANCE_IDS,
 	DIPLOMES_IDS,
+	ESPECES_IDS,
+	ORIGINES_NAISSAIN_IDS,
 	QUARTIERS_IMMATRICULATION_IDS,
 	REGIMES_SOCIAUX_IDS,
 } from "$lib/constants";
 import {
-	Email,
 	IsoDate,
 	Percent,
+	PositiveInt,
 	PositiveNumber,
 	Siret,
 	Year,
+	optObject,
 } from "$lib/types";
 
-// https://github.com/arktypeio/arktype/discussions/758#discussioncomment-5897693
-function enumerateStrings<T extends readonly string[]>(values: T) {
-	return values.map((v) => `'${v}'`).join("|") as `"${T[number]}"`;
-}
-
-export const ValeurVente = type({
-	"valeurHT?": PositiveNumber.or(type.null),
-	"quantiteKg?": PositiveNumber.or(type.null),
-}).or(type.null);
-
-export const Volume = type({
-	"volume?": PositiveNumber.or(type.null),
-}).or(type.null);
-
-export const StockValues = type({
-	"stockKg?": PositiveNumber.or(type.null),
-	"stockNmoins1kg?": PositiveNumber.or(type.null),
-}).or(type.null);
-
-export const StockValuesNaissain = type({
-	"stockMilliers?": PositiveNumber.or(type.null),
-	"stockM?": PositiveNumber.or(type.null),
-	"stockNmoins1milliers?": PositiveNumber.or(type.null),
-}).or(type.null);
-
-export const DeclarationSchema = type({
-	etapes: {
-		entrepriseValidee: "boolean",
-		concessionValidee: "boolean",
-		stockValidee: "boolean",
-		productionValidee: "boolean",
-		envoiValidee: "boolean",
-		declarationValidee: "boolean",
-	},
-	aProduit: "boolean | null = null",
-	dateBilan: IsoDate.or(type.null),
-	debutExercice: IsoDate.or(type.null),
-	finExercice: IsoDate.or(type.null),
-	entreprise: {
-		emailEntreprise: Email.or(type.null).default(null),
-		telEntreprise: "string | null = null",
-		emailContact: Email.or(type.null).default(null),
-		telContact: "string | null = null",
-	},
-	etablissement: {
-		siret: Siret,
-		denomination: "string",
-		codeActivitePrincipale: "string | null",
-		activitePrincipale: "string | null",
-		adresse: "string | null",
-		codePostal: "string | null",
-		commune: "string | null",
-	},
-	equipe: {
-		"dirigeants": type(
-			{
-				"id": "string.uuid.v4",
-				"prenomNom?": "string",
-				"anneeNaissance?": Year,
-				"nationalite?": "string",
-				"sexe?": "'M' | 'F'",
-				"statut?": "'salarie' | 'nonSalarie'",
-				"tempsTravail?": Percent,
-				"diplome?": enumerateStrings(DIPLOMES_IDS),
-				"regimeSocial?": enumerateStrings(REGIMES_SOCIAUX_IDS),
-				"nouveauDirigeant?": "boolean",
-			},
-			"[]",
-		),
-		"permanents?": {
-			"femmes?": {
-				"salarie?": {
-					// TYPES_DUREE_TRAVAIL
-					"tempsPlein?": PositiveNumber.or(type.null),
-					"plusDunMiTemps?": PositiveNumber.or(type.null),
-					"miTemps?": PositiveNumber.or(type.null),
-					"moinsDunMiTemps?": PositiveNumber.or(type.null),
-				},
-				"nonSalarie?": {
-					"tempsPlein?": PositiveNumber.or(type.null),
-					"plusDunMiTemps?": PositiveNumber.or(type.null),
-					"miTemps?": PositiveNumber.or(type.null),
-					"moinsDunMiTemps?": PositiveNumber.or(type.null),
-				},
-			},
-			"hommes?": {
-				"salarie?": {
-					"tempsPlein?": PositiveNumber.or(type.null),
-					"plusDunMiTemps?": PositiveNumber.or(type.null),
-					"miTemps?": PositiveNumber.or(type.null),
-					"moinsDunMiTemps?": PositiveNumber.or(type.null),
-				},
-				"nonSalarie?": {
-					"tempsPlein?": PositiveNumber.or(type.null),
-					"plusDunMiTemps?": PositiveNumber.or(type.null),
-					"miTemps?": PositiveNumber.or(type.null),
-					"moinsDunMiTemps?": PositiveNumber.or(type.null),
-				},
-			},
-		},
-		"saisonniers?": {
-			"femmes?": {
-				"cdd?": {
-					"nbJours?": PositiveNumber.or(type.null),
-					"nbPersonnes?": PositiveNumber.or(type.null),
-				},
-				"interim?": {
-					"nbJours?": PositiveNumber.or(type.null),
-					"nbPersonnes?": PositiveNumber.or(type.null),
-				},
-			},
-			"hommes?": {
-				"cdd?": {
-					"nbJours?": PositiveNumber.or(type.null),
-					"nbPersonnes?": PositiveNumber.or(type.null),
-				},
-				"interim?": {
-					"nbJours?": PositiveNumber.or(type.null),
-					"nbPersonnes?": PositiveNumber.or(type.null),
-				},
-			},
-		},
-	},
-	production: {
-		// TODO ESPECES.id
-		"[string]": type({
-			"validation?": {
-				"elevage?": "boolean",
-				"origine?": "boolean",
-				"zones?": "boolean",
-			},
-			"naissain?": {
-				"total?": StockValuesNaissain,
-				"captage?": StockValuesNaissain,
-				"ecloserie?": StockValuesNaissain,
-			},
-			"elevage?": {
-				"pregrossissement?": StockValues,
-				"demiElevage?": StockValues,
-				"adulte?": StockValues,
-			},
-			"origine?": {},
-			"zonesProduction?": [
-				{
-					zone: type.enumerated(QUARTIERS_IMMATRICULATION_IDS),
-					surfaceHa: PositiveNumber,
-				},
-			],
-		}),
-	},
-	ventes: {
-		// TODO ESPECES.id
-		"[string]": {
-			"validation?": {
-				"naissain?": "boolean",
-				"elevage?": "boolean",
-				"consommation?": "boolean",
-				"origine?": "boolean",
-			},
-
-			"naissain?": {
-				"captage?": {
-					"destination?": {
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-				"ecloserieDiploide?": {
-					"destination?": {
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-				"ecloserieTriploide?": {
-					"destination?": {
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-			},
-			"elevage?": {
-				"pregrossi?": {
-					"destination?": {
-						// 1.2 + Agreste 1.7.2,
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-				"demiElevage?": {
-					"destination?": {
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-				"adulte?": {
-					"destination?": {
-						"france?": ValeurVente,
-						"etranger?": ValeurVente,
-					},
-				},
-			},
-			"consommation?": {
-				"modeElevage?": {
-					// TODO MODE_ELEVAGE.id
-					"[string]": {
-						// pourcentage OU
-						// valeurHT
-					},
-				},
-				"destination?": {
-					"france?": {
-						// TODO DESTINATIONS_VENTES_CONSO_FRANCE.id
-						"[string]": ValeurVente,
-					},
-					"unionEuropeenne?": ValeurVente,
-					"horsUnionEuropeenne?": ValeurVente,
-				},
-				"affinage?": {
-					"claires?": {
-						"part?": Percent.or(type.null),
-						"surfaceHa?": PositiveNumber.or(type.null),
-					},
-					"parcs?": {
-						"part?": Percent.or(type.null),
-						"surfaceHa?": PositiveNumber.or(type.null),
-					},
-				},
-				"bio?": {
-					"part?": Percent.or(type.null),
-				},
-				"origine?": {
-					"captage?": Percent.or(type.null),
-					"ecloserieDiploide?": Percent.or(type.null),
-					"ecloserieTriploide?": Percent.or(type.null),
-				},
-			},
-		},
-	},
-	retourAnnee: {
-		aleas: type.enumerated(...ALEAS_IDS).array(),
-		aleasDetails: "string | null = null",
-		difficultes: "string | null = null",
-		suggestions: "string | null = null",
-		raisonsInactivite: "string | null = null",
-	},
+const valeurVente = optObject({
+	valeurHT: PositiveNumber.nullish(),
+	quantiteKg: PositiveNumber.nullish(),
 });
 
-export type DeclarationSchema = typeof DeclarationSchema.infer;
+export const venteSchema = optObject({
+	validation: optObject({
+		naissain: z.boolean(),
+		elevage: z.boolean(),
+		consommation: z.boolean(),
+		origine: z.boolean(),
+	}),
+
+	naissain: optObject({
+		captage: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+		ecloserieDiploide: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+		ecloserieTriploide: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+	}),
+	elevage: optObject({
+		pregrossi: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+		demiElevage: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+		adulte: optObject({
+			destination: optObject({
+				france: valeurVente,
+				etranger: valeurVente,
+			}),
+		}),
+	}),
+	consommation: optObject({
+		destination: optObject({
+			france: z
+				.partialRecord(
+					z.enum(DESTINATIONS_VENTES_CONSO_FRANCE_IDS),
+					valeurVente,
+				)
+				.optional(),
+			unionEuropeenne: valeurVente,
+			horsUnionEuropeenne: valeurVente,
+		}),
+		affinage: optObject({
+			claires: optObject({
+				part: Percent.nullish(),
+				surfaceHa: PositiveInt.nullish(),
+			}),
+			parcs: optObject({
+				part: Percent.nullish(),
+				surfaceHa: PositiveInt.nullish(),
+			}),
+		}),
+
+		bio: optObject({
+			part: Percent.nullish(),
+		}),
+
+		origine: z
+			.partialRecord(z.enum(ORIGINES_NAISSAIN_IDS), Percent.nullish())
+			.optional(),
+
+		// optObject({
+		// 	captage: Percent.nullish(),
+		// 	ecloserieDiploide: Percent.nullish(),
+		// 	ecloserieTriploide: Percent.nullish(),
+		// }),
+	}),
+});
+
+export const StockValues = optObject({
+	stockKg: PositiveNumber.nullish(),
+	stockNmoins1kg: PositiveNumber.nullish(),
+});
+
+export const StockValuesNaissain = optObject({
+	stockMilliers: PositiveNumber.nullish(),
+	stockM: PositiveNumber.nullish(),
+	stockNmoins1milliers: PositiveNumber.nullish(),
+});
+
+export const productionSchema = optObject({
+	validation: optObject({
+		elevage: z.boolean(),
+		origine: z.boolean(),
+		zones: z.boolean(),
+	}),
+	naissain: optObject({
+		total: StockValuesNaissain,
+		captage: StockValuesNaissain,
+		ecloserie: StockValuesNaissain,
+	}),
+	elevage: optObject({
+		pregrossissement: StockValues,
+		demiElevage: StockValues,
+		adulte: StockValues,
+	}),
+	origine: optObject({}),
+	zonesProduction: z
+		.object({
+			zone: z.enum(QUARTIERS_IMMATRICULATION_IDS),
+			surfaceHa: PositiveInt.nullish(),
+		})
+		.array()
+		.optional(),
+});
+
+export const DeclarationSchema = z.strictObject({
+	etapes: z.strictObject({
+		entrepriseValidee: z.boolean(),
+		concessionValidee: z.boolean(),
+		stockValidee: z.boolean(),
+		productionValidee: z.boolean(),
+		envoiValidee: z.boolean(),
+		declarationValidee: z.boolean(),
+	}),
+	aProduit: z.boolean(),
+	dateBilan: IsoDate.nullish(),
+	debutExercice: IsoDate.nullish(),
+	finExercice: IsoDate.nullish(),
+	entreprise: z.strictObject({
+		emailEntreprise: z.email().nullable().default(null),
+		telEntreprise: z.string().nullable().default(null),
+		emailContact: z.email().nullable().default(null),
+		telContact: z.string().nullable().default(null),
+	}),
+	etablissement: z.strictObject({
+		siret: Siret,
+		denomination: z.string().nullable(),
+		codeActivitePrincipale: z.string().nullable(),
+		activitePrincipale: z.string().nullable(),
+		adresse: z.string().nullable(),
+		codePostal: z.string().nullable(),
+		commune: z.string().nullable(),
+	}),
+	equipe: z.strictObject({
+		dirigeants: z
+			.object({
+				id: z.uuid({ version: "v4" }),
+				prenomNom: z.string().optional(),
+				anneeNaissance: Year.optional(),
+				nationalite: z.string().optional(),
+				sexe: z.literal(["M", "F"]).optional(),
+				statut: z.literal(["salarie", "nonSalarie"]).optional(),
+				tempsTravail: Percent.optional(),
+				diplome: z.enum(DIPLOMES_IDS).optional(),
+				regimeSocial: z.enum(REGIMES_SOCIAUX_IDS).optional(),
+				nouveauDirigeant: z.boolean().optional(),
+			})
+			.array(),
+		permanents: optObject({
+			femmes: optObject({
+				salarie: optObject({
+					// TODO: remplacer par un record ?
+					// TYPES_DUREE_TRAVAIL
+					tempsPlein: PositiveInt.nullish(),
+					plusDunMiTemps: PositiveInt.nullish(),
+					miTemps: PositiveInt.nullish(),
+					moinsDunMiTemps: PositiveInt.nullish(),
+				}),
+				nonSalarie: optObject({
+					tempsPlein: PositiveInt.nullish(),
+					plusDunMiTemps: PositiveInt.nullish(),
+					miTemps: PositiveInt.nullish(),
+					moinsDunMiTemps: PositiveInt.nullish(),
+				}),
+			}),
+			hommes: optObject({
+				salarie: optObject({
+					tempsPlein: PositiveInt.nullish(),
+					plusDunMiTemps: PositiveInt.nullish(),
+					miTemps: PositiveInt.nullish(),
+					moinsDunMiTemps: PositiveInt.nullish(),
+				}),
+				nonSalarie: optObject({
+					tempsPlein: PositiveInt.nullish(),
+					plusDunMiTemps: PositiveInt.nullish(),
+					miTemps: PositiveInt.nullish(),
+					moinsDunMiTemps: PositiveInt.nullish(),
+				}),
+			}),
+		}),
+		saisonniers: optObject({
+			femmes: optObject({
+				cdd: optObject({
+					nbJours: PositiveInt.nullish(),
+					nbPersonnes: PositiveInt.nullish(),
+				}),
+				interim: optObject({
+					nbJours: PositiveInt.nullish(),
+					nbPersonnes: PositiveInt.nullish(),
+				}),
+			}),
+			hommes: optObject({
+				cdd: optObject({
+					nbJours: PositiveInt.nullish(),
+					nbPersonnes: PositiveInt.nullish(),
+				}),
+				interim: optObject({
+					nbJours: PositiveInt.nullish(),
+					nbPersonnes: PositiveInt.nullish(),
+				}),
+			}),
+		}),
+	}),
+	production: z.record(z.enum(ESPECES_IDS), productionSchema),
+	ventes: z.record(z.enum(ESPECES_IDS), venteSchema),
+
+	retourAnnee: z.object({
+		aleas: z.enum(ALEAS_IDS).array(),
+		aleasDetails: z.string().nullable().default(null),
+		difficultes: z.string().nullable().default(null),
+		suggestions: z.string().nullable().default(null),
+		raisonsInactivite: z.string().nullable().default(null),
+	}),
+});
+
+export type DeclarationSchema = z.infer<typeof DeclarationSchema>;

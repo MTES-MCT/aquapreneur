@@ -66,7 +66,7 @@ export const updateDeclaration = async (
 	declarationId: number,
 	donneesDeclaration: DeclarationSchema,
 ) => {
-	const parsedData = DeclarationSchema.assert(donneesDeclaration);
+	const parsedData = DeclarationSchema.parse(donneesDeclaration);
 	const currentValue = (
 		await db
 			.select()

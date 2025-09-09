@@ -1,6 +1,6 @@
 import { type OAuth2Tokens, decodeIdToken } from "arctic";
-import { type } from "arktype";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 import { error, redirect } from "@sveltejs/kit";
 
@@ -19,27 +19,25 @@ import {
 	OIDC_ID_TOKEN_COOKIE_NAME,
 	OIDC_STATE_COOKIE_NAME,
 } from "$lib/constants";
-import { Email, Siret } from "$lib/types";
+import { Siret } from "$lib/types";
 
 // https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/donnees_fournies
 
-const UserInfoPayloadSchema = type({
-	"+": "ignore",
-	"sub": "string",
-	"given_name": "string",
-	"usual_name": "string",
-	"email": Email,
-	"siret": Siret,
-	"phone_number?": "string | null",
+const userInfoPayloadSchema = z.looseObject({
+	sub: z.string(),
+	given_name: z.string(),
+	usual_name: z.string(),
+	email: z.email(),
+	siret: Siret,
+	phone_number: z.string().nullish(),
 });
 
 // https://partenaires.proconnect.gouv.fr/docs/ressources/claim_amr
-const AmrEnum = type("('pwd' | 'mail' | 'totp' | 'pop' | 'mfa')[]");
-type AmrEnum = typeof AmrEnum.infer;
+const amrEnum = z.enum(["pwd", "mail", "totp", "pop", "mfa"]).array();
+type amrEnum = z.infer<typeof amrEnum>;
 
-const IdTokenPayloadSchema = type({
-	"+": "ignore",
-	"amr": AmrEnum,
+const idTokenPayloadSchema = z.looseObject({
+	amr: amrEnum,
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,11 +76,13 @@ export const load = async ({ url, cookies }) => {
 	const tokenId = tokens.idToken();
 
 	// Vérification de la connexion MFA
-	let amr: AmrEnum = [];
-	const idTokenParsedResult = IdTokenPayloadSchema(decodeIdToken(tokenId));
+	let amr: amrEnum = [];
+	const idTokenParsedResult = idTokenPayloadSchema.safeParse(
+		decodeIdToken(tokenId),
+	);
 
-	if (!(idTokenParsedResult instanceof type.errors)) {
-		amr = idTokenParsedResult.amr;
+	if (idTokenParsedResult.success) {
+		amr = idTokenParsedResult.data.amr;
 	}
 
 	// On stocke le tokenId pour pouvoir déconnecter l’utilisateurice de ProConnect
@@ -104,14 +104,14 @@ export const load = async ({ url, cookies }) => {
 		},
 	);
 	const userInfoPayload = decodeIdToken(await userInfoResponse.text());
-	const parsedResult = UserInfoPayloadSchema(userInfoPayload);
-	if (parsedResult instanceof type.errors) {
+	const parsedResult = userInfoPayloadSchema.safeParse(userInfoPayload);
+	if (!parsedResult.success) {
 		logger.error("IdToken OIDC invalide", {
-			error: parsedResult.summary,
+			error: parsedResult.error,
 		});
 		error(400);
 	}
-	const userData = parsedResult;
+	const userData = parsedResult.data;
 	const query = await db
 		.select()
 		.from(utilisateurs)

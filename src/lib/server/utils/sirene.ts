@@ -1,4 +1,3 @@
-import { type } from "arktype";
 import assert from "assert";
 import { eq } from "drizzle-orm";
 
@@ -162,14 +161,14 @@ const getSireneInfo = async (siret: string) => {
 		throw new Error("Impossible de contacter l’API Sirene");
 	} else {
 		const jsonRes = await res.json();
-		const parsedResponse = SireneEtablissementResponse(jsonRes);
+		const parsedResponse = SireneEtablissementResponse.safeParse(jsonRes);
 
-		if (parsedResponse instanceof type.errors) {
+		if (!parsedResponse.success) {
 			logger.error("Impossible de parser la réponse de l’API Sirene", {
-				error: parsedResponse.summary,
+				error: parsedResponse.error,
 			});
 			throw new Error("Impossible de parser la réponse de l’API Sirene");
 		}
-		return parsedResponse.etablissement;
+		return parsedResponse.data.etablissement;
 	}
 };

@@ -357,7 +357,7 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: {} },
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -365,7 +365,7 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: { StckValHNaisMi: null } },
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeNull();
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -373,7 +373,7 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: { StckValHNaisMi: undefined } },
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeUndefined();
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -381,7 +381,7 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: { StckValHNaisMi: "" } },
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBeNull();
 	});
 
@@ -399,7 +399,7 @@ describe("Tests des champs monétaires", async () => {
 			},
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -407,7 +407,7 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: { StckValHNaisMi: 12345.67 } },
 		});
 		expect(response.status).toBe(204);
-		inserted = CGODonneesBilan.assert((await getLastById(bilans)).donnees);
+		inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBe(12345.67);
 	});
 
@@ -417,8 +417,8 @@ describe("Tests des champs monétaires", async () => {
 			data: { ...dummyBilan, stock: { StckValHNaisMi: "ABC" } },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'stock.StckValHNaisMi must be a number, "", null, a well-formed numeric string or undefined (was "ABC")',
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected number, received string",
 		);
 	});
 });
@@ -433,8 +433,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			data: dummyBilanNoDir,
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"dirigeant_es must be an array (was missing)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected array, received undefined",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -442,8 +442,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			data: { ...dummyBilanNoDir, dirigeant_es: "notAnArray" },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"dirigeant_es must be an array (was string)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected array, received string",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -466,8 +466,11 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		});
 		expect(response.status).toBe(400);
 		const body = await response.json();
-		expect(body.message).toContain("prenom must be a string (was missing)");
-		expect(body.message).toContain("nom must be a string (was missing)");
+		expect(body.message).toContain(
+			"Invalid input: expected string, received undefined",
+		);
+		expect(body.message).toContain("→ at dirigeant_es[0].nom");
+		expect(body.message).toContain("→ at dirigeant_es[0].prenom");
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
@@ -481,8 +484,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			},
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"dirigeant_es[0].prenom must be a string (was missing)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected string, received undefined\n  → at dirigeant_es[0].prenom",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -498,8 +501,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			},
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"dirigeant_es[0].nom must be a string (was a number)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected string, received number\n  → at dirigeant_es[0].nom",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -516,8 +519,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			},
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected number, received string\n  → at dirigeant_es[0].annee_naissance",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -534,8 +537,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			},
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'dirigeant_es[0].annee_naissance must be a number, undefined or null (was "abc")',
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected number, received string\n  → at dirigeant_es[0].annee_naissance",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -552,8 +555,8 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 			},
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"dirigeant_es[0].anneeN must be removed",
+		expect((await response.json()).message).toContain(
+			'Unrecognized key: "anneeN"',
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -582,17 +585,15 @@ describe("Tests de validation des champs date", async () => {
 			data: { ...dummyBilan, debut_exercice: "" },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'debut_exercice must be a valid date (invalid RFC 9557 string: ) (was "")',
-		);
+		expect((await response.json()).message).toContain("Invalid ISO date");
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
 			headers: { Authorization: `Bearer ${validAuthToken}` },
 			data: { ...dummyBilan, debut_exercice: null },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"debut_exercice must be a string (was null)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected string, received null",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -600,8 +601,8 @@ describe("Tests de validation des champs date", async () => {
 			data: { ...dummyBilan, debut_exercice: undefined },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			"debut_exercice must be a string (was missing)",
+		expect((await response.json()).message).toContain(
+			"Invalid input: expected string, received undefined\n  → at debut_exercice",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -609,8 +610,8 @@ describe("Tests de validation des champs date", async () => {
 			data: { ...dummyBilan, debut_exercice: "12/31/2020" },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'debut_exercice must be a valid date (invalid RFC 9557 string: 12/31/2020) (was "12/31/2020")',
+		expect((await response.json()).message).toContain(
+			"Invalid ISO date\n  → at debut_exercice",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -618,8 +619,8 @@ describe("Tests de validation des champs date", async () => {
 			data: { ...dummyBilan, debut_exercice: "31/12/2020" },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'debut_exercice must be a valid date (invalid RFC 9557 string: 31/12/2020) (was "31/12/2020")',
+		expect((await response.json()).message).toContain(
+			"Invalid ISO date\n  → at debut_exercice",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -627,8 +628,8 @@ describe("Tests de validation des champs date", async () => {
 			data: { ...dummyBilan, debut_exercice: "2020-31-12" },
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toBe(
-			'debut_exercice must be a valid date (invalid RFC 9557 string: 2020-31-12) (was "2020-31-12")',
+		expect((await response.json()).message).toContain(
+			"Invalid ISO date\n  → at debut_exercice",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -1016,9 +1017,7 @@ describe("Tests de conversion des champs CGO", async () => {
 			data: testBilanCGO,
 		});
 		expect(response.status).toBe(204);
-		const inserted = CGODonneesBilan.assert(
-			(await getLastById(bilans)).donnees,
-		);
+		const inserted = CGODonneesBilan.parse((await getLastById(bilans)).donnees);
 		expect(inserted.stock.StckValHNaisMi).toBe(20000);
 	});
 
@@ -1037,7 +1036,7 @@ describe("Tests de conversion des champs CGO", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toContain(
-			"newField must be removed",
+			'Unrecognized key: "newField"',
 		);
 
 		const d2 = {
@@ -1054,7 +1053,7 @@ describe("Tests de conversion des champs CGO", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toContain(
-			"newField must be removed",
+			'Unrecognized key: "newField"\n  → at production',
 		);
 
 		const d3 = {
@@ -1071,7 +1070,7 @@ describe("Tests de conversion des champs CGO", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toContain(
-			"newField must be removed",
+			'Unrecognized key: "newField"',
 		);
 
 		const d4 = {
@@ -1086,7 +1085,9 @@ describe("Tests de conversion des champs CGO", async () => {
 			data: d4,
 		});
 		expect(response.status).toBe(400);
-		expect((await response.json()).message).toContain("stk must be removed");
+		expect((await response.json()).message).toContain(
+			'Unrecognized key: "stk"',
+		);
 	});
 
 	test("400 si un champ ou catégorie est manquante", async () => {
@@ -1099,7 +1100,7 @@ describe("Tests de conversion des champs CGO", async () => {
 			data,
 		});
 		expect((await response.json()).message).toContain(
-			"stock must be an object (was missing)",
+			"Invalid input: expected object, received undefined\n  → at stock",
 		);
 		expect(response.status).toBe(400);
 	});
@@ -1200,7 +1201,6 @@ describe("Tests du champ `invalide` et du versioning", async () => {
 	});
 });
 
-//
 declare module "vitest" {
 	export interface ProvidedContext {
 		baseUrl: string;
