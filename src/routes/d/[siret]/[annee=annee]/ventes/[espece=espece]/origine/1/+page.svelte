@@ -1,38 +1,70 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
+	import { nestedSpaForm } from "$lib/form-utils";
+	import { Percent, PositiveInt } from "$lib/types";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	const affinage =
+		data.declaration.donnees.ventes[data.espece.id]!.consommation?.affinage;
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./2");
-	};
+	const schema = z.object({
+		claires: z.object({
+			part: Percent.default(affinage?.claires?.part ?? 0),
+			surfaceHa: PositiveInt.default(affinage?.claires?.surfaceHa ?? 0),
+		}),
+		parcs: z.object({
+			part: Percent.default(affinage?.parcs?.part ?? 0),
+			surfaceHa: PositiveInt.default(affinage?.parcs?.surfaceHa ?? 0),
+		}),
+	});
 
-	// TODO La catégorie `affinage` a été validée à l’étape précédente ; on considère
-	// pour l’instant qu’elle est bien définie, mais c’est fragile.
-	// Même remarque pour les `input` du tableau.
-	let d = $derived(donnees.ventes[data.espece.id]!.consommation!.affinage!);
+	const { form, errors, message, enhance } = nestedSpaForm(
+		defaults(zod4(schema)),
+		{
+			validators: zod4(schema),
+			onUpdate: async ({ form }) => {
+				if (form.valid) {
+					try {
+						merge(data.declaration.donnees.ventes, {
+							[data.espece.id]: { consommation: { affinage: form.data } },
+						});
+						data.declaration.donnees = await submitDeclarationUpdate(
+							data.declaration.id,
+							data.declaration.donnees,
+						);
+					} catch (err) {
+						console.error(err);
+					}
+				}
+			},
+			onUpdated({ form }) {
+				if (form.valid) {
+					goto("./2");
+				}
+			},
+		},
+	);
 </script>
 
 <div>
 	<p class="fr-text--xl">
 		Quelle part de la production a été affinée avant la vente ?
 	</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	{#if $message}<h3>{$message}</h3>{/if}
+
+	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
 				<div class="fr-table fr-table--lg">
@@ -54,48 +86,36 @@
 												consommation
 											</td>
 											<td>
-												<input
-													class="fr-input"
-													type="text"
-													value={d.claires!.part}
-													onchange={(v) =>
-														(d.claires!.part = toNumber(v.currentTarget.value))}
-												/>
+												<InputGroup
+													type="number"
+													bind:value={$form.claires.part}
+													errors={$errors.claires?.part}
+												></InputGroup>
 											</td>
 											<td>
-												<input
-													class="fr-input"
-													type="text"
-													value={d.parcs!.part}
-													onchange={(v) =>
-														(d.parcs!.part = toNumber(v.currentTarget.value))}
-												/>
+												<InputGroup
+													type="number"
+													bind:value={$form.parcs.part}
+													errors={$errors.parcs?.part}
+												></InputGroup>
 											</td>
 										</tr>
 
 										<tr>
 											<td>Surface d’affinage (ha)</td>
 											<td>
-												<input
-													class="fr-input"
-													type="text"
-													value={d?.claires?.surfaceHa}
-													onchange={(v) =>
-														(d.claires!.surfaceHa = toNumber(
-															v.currentTarget.value,
-														))}
-												/>
+												<InputGroup
+													type="number"
+													bind:value={$form.claires.surfaceHa}
+													errors={$errors.claires?.surfaceHa}
+												></InputGroup>
 											</td>
 											<td>
-												<input
-													class="fr-input"
-													type="text"
-													value={d.parcs?.surfaceHa}
-													onchange={(v) =>
-														(d.parcs!.surfaceHa = toNumber(
-															v.currentTarget.value,
-														))}
-												/>
+												<InputGroup
+													type="number"
+													bind:value={$form.parcs.surfaceHa}
+													errors={$errors.parcs?.surfaceHa}
+												></InputGroup>
 											</td>
 										</tr>
 									</tbody>
@@ -106,7 +126,12 @@
 				</div>
 			{/snippet}
 		</Fieldset>
-
 		<NavigationLinks prevHref="./intro" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug
+	{form}
+	{errors}
+	data={data.declaration.donnees.ventes[data.espece.id]}
+></FormDebug>
