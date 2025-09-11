@@ -19,7 +19,7 @@
 		<label class="fr-label" for={id}>{@render label()}</label>
 		<div
 			class="fr-messages-group"
-			id="checkbox-1-messages"
+			id="checkbox-{id}-messages"
 			aria-live="polite"
 		></div>
 	</div>

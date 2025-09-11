@@ -81,7 +81,7 @@
 					{#snippet input(id)}
 						<input
 							type="checkbox"
-							aria-describedby="checkbox-1-messages"
+							aria-describedby="checkbox-{id}-messages"
 							{id}
 							value={aleaId}
 							bind:group={$form.aleas}
