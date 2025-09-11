@@ -1,78 +1,130 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group.svelte";
-	import { DIPLOMES, REGIMES_SOCIAUX } from "$lib/constants";
+	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import {
+		DIPLOMES,
+		DIPLOMES_IDS,
+		REGIMES_SOCIAUX,
+		REGIMES_SOCIAUX_IDS,
+	} from "$lib/constants";
+	import { nestedSpaForm } from "$lib/form-utils";
+	import { Percent } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
-	let dirigeant = $derived(
-		// TODO hors manipulation de l’URL, le dirigeant devrait exister
-		// mais il faut gérer ce cas correctement
-		donnees.equipe.dirigeants.find((d) => d.id === data.dirigeantId)!,
-	);
+	const schema = z.object({
+		statut: z
+			.literal(["salarie", "nonSalarie"])
+			.default(data.dirigeant.statut ?? ("" as "salarie")),
+		tempsTravail: Percent.default(
+			data.dirigeant.tempsTravail ?? (null as unknown as number),
+		),
+		diplome: z
+			.enum(DIPLOMES_IDS)
+			.default(data.dirigeant.diplome ?? ("" as "aucun")),
+		regimeSocial: z
+			.enum(REGIMES_SOCIAUX_IDS)
+			.default(data.dirigeant.regimeSocial ?? ("" as "general")),
+	});
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		if (dirigeant.tempsTravail == null) dirigeant.tempsTravail = undefined;
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		// TODO: validation
-		goto("../../../recapitulatif");
-	};
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.dirigeant, { ...form.data });
+
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("../../../recapitulatif");
+			}
+		},
+	});
 </script>
 
 <div>
 	<p class="fr-text--xl">Son statut et ses qualifications</p>
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
+	<form method="POST" use:enhance>
+		<Fieldset hasError={!!$errors?.statut}>
 			{#snippet legend()}Statut{/snippet}
-			{#snippet inputs()}
-				<RadioGroup
-					name="radio-inline"
-					id="radio-salarie"
-					inline
-					value="salarie"
-					bind:group={dirigeant.statut}
-				>
+			{#snippet inputs(fieldsetId)}
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value="salarie"
+							bind:group={$form.statut}
+						/>
+					{/snippet}
 					{#snippet label()}Salarié{/snippet}
 				</RadioGroup>
 
-				<RadioGroup
-					name="radio-inline"
-					id="radio-non-salarie"
-					inline
-					value="nonSalarie"
-					bind:group={dirigeant.statut}
-				>
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value="nonSalarie"
+							bind:group={$form.statut}
+						/>
+					{/snippet}
 					{#snippet label()}Non salarié{/snippet}
 				</RadioGroup>
+
+				{#if $errors?.statut}
+					<div
+						class="fr-messages-group"
+						id="{fieldsetId}-messages"
+						aria-live="polite"
+					>
+						<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
+							{$errors.statut}
+						</p>
+					</div>
+				{/if}
 			{/snippet}
 		</Fieldset>
+
 		<Fieldset>
 			{#snippet inputs()}
 				<InputGroup
 					type="number"
-					min={0}
-					max={100}
-					bind:value={dirigeant.tempsTravail}
+					bind:value={$form.tempsTravail}
+					errors={$errors?.tempsTravail}
 				>
 					{#snippet label()}Temps de travail (%){/snippet}
 				</InputGroup>
 
 				<div class="fr-fieldset__element">
-					<div class="fr-select-group">
+					<div
+						class={[
+							"fr-select-group",
+							$errors?.diplome && "fr-select-group--error",
+						]}
+					>
 						<label class="fr-label" for="diplome">
 							Diplôme le plus élevé obtenu
 						</label>
@@ -81,45 +133,68 @@
 							aria-describedby="diplome-messages"
 							id="diplome"
 							name="diplome"
-							bind:value={dirigeant.diplome}
+							bind:value={$form.diplome}
 						>
-							<option value={undefined} selected disabled>
+							<option value="" selected disabled>
 								Sélectionnez une option
 							</option>
 							{#each DIPLOMES as d (d.id)}
 								<option value={d.id}>{d.label}</option>
 							{/each}
 						</select>
-						<div
-							class="fr-messages-group"
-							id="diplome-messages"
-							aria-live="polite"
-						></div>
+						{#if $errors?.diplome}
+							<div
+								class="fr-messages-group"
+								id="diplome-messages"
+								aria-live="polite"
+							>
+								<p
+									class="fr-message fr-message--error"
+									id="diplome-messages-error"
+								>
+									{$errors.diplome}
+								</p>
+							</div>
+						{/if}
 					</div>
 				</div>
 
 				<div class="fr-fieldset__element">
-					<div class="fr-select-group">
+					<div
+						class={[
+							"fr-select-group",
+							$errors?.regimeSocial && "fr-select-group--error",
+						]}
+					>
 						<label class="fr-label" for="regime">Régime social</label>
 						<select
 							class="fr-select"
 							aria-describedby="regime-messages"
 							id="regime"
 							name="regime"
-							bind:value={dirigeant.regimeSocial}
+							bind:value={$form.regimeSocial}
 						>
-							<option value={undefined} selected disabled>
+							<option value="" selected disabled>
 								Sélectionnez une option
 							</option>
 							{#each REGIMES_SOCIAUX as r (r.id)}
 								<option value={r.id}>{r.label}</option>
 							{/each}
 						</select>
-						<div
-							class="fr-messages-group"
-							id="regime-messages"
-							aria-live="polite"
-						></div>
+						{#if $errors?.regimeSocial}
+							<div
+								class="fr-messages-group"
+								id="regime-messages"
+								aria-live="polite"
+							>
+								<p
+									class="fr-message fr-message--error"
+									id="regime-messages-error"
+								>
+									{$errors.regimeSocial}
+								</p>
+							</div>
+						{/if}
 					</div>
 				</div>
 			{/snippet}
@@ -128,3 +203,5 @@
 		<NavigationLinks prevHref="./2" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>

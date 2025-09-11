@@ -1,107 +1,169 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group.svelte";
+	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { COUNTRIES } from "$lib/constants";
+	import { nestedSpaForm } from "$lib/form-utils";
+	import { Year } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	const donnees = $state(cloneDeep(data.declaration.donnees));
+	const schema = z.object({
+		prenomNom: z
+			.string()
+			.min(1)
+			.default(data.dirigeant.prenomNom ?? ""),
+		anneeNaissance: Year.min(1900)
+			.max(data.annee)
+			.default(data.dirigeant.anneeNaissance ?? (null as unknown as number)),
+		nationalite: z
+			.string()
+			.length(2)
+			.default(data.dirigeant.nationalite ?? ""),
+		sexe: z
+			.literal(["M", "F"])
+			.default(data.dirigeant.sexe ?? (null as unknown as "M" | "F")),
+	});
 
-	const dirigeant = $derived(
-		// TODO hors manipulation de l’URL, le dirigeant devrait exister
-		// mais il faut gérer ce cas correctement
-		donnees.equipe.dirigeants.find((d) => d.id === data.dirigeantId)!,
-	);
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.dirigeant, { ...form.data });
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		if (dirigeant.anneeNaissance == null) dirigeant.anneeNaissance = undefined;
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./3");
-	};
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("./3");
+			}
+		},
+	});
 </script>
 
 <div>
 	<p class="fr-text--xl">Son identité</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
-				<InputGroup type="text" bind:value={dirigeant.prenomNom}>
+				<InputGroup
+					type="text"
+					bind:value={$form.prenomNom}
+					errors={$errors?.prenomNom}
+				>
 					{#snippet label()}Nom et prénom{/snippet}
 				</InputGroup>
 
 				<InputGroup
 					type="number"
-					min={1900}
-					max={data.annee}
-					bind:value={dirigeant.anneeNaissance}
+					bind:value={$form.anneeNaissance}
+					errors={$errors?.anneeNaissance}
 				>
 					{#snippet label()}Année de naissance{/snippet}
 				</InputGroup>
 
 				<div class="fr-fieldset__element">
-					<div class="fr-select-group">
+					<div
+						class={[
+							"fr-select-group",
+							$errors?.nationalite && "fr-select-group--error",
+						]}
+					>
 						<label class="fr-label" for="select-1">Nationalité</label>
 						<select
 							class="fr-select"
 							aria-describedby="select-1-messages"
 							id="select-1"
-							name="select-1"
-							bind:value={dirigeant.nationalite}
+							bind:value={$form.nationalite}
 						>
-							<option value={undefined} selected disabled>
+							<option value="" selected disabled>
 								Sélectionnez une option
 							</option>
 							{#each COUNTRIES as c (c.iso_alpha2)}
 								<option value={c.iso_alpha2}>{c.label}</option>
 							{/each}
 						</select>
-						<div
-							class="fr-messages-group"
-							id="select-1-messages"
-							aria-live="polite"
-						></div>
+						{#if $errors?.nationalite}
+							<div
+								class="fr-messages-group"
+								id="select-1-messages"
+								aria-live="polite"
+							>
+								<p
+									class="fr-message fr-message--error"
+									id="select-1-message-error"
+								>
+									{$errors.nationalite}
+								</p>
+							</div>
+						{/if}
 					</div>
 				</div>
 			{/snippet}
 		</Fieldset>
 
-		<Fieldset>
+		<Fieldset hasError={!!$errors?.sexe}>
 			{#snippet legend()}Sexe{/snippet}
-			{#snippet inputs()}
-				<RadioGroup
-					name="radio-inline"
-					id="radio-f"
-					inline
-					value="F"
-					bind:group={dirigeant.sexe}
-				>
+			{#snippet inputs(fieldsetId)}
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value="F"
+							bind:group={$form.sexe}
+						/>
+					{/snippet}
 					{#snippet label()}Féminin{/snippet}
 				</RadioGroup>
 
-				<RadioGroup
-					name="radio-inline"
-					id="radio-m"
-					inline
-					value="M"
-					bind:group={dirigeant.sexe}
-				>
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value="M"
+							bind:group={$form.sexe}
+						/>
+					{/snippet}
 					{#snippet label()}Masculin{/snippet}
 				</RadioGroup>
+
+				{#if $errors?.sexe}
+					<div
+						class="fr-messages-group"
+						id="{fieldsetId}-messages"
+						aria-live="polite"
+					>
+						<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
+							{$errors.sexe}
+						</p>
+					</div>
+				{/if}
 			{/snippet}
 		</Fieldset>
 		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
