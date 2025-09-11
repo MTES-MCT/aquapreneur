@@ -13,25 +13,28 @@
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { COUNTRIES } from "$lib/constants";
 	import { nestedSpaForm } from "$lib/form-utils";
-	import { Year } from "$lib/types";
+	import {
+		ERR_MUST_CHOOSE_ANSWER,
+		ERR_REQUIRED,
+		NonEmptyString,
+		Year,
+	} from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	const schema = z.object({
-		prenomNom: z
-			.string()
-			.min(1)
-			.default(data.dirigeant.prenomNom ?? ""),
-		anneeNaissance: Year.min(1900)
-			.max(data.annee)
-			.default(data.dirigeant.anneeNaissance ?? (null as unknown as number)),
+		prenomNom: NonEmptyString.default(data.dirigeant.prenomNom ?? ""),
+		anneeNaissance: Year.max(
+			data.annee,
+			"Veuillez renseigner une année antérieure à la date de la déclaration",
+		).default(data.dirigeant.anneeNaissance ?? (null as unknown as number)),
 		nationalite: z
-			.string()
-			.length(2)
+			.string(ERR_REQUIRED)
+			.length(2, ERR_MUST_CHOOSE_ANSWER)
 			.default(data.dirigeant.nationalite ?? ""),
 		sexe: z
-			.literal(["M", "F"])
+			.literal(["M", "F"], ERR_MUST_CHOOSE_ANSWER)
 			.default(data.dirigeant.sexe ?? (null as unknown as "M" | "F")),
 	});
 

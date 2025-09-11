@@ -520,7 +520,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toContain(
-			"Invalid input: expected number, received string\n  → at dirigeant_es[0].annee_naissance",
+			"Veuillez renseigner une année (ex : 1981)\n  → at dirigeant_es[0].annee_naissance",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {
@@ -538,7 +538,7 @@ describe("Tests de validation des champs dirigeant_es", async () => {
 		});
 		expect(response.status).toBe(400);
 		expect((await response.json()).message).toContain(
-			"Invalid input: expected number, received string\n  → at dirigeant_es[0].annee_naissance",
+			"Veuillez renseigner une année (ex : 1981)\n  → at dirigeant_es[0].annee_naissance",
 		);
 
 		response = await post(`/api/v0/bilan/cgo/${dummySiret1}`, {

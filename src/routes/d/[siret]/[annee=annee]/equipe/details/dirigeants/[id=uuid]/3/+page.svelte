@@ -18,23 +18,23 @@
 		REGIMES_SOCIAUX_IDS,
 	} from "$lib/constants";
 	import { nestedSpaForm } from "$lib/form-utils";
-	import { Percent } from "$lib/types";
+	import { ERR_MUST_CHOOSE_ANSWER, Percent } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	const schema = z.object({
 		statut: z
-			.literal(["salarie", "nonSalarie"])
+			.literal(["salarie", "nonSalarie"], ERR_MUST_CHOOSE_ANSWER)
 			.default(data.dirigeant.statut ?? ("" as "salarie")),
 		tempsTravail: Percent.default(
 			data.dirigeant.tempsTravail ?? (null as unknown as number),
 		),
 		diplome: z
-			.enum(DIPLOMES_IDS)
+			.enum(DIPLOMES_IDS, ERR_MUST_CHOOSE_ANSWER)
 			.default(data.dirigeant.diplome ?? ("" as "aucun")),
 		regimeSocial: z
-			.enum(REGIMES_SOCIAUX_IDS)
+			.enum(REGIMES_SOCIAUX_IDS, ERR_MUST_CHOOSE_ANSWER)
 			.default(data.dirigeant.regimeSocial ?? ("" as "general")),
 	});
 

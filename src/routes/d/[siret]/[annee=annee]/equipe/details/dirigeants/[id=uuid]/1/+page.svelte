@@ -11,6 +11,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { nestedSpaForm } from "$lib/form-utils";
+	import { Bool } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -19,9 +20,9 @@
 		// Voir https://superforms.rocks/default-values#changing-a-default-value
 		// on veut une valeur initiale nulle, sans pour autant rendre le champ
 		// nullable
-		nouveauDirigeant: z
-			.boolean()
-			.default(data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean)),
+		nouveauDirigeant: Bool.default(
+			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
+		),
 	});
 
 	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {

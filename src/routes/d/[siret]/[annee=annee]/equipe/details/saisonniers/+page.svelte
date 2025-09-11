@@ -11,6 +11,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { Bool } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -18,7 +19,9 @@
 	const equipe = data.declaration.donnees.equipe;
 
 	const schema = z.object({
-		aSaisonniers: z.boolean().default(!!equipe.saisonniers),
+		aSaisonniers: Bool.default(
+			equipe.saisonniers ? true : (null as unknown as boolean),
+		),
 	});
 
 	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
