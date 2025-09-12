@@ -1,31 +1,30 @@
 #!/usr/bin/env -S npx vite-node --options.transformMode.ssr="/.*/"
 import { input } from "@inquirer/prompts";
-import { type } from "arktype";
 import colors from "yoctocolors";
+import { z } from "zod";
 
 import { db } from "$lib/server/db";
 import { jetonsApi } from "$lib/server/db/schema/api";
 import { jetonsApiInsertSchema } from "$lib/server/db/types";
 import { generateApiToken } from "$lib/server/utils";
 
-const Email = type("string.trim").to("string.email & string.lower");
-const Siret = type("string.digits == 14");
+import { Siret } from "$lib/types";
 
 async function main() {
 	try {
 		const cleanSiret = (str: string) => str.trim().replace(/[^0-9]/g, "");
 
-		const nom = await input({
+		const nomInput = await input({
 			message: "Saisir le nom du partenaire :",
 			required: true,
 		});
 
-		const siret = await input({
+		const siretInput = await input({
 			message: "Saisir le numéro SIRET du partenaire :",
 			required: true,
 			validate: (str) => {
-				const parsed = Siret(str);
-				return parsed instanceof type.errors ? parsed.summary : true;
+				const parsed = Siret.safeParse(str);
+				return parsed.success ? true : z.prettifyError(parsed.error);
 			},
 		});
 
@@ -33,8 +32,8 @@ async function main() {
 			message: "Saisir le courriel de contact du partenaire :",
 			required: true,
 			validate: (str) => {
-				const parsed = Email(str);
-				return parsed instanceof type.errors ? parsed.summary : true;
+				const parsed = z.email().trim().lowercase().safeParse(str);
+				return parsed.success ? true : z.prettifyError(parsed.error);
 			},
 		});
 
@@ -44,20 +43,22 @@ async function main() {
 
 		const { token, digest } = generateApiToken();
 
-		const parsingResult = jetonsApiInsertSchema({
+		const parsingResult = jetonsApiInsertSchema.safeParse({
 			hachage: digest,
-			nomPartenaire: nom.trim(),
-			siretPartenaire: cleanSiret(siret),
+			nomPartenaire: nomInput.trim(),
+			siretPartenaire: cleanSiret(siretInput),
 			courrielPartenaire: courriel.trim(),
 		});
 
-		if (parsingResult instanceof type.errors) {
-			console.error(colors.red(colors.bold(parsingResult.summary)));
+		if (!parsingResult.success) {
+			console.error(
+				colors.red(colors.bold(z.prettifyError(parsingResult.error))),
+			);
 			process.exitCode = 1;
 			return;
 		}
 
-		await db.insert(jetonsApi).values(parsingResult);
+		await db.insert(jetonsApi).values(parsingResult.data);
 
 		console.log();
 		console.log(

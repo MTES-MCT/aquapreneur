@@ -1,47 +1,60 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-	import defaultsDeep from "lodash/defaultsDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group.svelte";
+	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { Bool } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	const equipe = data.declaration.donnees.equipe;
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		if (aSaisonniers) {
-			defaultsDeep(donnees, {
-				equipe: {
-					saisonniers: {
-						femmes: { cdd: {}, interim: {} },
-						hommes: { cdd: {}, interim: {} },
-					},
-				},
-			});
-		} else {
-			delete donnees.equipe.saisonniers;
-		}
+	const schema = z.object({
+		aSaisonniers: Bool.default(
+			equipe.saisonniers ? true : (null as unknown as boolean),
+		),
+	});
 
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		if (data.declaration.donnees.equipe.saisonniers) {
-			goto("./saisonniers/1");
-		} else {
-			goto("../recapitulatif");
-		}
-	};
-
-	let aSaisonniers: boolean | undefined = $state(!!donnees.equipe.saisonniers);
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					if (form.data.aSaisonniers) {
+						merge(equipe, {
+							saisonniers: {},
+						});
+					} else {
+						delete equipe.saisonniers;
+					}
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				if (data.declaration.donnees.equipe.saisonniers) {
+					goto("./saisonniers/1");
+				} else {
+					goto("../recapitulatif");
+				}
+			}
+		},
+	});
 </script>
 
 <div>
@@ -54,31 +67,47 @@
 		par exemple à Noël. Sont concernés les CDD, intérimaires, stagiaires,
 		personnel de groupements d’employeurs…
 	</p>
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
-			{#snippet inputs()}
-				<RadioGroup
-					name="radio-inline"
-					id="radio-oui"
-					inline
-					value={true}
-					bind:group={aSaisonniers}
-				>
+
+	<form method="POST" use:enhance>
+		<Fieldset hasError={!!$errors?.aSaisonniers}>
+			{#snippet inputs(id)}
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value={true}
+							bind:group={$form.aSaisonniers}
+						/>
+					{/snippet}
 					{#snippet label()}Oui{/snippet}
 				</RadioGroup>
-
-				<RadioGroup
-					name="radio-inline"
-					id="radio-non"
-					inline
-					value={false}
-					bind:group={aSaisonniers}
-				>
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value={false}
+							bind:group={$form.aSaisonniers}
+						/>
+					{/snippet}
 					{#snippet label()}Non{/snippet}
 				</RadioGroup>
+
+				{#if $errors?.aSaisonniers}
+					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+						<p class="fr-message fr-message--error" id="{id}-errors">
+							{$errors.aSaisonniers}
+						</p>
+					</div>
+				{/if}
 			{/snippet}
 		</Fieldset>
 
 		<NavigationLinks nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>

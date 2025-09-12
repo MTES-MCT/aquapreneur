@@ -1,5 +1,3 @@
-import "./src/lib/arktype.config.js";
-
 import { sentrySvelteKit } from "@sentry/sveltekit";
 import { defineConfig } from "vite";
 

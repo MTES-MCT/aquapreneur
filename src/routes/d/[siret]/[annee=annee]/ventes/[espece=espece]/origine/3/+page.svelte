@@ -1,34 +1,63 @@
 <script lang="ts">
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ORIGINES_NAISSAIN } from "$lib/constants";
-	import { dVentes } from "$lib/declaration-utils";
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
-	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
+	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { Percent, PositiveNumber } from "$lib/types";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(
-		JSON.parse(JSON.stringify(data.declaration.donnees)),
-	) as DeclarationSchema;
+	const origine =
+		data.declaration.donnees.ventes[data.espece.id]!.consommation?.origine;
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		dVentes(donnees, data.espece.id).consommation.origineValidé = true;
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("../../recapitulatif");
-	};
+	const schema = z.object({
+		captage: z.object({
+			part: Percent.default(origine?.captage?.part ?? 0),
+			value: PositiveNumber.default(origine?.captage?.value ?? 0),
+		}),
+		ecloserieDiploide: z.object({
+			part: Percent.default(origine?.ecloserieDiploide?.part ?? 0),
+			value: PositiveNumber.default(origine?.ecloserieDiploide?.value ?? 0),
+		}),
+		ecloserieTriploide: z.object({
+			part: Percent.default(origine?.ecloserieTriploide?.part ?? 0),
+			value: PositiveNumber.default(origine?.ecloserieTriploide?.value ?? 0),
+		}),
+	});
 
-	// TODO La catégorie `origine` a été validée dans ./intro ; on considère
-	// pour l’instant qu’elle est bien définie, mais c’est fragile.
-	let d = $derived(donnees.ventes[data.espece.id]!.consommation!.origine!);
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.declaration.donnees.ventes, {
+						[data.espece.id]: { consommation: { origine: form.data } },
+					});
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("../../recapitulatif");
+			}
+		},
+	});
 </script>
 
 <div>
@@ -42,7 +71,7 @@
 		quantités vendues.
 	</p>
 
-	<form method="POST" onsubmit={handleSubmit}>
+	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
 				<div class="fr-table fr-table--lg">
@@ -67,15 +96,19 @@
 										{#each ORIGINES_NAISSAIN as origine (origine.id)}
 											<tr>
 												<td>{origine.label}</td>
-												<td><input class="fr-input" disabled /></td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														value={d[origine.id]}
-														onchange={(v) =>
-															(d[origine.id] = toNumber(v.currentTarget.value))}
-													/>
+													<InputGroup
+														type="number"
+														bind:value={$form[origine.id].part}
+														errors={$errors[origine.id]?.part}
+													></InputGroup>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={$form[origine.id].value}
+														errors={$errors[origine.id]?.value}
+													></InputGroup>
 												</td>
 											</tr>
 										{/each}
@@ -90,3 +123,9 @@
 		<NavigationLinks prevHref="./2" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug
+	{form}
+	{errors}
+	data={data.declaration.donnees.ventes[data.espece.id]}
+></FormDebug>

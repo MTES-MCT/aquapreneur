@@ -17,7 +17,6 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		dVentes(donnees, data.espece.id).consommation.validé = true;
 		data.declaration.donnees = await submitDeclarationUpdate(
 			data.declaration.id,
 			donnees,

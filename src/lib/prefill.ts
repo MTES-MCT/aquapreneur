@@ -97,7 +97,7 @@ export const prefillDeclaration = async (
 	// const concessions = await getConcessions(etablissement.siren);
 	const d = bilan?.donnees;
 
-	const declaration = DeclarationSchema.assert({
+	const declaration = DeclarationSchema.parse({
 		etapes: {
 			entrepriseValidee: false,
 			concessionValidee: false,

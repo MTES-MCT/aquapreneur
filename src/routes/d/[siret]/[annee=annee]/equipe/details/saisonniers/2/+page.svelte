@@ -1,35 +1,78 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_CONTRAT } from "$lib/constants";
-	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
+	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { PositiveInt } from "$lib/types";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	const donnees = $state(cloneDeep(data.declaration.donnees));
+	// TODO : à remplacer par une version mettant les types à jour.
+	merge(data.declaration.donnees.equipe, {
+		saisonniers: {
+			hommes: { cdd: {}, interim: {} },
+		},
+	});
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		// TODO: marquer comme validé
-		goto("../../recapitulatif");
-	};
+	const hommes = data.declaration.donnees.equipe.saisonniers!.hommes!;
+
+	const schema = z.object({
+		cdd: z.object({
+			nbJours: PositiveInt.default(
+				hommes.cdd!.nbJours ?? (null as unknown as number),
+			),
+			nbPersonnes: PositiveInt.default(
+				hommes.cdd!.nbPersonnes ?? (null as unknown as number),
+			),
+		}),
+		interim: z.object({
+			nbJours: PositiveInt.default(
+				hommes.interim!.nbJours ?? (null as unknown as number),
+			),
+			nbPersonnes: PositiveInt.default(
+				hommes.interim!.nbPersonnes ?? (null as unknown as number),
+			),
+		}),
+	});
+
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(hommes, { ...form.data });
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("../../recapitulatif");
+			}
+		},
+	});
 </script>
 
 <div>
 	<p class="fr-text--xl">
 		Combien d’hommes saisonniers ont travaillé pour l’entreprise ?
 	</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
 				<div class="fr-table fr-table--lg">
@@ -49,27 +92,17 @@
 											<tr>
 												<td>{c.label}</td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														value={donnees.equipe.saisonniers!.hommes![c.id]!
-															.nbPersonnes}
-														onchange={(v) =>
-															(donnees.equipe.saisonniers!.hommes![
-																c.id
-															]!.nbPersonnes = toNumber(v.currentTarget.value))}
+													<InputGroup
+														type="number"
+														bind:value={$form[c.id].nbPersonnes}
+														errors={$errors?.[c.id]?.nbPersonnes}
 													/>
 												</td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														value={donnees.equipe.saisonniers!.hommes![c.id]!
-															.nbJours}
-														onchange={(v) =>
-															(donnees.equipe.saisonniers!.hommes![
-																c.id
-															]!.nbJours = toNumber(v.currentTarget.value))}
+													<InputGroup
+														type="number"
+														bind:value={$form[c.id].nbJours}
+														errors={$errors?.[c.id]?.nbJours}
 													/>
 												</td>
 											</tr>
@@ -85,3 +118,5 @@
 		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>

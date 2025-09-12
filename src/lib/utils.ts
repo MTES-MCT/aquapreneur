@@ -37,7 +37,7 @@ export const submitDeclarationUpdate = async (
 		body: JSON.stringify(donnees),
 	});
 	const res = await req.json();
-	return DeclarationSchema.assert(res.donnees);
+	return DeclarationSchema.parse(res.donnees);
 };
 
 export const deepClean = (obj: object) => {

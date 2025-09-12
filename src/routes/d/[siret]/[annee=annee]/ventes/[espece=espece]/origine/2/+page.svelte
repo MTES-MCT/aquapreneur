@@ -1,44 +1,63 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
+	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { Percent } from "$lib/types";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	const bio =
+		data.declaration.donnees.ventes[data.espece.id]!.consommation?.bio;
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./3");
-	};
+	const schema = z.object({
+		part: Percent.default(bio?.part ?? 0),
+	});
 
-	// TODO La catégorie `bio` a été validée dans ./intro ; on considère
-	// pour l’instant qu’elle est bien définie, mais c’est fragile.
-	let d = $derived(donnees.ventes[data.espece.id]!.consommation!.bio!);
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.declaration.donnees.ventes, {
+						[data.espece.id]: { consommation: { bio: form.data } },
+					});
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
+		},
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("./3");
+			}
+		},
+	});
 </script>
 
 <div>
 	<p class="fr-text--xl">Quelle part de la production est certifiée Bio ?</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	<form use:enhance>
 		<Fieldset>
-			{#snippet inputs(id)}
+			{#snippet inputs()}
 				<InputGroup
-					name="part-bio"
-					type="text"
-					fieldsetId={id}
-					value={d.part}
-					onChange={(v) => (d.part = toNumber(v.currentTarget.value))}
+					type="number"
+					bind:value={$form.part}
+					errors={$errors?.part as string[]}
+					required
 				>
 					{#snippet label()}Part certifiée Agriculture biologique (AB) (%)
 						<span class="fr-hint-text">
@@ -51,3 +70,9 @@
 		<NavigationLinks prevHref="./1" nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug
+	{form}
+	{errors}
+	data={data.declaration.donnees.ventes[data.espece.id]}
+></FormDebug>

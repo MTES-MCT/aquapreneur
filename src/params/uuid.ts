@@ -1,5 +1,5 @@
-import { type } from "arktype";
+import { z } from "zod";
 
 export function match(value) {
-	return type("string.uuid.v4").allows(value);
+	return z.uuid({ version: "v4" }).safeParse(value).success;
 }

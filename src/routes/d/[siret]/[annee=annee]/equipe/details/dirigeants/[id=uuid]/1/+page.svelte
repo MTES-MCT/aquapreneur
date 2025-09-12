@@ -1,38 +1,52 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import { goto } from "$app/navigation";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group.svelte";
+	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import { nestedSpaForm } from "$lib/form-utils";
+	import { Bool } from "$lib/types";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	const donnees = $state(cloneDeep(data.declaration.donnees));
+	const schema = z.object({
+		// Voir https://superforms.rocks/default-values#changing-a-default-value
+		// on veut une valeur initiale nulle, sans pour autant rendre le champ
+		// nullable
+		nouveauDirigeant: Bool.default(
+			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
+		),
+	});
 
-	const dirigeant = $derived(
-		donnees.equipe.dirigeants.find((d) => d.id === data.dirigeantId) ?? {
-			id: data.dirigeantId,
+	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
+		validators: zod4(schema),
+		onUpdate: async ({ form }) => {
+			if (form.valid) {
+				try {
+					merge(data.dirigeant, { ...form.data });
+
+					data.declaration.donnees = await submitDeclarationUpdate(
+						data.declaration.id,
+						data.declaration.donnees,
+					);
+				} catch (err) {
+					console.error(err);
+				}
+			}
 		},
-	);
-
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		if (
-			donnees.equipe.dirigeants.find((d) => d.id === data.dirigeantId) == null
-		) {
-			donnees.equipe.dirigeants.push(dirigeant);
-		}
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
-		goto("./2");
-	};
+		onUpdated({ form }) {
+			if (form.valid) {
+				goto("./2");
+			}
+		},
+	});
 </script>
 
 <div>
@@ -40,31 +54,46 @@
 		Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
 		{data.annee} ?
 	</p>
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
-			{#snippet inputs()}
-				<RadioGroup
-					name="radio-inline"
-					id="radio-oui"
-					inline
-					value={true}
-					bind:group={dirigeant.nouveauDirigeant}
-				>
+	<form method="POST" use:enhance>
+		<Fieldset hasError={!!$errors?.nouveauDirigeant}>
+			{#snippet inputs(id)}
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value={true}
+							bind:group={$form.nouveauDirigeant}
+						/>
+					{/snippet}
 					{#snippet label()}Oui{/snippet}
 				</RadioGroup>
-
-				<RadioGroup
-					name="radio-inline"
-					id="radio-non"
-					inline
-					value={false}
-					bind:group={dirigeant.nouveauDirigeant}
-				>
+				<RadioGroup inline>
+					{#snippet input(id)}
+						<input
+							{id}
+							type="radio"
+							aria-describedby="radio-{id}-messages"
+							value={false}
+							bind:group={$form.nouveauDirigeant}
+						/>
+					{/snippet}
 					{#snippet label()}Non{/snippet}
 				</RadioGroup>
+
+				{#if $errors?.nouveauDirigeant}
+					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+						<p class="fr-message fr-message--error" id="{id}-errors">
+							{$errors.nouveauDirigeant}
+						</p>
+					</div>
+				{/if}
 			{/snippet}
 		</Fieldset>
 
 		<NavigationLinks nextIsButton cantAnswerBtn />
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>

@@ -1,7 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
 import { ESPECES, type ESPECES_SLUG } from "$lib/constants";
-import { dVentes } from "$lib/declaration-utils";
 
 export const load = async ({ params, parent }) => {
 	const { etablissement, declaration } = await parent();
@@ -9,10 +8,10 @@ export const load = async ({ params, parent }) => {
 
 	const espece = ESPECES.find((e) => e.slug === (especeSlug as ESPECES_SLUG))!; // assuré par le ParamsMatcher
 
-	const especeId = espece.id;
-	if (!dVentes(declaration.donnees, especeId).active()) {
+	if (declaration.donnees.ventes[espece.id] == null) {
 		redirect(307, "../");
 	}
+
 	return {
 		wide: true,
 		espece,
