@@ -14,7 +14,6 @@
 	const { data } = $props();
 
 	const schema = z.object({
-		// Voir https://superforms.rocks/default-values#changing-a-default-value
 		nouveauDirigeant: Bool.default(
 			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
 		),
@@ -22,19 +21,19 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./2",
-		(form) => {
-			merge(
-				data.declaration.donnees.equipe.dirigeants.find(
-					(d) => d.id === data.dirigeant.id,
-				),
-				{
-					...form.data,
-				},
-			);
+
+		(statut) => {
+			data.progressionDirigeant.statut = statut;
 			return data.declaration;
 		},
+
+		(form) => {
+			merge(data.dirigeant, form.data);
+			return data.declaration;
+		},
+
 		defaults(zod4(schema)),
 	);
 </script>
@@ -88,4 +87,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.dirigeant}
+	progression={data.progressionDirigeant}
+></FormDebug>

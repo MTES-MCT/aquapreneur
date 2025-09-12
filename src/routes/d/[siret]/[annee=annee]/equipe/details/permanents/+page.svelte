@@ -12,29 +12,35 @@
 
 	const { data } = $props();
 
-	const equipe = data.declaration.donnees.equipe;
-
 	const schema = z.object({
-		aPermanents: z.boolean().default(!!equipe.permanents),
+		aPermanents: z.boolean().default(!!data.equipe.permanents),
 	});
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		(form) => !form.data.aPermanents,
+
 		() =>
 			data.declaration.donnees.equipe.permanents ?
 				"./permanents/1"
 			:	"../recapitulatif",
+
+		(statut) => {
+			data.progressionEquipe.permanents = statut;
+			return data.declaration;
+		},
+
 		(form) => {
 			if (form.data.aPermanents) {
-				merge(equipe, {
+				merge(data.equipe, {
 					permanents: {},
 				});
 			} else {
-				delete equipe.permanents;
+				delete data.equipe.permanents;
 			}
 			return data.declaration;
 		},
+
 		defaults(zod4(schema)),
 	);
 </script>
@@ -93,4 +99,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.permanents}
+	progression={data.progressionEquipe}
+></FormDebug>

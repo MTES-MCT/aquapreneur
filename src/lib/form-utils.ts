@@ -3,6 +3,7 @@ import { type ZodValidationSchema, zod4 } from "sveltekit-superforms/adapters";
 
 import { goto } from "$app/navigation";
 
+import { type StatutProgression } from "./schemas/declaration-schema";
 import { submitDeclarationUpdate } from "./utils";
 
 import type { DeclarationEntry } from "./server/db/types";
@@ -19,9 +20,10 @@ export function prepareForm<
 	In extends Record<string, unknown> = T,
 >(
 	schema: S,
-	declaration: DeclarationEntry,
+	isLastStep: (form: SuperValidated<T, M, In>) => boolean,
 	getNextPage: () => string,
-	updateData: <F extends SuperValidated<T, M, In>>(form: F) => DeclarationEntry,
+	updateProgress: (statut: StatutProgression) => DeclarationEntry,
+	updateData: (form: SuperValidated<T, M, In>) => DeclarationEntry,
 	...params: Parameters<typeof superForm<T, M, In>>
 ) {
 	return superForm<T, M, In>(params[0], {
@@ -29,21 +31,46 @@ export function prepareForm<
 		SPA: true,
 		dataType: "json",
 		resetForm: false,
+
+		onSubmit: async ({
+			submitter,
+			cancel,
+		}: {
+			submitter: HTMLElement | null;
+			cancel: () => void;
+		}) => {
+			if ((submitter as HTMLButtonElement).name === "cantAnswer") {
+				const declaration = updateProgress("passage producteur");
+				try {
+					await submitDeclarationUpdate(declaration);
+					goto(getNextPage());
+				} catch (err) {
+					console.error(err);
+				}
+				cancel();
+			}
+		},
+
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
-				declaration = updateData<SuperValidated<T, M, In>>(form);
+				let declaration = updateData(form);
+				declaration = updateProgress(
+					isLastStep(form) ? "validé comptable" : "en cours comptable",
+				);
 				try {
-					await submitDeclarationUpdate(declaration.id, declaration.donnees);
+					await submitDeclarationUpdate(declaration);
 				} catch (err) {
 					console.error(err);
 				}
 			}
 		},
-		onUpdated({ form }) {
+
+		onUpdated: ({ form }) => {
 			if (form.valid) {
 				goto(getNextPage());
 			}
 		},
+
 		...params[1],
 	});
 }

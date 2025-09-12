@@ -3,10 +3,25 @@
 
 	import { dev } from "$app/environment";
 
-	const { form, errors, data } = $props();
+	const {
+		form,
+		errors,
+		data,
+		progression,
+	}: {
+		form?: object | null;
+		errors?: object | null;
+		data?: object | null;
+		progression?: object | null;
+	} = $props();
 </script>
 
 {#if dev}
+	{#if progression}
+		progression
+		<SuperDebug data={progression} />
+		<hr />
+	{/if}
 	<div class="fr-mt-5w">
 		form
 		<SuperDebug data={form} />

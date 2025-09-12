@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 
 	import Accordion from "$lib/components/accordion.svelte";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 </script>
@@ -18,13 +19,22 @@
 			<Accordion>
 				{#snippet header()}
 					<div style="flex: 1">{dir.prenomNom}</div>
+					{data.progressionEquipe.dirigeants.find((d) => d.id === dir.id)
+						?.statut}
 				{/snippet}
 				{#snippet headerAction()}
 					{@const validé = false}
 					<button
 						class="fr-btn fr-mx-2v"
 						class:fr-btn--tertiary={validé}
-						onclick={() => {
+						onclick={async () => {
+							const s = data.progressionEquipe.dirigeants.find(
+								(d) => d.id === dir.id,
+							);
+							if (s) {
+								s.statut = "en cours comptable";
+							}
+							await submitDeclarationUpdate(data.declaration);
 							goto(`./details/dirigeants/${dir.id}/1`);
 						}}
 					>
@@ -52,13 +62,16 @@
 		<Accordion>
 			{#snippet header()}
 				<div style="flex: 1">Employés permanents</div>
+				{data.progressionEquipe.permanents}
 			{/snippet}
 			{#snippet headerAction()}
 				{@const validé = false}
 				<button
 					class="fr-btn fr-mx-2v"
 					class:fr-btn--tertiary={validé}
-					onclick={() => {
+					onclick={async () => {
+						data.progressionEquipe.permanents = "en cours comptable";
+						await submitDeclarationUpdate(data.declaration);
 						goto(`./details/permanents`);
 					}}
 				>
@@ -71,13 +84,16 @@
 		<Accordion>
 			{#snippet header()}
 				<div style="flex: 1">Employés saisonniers</div>
+				{data.progressionEquipe.saisonniers}
 			{/snippet}
 			{#snippet headerAction()}
 				{@const validé = false}
 				<button
 					class="fr-btn fr-mx-2v"
 					class:fr-btn--tertiary={validé}
-					onclick={() => {
+					onclick={async () => {
+						data.progressionEquipe.saisonniers = "en cours comptable";
+						await submitDeclarationUpdate(data.declaration);
 						goto(`./details/saisonniers`);
 					}}
 				>

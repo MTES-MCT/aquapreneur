@@ -37,19 +37,19 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => true,
 		() => "../../../recapitulatif",
-		(form) => {
-			merge(
-				data.declaration.donnees.equipe.dirigeants.find(
-					(d) => d.id === data.dirigeant.id,
-				),
-				{
-					...form.data,
-				},
-			);
+
+		(statut) => {
+			data.progressionDirigeant.statut = statut;
 			return data.declaration;
 		},
+
+		(form) => {
+			merge(data.dirigeant, form.data);
+			return data.declaration;
+		},
+
 		defaults(zod4(schema)),
 	);
 </script>
@@ -198,4 +198,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.dirigeant}
+	progression={data.progressionDirigeant}
+></FormDebug>

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
@@ -13,14 +11,9 @@
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
-
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
 		goto("./2");
 	};
 

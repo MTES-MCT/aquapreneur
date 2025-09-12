@@ -6,6 +6,7 @@ import isPlainObject from "lodash/isPlainObject";
 import { ANNEES_DECLARATIVES, DSFR_VERSION } from "./constants";
 import { DeclarationSchema } from "./schemas/declaration-schema";
 
+import type { DeclarationEntry } from "./server/db/types";
 import type { AnneeDeclarative } from "./types";
 
 export const formatDate = (date: string | null) => {
@@ -28,13 +29,12 @@ export const formatNum = (value: number, unit = "", naValue = ""): string => {
 };
 
 export const submitDeclarationUpdate = async (
-	id: number,
-	donnees: DeclarationSchema,
+	declaration: DeclarationEntry,
 ) => {
-	const req = await fetch(`/api/declarations/${id}`, {
+	const req = await fetch(`/api/declarations/${declaration.id}`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
-		body: JSON.stringify(donnees),
+		body: JSON.stringify(declaration.donnees),
 	});
 	const res = await req.json();
 	return DeclarationSchema.parse(res.donnees);

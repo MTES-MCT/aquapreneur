@@ -32,10 +32,7 @@
 			}
 		});
 
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
 		goto("./recapitulatif");
 	};
 

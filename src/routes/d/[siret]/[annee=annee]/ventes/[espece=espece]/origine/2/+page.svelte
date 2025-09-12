@@ -22,8 +22,11 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./3",
+		() => {
+			return data.declaration;
+		},
 		(form) => {
 			merge(data.declaration.donnees.ventes, {
 				[data.espece.id]: { consommation: { bio: form.data } },

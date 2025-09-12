@@ -14,23 +14,24 @@
 
 	const { data } = $props();
 
-	const retour = data.declaration.donnees.retourAnnee;
-
 	const schema = z.object({
 		aleas: z
 			.enum(ALEAS_IDS)
 			.array()
 			.min(1, "Veuillez selectionner au moins une réponse")
-			.default(retour.aleas),
-		aleasDetails: z.string().nullable().default(retour.aleasDetails),
+			.default(data.retourAnnee.aleas),
+		aleasDetails: z.string().nullable().default(data.retourAnnee.aleasDetails),
 	});
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./2",
+		() => {
+			return data.declaration;
+		},
 		(form) => {
-			merge(data.declaration.donnees.retourAnnee, { ...form.data });
+			merge(data.retourAnnee, form.data);
 			return data.declaration;
 		},
 		defaults(zod4(schema)),
@@ -100,5 +101,4 @@
 	<NavigationLinks nextIsButton />
 </form>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.retourAnnee}
-></FormDebug>
+<FormDebug {form} {errors} data={data.retourAnnee}></FormDebug>

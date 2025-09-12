@@ -147,14 +147,32 @@ export const productionSchema = optObject({
 		.optional(),
 });
 
+export const StatutProgression = z
+	.union([
+		z.number().int(),
+		z.literal([
+			"en cours comptable",
+			"validé comptable",
+			"passage producteur",
+			"en cours producteur",
+			"validé producteur",
+		]),
+	])
+	.nullish();
+export type StatutProgression = z.infer<typeof StatutProgression>;
+
 export const DeclarationSchema = z.strictObject({
-	etapes: z.strictObject({
-		entrepriseValidee: z.boolean(),
-		concessionValidee: z.boolean(),
-		stockValidee: z.boolean(),
-		productionValidee: z.boolean(),
-		envoiValidee: z.boolean(),
-		declarationValidee: z.boolean(),
+	progression: z.strictObject({
+		equipe: optObject({
+			dirigeants: z
+				.strictObject({
+					id: z.uuid({ version: "v4" }),
+					statut: StatutProgression,
+				})
+				.array(),
+			permanents: StatutProgression,
+			saisonniers: StatutProgression,
+		}),
 	}),
 	aProduit: z.boolean(),
 	dateBilan: IsoDate.nullish(),

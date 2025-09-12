@@ -98,14 +98,7 @@ export const prefillDeclaration = async (
 	const d = bilan?.donnees;
 
 	const declaration = DeclarationSchema.parse({
-		etapes: {
-			entrepriseValidee: false,
-			concessionValidee: false,
-			stockValidee: false,
-			productionValidee: false,
-			envoiValidee: false,
-			declarationValidee: false,
-		},
+		progression: {},
 		aProduit: true, // TODO
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,

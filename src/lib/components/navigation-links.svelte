@@ -47,6 +47,7 @@
 				<button
 					class="fr-btn fr-btn--secondary fr-mx-4v"
 					disabled={clicked}
+					name="cantAnswer"
 					type="submit"
 				>
 					Je ne peux pas répondre
@@ -61,7 +62,9 @@
 					{nextLabel}
 				</a>
 			{:else if nextIsButton}
-				<button class="fr-btn" disabled={clicked} type="submit">Valider</button>
+				<button name="validate" class="fr-btn" disabled={clicked} type="submit">
+					Valider
+				</button>
 			{/if}
 		</div>
 	</div>

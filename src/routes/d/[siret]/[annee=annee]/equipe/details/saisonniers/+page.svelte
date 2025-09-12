@@ -13,31 +13,35 @@
 
 	const { data } = $props();
 
-	const equipe = data.declaration.donnees.equipe;
-
 	const schema = z.object({
-		aSaisonniers: Bool.default(
-			equipe.saisonniers ? true : (null as unknown as boolean),
-		),
+		aSaisonniers: Bool.default(!!data.equipe.permanents),
 	});
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		(form) => !form.data.aSaisonniers,
+
 		() =>
 			data.declaration.donnees.equipe.saisonniers ?
 				"./saisonniers/1"
 			:	"../recapitulatif",
+
+		(statut) => {
+			data.progressionEquipe.saisonniers = statut;
+			return data.declaration;
+		},
+
 		(form) => {
 			if (form.data.aSaisonniers) {
-				merge(equipe, {
+				merge(data.equipe, {
 					saisonniers: {},
 				});
 			} else {
-				delete equipe.saisonniers;
+				delete data.equipe.saisonniers;
 			}
 			return data.declaration;
 		},
+
 		defaults(zod4(schema)),
 	);
 </script>
@@ -97,4 +101,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.saisonniers}
+	progression={data.progressionEquipe}
+></FormDebug>

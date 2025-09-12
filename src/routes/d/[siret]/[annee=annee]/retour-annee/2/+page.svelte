@@ -12,18 +12,19 @@
 
 	const { data } = $props();
 
-	const retour = data.declaration.donnees.retourAnnee;
-
 	const schema = z.object({
-		difficultes: z.string().nullable().default(retour.difficultes),
+		difficultes: z.string().nullable().default(data.retourAnnee.difficultes),
 	});
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./3",
+		() => {
+			return data.declaration;
+		},
 		(form) => {
-			merge(data.declaration.donnees.retourAnnee, { ...form.data });
+			merge(data.retourAnnee, form.data);
 			return data.declaration;
 		},
 		defaults(zod4(schema)),
@@ -64,5 +65,4 @@
 	<NavigationLinks prevHref="./1" nextIsButton />
 </form>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.retourAnnee}
-></FormDebug>
+<FormDebug {form} {errors} data={data.retourAnnee}></FormDebug>

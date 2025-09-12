@@ -18,10 +18,7 @@
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
 
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
 		if (dVentes(donnees, data.espece.id).elevage.active()) goto("./1");
 		else goto("../../recapitulatif");
 	};

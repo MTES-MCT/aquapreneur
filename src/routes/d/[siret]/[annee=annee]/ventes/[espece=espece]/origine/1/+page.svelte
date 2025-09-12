@@ -29,8 +29,11 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./2",
+		() => {
+			return data.declaration;
+		},
 		(form) => {
 			merge(data.declaration.donnees.ventes, {
 				[data.espece.id]: { consommation: { affinage: form.data } },
@@ -116,4 +119,5 @@
 	{form}
 	{errors}
 	data={data.declaration.donnees.ventes[data.espece.id]}
+	progression={data.declaration.donnees.progression}
 ></FormDebug>

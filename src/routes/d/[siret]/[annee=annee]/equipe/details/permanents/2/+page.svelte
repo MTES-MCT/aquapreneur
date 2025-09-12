@@ -15,13 +15,13 @@
 	const { data } = $props();
 
 	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.declaration.donnees.equipe, {
+	merge(data.equipe, {
 		permanents: {
 			hommes: { salarie: {}, nonSalarie: {} },
 		},
 	});
 
-	const hommes = data.declaration.donnees.equipe.permanents!.hommes!;
+	const hommes = data.equipe.permanents!.hommes!;
 
 	const schema = z.object({
 		salarie: z.object({
@@ -56,12 +56,19 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => true,
 		() => "../../recapitulatif",
-		(form) => {
-			merge(hommes, { ...form.data });
+
+		(statut) => {
+			data.progressionEquipe.permanents = statut;
 			return data.declaration;
 		},
+
+		(form) => {
+			merge(hommes, form.data);
+			return data.declaration;
+		},
+
 		defaults(zod4(schema)),
 	);
 </script>
@@ -115,4 +122,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.permanents}
+	progression={data.progressionEquipe}
+></FormDebug>

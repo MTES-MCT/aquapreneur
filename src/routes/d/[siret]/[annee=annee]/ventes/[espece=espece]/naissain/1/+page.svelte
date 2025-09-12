@@ -17,10 +17,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
 		goto("./2");
 	};
 

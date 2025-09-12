@@ -44,10 +44,16 @@
 
 	const { form, errors, enhance } = prepareForm(
 		schema,
-		data.declaration,
+		() => false,
 		() => "./2",
+
+		(statut) => {
+			data.progressionEquipe.saisonniers = statut;
+			return data.declaration;
+		},
+
 		(form) => {
-			merge(femmes, { ...form.data });
+			merge(femmes, form.data);
 			return data.declaration;
 		},
 		defaults(zod4(schema)),
@@ -107,4 +113,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.saisonniers}
+	progression={data.progressionEquipe}
+></FormDebug>
