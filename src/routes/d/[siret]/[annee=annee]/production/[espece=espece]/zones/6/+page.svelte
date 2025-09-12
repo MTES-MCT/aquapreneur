@@ -57,10 +57,18 @@
 											<tr>
 												<td>{q.nom}</td>
 												<td>
-													<input class="fr-input" type="text" />
+													<input
+														class="fr-input"
+														type="text"
+														autocomplete="off"
+													/>
 												</td>
 												<td>
-													<input class="fr-input" type="text" />
+													<input
+														class="fr-input"
+														type="text"
+														autocomplete="off"
+													/>
 												</td>
 											</tr>
 										{/each}

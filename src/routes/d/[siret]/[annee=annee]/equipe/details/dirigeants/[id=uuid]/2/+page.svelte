@@ -134,6 +134,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="F"
 							bind:group={$form.sexe}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Féminin{/snippet}
@@ -147,6 +148,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="M"
 							bind:group={$form.sexe}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Masculin{/snippet}

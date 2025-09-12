@@ -56,6 +56,7 @@
 														class="fr-input"
 														type="text"
 														placeholder="kg"
+														autocomplete="off"
 													/>
 												</td>
 												<td>
@@ -63,6 +64,7 @@
 														class="fr-input"
 														type="text"
 														placeholder="kg"
+														autocomplete="off"
 													/>
 												</td>
 											</tr>

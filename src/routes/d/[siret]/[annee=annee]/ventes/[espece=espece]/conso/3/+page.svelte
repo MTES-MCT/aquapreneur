@@ -90,9 +90,16 @@
 																	(value.valeurHT = toNumber(
 																		v.currentTarget.value,
 																	))}
+																autocomplete="off"
 															/>
 														</td>
-														<td><input class="fr-input" disabled /></td>
+														<td>
+															<input
+																class="fr-input"
+																disabled
+																autocomplete="off"
+															/>
+														</td>
 													</tr>
 												{/if}
 											{/each}
@@ -123,9 +130,16 @@
 																(value.valeurHT = toNumber(
 																	v.currentTarget.value,
 																))}
+															autocomplete="off"
 														/>
 													</td>
-													<td><input class="fr-input" disabled /></td>
+													<td>
+														<input
+															class="fr-input"
+															disabled
+															autocomplete="off"
+														/>
+													</td>
 												</tr>
 											{/if}
 											{#if dVentes(donnees, data.espece.id).consommation.destination?.horsUnionEuropeenne?.active()}
@@ -145,9 +159,16 @@
 																(value.valeurHT = toNumber(
 																	v.currentTarget.value,
 																))}
+															autocomplete="off"
 														/>
 													</td>
-													<td><input class="fr-input" disabled /></td>
+													<td>
+														<input
+															class="fr-input"
+															disabled
+															autocomplete="off"
+														/>
+													</td>
 												</tr>
 											{/if}
 										{/if}

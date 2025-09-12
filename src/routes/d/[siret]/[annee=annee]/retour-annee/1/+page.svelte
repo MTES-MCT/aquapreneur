@@ -85,6 +85,7 @@
 							{id}
 							value={aleaId}
 							bind:group={$form.aleas}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}{alea.label}{/snippet}

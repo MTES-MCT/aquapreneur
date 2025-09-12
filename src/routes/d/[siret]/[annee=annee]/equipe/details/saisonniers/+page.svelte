@@ -79,6 +79,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={true}
 							bind:group={$form.aSaisonniers}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Oui{/snippet}
@@ -91,6 +92,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={false}
 							bind:group={$form.aSaisonniers}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non{/snippet}

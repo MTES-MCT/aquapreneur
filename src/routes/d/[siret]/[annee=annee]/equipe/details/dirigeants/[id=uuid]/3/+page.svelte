@@ -76,6 +76,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="salarie"
 							bind:group={$form.statut}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Salarié{/snippet}
@@ -89,6 +90,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="nonSalarie"
 							bind:group={$form.statut}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non salarié{/snippet}

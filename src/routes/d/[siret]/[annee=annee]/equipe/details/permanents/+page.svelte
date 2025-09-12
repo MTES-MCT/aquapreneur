@@ -75,6 +75,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={true}
 							bind:group={$form.aPermanents}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Oui{/snippet}
@@ -87,6 +88,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={false}
 							bind:group={$form.aPermanents}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non{/snippet}
