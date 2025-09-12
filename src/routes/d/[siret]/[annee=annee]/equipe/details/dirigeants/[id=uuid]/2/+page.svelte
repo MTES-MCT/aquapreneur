@@ -4,22 +4,19 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { COUNTRIES } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm } from "$lib/form-utils";
 	import {
 		ERR_MUST_CHOOSE_ANSWER,
 		ERR_REQUIRED,
 		NonEmptyString,
 		Year,
 	} from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -38,28 +35,23 @@
 			.default(data.dirigeant.sexe ?? (null as unknown as "M" | "F")),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.dirigeant, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() => "./3",
+		(form) => {
+			merge(
+				data.declaration.donnees.equipe.dirigeants.find(
+					(d) => d.id === data.dirigeant.id,
+				),
+				{
+					...form.data,
+				},
+			);
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./3");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
@@ -171,4 +163,4 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

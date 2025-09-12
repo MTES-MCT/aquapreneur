@@ -4,16 +4,13 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -57,27 +54,16 @@
 		}),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(femmes, { ...form.data });
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() => "./2",
+		(form) => {
+			merge(femmes, { ...form.data });
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./2");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>

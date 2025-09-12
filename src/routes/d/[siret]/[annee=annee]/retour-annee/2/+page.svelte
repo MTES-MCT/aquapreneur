@@ -4,14 +4,11 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import TextareaGroup from "$lib/components/textarea–group.svelte";
-	import { nestedSpaForm } from "$lib/form-utils";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm } from "$lib/form-utils";
 
 	const { data } = $props();
 
@@ -21,28 +18,16 @@
 		difficultes: z.string().nullable().default(retour.difficultes),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.declaration.donnees.retourAnnee, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() => "./3",
+		(form) => {
+			merge(data.declaration.donnees.retourAnnee, { ...form.data });
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./3");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div class="fr-stepper">

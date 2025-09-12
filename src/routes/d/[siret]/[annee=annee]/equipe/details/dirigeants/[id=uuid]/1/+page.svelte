@@ -4,49 +4,39 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	const schema = z.object({
 		// Voir https://superforms.rocks/default-values#changing-a-default-value
-		// on veut une valeur initiale nulle, sans pour autant rendre le champ
-		// nullable
 		nouveauDirigeant: Bool.default(
 			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
 		),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.dirigeant, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() => "./2",
+		(form) => {
+			merge(
+				data.declaration.donnees.equipe.dirigeants.find(
+					(d) => d.id === data.dirigeant.id,
+				),
+				{
+					...form.data,
+				},
+			);
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./2");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
@@ -98,4 +88,4 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

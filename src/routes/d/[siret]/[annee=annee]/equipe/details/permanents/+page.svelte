@@ -4,14 +4,11 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils.js";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm } from "$lib/form-utils.js";
 
 	const { data } = $props();
 
@@ -21,37 +18,25 @@
 		aPermanents: z.boolean().default(!!equipe.permanents),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					if (form.data.aPermanents) {
-						merge(equipe, {
-							permanents: {},
-						});
-					} else {
-						delete equipe.permanents;
-					}
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() =>
+			data.declaration.donnees.equipe.permanents ?
+				"./permanents/1"
+			:	"../recapitulatif",
+		(form) => {
+			if (form.data.aPermanents) {
+				merge(equipe, {
+					permanents: {},
+				});
+			} else {
+				delete equipe.permanents;
 			}
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				if (data.declaration.donnees.equipe.permanents) {
-					goto("./permanents/1");
-				} else {
-					goto("../recapitulatif");
-				}
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>

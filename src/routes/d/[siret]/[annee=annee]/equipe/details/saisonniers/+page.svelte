@@ -4,15 +4,12 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm } from "$lib/form-utils.js";
 	import { Bool } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -24,37 +21,25 @@
 		),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					if (form.data.aSaisonniers) {
-						merge(equipe, {
-							saisonniers: {},
-						});
-					} else {
-						delete equipe.saisonniers;
-					}
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
+	const { form, errors, enhance } = prepareForm(
+		schema,
+		data.declaration,
+		() =>
+			data.declaration.donnees.equipe.saisonniers ?
+				"./saisonniers/1"
+			:	"../recapitulatif",
+		(form) => {
+			if (form.data.aSaisonniers) {
+				merge(equipe, {
+					saisonniers: {},
+				});
+			} else {
+				delete equipe.saisonniers;
 			}
+			return data.declaration;
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				if (data.declaration.donnees.equipe.saisonniers) {
-					goto("./saisonniers/1");
-				} else {
-					goto("../recapitulatif");
-				}
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
