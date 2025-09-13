@@ -59,18 +59,6 @@ export const getBilan = async (siret: string, annee: number) => {
 		.limit(1);
 
 	if (result.length === 1) {
-		// TODO log à supprimer après tests
-		const bilan = result[0];
-		console.log(
-			bilan.id,
-			bilan.siret,
-			bilan.nom,
-			bilan.debutExercice,
-			bilan.finExercice,
-			bilan.version,
-			bilan.invalide,
-			bilan.dateBilan,
-		);
 		return result[0];
 	}
 	return null;
