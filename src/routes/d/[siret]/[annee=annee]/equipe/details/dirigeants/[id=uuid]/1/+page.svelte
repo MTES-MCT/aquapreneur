@@ -39,10 +39,10 @@
 </script>
 
 <div>
-	<p class="fr-text--xl">
+	<h2 class="fr-h4 fr-mb-4w">
 		Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
 		{data.annee} ?
-	</p>
+	</h2>
 	<form method="POST" use:enhance>
 		<Fieldset hasError={!!$errors?.nouveauDirigeant}>
 			{#snippet inputs(id)}
@@ -82,7 +82,6 @@
 				{/if}
 			{/snippet}
 		</Fieldset>
-
 		<NavigationLinks nextIsButton cantAnswerBtn />
 	</form>
 </div>

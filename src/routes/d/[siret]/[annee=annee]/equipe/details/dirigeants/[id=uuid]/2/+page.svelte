@@ -55,7 +55,7 @@
 </script>
 
 <div>
-	<p class="fr-text--xl">Son identité</p>
+	<h2 class="fr-h4 fr-mb-4w">Son identité</h2>
 	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}

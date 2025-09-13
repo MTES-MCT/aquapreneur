@@ -55,7 +55,7 @@
 </script>
 
 <div>
-	<p class="fr-text--xl">Son statut et ses qualifications</p>
+	<h2 class="fr-h4 fr-mb-4w">Son statut et ses qualifications</h2>
 	<form method="POST" use:enhance>
 		<Fieldset hasError={!!$errors?.statut}>
 			{#snippet legend()}Statut{/snippet}
