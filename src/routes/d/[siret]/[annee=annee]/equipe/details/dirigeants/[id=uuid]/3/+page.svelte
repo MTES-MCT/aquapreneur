@@ -15,7 +15,7 @@
 		REGIMES_SOCIAUX,
 		REGIMES_SOCIAUX_IDS,
 	} from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_ANSWER, Percent } from "$lib/types";
 
 	const { data } = $props();
@@ -41,7 +41,9 @@
 			isLastStep: () => true,
 			getNextPage: () => "../../../recapitulatif",
 			updateProgress: (statut) => {
-				data.progressionDirigeant.statut = statut;
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {

@@ -11,7 +11,7 @@
 	} = $props();
 </script>
 
-{#if !permanents?.femmes || !permanents?.hommes}
+{#if !permanents?.femmes && !permanents?.hommes}
 	<p class="fr-text--bold fr-text--sm">Pas d’employés permanents</p>
 {:else}
 	{#if permanents?.femmes}

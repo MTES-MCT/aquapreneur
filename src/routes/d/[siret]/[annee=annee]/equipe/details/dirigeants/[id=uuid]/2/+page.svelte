@@ -10,7 +10,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { COUNTRIES } from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import {
 		ERR_MUST_CHOOSE_ANSWER,
 		ERR_REQUIRED,
@@ -41,7 +41,9 @@
 			isLastStep: () => false,
 			getNextPage: () => "./3",
 			updateProgress: (statut) => {
-				data.progressionDirigeant.statut = statut;
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {

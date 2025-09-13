@@ -9,35 +9,28 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_CONTRAT } from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
 
 	const { data } = $props();
 
-	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.declaration.donnees.equipe, {
-		saisonniers: {
-			femmes: { cdd: {}, interim: {} },
-		},
-	});
-
-	const femmes = data.declaration.donnees.equipe.saisonniers!.femmes!;
+	const femmes = data.declaration.donnees.equipe.saisonniers?.femmes;
 
 	const schema = z.object({
 		cdd: z.object({
 			nbJours: PositiveInt.default(
-				femmes.cdd!.nbJours ?? (null as unknown as number),
+				femmes?.cdd?.nbJours ?? (null as unknown as number),
 			),
 			nbPersonnes: PositiveInt.default(
-				femmes.cdd!.nbPersonnes ?? (null as unknown as number),
+				femmes?.cdd?.nbPersonnes ?? (null as unknown as number),
 			),
 		}),
 		interim: z.object({
 			nbJours: PositiveInt.default(
-				femmes.interim!.nbJours ?? (null as unknown as number),
+				femmes?.interim?.nbJours ?? (null as unknown as number),
 			),
 			nbPersonnes: PositiveInt.default(
-				femmes.interim!.nbPersonnes ?? (null as unknown as number),
+				femmes?.interim?.nbPersonnes ?? (null as unknown as number),
 			),
 		}),
 	});
@@ -48,11 +41,17 @@
 			isLastStep: () => false,
 			getNextPage: () => "./2",
 			updateProgress: (statut) => {
-				data.progressionEquipe.saisonniers = statut;
+				if (shouldUpdateStatus(data.progressionEquipe.saisonniers)) {
+					data.progressionEquipe.saisonniers = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(femmes, form.data);
+				merge(data.declaration.donnees.equipe, {
+					saisonniers: {
+						femmes: form.data,
+					},
+				});
 				return data.declaration;
 			},
 		},

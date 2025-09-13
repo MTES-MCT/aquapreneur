@@ -9,47 +9,40 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
 
 	const { data } = $props();
 
-	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.equipe, {
-		permanents: {
-			femmes: { salarie: {}, nonSalarie: {} },
-		},
-	});
-
-	const femmes = data.equipe.permanents!.femmes!;
+	const femmes = data.equipe.permanents?.femmes;
 
 	const schema = z.object({
 		salarie: z.object({
 			tempsPlein: PositiveInt.default(
-				femmes.salarie!.tempsPlein ?? (null as unknown as number),
+				femmes?.salarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				femmes.salarie!.plusDunMiTemps ?? (null as unknown as number),
+				femmes?.salarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				femmes.salarie!.miTemps ?? (null as unknown as number),
+				femmes?.salarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				femmes.salarie!.moinsDunMiTemps ?? (null as unknown as number),
+				femmes?.salarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 		nonSalarie: z.object({
 			tempsPlein: PositiveInt.default(
-				femmes.nonSalarie!.tempsPlein ?? (null as unknown as number),
+				femmes?.nonSalarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				femmes.nonSalarie!.plusDunMiTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				femmes.nonSalarie!.miTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				femmes.nonSalarie!.moinsDunMiTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 	});
@@ -60,11 +53,17 @@
 			isLastStep: () => false,
 			getNextPage: () => "./2",
 			updateProgress: (statut) => {
-				data.progressionEquipe.permanents = statut;
+				if (shouldUpdateStatus(data.progressionEquipe.permanents)) {
+					data.progressionEquipe.permanents = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(femmes, form.data);
+				merge(data.declaration.donnees.equipe, {
+					permanents: {
+						femmes: form.data,
+					},
+				});
 				return data.declaration;
 			},
 		},

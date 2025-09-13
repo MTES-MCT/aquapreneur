@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { prepareForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
 
 	const { data } = $props();
@@ -25,7 +25,9 @@
 			isLastStep: () => false,
 			getNextPage: () => "./2",
 			updateProgress: (statut) => {
-				data.progressionDirigeant.statut = statut;
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {

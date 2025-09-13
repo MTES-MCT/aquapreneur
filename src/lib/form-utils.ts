@@ -13,6 +13,10 @@ export type Message = {
 	text: string;
 };
 
+export function shouldUpdateStatus(currentStatus: StatutProgression) {
+	return currentStatus !== "passage producteur";
+}
+
 export function prepareForm<
 	S extends ZodValidationSchema,
 	T extends Record<string, unknown>,

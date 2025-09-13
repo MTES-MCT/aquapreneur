@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { prepareForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 
 	const { data } = $props();
 
@@ -25,7 +25,9 @@
 					"./permanents/1"
 				:	"../recapitulatif",
 			updateProgress: (statut) => {
-				data.progressionEquipe.permanents = statut;
+				if (shouldUpdateStatus(data.progressionEquipe.permanents)) {
+					data.progressionEquipe.permanents = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {
