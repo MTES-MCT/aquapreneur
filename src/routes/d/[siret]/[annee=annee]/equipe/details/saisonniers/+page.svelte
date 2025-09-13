@@ -14,7 +14,7 @@
 	const { data } = $props();
 
 	const schema = z.object({
-		aSaisonniers: Bool.default(!!data.equipe.permanents),
+		aSaisonniers: Bool.default(!!data.equipe.saisonniers),
 	});
 
 	const { form, errors, enhance } = prepareForm(

@@ -74,7 +74,7 @@
 </script>
 
 <div>
-	<p class="fr-text--xl">Combien d’hommes travaillent pour l’entreprise ?</p>
+	<p class="fr-text--xl">Combien d’hommes travaillent pour l’entreprise ?</p>
 	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { StatutProgression } from "$lib/schemas/declaration-schema";
+	import { type Snippet } from "svelte";
 
-	import type { Snippet } from "svelte";
+	import type { StatutProgression } from "$lib/schemas/declaration-schema";
 
 	type RecapLineMode = "edit" | "review";
 
@@ -48,9 +48,8 @@
 				return "edit";
 			case "validé comptable":
 			case "validé producteur":
-				return "review";
 			case "passage producteur":
-				return "edit";
+				return "review";
 			default:
 				return "edit";
 		}
@@ -70,6 +69,8 @@
 				return icon;
 		}
 	});
+
+	let disclosed = $state(false);
 </script>
 
 {#snippet content()}
@@ -89,6 +90,21 @@
 			<span class="fr-text--xs fr-text--light">en cours</span>
 		{/if}
 	</div>
+
+	{#if status === "passage producteur"}
+		<p class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w">
+			Passage producteur attendu
+		</p>
+	{/if}
+
+	{#if mode === "review" && disclosed}
+		<button
+			class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-2w"
+			onclick={onEdit}
+		>
+			Modifier
+		</button>
+	{/if}
 {/snippet}
 
 <section class="fr-accordion">
@@ -97,9 +113,10 @@
 			<button
 				type="button"
 				style="color: var(--text-default-grey)"
-				class="fr-accordion__btn fr-p-0 fr-text--sm"
+				class="fr-accordion__btn fr-p-0 fr-pr-2w fr-text--sm"
 				aria-expanded="false"
 				aria-controls={id}
+				onclick={() => (disclosed = !disclosed)}
 			>
 				{@render content()}
 			</button>
@@ -107,17 +124,11 @@
 			<button
 				type="button"
 				style="color: var(--text-default-grey)"
-				class="fr-accordion__btn fr-p-0 fr-text--sm fr-icon-arrow-right-line"
+				class="fr-accordion__btn fr-p-0 fr-pr-2w fr-text--sm fr-icon-arrow-right-line"
 				aria-expanded="false"
 				onclick={onEdit}
 			>
 				{@render content()}
-
-				{#if status === "passage producteur"}
-					<p class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w">
-						Passage producteur attendu
-					</p>
-				{/if}
 			</button>
 		{/if}
 	</svelte:element>

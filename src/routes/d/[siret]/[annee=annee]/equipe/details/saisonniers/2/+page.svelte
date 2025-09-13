@@ -62,7 +62,7 @@
 
 <div>
 	<p class="fr-text--xl">
-		Combien d’hommes saisonniers ont travaillé pour l’entreprise ?
+		Combien d’hommes saisonniers ont travaillé pour l’entreprise ?
 	</p>
 	<form method="POST" use:enhance>
 		<Fieldset>

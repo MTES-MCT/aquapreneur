@@ -4,6 +4,10 @@
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
+	import RecapDirigeant from "./recap-dirigeant.svelte";
+	import RecapPermanents from "./recap-permanents.svelte";
+	import RecapSaisonniers from "./recap-saisonniers.svelte";
+
 	const { data } = $props();
 </script>
 
@@ -31,7 +35,7 @@
 					goto(`./details/dirigeants/${dir.id}/1`);
 				}}
 			>
-				TODO tableau récap
+				<RecapDirigeant dirigeant={dir}></RecapDirigeant>
 			</RecapLine>
 		{/each}
 	</div>
@@ -59,7 +63,8 @@
 				goto(`./details/permanents`);
 			}}
 		>
-			TODO tableau récap
+			<RecapPermanents permanents={data.declaration.donnees.equipe.permanents}
+			></RecapPermanents>
 		</RecapLine>
 
 		<RecapLine
@@ -72,7 +77,9 @@
 				goto(`./details/saisonniers`);
 			}}
 		>
-			TODO tableau récap
+			<RecapSaisonniers
+				saisonniers={data.declaration.donnees.equipe.saisonniers}
+			></RecapSaisonniers>
 		</RecapLine>
 	</div>
 </div>
