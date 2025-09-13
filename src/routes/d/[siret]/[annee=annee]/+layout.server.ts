@@ -30,7 +30,9 @@ export const load = async ({ params }) => {
 	const declaration = await getOrCreateDeclaration(etablissement, anneeNum);
 
 	return {
+		// TODO supprimer
 		annee: anneeNum,
+		// TODO supprimer
 		etablissement,
 		declaration,
 		title: `${etablissement.denomination} • Déclaration ${annee}`,

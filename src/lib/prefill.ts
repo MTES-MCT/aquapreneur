@@ -59,18 +59,6 @@ export const getBilan = async (siret: string, annee: number) => {
 		.limit(1);
 
 	if (result.length === 1) {
-		// TODO log à supprimer après tests
-		const bilan = result[0];
-		console.log(
-			bilan.id,
-			bilan.siret,
-			bilan.nom,
-			bilan.debutExercice,
-			bilan.finExercice,
-			bilan.version,
-			bilan.invalide,
-			bilan.dateBilan,
-		);
 		return result[0];
 	}
 	return null;
@@ -98,14 +86,7 @@ export const prefillDeclaration = async (
 	const d = bilan?.donnees;
 
 	const declaration = DeclarationSchema.parse({
-		etapes: {
-			entrepriseValidee: false,
-			concessionValidee: false,
-			stockValidee: false,
-			productionValidee: false,
-			envoiValidee: false,
-			declarationValidee: false,
-		},
+		progression: {},
 		aProduit: true, // TODO
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,

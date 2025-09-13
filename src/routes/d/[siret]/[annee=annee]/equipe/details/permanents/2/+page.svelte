@@ -4,84 +4,75 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.declaration.donnees.equipe, {
-		permanents: {
-			hommes: { salarie: {}, nonSalarie: {} },
-		},
-	});
-
-	const hommes = data.declaration.donnees.equipe.permanents!.hommes!;
+	const hommes = data.equipe.permanents?.hommes;
 
 	const schema = z.object({
 		salarie: z.object({
 			tempsPlein: PositiveInt.default(
-				hommes.salarie!.tempsPlein ?? (null as unknown as number),
+				hommes?.salarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				hommes.salarie!.plusDunMiTemps ?? (null as unknown as number),
+				hommes?.salarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				hommes.salarie!.miTemps ?? (null as unknown as number),
+				hommes?.salarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				hommes.salarie!.moinsDunMiTemps ?? (null as unknown as number),
+				hommes?.salarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 		nonSalarie: z.object({
 			tempsPlein: PositiveInt.default(
-				hommes.nonSalarie!.tempsPlein ?? (null as unknown as number),
+				hommes?.nonSalarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				hommes.nonSalarie!.plusDunMiTemps ?? (null as unknown as number),
+				hommes?.nonSalarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				hommes.nonSalarie!.miTemps ?? (null as unknown as number),
+				hommes?.nonSalarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				hommes.nonSalarie!.moinsDunMiTemps ?? (null as unknown as number),
+				hommes?.nonSalarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(hommes, { ...form.data });
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => true,
+			getNextPage: () => "../../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionEquipe.permanents)) {
+					data.progressionEquipe.permanents = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.declaration.donnees.equipe, {
+					permanents: {
+						hommes: form.data,
+					},
+				});
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("../../recapitulatif");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
-	<p class="fr-text--xl">Combien d’hommes travaillent pour l’entreprise ?</p>
+	<p class="fr-text--xl">Combien d’hommes travaillent pour l’entreprise ?</p>
 	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
@@ -129,4 +120,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.permanents}
+	progression={data.progressionEquipe}
+></FormDebug>

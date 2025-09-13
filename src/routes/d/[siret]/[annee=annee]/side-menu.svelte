@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import { partFilled } from "$lib/utils";
 
 	import type { DeclarationStep } from "./type";
 
 	const {
 		step,
 		baseUrl,
+		donnees,
 		nomEtablissement,
 		resetActionUrl,
 	}: {
@@ -15,16 +17,40 @@
 		nomEtablissement: string;
 		resetActionUrl: string;
 	} = $props();
-</script>
 
-{#snippet categoryTitle(text: string, isDone: boolean)}
-	<div style="display: flex; justify-content: space-between; width: 100%">
-		<div>{text}</div>
-		{#if isDone}
-			<div class="fr-icon-success-line"></div>
-		{/if}
-	</div>
-{/snippet}
+	const parts = [
+		{
+			label: "Équipe et direction",
+			partId: "equipe",
+			link: "equipe/",
+			previousId: "",
+		},
+		{
+			label: "Production",
+			partId: "production",
+			link: "production/",
+			previousId: "equipe",
+		},
+		{
+			label: "Ventes",
+			partId: "ventes",
+			link: "ventes/",
+			previousId: "production",
+		},
+		{
+			label: "Retour sur l’année",
+			partId: "retourAnnee",
+			link: "retour-annee/",
+			previousId: "ventes",
+		},
+		{
+			label: "Envoi",
+			partId: "envoi",
+			link: "envoi/",
+			previousId: "retourAnnee",
+		},
+	] as const;
+</script>
 
 <nav
 	class="fr-sidemenu fr-sidemenu--sticky-full-height"
@@ -47,54 +73,41 @@
 				</h2>
 			</div>
 			<ul class="fr-sidemenu__list">
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						href="{baseUrl}/equipe/"
-						aria-current={step === "equipe" ? "page" : undefined}
-					>
-						{@render categoryTitle("Équipe et direction", false)}
-					</a>
-				</li>
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						href="{baseUrl}/production/"
-						aria-current={step === "production" ? "page" : undefined}
-					>
-						{@render categoryTitle("Production", false)}
-					</a>
-				</li>
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						href="{baseUrl}/ventes/"
-						aria-current={step === "ventes" ? "page" : undefined}
-					>
-						{@render categoryTitle("Ventes", false)}
-					</a>
-				</li>
-
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						href="{baseUrl}/retour-annee/"
-						aria-current={step === "retourAnnee" ? "page" : undefined}
-					>
-						{@render categoryTitle("Retour sur l’année", false)}
-					</a>
-				</li>
-				<li class="fr-sidemenu__item">
-					<a
-						class="fr-sidemenu__link"
-						style="color: var(--text-disabled-grey)"
-						aria-current={step === "envoi" ? "page" : undefined}
-						role="link"
-						aria-disabled="true"
-					>
-						{@render categoryTitle("Envoi", false)}
-					</a>
-				</li>
+				{#each parts as part (part.partId)}
+					{@const validated = partFilled(donnees, part.partId)}
+					{@const previousValidated = partFilled(donnees, part.previousId)}
+					<li class="fr-sidemenu__item">
+						{#if validated || previousValidated || step === part.partId}
+							<a
+								class="fr-sidemenu__link"
+								href="{baseUrl}/{part.link}"
+								aria-current={step === part.partId ? "page" : undefined}
+							>
+								<div
+									style="display: flex; justify-content: space-between; width: 100%"
+								>
+									<div>{part.label}</div>
+									{#if validated}
+										<div class="fr-icon-success-line"></div>
+									{/if}
+								</div>
+							</a>
+						{:else}
+							<a
+								style="color: var(--text-disabled-grey)"
+								role="link"
+								aria-disabled="true"
+								class="fr-sidemenu__link"
+							>
+								<div
+									style="display: flex; justify-content: space-between; width: 100%"
+								>
+									<div>{part.label}</div>
+								</div>
+							</a>
+						{/if}
+					</li>
+				{/each}
 			</ul>
 		</div>
 		<div class="fr-mt-10v">

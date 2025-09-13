@@ -4,54 +4,45 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils.js";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 
 	const { data } = $props();
 
-	const equipe = data.declaration.donnees.equipe;
-
 	const schema = z.object({
-		aPermanents: z.boolean().default(!!equipe.permanents),
+		aPermanents: z.boolean().default(!!data.equipe.permanents),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					if (form.data.aPermanents) {
-						merge(equipe, {
-							permanents: {},
-						});
-					} else {
-						delete equipe.permanents;
-					}
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: (form) => !form.data.aPermanents,
+			getNextPage: () =>
+				data.declaration.donnees.equipe.permanents ?
+					"./permanents/1"
+				:	"../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionEquipe.permanents)) {
+					data.progressionEquipe.permanents = statut;
 				}
-			}
-		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				if (data.declaration.donnees.equipe.permanents) {
-					goto("./permanents/1");
+				return data.declaration;
+			},
+			updateData: (form) => {
+				if (form.data.aPermanents) {
+					merge(data.equipe, {
+						permanents: {},
+					});
 				} else {
-					goto("../recapitulatif");
+					delete data.equipe.permanents;
 				}
-			}
+				return data.declaration;
+			},
 		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
@@ -75,6 +66,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={true}
 							bind:group={$form.aPermanents}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Oui{/snippet}
@@ -87,6 +79,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={false}
 							bind:group={$form.aPermanents}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non{/snippet}
@@ -106,4 +99,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.permanents}
+	progression={data.progressionEquipe}
+></FormDebug>

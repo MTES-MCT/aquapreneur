@@ -4,8 +4,6 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
@@ -17,9 +15,8 @@
 		REGIMES_SOCIAUX,
 		REGIMES_SOCIAUX_IDS,
 	} from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_ANSWER, Percent } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -38,32 +35,28 @@
 			.default(data.dirigeant.regimeSocial ?? ("" as "general")),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.dirigeant, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => true,
+			getNextPage: () => "../../../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.dirigeant, form.data);
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("../../../recapitulatif");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
-	<p class="fr-text--xl">Son statut et ses qualifications</p>
+	<h2 class="fr-h4 fr-mb-4w">Son statut et ses qualifications</h2>
 	<form method="POST" use:enhance>
 		<Fieldset hasError={!!$errors?.statut}>
 			{#snippet legend()}Statut{/snippet}
@@ -76,6 +69,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="salarie"
 							bind:group={$form.statut}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Salarié{/snippet}
@@ -89,6 +83,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="nonSalarie"
 							bind:group={$form.statut}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non salarié{/snippet}
@@ -204,4 +199,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.dirigeant}
+	progression={data.progressionDirigeant}
+></FormDebug>

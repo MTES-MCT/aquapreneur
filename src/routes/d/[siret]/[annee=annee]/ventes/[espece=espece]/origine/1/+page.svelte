@@ -4,15 +4,12 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm } from "$lib/form-utils";
 	import { Percent, PositiveInt } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -30,31 +27,22 @@
 		}),
 	});
 
-	const { form, errors, message, enhance } = nestedSpaForm(
-		defaults(zod4(schema)),
+	const { form, errors, enhance } = prepareForm(
 		{
-			validators: zod4(schema),
-			onUpdate: async ({ form }) => {
-				if (form.valid) {
-					try {
-						merge(data.declaration.donnees.ventes, {
-							[data.espece.id]: { consommation: { affinage: form.data } },
-						});
-						data.declaration.donnees = await submitDeclarationUpdate(
-							data.declaration.id,
-							data.declaration.donnees,
-						);
-					} catch (err) {
-						console.error(err);
-					}
-				}
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: () => {
+				return data.declaration;
 			},
-			onUpdated({ form }) {
-				if (form.valid) {
-					goto("./2");
-				}
+			updateData: (form) => {
+				merge(data.declaration.donnees.ventes, {
+					[data.espece.id]: { consommation: { affinage: form.data } },
+				});
+				return data.declaration;
 			},
 		},
+		defaults(zod4(schema)),
 	);
 </script>
 
@@ -62,7 +50,6 @@
 	<p class="fr-text--xl">
 		Quelle part de la production a été affinée avant la vente ?
 	</p>
-	{#if $message}<h3>{$message}</h3>{/if}
 
 	<form method="POST" use:enhance>
 		<Fieldset>
@@ -134,4 +121,5 @@
 	{form}
 	{errors}
 	data={data.declaration.donnees.ventes[data.espece.id]}
+	progression={data.declaration.donnees.progression}
 ></FormDebug>

@@ -25,7 +25,10 @@
 	{#if legend}
 		<!-- TODO a11y : on veut sans doute rendre cette légende obligatoire
    quite à la réserver aux lecteurs d’écrans -->
-		<legend id="{id}-legend" class="fr-fieldset__legend">
+		<legend
+			id="{id}-legend"
+			class="fr-fieldset__legend fr-fieldset__legend--regular"
+		>
 			{@render legend()}
 		</legend>
 	{/if}

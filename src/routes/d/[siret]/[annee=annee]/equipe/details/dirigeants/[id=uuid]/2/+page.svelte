@@ -4,22 +4,19 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
 	import { COUNTRIES } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import {
 		ERR_MUST_CHOOSE_ANSWER,
 		ERR_REQUIRED,
 		NonEmptyString,
 		Year,
 	} from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -38,32 +35,28 @@
 			.default(data.dirigeant.sexe ?? (null as unknown as "M" | "F")),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.dirigeant, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./3",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.dirigeant, form.data);
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./3");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
-	<p class="fr-text--xl">Son identité</p>
+	<h2 class="fr-h4 fr-mb-4w">Son identité</h2>
 	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
@@ -134,6 +127,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="F"
 							bind:group={$form.sexe}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Féminin{/snippet}
@@ -147,6 +141,7 @@
 							aria-describedby="radio-{id}-messages"
 							value="M"
 							bind:group={$form.sexe}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Masculin{/snippet}
@@ -169,4 +164,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.dirigeant}
+	progression={data.progressionDirigeant}
+></FormDebug>

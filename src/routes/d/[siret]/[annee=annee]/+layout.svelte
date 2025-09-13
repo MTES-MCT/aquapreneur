@@ -1,6 +1,4 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
 	import { type SlideParams, slide } from "svelte/transition";
 
 	import { navigating, page } from "$app/state";
@@ -8,8 +6,6 @@
 	import SideMenu from "./side-menu.svelte";
 
 	let { data, children } = $props();
-
-	let donnees = $state(cloneDeep(data.declaration.donnees));
 
 	function maybeSlide(
 		node: Element,
@@ -42,7 +38,7 @@
 						baseUrl="/d/{data.etablissement.siret}/{data.annee}"
 						nomEtablissement={data.etablissement.denomination}
 						resetActionUrl="/d/{data.etablissement.siret}/{data.annee}"
-						{donnees}
+						donnees={data.declaration.donnees}
 					></SideMenu>
 				</div>
 			{/if}

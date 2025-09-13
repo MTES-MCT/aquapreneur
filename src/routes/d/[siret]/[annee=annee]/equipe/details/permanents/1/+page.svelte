@@ -4,84 +4,75 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.declaration.donnees.equipe, {
-		permanents: {
-			femmes: { salarie: {}, nonSalarie: {} },
-		},
-	});
-
-	const femmes = data.declaration.donnees.equipe.permanents!.femmes!;
+	const femmes = data.equipe.permanents?.femmes;
 
 	const schema = z.object({
 		salarie: z.object({
 			tempsPlein: PositiveInt.default(
-				femmes.salarie!.tempsPlein ?? (null as unknown as number),
+				femmes?.salarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				femmes.salarie!.plusDunMiTemps ?? (null as unknown as number),
+				femmes?.salarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				femmes.salarie!.miTemps ?? (null as unknown as number),
+				femmes?.salarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				femmes.salarie!.moinsDunMiTemps ?? (null as unknown as number),
+				femmes?.salarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 		nonSalarie: z.object({
 			tempsPlein: PositiveInt.default(
-				femmes.nonSalarie!.tempsPlein ?? (null as unknown as number),
+				femmes?.nonSalarie?.tempsPlein ?? (null as unknown as number),
 			),
 			plusDunMiTemps: PositiveInt.default(
-				femmes.nonSalarie!.plusDunMiTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.plusDunMiTemps ?? (null as unknown as number),
 			),
 			miTemps: PositiveInt.default(
-				femmes.nonSalarie!.miTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.miTemps ?? (null as unknown as number),
 			),
 			moinsDunMiTemps: PositiveInt.default(
-				femmes.nonSalarie!.moinsDunMiTemps ?? (null as unknown as number),
+				femmes?.nonSalarie?.moinsDunMiTemps ?? (null as unknown as number),
 			),
 		}),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(femmes, { ...form.data });
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionEquipe.permanents)) {
+					data.progressionEquipe.permanents = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.declaration.donnees.equipe, {
+					permanents: {
+						femmes: form.data,
+					},
+				});
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./2");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
-	<p class="fr-text--xl">Combien de femmes travaillent pour l’entreprise ?</p>
+	<p class="fr-text--xl">Combien de femmes travaillent pour l’entreprise ?</p>
 	<form method="POST" use:enhance>
 		<Fieldset>
 			{#snippet inputs()}
@@ -130,4 +121,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.permanents}
+	progression={data.progressionEquipe}
+></FormDebug>

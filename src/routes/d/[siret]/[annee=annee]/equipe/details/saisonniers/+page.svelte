@@ -4,57 +4,46 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { Bool } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	const equipe = data.declaration.donnees.equipe;
-
 	const schema = z.object({
-		aSaisonniers: Bool.default(
-			equipe.saisonniers ? true : (null as unknown as boolean),
-		),
+		aSaisonniers: Bool.default(!!data.equipe.saisonniers),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					if (form.data.aSaisonniers) {
-						merge(equipe, {
-							saisonniers: {},
-						});
-					} else {
-						delete equipe.saisonniers;
-					}
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: (form) => !form.data.aSaisonniers,
+			getNextPage: () =>
+				data.declaration.donnees.equipe.saisonniers ?
+					"./saisonniers/1"
+				:	"../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionEquipe.saisonniers)) {
+					data.progressionEquipe.saisonniers = statut;
 				}
-			}
-		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				if (data.declaration.donnees.equipe.saisonniers) {
-					goto("./saisonniers/1");
+				return data.declaration;
+			},
+			updateData: (form) => {
+				if (form.data.aSaisonniers) {
+					merge(data.equipe, {
+						saisonniers: {},
+					});
 				} else {
-					goto("../recapitulatif");
+					delete data.equipe.saisonniers;
 				}
-			}
+				return data.declaration;
+			},
 		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
@@ -79,6 +68,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={true}
 							bind:group={$form.aSaisonniers}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Oui{/snippet}
@@ -91,6 +81,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={false}
 							bind:group={$form.aSaisonniers}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non{/snippet}
@@ -110,4 +101,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.saisonniers}
+	progression={data.progressionEquipe}
+></FormDebug>

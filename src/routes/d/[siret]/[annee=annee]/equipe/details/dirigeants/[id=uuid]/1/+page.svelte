@@ -4,56 +4,46 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { nestedSpaForm } from "$lib/form-utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	const schema = z.object({
-		// Voir https://superforms.rocks/default-values#changing-a-default-value
-		// on veut une valeur initiale nulle, sans pour autant rendre le champ
-		// nullable
 		nouveauDirigeant: Bool.default(
 			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
 		),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.dirigeant, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionDirigeant.statut)) {
+					data.progressionDirigeant.statut = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.dirigeant, form.data);
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./2");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
-	<p class="fr-text--xl">
+	<h2 class="fr-h4 fr-mb-4w">
 		Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
 		{data.annee} ?
-	</p>
+	</h2>
 	<form method="POST" use:enhance>
 		<Fieldset hasError={!!$errors?.nouveauDirigeant}>
 			{#snippet inputs(id)}
@@ -65,6 +55,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={true}
 							bind:group={$form.nouveauDirigeant}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Oui{/snippet}
@@ -77,6 +68,7 @@
 							aria-describedby="radio-{id}-messages"
 							value={false}
 							bind:group={$form.nouveauDirigeant}
+							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}Non{/snippet}
@@ -91,9 +83,13 @@
 				{/if}
 			{/snippet}
 		</Fieldset>
-
 		<NavigationLinks nextIsButton cantAnswerBtn />
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.dirigeant}
+	progression={data.progressionDirigeant}
+></FormDebug>

@@ -60,14 +60,7 @@ describe("Tests de manipulation des déclarations", async () => {
 				suggestions: null,
 				raisonsInactivite: null,
 			},
-			etapes: {
-				entrepriseValidee: false,
-				concessionValidee: false,
-				stockValidee: false,
-				productionValidee: false,
-				envoiValidee: false,
-				declarationValidee: false,
-			},
+			progression: {},
 			entreprise: {
 				emailEntreprise: null,
 				emailContact: null,
@@ -126,14 +119,6 @@ describe("Tests de manipulation des déclarations", async () => {
 
 		expect(deepClean(declaration)).toEqual({
 			aProduit: true,
-			etapes: {
-				concessionValidee: false,
-				declarationValidee: false,
-				entrepriseValidee: false,
-				envoiValidee: false,
-				productionValidee: false,
-				stockValidee: false,
-			},
 			etablissement: {
 				siret: "xxx",
 				denomination: "yyy",

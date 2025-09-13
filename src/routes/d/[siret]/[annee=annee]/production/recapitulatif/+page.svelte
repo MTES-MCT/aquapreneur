@@ -4,9 +4,10 @@
 
 	import { goto } from "$app/navigation";
 
-	import Accordion from "$lib/components/accordion.svelte";
+	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
 	import { dProd } from "$lib/declaration-utils";
+	import { StatutProgression } from "$lib/schemas/declaration-schema";
 
 	const { data } = $props();
 
@@ -17,28 +18,15 @@
 	);
 </script>
 
-{#snippet recapLine(title: string, link: string)}
-	<Accordion>
-		{#snippet header()}
-			<div style="flex: 1">
-				<span class="fr-icon-list-unordered" aria-hidden="true"></span>
-				{title}
-			</div>
-		{/snippet}
-		{#snippet headerAction()}
-			{@const validé = false}
-			<button
-				class="fr-btn fr-mx-2v"
-				class:fr-btn--tertiary={validé}
-				onclick={() => {
-					goto(link);
-				}}
-			>
-				{validé ? "Validé" : "Compléter"}
-			</button>
-		{/snippet}
-		{#snippet content()}{/snippet}
-	</Accordion>
+{#snippet recapLine(title: string, status: StatutProgression, link: string)}
+	<RecapLine
+		label={title}
+		{status}
+		icon="fr-icon-list-unordered"
+		onEdit={async () => goto(link)}
+	>
+		TODO tableau récap
+	</RecapLine>
 {/snippet}
 
 <div>
@@ -60,11 +48,13 @@
 		<div data-fr-group="true" class="fr-accordions-group">
 			{@render recapLine(
 				"Origine et mode d’élevage",
+				null,
 				`./${espece.slug}/origine/1`,
 			)}
-			{@render recapLine("Volume en stock", `./${espece.slug}/elevage/1`)}
+			{@render recapLine("Volume en stock", null, `./${espece.slug}/elevage/1`)}
 			{@render recapLine(
 				"Zones de production et pertes",
+				null,
 				`./${espece.slug}/zones/1`,
 			)}
 		</div>

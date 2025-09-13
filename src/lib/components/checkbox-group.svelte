@@ -31,6 +31,7 @@
 			{disabled}
 			type="checkbox"
 			onchange={(event) => onCheck(event)}
+			autocomplete="off"
 		/>
 		<label class="fr-label" for={id}>{@render label()}</label>
 	</div>

@@ -4,15 +4,12 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm } from "$lib/form-utils.js";
 	import { Percent } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -23,29 +20,23 @@
 		part: Percent.default(bio?.part ?? 0),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.declaration.donnees.ventes, {
-						[data.espece.id]: { consommation: { bio: form.data } },
-					});
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./3",
+			updateProgress: () => {
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.declaration.donnees.ventes, {
+					[data.espece.id]: { consommation: { bio: form.data } },
+				});
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./3");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>

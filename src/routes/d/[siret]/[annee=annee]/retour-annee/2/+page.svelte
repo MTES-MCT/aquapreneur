@@ -4,45 +4,33 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import TextareaGroup from "$lib/components/textarea–group.svelte";
-	import { nestedSpaForm } from "$lib/form-utils";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm } from "$lib/form-utils";
 
 	const { data } = $props();
 
-	const retour = data.declaration.donnees.retourAnnee;
-
 	const schema = z.object({
-		difficultes: z.string().nullable().default(retour.difficultes),
+		difficultes: z.string().nullable().default(data.retourAnnee.difficultes),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(data.declaration.donnees.retourAnnee, { ...form.data });
-
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
-				}
-			}
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./3",
+			updateProgress: () => {
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.retourAnnee, form.data);
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./3");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div class="fr-stepper">
@@ -79,5 +67,4 @@
 	<NavigationLinks prevHref="./1" nextIsButton />
 </form>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.retourAnnee}
-></FormDebug>
+<FormDebug {form} {errors} data={data.retourAnnee}></FormDebug>

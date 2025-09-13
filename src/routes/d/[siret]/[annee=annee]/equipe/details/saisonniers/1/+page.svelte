@@ -4,73 +4,64 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import { goto } from "$app/navigation";
-
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_CONTRAT } from "$lib/constants";
-	import { nestedSpaForm } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
 	import { PositiveInt } from "$lib/types";
-	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	// TODO : à remplacer par une version mettant les types à jour.
-	merge(data.declaration.donnees.equipe, {
-		saisonniers: {
-			femmes: { cdd: {}, interim: {} },
-		},
-	});
-
-	const femmes = data.declaration.donnees.equipe.saisonniers!.femmes!;
+	const femmes = data.declaration.donnees.equipe.saisonniers?.femmes;
 
 	const schema = z.object({
 		cdd: z.object({
 			nbJours: PositiveInt.default(
-				femmes.cdd!.nbJours ?? (null as unknown as number),
+				femmes?.cdd?.nbJours ?? (null as unknown as number),
 			),
 			nbPersonnes: PositiveInt.default(
-				femmes.cdd!.nbPersonnes ?? (null as unknown as number),
+				femmes?.cdd?.nbPersonnes ?? (null as unknown as number),
 			),
 		}),
 		interim: z.object({
 			nbJours: PositiveInt.default(
-				femmes.interim!.nbJours ?? (null as unknown as number),
+				femmes?.interim?.nbJours ?? (null as unknown as number),
 			),
 			nbPersonnes: PositiveInt.default(
-				femmes.interim!.nbPersonnes ?? (null as unknown as number),
+				femmes?.interim?.nbPersonnes ?? (null as unknown as number),
 			),
 		}),
 	});
 
-	const { form, errors, enhance } = nestedSpaForm(defaults(zod4(schema)), {
-		validators: zod4(schema),
-		onUpdate: async ({ form }) => {
-			if (form.valid) {
-				try {
-					merge(femmes, { ...form.data });
-					data.declaration.donnees = await submitDeclarationUpdate(
-						data.declaration.id,
-						data.declaration.donnees,
-					);
-				} catch (err) {
-					console.error(err);
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionEquipe.saisonniers)) {
+					data.progressionEquipe.saisonniers = statut;
 				}
-			}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.declaration.donnees.equipe, {
+					saisonniers: {
+						femmes: form.data,
+					},
+				});
+				return data.declaration;
+			},
 		},
-		onUpdated({ form }) {
-			if (form.valid) {
-				goto("./2");
-			}
-		},
-	});
+		defaults(zod4(schema)),
+	);
 </script>
 
 <div>
 	<p class="fr-text--xl">
-		Combien de femmes saisonnières ont travaillé pour l’entreprise ?
+		Combien de femmes saisonnières ont travaillé pour l’entreprise ?
 	</p>
 	<form method="POST" use:enhance>
 		<Fieldset>
@@ -121,4 +112,9 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.declaration.donnees.equipe}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={data.equipe.saisonniers}
+	progression={data.progressionEquipe}
+></FormDebug>

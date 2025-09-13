@@ -18,10 +18,7 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(
-			data.declaration.id,
-			donnees,
-		);
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
 		goto("../../recapitulatif");
 	};
 
@@ -96,6 +93,7 @@
 																	(d.france!.valeurHT = toNumber(
 																		v.currentTarget.value,
 																	))}
+																autocomplete="off"
 															/>
 														</td>{/if}
 													{#if ventesEtrangerActives()}
@@ -108,10 +106,17 @@
 																	(d.etranger!.valeurHT = toNumber(
 																		v.currentTarget.value,
 																	))}
+																autocomplete="off"
 															/>
 														</td>
 													{/if}
-													<td><input class="fr-input" disabled /></td>
+													<td>
+														<input
+															class="fr-input"
+															disabled
+															autocomplete="off"
+														/>
+													</td>
 												</tr>
 											{/if}
 										{/each}
