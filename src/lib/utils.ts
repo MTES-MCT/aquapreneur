@@ -4,7 +4,10 @@ import isEqual from "lodash/isEqual";
 import isPlainObject from "lodash/isPlainObject";
 
 import { ANNEES_DECLARATIVES, DSFR_VERSION } from "./constants";
-import { DeclarationSchema } from "./schemas/declaration-schema";
+import {
+	DeclarationSchema,
+	StatutProgression,
+} from "./schemas/declaration-schema";
 
 import type { DeclarationEntry } from "./server/db/types";
 import type { AnneeDeclarative } from "./types";
@@ -83,4 +86,26 @@ export const toNumber = (val: string | null | undefined) => {
 			:	null
 		:	null
 	);
+};
+
+export const partFilled = (
+	donnees: DeclarationSchema,
+	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi" | "",
+) => {
+	const statutsFinalises: StatutProgression[] = [
+		"passage producteur",
+		"validé comptable",
+		"validé producteur",
+	];
+	if (part === "equipe") {
+		const p = donnees.progression.equipe;
+		return (
+			!!p &&
+			statutsFinalises.includes(p.permanents) &&
+			statutsFinalises.includes(p.saisonniers) &&
+			p.dirigeants.every((sd) => statutsFinalises.includes(sd.statut))
+		);
+	}
+
+	return false;
 };
