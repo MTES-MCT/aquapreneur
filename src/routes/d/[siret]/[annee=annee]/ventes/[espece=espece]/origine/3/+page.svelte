@@ -33,17 +33,19 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => false,
-		() => "../../recapitulatif",
-		() => {
-			return data.declaration;
-		},
-		(form) => {
-			merge(data.declaration.donnees.ventes, {
-				[data.espece.id]: { consommation: { origine: form.data } },
-			});
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "../../recapitulatif",
+			updateProgress: () => {
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.declaration.donnees.ventes, {
+					[data.espece.id]: { consommation: { origine: form.data } },
+				});
+				return data.declaration;
+			},
 		},
 		defaults(zod4(schema)),
 	);

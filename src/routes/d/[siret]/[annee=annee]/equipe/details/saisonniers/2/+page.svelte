@@ -43,18 +43,18 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => true,
-		() => "../../recapitulatif",
-
-		(statut) => {
-			data.progressionEquipe.saisonniers = statut;
-			return data.declaration;
-		},
-
-		(form) => {
-			merge(hommes, form.data);
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => true,
+			getNextPage: () => "../../recapitulatif",
+			updateProgress: (statut) => {
+				data.progressionEquipe.saisonniers = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(hommes, form.data);
+				return data.declaration;
+			},
 		},
 		defaults(zod4(schema)),
 	);

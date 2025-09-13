@@ -55,20 +55,19 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => false,
-		() => "./2",
-
-		(statut) => {
-			data.progressionEquipe.permanents = statut;
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				data.progressionEquipe.permanents = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(femmes, form.data);
+				return data.declaration;
+			},
 		},
-
-		(form) => {
-			merge(femmes, form.data);
-			return data.declaration;
-		},
-
 		defaults(zod4(schema)),
 	);
 </script>

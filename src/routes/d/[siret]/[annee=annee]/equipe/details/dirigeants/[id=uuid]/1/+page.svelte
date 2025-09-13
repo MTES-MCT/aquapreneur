@@ -20,20 +20,19 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => false,
-		() => "./2",
-
-		(statut) => {
-			data.progressionDirigeant.statut = statut;
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				data.progressionDirigeant.statut = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.dirigeant, form.data);
+				return data.declaration;
+			},
 		},
-
-		(form) => {
-			merge(data.dirigeant, form.data);
-			return data.declaration;
-		},
-
 		defaults(zod4(schema)),
 	);
 </script>

@@ -55,20 +55,19 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => true,
-		() => "../../recapitulatif",
-
-		(statut) => {
-			data.progressionEquipe.permanents = statut;
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => true,
+			getNextPage: () => "../../recapitulatif",
+			updateProgress: (statut) => {
+				data.progressionEquipe.permanents = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(hommes, form.data);
+				return data.declaration;
+			},
 		},
-
-		(form) => {
-			merge(hommes, form.data);
-			return data.declaration;
-		},
-
 		defaults(zod4(schema)),
 	);
 </script>

@@ -17,30 +17,28 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		(form) => !form.data.aPermanents,
-
-		() =>
-			data.declaration.donnees.equipe.permanents ?
-				"./permanents/1"
-			:	"../recapitulatif",
-
-		(statut) => {
-			data.progressionEquipe.permanents = statut;
-			return data.declaration;
+		{
+			schema,
+			isLastStep: (form) => !form.data.aPermanents,
+			getNextPage: () =>
+				data.declaration.donnees.equipe.permanents ?
+					"./permanents/1"
+				:	"../recapitulatif",
+			updateProgress: (statut) => {
+				data.progressionEquipe.permanents = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				if (form.data.aPermanents) {
+					merge(data.equipe, {
+						permanents: {},
+					});
+				} else {
+					delete data.equipe.permanents;
+				}
+				return data.declaration;
+			},
 		},
-
-		(form) => {
-			if (form.data.aPermanents) {
-				merge(data.equipe, {
-					permanents: {},
-				});
-			} else {
-				delete data.equipe.permanents;
-			}
-			return data.declaration;
-		},
-
 		defaults(zod4(schema)),
 	);
 </script>

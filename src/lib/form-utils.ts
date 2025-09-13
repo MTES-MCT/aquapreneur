@@ -19,11 +19,19 @@ export function prepareForm<
 	M extends Message = Message,
 	In extends Record<string, unknown> = T,
 >(
-	schema: S,
-	isLastStep: (form: SuperValidated<T, M, In>) => boolean,
-	getNextPage: () => string,
-	updateProgress: (statut: StatutProgression) => DeclarationEntry,
-	updateData: (form: SuperValidated<T, M, In>) => DeclarationEntry,
+	{
+		schema,
+		isLastStep,
+		getNextPage,
+		updateProgress,
+		updateData,
+	}: {
+		schema: S;
+		isLastStep: (form: SuperValidated<T, M, In>) => boolean;
+		getNextPage: () => string;
+		updateProgress: (statut: StatutProgression) => DeclarationEntry;
+		updateData: (form: SuperValidated<T, M, In>) => DeclarationEntry;
+	},
 	...params: Parameters<typeof superForm<T, M, In>>
 ) {
 	return superForm<T, M, In>(params[0], {

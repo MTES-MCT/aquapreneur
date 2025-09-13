@@ -18,30 +18,28 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		(form) => !form.data.aSaisonniers,
-
-		() =>
-			data.declaration.donnees.equipe.saisonniers ?
-				"./saisonniers/1"
-			:	"../recapitulatif",
-
-		(statut) => {
-			data.progressionEquipe.saisonniers = statut;
-			return data.declaration;
+		{
+			schema,
+			isLastStep: (form) => !form.data.aSaisonniers,
+			getNextPage: () =>
+				data.declaration.donnees.equipe.saisonniers ?
+					"./saisonniers/1"
+				:	"../recapitulatif",
+			updateProgress: (statut) => {
+				data.progressionEquipe.saisonniers = statut;
+				return data.declaration;
+			},
+			updateData: (form) => {
+				if (form.data.aSaisonniers) {
+					merge(data.equipe, {
+						saisonniers: {},
+					});
+				} else {
+					delete data.equipe.saisonniers;
+				}
+				return data.declaration;
+			},
 		},
-
-		(form) => {
-			if (form.data.aSaisonniers) {
-				merge(data.equipe, {
-					saisonniers: {},
-				});
-			} else {
-				delete data.equipe.saisonniers;
-			}
-			return data.declaration;
-		},
-
 		defaults(zod4(schema)),
 	);
 </script>

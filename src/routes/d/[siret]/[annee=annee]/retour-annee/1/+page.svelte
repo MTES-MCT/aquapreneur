@@ -24,15 +24,17 @@
 	});
 
 	const { form, errors, enhance } = prepareForm(
-		schema,
-		() => false,
-		() => "./2",
-		() => {
-			return data.declaration;
-		},
-		(form) => {
-			merge(data.retourAnnee, form.data);
-			return data.declaration;
+		{
+			schema,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: () => {
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.retourAnnee, form.data);
+				return data.declaration;
+			},
 		},
 		defaults(zod4(schema)),
 	);
