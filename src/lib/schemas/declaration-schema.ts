@@ -148,15 +148,12 @@ export const productionSchema = optObject({
 });
 
 export const StatutProgression = z
-	.union([
-		z.number().int(),
-		z.literal([
-			"en cours comptable",
-			"validé comptable",
-			"passage producteur",
-			"en cours producteur",
-			"validé producteur",
-		]),
+	.literal([
+		"en cours comptable",
+		"validé comptable",
+		"passage producteur",
+		"en cours producteur",
+		"validé producteur",
 	])
 	.nullish();
 export type StatutProgression = z.infer<typeof StatutProgression>;

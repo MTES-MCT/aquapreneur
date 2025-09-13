@@ -4,9 +4,10 @@
 
 	import { goto } from "$app/navigation";
 
-	import Accordion from "$lib/components/accordion.svelte";
+	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
+	import { StatutProgression } from "$lib/schemas/declaration-schema";
 
 	const { data } = $props();
 
@@ -16,6 +17,17 @@
 		ESPECES.filter((e) => dVentes(donnees, e.id).active()),
 	);
 </script>
+
+{#snippet recapLine(title: string, status: StatutProgression, link: string)}
+	<RecapLine
+		label={title}
+		{status}
+		icon="fr-icon-list-unordered"
+		onEdit={async () => goto(link)}
+	>
+		TODO tableau récap
+	</RecapLine>
+{/snippet}
 
 <div>
 	<div class="bandeau-titre">
@@ -34,81 +46,30 @@
 		<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
 
 		<div data-fr-group="true" class="fr-accordions-group">
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Ventes à la consommation</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = dVentes(donnees, espece.id).consommation.validé}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/conso/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Ventes à l’élevage</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = dVentes(donnees, espece.id).elevage.validé}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/elevage/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
+			{@render recapLine(
+				"Ventes à la consommation",
+				null,
+				`./${espece.slug}/conso/`,
+			)}
+
+			{@render recapLine(
+				"Ventes à l’élevage",
+				null,
+				`./${espece.slug}/elevage/`,
+			)}
+
 			{#if dVentes(donnees, espece.id).naissain.active()}
-				<Accordion>
-					{#snippet header()}
-						<div style="flex: 1">Vente de naissain</div>
-					{/snippet}
-					{#snippet headerAction()}
-						{@const validé = dVentes(donnees, espece.id).naissain.validé}
-						<button
-							class="fr-btn fr-mx-2v"
-							class:fr-btn--tertiary={validé}
-							onclick={() => {
-								goto(`./${espece.slug}/naissain/`);
-							}}
-						>
-							{validé ? "Validé" : "Compléter"}
-						</button>
-					{/snippet}
-					{#snippet content()}{/snippet}
-				</Accordion>
+				{@render recapLine(
+					"Vente de naissain",
+					null,
+					`./${espece.slug}/naissain/`,
+				)}
 			{/if}
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">Origine, finition et certification</div>
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = dVentes(donnees, espece.id).consommation
-						.origineValidé}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={() => {
-							goto(`./${espece.slug}/origine/`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
+			{@render recapLine(
+				"Origine, finition et certification",
+				null,
+				`./${espece.slug}/origine/`,
+			)}
 		</div>
 	{/each}
 </div>

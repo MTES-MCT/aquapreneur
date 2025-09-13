@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 
-	import Accordion from "$lib/components/accordion.svelte";
+	import RecapLine from "$lib/components/recap-line.svelte";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
@@ -15,34 +15,24 @@
 	<h2 class="fr-h6 fr-mt-10v">Dirigeants et associés</h2>
 
 	<div data-fr-group="true" class="fr-accordions-group">
-		{#each data.declaration.donnees.equipe.dirigeants as dir (dir.id)}
-			<Accordion>
-				{#snippet header()}
-					<div style="flex: 1">{dir.prenomNom}</div>
-					{data.progressionEquipe.dirigeants.find((d) => d.id === dir.id)
-						?.statut}
-				{/snippet}
-				{#snippet headerAction()}
-					{@const validé = false}
-					<button
-						class="fr-btn fr-mx-2v"
-						class:fr-btn--tertiary={validé}
-						onclick={async () => {
-							const s = data.progressionEquipe.dirigeants.find(
-								(d) => d.id === dir.id,
-							);
-							if (s) {
-								s.statut = "en cours comptable";
-							}
-							await submitDeclarationUpdate(data.declaration);
-							goto(`./details/dirigeants/${dir.id}/1`);
-						}}
-					>
-						{validé ? "Validé" : "Compléter"}
-					</button>
-				{/snippet}
-				{#snippet content()}{/snippet}
-			</Accordion>
+		{#each data.declaration.donnees.equipe.dirigeants as dir, index (dir.id)}
+			{@const statut = data.progressionEquipe.dirigeants.find(
+				(d) => d.id === dir.id,
+			)}
+			<RecapLine
+				label={dir.prenomNom ?? `Dirigeant ou associé n° ${index + 1}`}
+				icon="fr-icon-user-line"
+				status={statut?.statut}
+				onEdit={async () => {
+					if (statut) {
+						statut.statut = "en cours comptable";
+					}
+					await submitDeclarationUpdate(data.declaration);
+					goto(`./details/dirigeants/${dir.id}/1`);
+				}}
+			>
+				TODO tableau récap
+			</RecapLine>
 		{/each}
 	</div>
 
@@ -59,49 +49,31 @@
 	<h2 class="fr-h6 fr-mt-10v">Main d’œuvre</h2>
 
 	<div data-fr-group="true" class="fr-accordions-group">
-		<Accordion>
-			{#snippet header()}
-				<div style="flex: 1">Employés permanents</div>
-				{data.progressionEquipe.permanents}
-			{/snippet}
-			{#snippet headerAction()}
-				{@const validé = false}
-				<button
-					class="fr-btn fr-mx-2v"
-					class:fr-btn--tertiary={validé}
-					onclick={async () => {
-						data.progressionEquipe.permanents = "en cours comptable";
-						await submitDeclarationUpdate(data.declaration);
-						goto(`./details/permanents`);
-					}}
-				>
-					{validé ? "Validé" : "Compléter"}
-				</button>
-			{/snippet}
-			{#snippet content()}{/snippet}
-		</Accordion>
+		<RecapLine
+			label="Employés permanents"
+			icon="fr-icon-group-line"
+			status={data.progressionEquipe.permanents}
+			onEdit={async () => {
+				data.progressionEquipe.permanents = "en cours comptable";
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./details/permanents`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
 
-		<Accordion>
-			{#snippet header()}
-				<div style="flex: 1">Employés saisonniers</div>
-				{data.progressionEquipe.saisonniers}
-			{/snippet}
-			{#snippet headerAction()}
-				{@const validé = false}
-				<button
-					class="fr-btn fr-mx-2v"
-					class:fr-btn--tertiary={validé}
-					onclick={async () => {
-						data.progressionEquipe.saisonniers = "en cours comptable";
-						await submitDeclarationUpdate(data.declaration);
-						goto(`./details/saisonniers`);
-					}}
-				>
-					{validé ? "Validé" : "Compléter"}
-				</button>
-			{/snippet}
-			{#snippet content()}{/snippet}
-		</Accordion>
+		<RecapLine
+			label="Employés saisonniers"
+			icon="fr-icon-group-line"
+			status={data.progressionEquipe.saisonniers}
+			onEdit={async () => {
+				data.progressionEquipe.saisonniers = "en cours comptable";
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./details/saisonniers`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
 	</div>
 </div>
 
