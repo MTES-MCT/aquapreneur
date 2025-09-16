@@ -96,6 +96,16 @@ export const appHandle: Handle = async ({ event, resolve }) => {
 	event.locals.utilisateur = utilisateur;
 	event.locals.session = session;
 
+	// TEMPORAIRE pour faciliter les tests utilisateurs, on permet aux comptes
+	// admin de forcer un mode "comptable" ou "producteur"
+	let parcoursMode = event.url.searchParams.get("parcours") ?? null;
+	if (parcoursMode) {
+		event.cookies.set("parcoursMode", parcoursMode, { path: "/" });
+	} else {
+		parcoursMode = event.cookies.get("parcoursMode") ?? null;
+	}
+	event.locals.parcoursMode = parcoursMode;
+
 	checkPermissions(utilisateur, event.route.id);
 
 	const response = await resolve(event);

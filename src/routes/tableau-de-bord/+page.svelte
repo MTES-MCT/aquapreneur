@@ -20,33 +20,67 @@
 								<thead>
 									<tr>
 										<th scope="col">Adhérent</th>
-										<th scope="col">N° SIRET</th>
 										<th scope="col">Période</th>
+										<th scope="col">Parcours</th>
 										<th scope="col">Statut</th>
+										<th scope="col">Actions</th>
 									</tr>
 								</thead>
 								<tbody>
 									{#each data.declarations as declaration (declaration.id)}
 										<tr>
 											<td>
-												<a
-													href="./d/{declaration.siret}/{declaration.annee}/"
-													class="fr-icon-store-line fr-link--icon-left fr-link fr-link--sm"
-													data-sveltekit-preload-data="off"
-												>
-													{declaration.denomination}
-												</a>
+												{declaration.denomination}
+												<span class="fr-text--xs fr-text--light">
+													({declaration.siret})
+												</span>
 											</td>
-											<td>{declaration.siret}</td>
 											<td>{declaration.annee}</td>
 											<td>
 												<a
-													target="_blank"
-													download={`aquapreneur-decl-${declaration.siret}-${declaration.annee}.json`}
-													href="./d/{declaration.siret}/{declaration.annee}/download"
+													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=comptable"
+													class="fr-link fr-link--sm"
+													data-sveltekit-preload-data="off"
 												>
-													Télécharger
+													parcours comptable
 												</a>
+												<br />
+												<a
+													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=producteur"
+													class=" fr-link fr-link--sm"
+													data-sveltekit-preload-data="off"
+												>
+													parcours producteur
+												</a>
+											</td>
+											<td>
+												<!-- <p
+													class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w"
+												>
+													Passage producteur attendu
+												</p> -->
+											</td>
+
+											<td>
+												<form
+													method="POST"
+													action="/d/{declaration.siret}/{declaration.annee}"
+												>
+													<button
+														class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
+													>
+														Réinitialiser
+													</button>
+													•
+													<a
+														class="fr-link fr-link--sm"
+														target="_blank"
+														download={`aquapreneur-decl-${declaration.siret}-${declaration.annee}.json`}
+														href="./d/{declaration.siret}/{declaration.annee}/download"
+													>
+														Télécharger
+													</a>
+												</form>
 											</td>
 										</tr>
 									{/each}
