@@ -1,4 +1,6 @@
-import { eq, getTableColumns, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, inArray, isNotNull, sql } from "drizzle-orm";
+
+import { env } from "$env/dynamic/private";
 
 import { db } from "$lib/server/db";
 
@@ -11,7 +13,19 @@ import * as logger from "$lib/server/utils/logger";
 
 export const load = async () => {
 	// TODO: ne récuperer que les exploitants assignés au comptable connecté
-	const etablissements = await db.select().from(etablissementsTable);
+	const etablissements = await db
+		.select()
+		.from(etablissementsTable)
+		.where(
+			and(
+				env.TMP_ALLOWED_SIRENS ?
+					inArray(
+						sql<string>`substring(${etablissementsTable.siret} from 1 for 9)`,
+						env.TMP_ALLOWED_SIRENS.split(","),
+					)
+				:	isNotNull(etablissementsTable.siret),
+			),
+		);
 
 	for (const etablissement of etablissements) {
 		try {
@@ -38,7 +52,17 @@ export const load = async () => {
 		.with(sq)
 		.select()
 		.from(sq)
-		.where(eq(sq.rank, 1));
+		.where(
+			and(
+				eq(sq.rank, 1),
+				env.TMP_ALLOWED_SIRENS ?
+					inArray(
+						sql<string>`substring(${sq.siret} from 1 for 9)`,
+						env.TMP_ALLOWED_SIRENS.split(","),
+					)
+				:	isNotNull(sq.siret),
+			),
+		);
 
 	return {
 		declarations,
