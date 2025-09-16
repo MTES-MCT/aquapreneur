@@ -9,6 +9,7 @@ declare global {
 		interface Locals {
 			utilisateur: Utilisateur | null;
 			session: Session | null;
+			parcoursMode: string | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

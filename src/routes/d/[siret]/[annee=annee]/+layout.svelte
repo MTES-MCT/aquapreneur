@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { type SlideParams, slide } from "svelte/transition";
 
+	import { browser } from "$app/environment";
+	import { invalidateAll } from "$app/navigation";
 	import { navigating, page } from "$app/state";
 
 	import SideMenu from "./side-menu.svelte";
 
 	let { data, children } = $props();
+
+	if (browser && page.url.searchParams.get("parcours")) {
+		invalidateAll();
+	}
 
 	function maybeSlide(
 		node: Element,

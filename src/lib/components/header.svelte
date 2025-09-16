@@ -5,7 +5,11 @@
 
 	import LogoAP from "$lib/assets/logo-aquapreneur.svg";
 
-	const { utilisateur }: { utilisateur: Utilisateur | null } = $props();
+	const {
+		utilisateur,
+		parcoursMode,
+	}: { utilisateur: Utilisateur | null; parcoursMode: string | null } =
+		$props();
 </script>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
@@ -66,6 +70,15 @@
 						<ul class="fr-btns-group">
 							<li>
 								{#if utilisateur}
+									{#if parcoursMode}
+										<p
+											class="fr-tag fr-icon-user-line fr-tag--icon-left fr-mr-2w"
+										>
+											{parcoursMode === "comptable" ? "Comptable" : (
+												"Producteur"
+											)}
+										</p>
+									{/if}
 									<form
 										method="post"
 										action="/auth/logout/proconnect"

@@ -8,11 +8,16 @@
 <Pictogram pict="document/contract" width={124} height={124}></Pictogram>
 
 <h2 class="fr-h2 fr-mt-6v">
-	Cette déclaration annuelle de production aquacole concerne votre adhérent :
+	{#if data.parcoursMode === "comptable"}
+		Cette déclaration annuelle de production aquacole concerne votre adhérent :
+	{:else}
+		Cette déclaration annuelle de production aquacole concerne votre
+		entreprise :
+	{/if}
 </h2>
 
 <p class="fr-h2">
 	{data.etablissement.denomination}
 </p>
 
-<NavigationLinks nextHref="./2" nextLabel="Commencer" />
+<NavigationLinks nextHref="../equipe" nextLabel="Commencer" />

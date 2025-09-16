@@ -92,7 +92,7 @@
 	</div>
 
 	{#if status === "passage producteur"}
-		<p class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w">
+		<p class="fr-badge fr-badge--sm fr-badge--blue-cumulus fr-mr-1w">
 			Passage producteur attendu
 		</p>
 	{/if}
