@@ -65,7 +65,7 @@
 					bind:value={$form.prenomNom}
 					errors={$errors?.prenomNom}
 				>
-					{#snippet label()}Nom et prénom{/snippet}
+					{#snippet label()}Prénom et nom{/snippet}
 				</InputGroup>
 
 				<InputGroup
