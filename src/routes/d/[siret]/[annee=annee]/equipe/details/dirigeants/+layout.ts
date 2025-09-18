@@ -21,8 +21,6 @@ export const load = async ({ params, parent }) => {
 
 	merge(progressionEquipe, {
 		dirigeants: [],
-		permanents: null,
-		saisonniers: null,
 	});
 
 	let progressionDirigeant = progressionEquipe.dirigeants.find(
