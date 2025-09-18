@@ -3,13 +3,15 @@
 import type { Session } from "$lib/server/db/types";
 import type { Utilisateur } from "$lib/server/db/types";
 
+import type { Persona } from "$lib/types";
+
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
 			utilisateur: Utilisateur | null;
 			session: Session | null;
-			parcoursMode: string | null;
+			persona: Persona;
 		}
 		// interface PageData {}
 		// interface PageState {}

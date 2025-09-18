@@ -26,6 +26,7 @@ import audit from "$lib/server/utils/audit";
 import * as logger from "$lib/server/utils/logger";
 
 import { SESSION_COOKIE_NAME } from "$lib/constants";
+import { Persona } from "$lib/types";
 
 z.config({ jitless: true });
 
@@ -98,13 +99,16 @@ export const appHandle: Handle = async ({ event, resolve }) => {
 
 	// TEMPORAIRE pour faciliter les tests utilisateurs, on permet aux comptes
 	// admin de forcer un mode "comptable" ou "producteur"
-	let parcoursMode = event.url.searchParams.get("parcours") ?? null;
-	if (parcoursMode) {
-		event.cookies.set("parcoursMode", parcoursMode, { path: "/" });
+	const personaParam = event.url.searchParams.get("persona");
+	let persona;
+	if (personaParam) {
+		persona = Persona.safeParse(personaParam).data || "comptable";
+		event.cookies.set("persona", persona ?? "", { path: "/" });
 	} else {
-		parcoursMode = event.cookies.get("parcoursMode") ?? null;
+		const cookieValue = event.cookies.get("persona");
+		persona = Persona.safeParse(cookieValue).data || "comptable";
 	}
-	event.locals.parcoursMode = parcoursMode;
+	event.locals.persona = persona;
 
 	checkPermissions(utilisateur, event.route.id);
 

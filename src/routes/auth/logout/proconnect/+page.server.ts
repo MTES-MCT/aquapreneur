@@ -60,6 +60,9 @@ export const actions = {
 			path: "/",
 		});
 
+		// eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
+		cookies.delete("persona", { path: "/" });
+
 		if (idToken !== null) {
 			// eslint-disable-next-line drizzle/enforce-delete-with-where -- incorrectly considers this as a database operation
 			cookies.delete(OIDC_ID_TOKEN_COOKIE_NAME, { path: "/" });

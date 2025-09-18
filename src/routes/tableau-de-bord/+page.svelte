@@ -38,7 +38,7 @@
 											<td>{declaration.annee}</td>
 											<td>
 												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=comptable"
+													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=comptable"
 													class="fr-link fr-link--sm"
 													data-sveltekit-preload-data="off"
 												>
@@ -46,7 +46,7 @@
 												</a>
 												<br />
 												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=producteur"
+													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=producteur"
 													class=" fr-link fr-link--sm"
 													data-sveltekit-preload-data="off"
 												>

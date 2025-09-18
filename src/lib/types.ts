@@ -40,3 +40,6 @@ export const Year = z.number(ERR_YEAR).int(ERR_YEAR).min(1900, ERR_YEAR_MIN);
 export const Siret = z.string().regex(/^\d{14}$/);
 
 export type AnneeDeclarative = (typeof ANNEES_DECLARATIVES)[number];
+
+export const Persona = z.literal(["comptable", "producteur"]);
+export type Persona = z.infer<typeof Persona>;
