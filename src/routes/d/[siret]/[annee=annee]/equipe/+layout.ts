@@ -11,10 +11,11 @@ export const load = async ({ parent, fetch }) => {
 	});
 
 	const statutCourantEquipe = declaration.donnees.progression.equipe!.globale;
-	let nouveauStatutEquipe: StatutProgression;
+	let nouveauStatutEquipe: StatutProgression = statutCourantEquipe;
 
-	if (persona === "producteur" && typeStatut(statutCourantEquipe) == null) {
-		nouveauStatutEquipe = "en cours producteur";
+	if (statutCourantEquipe == null) {
+		nouveauStatutEquipe =
+			persona === "comptable" ? "en cours comptable" : "en cours producteur";
 	}
 
 	if (
