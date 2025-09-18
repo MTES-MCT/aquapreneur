@@ -5,9 +5,9 @@
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { partFilled, submitDeclarationUpdate } from "$lib/utils";
 
-	import RecapDirigeant from "./recap-dirigeant.svelte";
-	import RecapPermanents from "./recap-permanents.svelte";
-	import RecapSaisonniers from "./recap-saisonniers.svelte";
+	import RecapDirigeant from "../recap-dirigeant.svelte";
+	import RecapPermanents from "../recap-permanents.svelte";
+	import RecapSaisonniers from "../recap-saisonniers.svelte";
 
 	const { data } = $props();
 
