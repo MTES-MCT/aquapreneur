@@ -3,6 +3,16 @@
 	import Pictogram from "$lib/components/pictogram.svelte";
 
 	let { data } = $props();
+
+	const getNextUrl = () => {
+		if (
+			data.progressionEquipe.globale === "préremplissage comptable à valider"
+		) {
+			return "equipe/verification";
+		} else {
+			return "equipe/recapitulatif";
+		}
+	};
 </script>
 
 <div
@@ -17,9 +27,5 @@
 		Informations concernant votre équipe et la direction de l’entreprise en {data.annee}
 	</p>
 
-	<NavigationLinks
-		nextHref="equipe/recapitulatif"
-		nextLabel="Commencer"
-		center
-	/>
+	<NavigationLinks nextHref={getNextUrl()} nextLabel="Commencer" center />
 </div>
