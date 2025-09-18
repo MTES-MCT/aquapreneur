@@ -37,7 +37,7 @@
 			data.progressionEquipe.globale = "validé producteur";
 		}
 		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("../production");
+		goto("../envoi");
 	};
 </script>
 

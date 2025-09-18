@@ -23,7 +23,10 @@
 </script>
 
 {#if children}
-	<div class="fr-mt-8w" style="display:flex; justify-content: right;">
+	<div
+		class="fr-mt-8w"
+		style="display:flex; justify-content: {center ? 'center' : 'right'};"
+	>
 		{@render children()}
 	</div>
 {:else}

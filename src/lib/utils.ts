@@ -125,10 +125,7 @@ export const partFilled = (
 		];
 		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
 	} else if (persona === "producteur") {
-		const statutsFinalises: StatutProgression[] = [
-			"passage producteur nécessaire",
-			"validé comptable",
-		];
+		const statutsFinalises: StatutProgression[] = ["validé producteur"];
 		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
 	}
 	const statutsFinalises: StatutProgression[] = [

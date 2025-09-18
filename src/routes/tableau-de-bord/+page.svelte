@@ -54,11 +54,7 @@
 												</a>
 											</td>
 											<td>
-												<!-- <p
-													class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w"
-												>
-													Passage producteur attendu
-												</p> -->
+												{declaration.donnees.progression.globale}
 											</td>
 
 											<td>
