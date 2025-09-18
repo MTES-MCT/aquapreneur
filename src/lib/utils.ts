@@ -31,10 +31,16 @@ export const formatNum = (value: number, unit = "", naValue = ""): string => {
 	return unit ? `${strNum} ${unit}` : strNum;
 };
 
+type FetchFct = (
+	input: string | URL | Request,
+	init?: RequestInit,
+) => Promise<Response>;
+
 export const submitDeclarationUpdate = async (
 	declaration: DeclarationEntry,
+	{ fetchFct }: { fetchFct: FetchFct } = { fetchFct: fetch },
 ) => {
-	const req = await fetch(`/api/declarations/${declaration.id}`, {
+	const req = await fetchFct(`/api/declarations/${declaration.id}`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
 		body: JSON.stringify(declaration.donnees),
