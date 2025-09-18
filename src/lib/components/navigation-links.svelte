@@ -6,7 +6,7 @@
 		prevHref,
 		nextHref,
 		nextIsButton = false,
-		nextLabel = "Suivant",
+		nextLabel,
 		cantAnswerBtn = false,
 		center = false,
 	}: {
@@ -59,11 +59,11 @@
 					class="fr-link fr-icon-arrow-right-line fr-link--icon-right"
 					style="justify-self: end"
 				>
-					{nextLabel}
+					{nextLabel || "Suivant"}
 				</a>
 			{:else if nextIsButton}
 				<button name="validate" class="fr-btn" disabled={clicked} type="submit">
-					Valider
+					{nextLabel || "Valider"}
 				</button>
 			{/if}
 		</div>
