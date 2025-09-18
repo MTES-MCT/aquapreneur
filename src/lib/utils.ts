@@ -10,7 +10,7 @@ import {
 } from "./schemas/declaration-schema";
 
 import type { DeclarationEntry } from "./server/db/types";
-import type { AnneeDeclarative } from "./types";
+import type { AnneeDeclarative, Persona } from "./types";
 
 export const formatDate = (date: string | null) => {
 	if (date == null) return "";
@@ -94,10 +94,43 @@ export const toNumber = (val: string | null | undefined) => {
 	);
 };
 
+export const typeStatut = (statut: StatutProgression) => {
+	switch (statut) {
+		// case "préremplissage API à valider":
+		// 	case "préremplissage API validé":
+		case "en cours comptable":
+		case "validé comptable":
+		case "passage producteur nécessaire":
+			return "comptable";
+		case "préremplissage comptable à valider":
+		case "préremplissage comptable validé":
+		case "en cours producteur":
+		case "validé producteur":
+			return "producteur";
+		case null:
+		case undefined:
+			return null;
+	}
+};
+
 export const partFilled = (
 	donnees: DeclarationSchema,
-	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi" | "",
+	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi",
+	persona: Persona,
 ) => {
+	if (persona === "comptable") {
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+		];
+		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
+	} else if (persona === "producteur") {
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+		];
+		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
+	}
 	const statutsFinalises: StatutProgression[] = [
 		"passage producteur nécessaire",
 		"validé comptable",
