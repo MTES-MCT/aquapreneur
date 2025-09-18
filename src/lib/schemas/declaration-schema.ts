@@ -151,7 +151,7 @@ export const StatutProgression = z
 	.literal([
 		"en cours comptable",
 		"validé comptable",
-		"passage producteur",
+		"passage producteur nécessaire",
 		"en cours producteur",
 		"validé producteur",
 	])

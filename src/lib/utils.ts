@@ -93,7 +93,7 @@ export const partFilled = (
 	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi" | "",
 ) => {
 	const statutsFinalises: StatutProgression[] = [
-		"passage producteur",
+		"passage producteur nécessaire",
 		"validé comptable",
 		"validé producteur",
 	];

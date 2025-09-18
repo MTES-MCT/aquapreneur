@@ -14,7 +14,7 @@ export type Message = {
 };
 
 export function shouldUpdateStatus(currentStatus: StatutProgression) {
-	return currentStatus !== "passage producteur";
+	return currentStatus !== "passage producteur nécessaire";
 }
 
 export function prepareForm<
@@ -52,7 +52,7 @@ export function prepareForm<
 			cancel: () => void;
 		}) => {
 			if ((submitter as HTMLButtonElement).name === "cantAnswer") {
-				const declaration = updateProgress("passage producteur");
+				const declaration = updateProgress("passage producteur nécessaire");
 				try {
 					await submitDeclarationUpdate(declaration);
 					goto(getNextPage());
