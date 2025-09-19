@@ -34,7 +34,7 @@
 			case "validé comptable":
 			case "validé producteur":
 				return ["#ECECFE", "#6A6AF4"];
-			case "passage producteur":
+			case "passage producteur nécessaire":
 				return ["#ECECFE", "#6A6AF4"];
 			default:
 				return ["var(--background-alt-grey)", "var(--text-disabled-grey)"];
@@ -48,7 +48,7 @@
 				return "edit";
 			case "validé comptable":
 			case "validé producteur":
-			case "passage producteur":
+			case "passage producteur nécessaire":
 				return "review";
 			default:
 				return "edit";
@@ -63,7 +63,7 @@
 			case "validé comptable":
 			case "validé producteur":
 				return "fr-icon-success-fill";
-			case "passage producteur":
+			case "passage producteur nécessaire":
 				return "fr-icon-error-warning-fill";
 			default:
 				return icon;
@@ -91,7 +91,7 @@
 		{/if}
 	</div>
 
-	{#if status === "passage producteur"}
+	{#if status === "passage producteur nécessaire"}
 		<p class="fr-badge fr-badge--sm fr-badge--blue-cumulus fr-mr-1w">
 			Passage producteur attendu
 		</p>

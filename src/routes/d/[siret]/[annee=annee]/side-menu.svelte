@@ -1,5 +1,10 @@
 <script lang="ts">
+	import SuperDebug from "sveltekit-superforms";
+
+	import { dev } from "$app/environment";
+
 	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { Persona } from "$lib/types";
 	import { partFilled } from "$lib/utils";
 
 	import type { DeclarationStep } from "./type";
@@ -9,13 +14,13 @@
 		baseUrl,
 		donnees,
 		nomEtablissement,
-		resetActionUrl,
+		persona,
 	}: {
 		step: DeclarationStep;
 		baseUrl: string;
 		donnees: DeclarationSchema;
 		nomEtablissement: string;
-		resetActionUrl: string;
+		persona: Persona;
 	} = $props();
 
 	const parts = [
@@ -23,31 +28,26 @@
 			label: "Équipe et direction",
 			partId: "equipe",
 			link: "equipe/",
-			previousId: "",
 		},
 		{
 			label: "Production",
 			partId: "production",
 			link: "production/",
-			previousId: "equipe",
 		},
 		{
 			label: "Ventes",
 			partId: "ventes",
 			link: "ventes/",
-			previousId: "production",
 		},
 		{
 			label: "Retour sur l’année",
 			partId: "retourAnnee",
 			link: "retour-annee/",
-			previousId: "ventes",
 		},
 		{
 			label: "Envoi",
 			partId: "envoi",
 			link: "envoi/",
-			previousId: "retourAnnee",
 		},
 	] as const;
 </script>
@@ -74,10 +74,9 @@
 			</div>
 			<ul class="fr-sidemenu__list">
 				{#each parts as part (part.partId)}
-					{@const validated = partFilled(donnees, part.partId)}
-					{@const previousValidated = partFilled(donnees, part.previousId)}
+					{@const validated = partFilled(donnees, part.partId, persona)}
 					<li class="fr-sidemenu__item">
-						{#if validated || previousValidated || step === part.partId}
+						{#if validated || step === part.partId}
 							<a
 								class="fr-sidemenu__link"
 								href="{baseUrl}/{part.link}"
@@ -110,14 +109,9 @@
 				{/each}
 			</ul>
 		</div>
-		<div class="fr-mt-10v">
-			<form method="POST" action={resetActionUrl}>
-				<button
-					class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-arrow-go-forward-fill"
-				>
-					Réinitialiser
-				</button>
-			</form>
-		</div>
+
+		{#if dev}
+			<SuperDebug data={donnees.progression} />
+		{/if}
 	</div>
 </nav>

@@ -70,7 +70,7 @@
 		<NavigationLinks
 			prevHref="../../recapitulatif"
 			nextIsButton
-			cantAnswerBtn
+			cantAnswerBtn={data.persona === "comptable"}
 		/>
 	</form>
 </div>

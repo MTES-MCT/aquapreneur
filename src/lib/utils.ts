@@ -10,7 +10,7 @@ import {
 } from "./schemas/declaration-schema";
 
 import type { DeclarationEntry } from "./server/db/types";
-import type { AnneeDeclarative } from "./types";
+import type { AnneeDeclarative, Persona } from "./types";
 
 export const formatDate = (date: string | null) => {
 	if (date == null) return "";
@@ -31,10 +31,16 @@ export const formatNum = (value: number, unit = "", naValue = ""): string => {
 	return unit ? `${strNum} ${unit}` : strNum;
 };
 
+type FetchFct = (
+	input: string | URL | Request,
+	init?: RequestInit,
+) => Promise<Response>;
+
 export const submitDeclarationUpdate = async (
 	declaration: DeclarationEntry,
+	{ fetchFct }: { fetchFct: FetchFct } = { fetchFct: fetch },
 ) => {
-	const req = await fetch(`/api/declarations/${declaration.id}`, {
+	const req = await fetchFct(`/api/declarations/${declaration.id}`, {
 		method: "POST",
 		headers: { "content-type": "application/json" },
 		body: JSON.stringify(declaration.donnees),
@@ -88,24 +94,36 @@ export const toNumber = (val: string | null | undefined) => {
 	);
 };
 
+export const typeStatut = (statut: StatutProgression) => {
+	switch (statut) {
+		case "préremplissage API à valider":
+		case "en cours comptable":
+		case "validé comptable":
+		case "passage producteur nécessaire":
+			return "comptable";
+		case "préremplissage comptable à valider":
+		case "en cours producteur":
+		case "validé producteur":
+			return "producteur";
+		case null:
+		case undefined:
+			return null;
+	}
+};
+
 export const partFilled = (
 	donnees: DeclarationSchema,
-	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi" | "",
+	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi",
+	persona: Persona,
 ) => {
-	const statutsFinalises: StatutProgression[] = [
-		"passage producteur",
-		"validé comptable",
-		"validé producteur",
-	];
-	if (part === "equipe") {
-		const p = donnees.progression.equipe;
-		return (
-			!!p &&
-			statutsFinalises.includes(p.permanents) &&
-			statutsFinalises.includes(p.saisonniers) &&
-			p.dirigeants.every((sd) => statutsFinalises.includes(sd.statut))
-		);
+	if (persona === "comptable") {
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+		];
+		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
+	} else {
+		const statutsFinalises: StatutProgression[] = ["validé producteur"];
+		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
 	}
-
-	return false;
 };

@@ -7,9 +7,8 @@
 
 	const {
 		utilisateur,
-		parcoursMode,
-	}: { utilisateur: Utilisateur | null; parcoursMode: string | null } =
-		$props();
+		persona,
+	}: { utilisateur: Utilisateur | null; persona: string } = $props();
 </script>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
@@ -70,15 +69,11 @@
 						<ul class="fr-btns-group">
 							<li>
 								{#if utilisateur}
-									{#if parcoursMode}
-										<p
-											class="fr-tag fr-icon-user-line fr-tag--icon-left fr-mr-2w"
-										>
-											{parcoursMode === "comptable" ? "Comptable" : (
-												"Producteur"
-											)}
-										</p>
-									{/if}
+									<p
+										class="fr-tag fr-icon-user-line fr-tag--icon-left fr-mr-2w"
+									>
+										{persona === "comptable" ? "Comptable" : "Producteur"}
+									</p>
 									<form
 										method="post"
 										action="/auth/logout/proconnect"

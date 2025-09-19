@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { ANNEES_DECLARATIVES } from "$lib/constants";
+
 	const { data } = $props();
+
+	const CURRENT_YEAR = ANNEES_DECLARATIVES[0];
 </script>
 
 <div class="fr-container">
@@ -27,44 +31,74 @@
 									</tr>
 								</thead>
 								<tbody>
-									{#each data.declarations as declaration (declaration.id)}
+									{#each data.etablissements as etablissement (etablissement.siret)}
+										{@const declarationComptable = data.declarations.find(
+											(d) =>
+												d.siret == etablissement.siret &&
+												d.annee === CURRENT_YEAR &&
+												d.type === "comptable",
+										)}
+										{@const declarationProducteur = data.declarations.find(
+											(d) =>
+												d.siret == etablissement.siret &&
+												d.annee === CURRENT_YEAR &&
+												d.type === "producteur",
+										)}
 										<tr>
 											<td>
-												{declaration.denomination}
+												{etablissement.denomination}
 												<span class="fr-text--xs fr-text--light">
-													({declaration.siret})
+													({etablissement.siret})
 												</span>
 											</td>
-											<td>{declaration.annee}</td>
+											<td>{CURRENT_YEAR}</td>
 											<td>
-												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=comptable"
-													class="fr-link fr-link--sm"
-													data-sveltekit-preload-data="off"
-												>
-													parcours comptable
-												</a>
+												{#if declarationComptable?.donnees.progression.globale === "validé comptable" || declarationProducteur?.donnees.progression.globale}
+													<a
+														class="fr-link fr-link--sm"
+														style="color: var(--text-disabled-grey)"
+														role="link"
+														aria-disabled="true"
+													>
+														parcours comptable
+													</a>
+												{:else}
+													<a
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/intro?persona=comptable"
+														class="fr-link fr-link--sm"
+													>
+														parcours comptable
+													</a>
+												{/if}
+
 												<br />
-												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro/1?parcours=producteur"
-													class=" fr-link fr-link--sm"
-													data-sveltekit-preload-data="off"
-												>
-													parcours producteur
-												</a>
+												{#if declarationProducteur?.donnees.progression.globale === "validé producteur"}
+													<a
+														class=" fr-link fr-link--sm"
+														style="color: var(--text-disabled-grey)"
+														role="link"
+														aria-disabled="true"
+													>
+														parcours producteur
+													</a>
+												{:else}
+													<a
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/intro?persona=producteur"
+														class=" fr-link fr-link--sm"
+													>
+														parcours producteur
+													</a>
+												{/if}
 											</td>
 											<td>
-												<!-- <p
-													class="fr-badge fr-badge--sm fr-badge--info fr-mr-1w"
-												>
-													Passage producteur attendu
-												</p> -->
+												{declarationProducteur?.donnees.progression.globale ||
+													declarationComptable?.donnees.progression.globale}
 											</td>
 
 											<td>
 												<form
 													method="POST"
-													action="/d/{declaration.siret}/{declaration.annee}"
+													action="/d/{etablissement.siret}/{CURRENT_YEAR}"
 												>
 													<button
 														class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
@@ -75,8 +109,8 @@
 													<a
 														class="fr-link fr-link--sm"
 														target="_blank"
-														download={`aquapreneur-decl-${declaration.siret}-${declaration.annee}.json`}
-														href="./d/{declaration.siret}/{declaration.annee}/download"
+														download={`aquapreneur-decl-${etablissement.siret}-${CURRENT_YEAR}.json`}
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/download"
 													>
 														Télécharger
 													</a>

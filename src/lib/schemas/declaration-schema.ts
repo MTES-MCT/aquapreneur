@@ -147,11 +147,26 @@ export const productionSchema = optObject({
 		.optional(),
 });
 
-export const StatutProgression = z
+export const StatutProgressionGlobale = z
 	.literal([
+		// Comptable
 		"en cours comptable",
 		"validé comptable",
-		"passage producteur",
+		// Producteur
+		"en cours producteur",
+		"validé producteur",
+	])
+	.nullish();
+
+export const StatutProgression = z
+	.literal([
+		// Comptable
+		"préremplissage API à valider",
+		"en cours comptable",
+		"validé comptable",
+		"passage producteur nécessaire",
+		// Producteur
+		"préremplissage comptable à valider",
 		"en cours producteur",
 		"validé producteur",
 	])
@@ -160,7 +175,9 @@ export type StatutProgression = z.infer<typeof StatutProgression>;
 
 export const DeclarationSchema = z.strictObject({
 	progression: z.strictObject({
+		globale: StatutProgressionGlobale.nullish(),
 		equipe: optObject({
+			globale: StatutProgression.nullish(),
 			dirigeants: z
 				.strictObject({
 					id: z.uuid({ version: "v4" }),
@@ -169,6 +186,18 @@ export const DeclarationSchema = z.strictObject({
 				.array(),
 			permanents: StatutProgression,
 			saisonniers: StatutProgression,
+		}),
+		production: optObject({
+			globale: StatutProgression.nullish(),
+		}),
+		ventes: optObject({
+			globale: StatutProgression.nullish(),
+		}),
+		retourAnnee: optObject({
+			globale: StatutProgression.nullish(),
+		}),
+		envoi: optObject({
+			globale: StatutProgression.nullish(),
 		}),
 	}),
 	aProduit: z.boolean(),

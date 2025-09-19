@@ -78,6 +78,10 @@
 			{/snippet}
 		</Fieldset>
 
-		<NavigationLinks prevHref="./intro" nextIsButton cantAnswerBtn />
+		<NavigationLinks
+			prevHref="./intro"
+			nextIsButton
+			cantAnswerBtn={data.persona === "comptable"}
+		/>
 	</form>
 </div>

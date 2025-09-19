@@ -18,8 +18,7 @@
 
 <Skiplink></Skiplink>
 
-<Header utilisateur={data.utilisateur} parcoursMode={data.parcoursMode}
-></Header>
+<Header utilisateur={data.utilisateur} persona={data.persona}></Header>
 
 <!-- svelte-ignore a11y_no_redundant_roles -->
 <main role="main" id="content">

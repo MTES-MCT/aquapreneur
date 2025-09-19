@@ -1,19 +1,44 @@
 <script lang="ts">
+	import type { FormEventHandler } from "svelte/elements";
+
 	import { goto } from "$app/navigation";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
-	import { partFilled, submitDeclarationUpdate } from "$lib/utils";
+	import type { StatutProgression } from "$lib/schemas/declaration-schema";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
-	import RecapDirigeant from "./recap-dirigeant.svelte";
-	import RecapPermanents from "./recap-permanents.svelte";
-	import RecapSaisonniers from "./recap-saisonniers.svelte";
+	import RecapDirigeant from "../recap-dirigeant.svelte";
+	import RecapPermanents from "../recap-permanents.svelte";
+	import RecapSaisonniers from "../recap-saisonniers.svelte";
 
 	const { data } = $props();
 
 	const saisieTerminée = $derived.by(() => {
-		return partFilled(data.declaration.donnees, "equipe");
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+			"validé producteur",
+		];
+		const p = data.declaration.donnees.progression.equipe;
+		return (
+			!!p &&
+			statutsFinalises.includes(p.permanents) &&
+			statutsFinalises.includes(p.saisonniers) &&
+			p.dirigeants.every((sd) => statutsFinalises.includes(sd.statut))
+		);
 	});
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		event.preventDefault();
+		if (data.persona === "comptable") {
+			data.progressionEquipe.globale = "validé comptable";
+		} else {
+			data.progressionEquipe.globale = "validé producteur";
+		}
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
+		goto("../envoi");
+	};
 </script>
 
 <div class="bandeau-titre">
@@ -87,7 +112,9 @@
 </div>
 
 {#if saisieTerminée}
-	<NavigationLinks nextHref="../production" nextLabel="Suivant" center />
+	<form method="POST" onsubmit={handleSubmit}>
+		<NavigationLinks nextIsButton center />
+	</form>
 {/if}
 
 <style>
