@@ -20,6 +20,7 @@
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
+			persona: data.persona,
 			isLastStep: (form) => !form.data.aSaisonniers,
 			getNextPage: () =>
 				data.declaration.donnees.equipe.saisonniers ?

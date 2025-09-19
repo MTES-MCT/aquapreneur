@@ -19,6 +19,7 @@
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
+			persona: data.persona,
 			isLastStep: (form) => !form.data.aPermanents,
 			getNextPage: () =>
 				data.declaration.donnees.equipe.permanents ?
