@@ -5,32 +5,36 @@
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import Pictogram from "$lib/components/pictogram.svelte";
-	import { submitDeclarationUpdate, typeStatut } from "$lib/utils";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
-		const statutCourant = data.declaration.donnees.progression.globale;
-		let nouveauStatut = statutCourant;
+
+		// Parcours comptable : pas besoin de recopier la déclaration préremplie
+		// la déclaration comptable a été initialisée de la même façon.
+		// On initialise juste le statut
 		if (data.persona === "comptable") {
-			if (!statutCourant) {
-				// TODO "préremplissage API à valider" quand on gèrera ce statut
-				nouveauStatut = "en cours comptable";
-			}
-		} else {
-			if (!statutCourant) {
-				nouveauStatut = "en cours producteur";
-			} else if (typeStatut(statutCourant) === "comptable") {
-				nouveauStatut = "préremplissage comptable à valider";
+			if (!data.declaration.donnees.progression.globale) {
+				data.declaration.donnees.progression.globale = "en cours comptable";
+				data.declaration.donnees = await submitDeclarationUpdate(
+					data.declaration,
+				);
 			}
 		}
-
-		if (nouveauStatut !== statutCourant) {
-			data.declaration.donnees.progression.globale = nouveauStatut;
-			data.declaration.donnees = await submitDeclarationUpdate(
-				data.declaration,
-			);
+		// Parcours producteur : si on rentre juste dedans, on recopie la déclaration comptable le cas échéant, en modifiant les statuts au passage
+		else {
+			if (!data.declaration.donnees.progression.globale) {
+				if (data.declarationComptable.donnees.progression.globale) {
+					data.declaration.donnees = data.declarationComptable.donnees;
+					// TODO: update status
+				}
+				data.declaration.donnees.progression.globale = "en cours producteur";
+				data.declaration.donnees = await submitDeclarationUpdate(
+					data.declaration,
+				);
+			}
 		}
 
 		goto("./equipe");

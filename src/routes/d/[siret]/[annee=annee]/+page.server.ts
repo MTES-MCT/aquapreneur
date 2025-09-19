@@ -1,6 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 
-import { deleteDeclaration } from "$lib/server/declaration-store";
+import { deleteDeclarations } from "$lib/server/declaration-store";
 
 import { estAnneeDeclarative } from "$lib/utils";
 
@@ -20,7 +20,7 @@ export const actions = {
 		}
 		const numAnnee = Number.parseInt(annee);
 		if (estAnneeDeclarative(numAnnee)) {
-			deleteDeclaration(siret, numAnnee);
+			deleteDeclarations(siret, numAnnee);
 		}
 		redirect(302, "/tableau-de-bord");
 	},

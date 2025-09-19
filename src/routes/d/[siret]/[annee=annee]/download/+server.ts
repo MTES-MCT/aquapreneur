@@ -32,7 +32,11 @@ export const GET = async ({ params, locals }) => {
 	const etablissement = etablissements[0];
 
 	const anneeNum = Number.parseInt(annee) as AnneeDeclarative;
-	const declaration = await getOrCreateDeclaration(etablissement, anneeNum);
+	const declaration = await getOrCreateDeclaration(
+		etablissement,
+		anneeNum,
+		"producteur",
+	);
 
 	return json(declaration);
 };

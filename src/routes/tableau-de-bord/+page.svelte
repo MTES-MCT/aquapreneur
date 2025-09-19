@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { typeStatut } from "$lib/utils";
+	import { ANNEES_DECLARATIVES } from "$lib/constants";
 
 	const { data } = $props();
+
+	const CURRENT_YEAR = ANNEES_DECLARATIVES[0];
 </script>
 
 <div class="fr-container">
@@ -29,17 +31,29 @@
 									</tr>
 								</thead>
 								<tbody>
-									{#each data.declarations as declaration (declaration.id)}
+									{#each data.etablissements as etablissement (etablissement.siret)}
+										{@const declarationComptable = data.declarations.find(
+											(d) =>
+												d.siret == etablissement.siret &&
+												d.annee === CURRENT_YEAR &&
+												d.type === "comptable",
+										)}
+										{@const declarationProducteur = data.declarations.find(
+											(d) =>
+												d.siret == etablissement.siret &&
+												d.annee === CURRENT_YEAR &&
+												d.type === "producteur",
+										)}
 										<tr>
 											<td>
-												{declaration.denomination}
+												{etablissement.denomination}
 												<span class="fr-text--xs fr-text--light">
-													({declaration.siret})
+													({etablissement.siret})
 												</span>
 											</td>
-											<td>{declaration.annee}</td>
+											<td>{CURRENT_YEAR}</td>
 											<td>
-												{#if declaration.donnees.progression.globale === "validé comptable" || typeStatut(declaration.donnees.progression.globale) === "producteur"}
+												{#if declarationComptable?.donnees.progression.globale === "validé comptable" || declarationProducteur?.donnees.progression.globale}
 													<a
 														class="fr-link fr-link--sm"
 														style="color: var(--text-disabled-grey)"
@@ -50,7 +64,7 @@
 													</a>
 												{:else}
 													<a
-														href="./d/{declaration.siret}/{declaration.annee}/intro?persona=comptable"
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/intro?persona=comptable"
 														class="fr-link fr-link--sm"
 													>
 														parcours comptable
@@ -58,7 +72,7 @@
 												{/if}
 
 												<br />
-												{#if declaration.donnees.progression.globale === "validé producteur"}
+												{#if declarationProducteur?.donnees.progression.globale === "validé producteur"}
 													<a
 														class=" fr-link fr-link--sm"
 														style="color: var(--text-disabled-grey)"
@@ -69,7 +83,7 @@
 													</a>
 												{:else}
 													<a
-														href="./d/{declaration.siret}/{declaration.annee}/intro?persona=producteur"
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/intro?persona=producteur"
 														class=" fr-link fr-link--sm"
 													>
 														parcours producteur
@@ -77,13 +91,14 @@
 												{/if}
 											</td>
 											<td>
-												{declaration.donnees.progression.globale}
+												{declarationProducteur?.donnees.progression.globale ||
+													declarationComptable?.donnees.progression.globale}
 											</td>
 
 											<td>
 												<form
 													method="POST"
-													action="/d/{declaration.siret}/{declaration.annee}"
+													action="/d/{etablissement.siret}/{CURRENT_YEAR}"
 												>
 													<button
 														class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
@@ -94,8 +109,8 @@
 													<a
 														class="fr-link fr-link--sm"
 														target="_blank"
-														download={`aquapreneur-decl-${declaration.siret}-${declaration.annee}.json`}
-														href="./d/{declaration.siret}/{declaration.annee}/download"
+														download={`aquapreneur-decl-${etablissement.siret}-${CURRENT_YEAR}.json`}
+														href="./d/{etablissement.siret}/{CURRENT_YEAR}/download"
 													>
 														Télécharger
 													</a>

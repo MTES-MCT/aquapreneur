@@ -14,14 +14,12 @@
 		baseUrl,
 		donnees,
 		nomEtablissement,
-		resetActionUrl,
 		persona,
 	}: {
 		step: DeclarationStep;
 		baseUrl: string;
 		donnees: DeclarationSchema;
 		nomEtablissement: string;
-		resetActionUrl: string;
 		persona: Persona;
 	} = $props();
 
@@ -111,15 +109,7 @@
 				{/each}
 			</ul>
 		</div>
-		<div class="fr-mt-10v">
-			<form method="POST" action={resetActionUrl}>
-				<button
-					class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-arrow-go-forward-fill"
-				>
-					Réinitialiser
-				</button>
-			</form>
-		</div>
+
 		{#if dev}
 			<SuperDebug data={donnees.progression} />
 		{/if}

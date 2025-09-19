@@ -43,7 +43,6 @@
 						step={page.data.step}
 						baseUrl="/d/{data.etablissement.siret}/{data.annee}"
 						nomEtablissement={data.etablissement.denomination}
-						resetActionUrl="/d/{data.etablissement.siret}/{data.annee}"
 						donnees={data.declaration.donnees}
 						persona={data.persona}
 					></SideMenu>

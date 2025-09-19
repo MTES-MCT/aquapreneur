@@ -13,6 +13,9 @@ export const DSFR_VERSION = "1.14.0";
 // export const ANNEES_DECLARATIVES = [2024, 2023, 2022, 2021, 2020] as const;
 export const ANNEES_DECLARATIVES = [2024] as const;
 
+export const DECLARATION_TYPES = ["api", "comptable", "producteur"] as const;
+export type DeclarationType = (typeof DECLARATION_TYPES)[number];
+
 export const ESPECES = [
 	{
 		label: "huître creuse",

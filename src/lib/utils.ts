@@ -122,24 +122,8 @@ export const partFilled = (
 			"validé comptable",
 		];
 		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
-	} else if (persona === "producteur") {
+	} else {
 		const statutsFinalises: StatutProgression[] = ["validé producteur"];
 		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
 	}
-	const statutsFinalises: StatutProgression[] = [
-		"passage producteur nécessaire",
-		"validé comptable",
-		"validé producteur",
-	];
-	if (part === "equipe") {
-		const p = donnees.progression.equipe;
-		return (
-			!!p &&
-			statutsFinalises.includes(p.permanents) &&
-			statutsFinalises.includes(p.saisonniers) &&
-			p.dirigeants.every((sd) => statutsFinalises.includes(sd.statut))
-		);
-	}
-
-	return false;
 };

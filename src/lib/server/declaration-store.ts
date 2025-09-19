@@ -7,29 +7,17 @@ import { declarationsTable } from "$lib/server/db/schema/declaration";
 
 import { prefillDeclaration } from "$lib/prefill";
 
-import { ANNEES_DECLARATIVES } from "../constants";
+import { type DeclarationType } from "../constants";
 import { DeclarationSchema } from "../schemas/declaration-schema";
 import { type DeclarationEntry } from "./db/types";
 
 import type { AnneeDeclarative } from "../types";
 import type { EtablissementSelect } from "./db/types";
 
-export const getOrCreateDeclarations = async (
-	etablissement: EtablissementSelect,
-) => {
-	const declarations: Map<AnneeDeclarative, DeclarationEntry> = new Map();
-
-	for (const annee of ANNEES_DECLARATIVES) {
-		const declaration = await getOrCreateDeclaration(etablissement, annee);
-		declarations.set(annee, declaration);
-	}
-
-	return declarations;
-};
-
 export const getOrCreateDeclaration = async (
 	etablissement: EtablissementSelect,
 	annee: AnneeDeclarative,
+	declarationType: DeclarationType,
 ) => {
 	let declaration: DeclarationEntry;
 	const declarationsResult = await db
@@ -39,11 +27,11 @@ export const getOrCreateDeclaration = async (
 			and(
 				eq(declarationsTable.siret, etablissement.siret),
 				eq(declarationsTable.annee, annee),
+				eq(declarationsTable.type, declarationType),
 			),
 		);
 
 	if (declarationsResult.length) {
-		// TODO: différencier version préremplie, comptable / producteur, etc
 		assert(declarationsResult.length == 1);
 		declaration = declarationsResult[0];
 	} else {
@@ -53,6 +41,7 @@ export const getOrCreateDeclaration = async (
 				.values({
 					annee,
 					denomination: etablissement.denomination,
+					type: declarationType,
 					siret: etablissement.siret,
 					donnees: await prefillDeclaration(etablissement, annee),
 				})
@@ -85,7 +74,7 @@ export const updateDeclaration = async (
 	return currentValue;
 };
 
-export const deleteDeclaration = async (
+export const deleteDeclarations = async (
 	siret: string,
 	annee: AnneeDeclarative,
 ) => {

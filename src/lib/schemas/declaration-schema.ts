@@ -150,11 +150,9 @@ export const productionSchema = optObject({
 export const StatutProgressionGlobale = z
 	.literal([
 		// Comptable
-		"préremplissage API à valider",
 		"en cours comptable",
 		"validé comptable",
 		// Producteur
-		"préremplissage comptable à valider",
 		"en cours producteur",
 		"validé producteur",
 	])
