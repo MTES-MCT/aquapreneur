@@ -40,7 +40,6 @@
 												<a
 													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=comptable"
 													class="fr-link fr-link--sm"
-													data-sveltekit-preload-data="off"
 												>
 													parcours comptable
 												</a>
@@ -48,7 +47,6 @@
 												<a
 													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=producteur"
 													class=" fr-link fr-link--sm"
-													data-sveltekit-preload-data="off"
 												>
 													parcours producteur
 												</a>
