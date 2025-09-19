@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { typeStatut } from "$lib/utils";
+
 	const { data } = $props();
 </script>
 
@@ -37,19 +39,42 @@
 											</td>
 											<td>{declaration.annee}</td>
 											<td>
-												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=comptable"
-													class="fr-link fr-link--sm"
-												>
-													parcours comptable
-												</a>
+												{#if declaration.donnees.progression.globale === "validé comptable" || typeStatut(declaration.donnees.progression.globale) === "producteur"}
+													<a
+														class="fr-link fr-link--sm"
+														style="color: var(--text-disabled-grey)"
+														role="link"
+														aria-disabled="true"
+													>
+														parcours comptable
+													</a>
+												{:else}
+													<a
+														href="./d/{declaration.siret}/{declaration.annee}/intro?persona=comptable"
+														class="fr-link fr-link--sm"
+													>
+														parcours comptable
+													</a>
+												{/if}
+
 												<br />
-												<a
-													href="./d/{declaration.siret}/{declaration.annee}/intro?persona=producteur"
-													class=" fr-link fr-link--sm"
-												>
-													parcours producteur
-												</a>
+												{#if declaration.donnees.progression.globale === "validé producteur"}
+													<a
+														class=" fr-link fr-link--sm"
+														style="color: var(--text-disabled-grey)"
+														role="link"
+														aria-disabled="true"
+													>
+														parcours producteur
+													</a>
+												{:else}
+													<a
+														href="./d/{declaration.siret}/{declaration.annee}/intro?persona=producteur"
+														class=" fr-link fr-link--sm"
+													>
+														parcours producteur
+													</a>
+												{/if}
 											</td>
 											<td>
 												{declaration.donnees.progression.globale}

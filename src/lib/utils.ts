@@ -96,14 +96,12 @@ export const toNumber = (val: string | null | undefined) => {
 
 export const typeStatut = (statut: StatutProgression) => {
 	switch (statut) {
-		// case "préremplissage API à valider":
-		// 	case "préremplissage API validé":
+		case "préremplissage API à valider":
 		case "en cours comptable":
 		case "validé comptable":
 		case "passage producteur nécessaire":
 			return "comptable";
 		case "préremplissage comptable à valider":
-		case "préremplissage comptable validé":
 		case "en cours producteur":
 		case "validé producteur":
 			return "producteur";

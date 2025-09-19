@@ -19,7 +19,7 @@
 			data.persona === "producteur" &&
 			data.progressionEquipe.globale === "préremplissage comptable à valider"
 		) {
-			data.progressionEquipe.globale = "préremplissage comptable validé";
+			data.progressionEquipe.globale = "en cours producteur";
 			data.declaration.donnees = await submitDeclarationUpdate(
 				data.declaration,
 			);

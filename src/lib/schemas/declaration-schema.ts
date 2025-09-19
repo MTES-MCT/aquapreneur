@@ -163,14 +163,12 @@ export const StatutProgressionGlobale = z
 export const StatutProgression = z
 	.literal([
 		// Comptable
-		// "préremplissage API à valider",
-		// "préremplissage API validé",
+		"préremplissage API à valider",
 		"en cours comptable",
 		"validé comptable",
 		"passage producteur nécessaire",
 		// Producteur
 		"préremplissage comptable à valider",
-		"préremplissage comptable validé",
 		"en cours producteur",
 		"validé producteur",
 	])
