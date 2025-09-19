@@ -173,33 +173,35 @@ export const StatutProgression = z
 	.nullish();
 export type StatutProgression = z.infer<typeof StatutProgression>;
 
-export const DeclarationSchema = z.strictObject({
-	progression: z.strictObject({
-		globale: StatutProgressionGlobale.nullish(),
-		equipe: optObject({
-			globale: StatutProgression.nullish(),
-			dirigeants: z
-				.strictObject({
-					id: z.uuid({ version: "v4" }),
-					statut: StatutProgression,
-				})
-				.array(),
-			permanents: StatutProgression,
-			saisonniers: StatutProgression,
-		}),
-		production: optObject({
-			globale: StatutProgression.nullish(),
-		}),
-		ventes: optObject({
-			globale: StatutProgression.nullish(),
-		}),
-		retourAnnee: optObject({
-			globale: StatutProgression.nullish(),
-		}),
-		envoi: optObject({
-			globale: StatutProgression.nullish(),
-		}),
+const Progression = z.strictObject({
+	globale: StatutProgressionGlobale.nullish(),
+	equipe: optObject({
+		globale: StatutProgression.nullish(),
+		dirigeants: z
+			.strictObject({
+				id: z.uuid({ version: "v4" }),
+				statut: StatutProgression,
+			})
+			.array(),
+		permanents: StatutProgression,
+		saisonniers: StatutProgression,
 	}),
+	production: optObject({
+		globale: StatutProgression.nullish(),
+	}),
+	ventes: optObject({
+		globale: StatutProgression.nullish(),
+	}),
+	retourAnnee: optObject({
+		globale: StatutProgression.nullish(),
+	}),
+	envoi: optObject({
+		globale: StatutProgression.nullish(),
+	}),
+});
+
+export const DeclarationSchema = z.strictObject({
+	progression: Progression,
 	aProduit: z.boolean(),
 	dateBilan: IsoDate.nullish(),
 	debutExercice: IsoDate.nullish(),

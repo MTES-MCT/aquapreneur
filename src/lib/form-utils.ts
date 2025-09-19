@@ -7,6 +7,7 @@ import { type StatutProgression } from "./schemas/declaration-schema";
 import { submitDeclarationUpdate } from "./utils";
 
 import type { DeclarationEntry } from "./server/db/types";
+import type { Persona } from "./types";
 
 export type Message = {
 	status: "success" | "error" | "warning";
@@ -25,12 +26,14 @@ export function prepareForm<
 >(
 	{
 		schema,
+		persona,
 		isLastStep,
 		getNextPage,
 		updateProgress,
 		updateData,
 	}: {
 		schema: S;
+		persona: Persona;
 		isLastStep: (form: SuperValidated<T, M, In>) => boolean;
 		getNextPage: () => string;
 		updateProgress: (statut: StatutProgression) => DeclarationEntry;
@@ -52,12 +55,16 @@ export function prepareForm<
 			cancel: () => void;
 		}) => {
 			if ((submitter as HTMLButtonElement).name === "cantAnswer") {
-				const declaration = updateProgress("passage producteur nécessaire");
-				try {
-					await submitDeclarationUpdate(declaration);
-					goto(getNextPage());
-				} catch (err) {
-					console.error(err);
+				if (persona === "producteur") {
+					console.error("On ne s’attend pas à passer ici pour un producteur");
+				} else {
+					const declaration = updateProgress("passage producteur nécessaire");
+					try {
+						await submitDeclarationUpdate(declaration);
+						goto(getNextPage());
+					} catch (err) {
+						console.error(err);
+					}
 				}
 				cancel();
 			}
@@ -67,7 +74,11 @@ export function prepareForm<
 			if (form.valid) {
 				let declaration = updateData(form);
 				declaration = updateProgress(
-					isLastStep(form) ? "validé comptable" : "en cours comptable",
+					persona === "comptable" ?
+						isLastStep(form) ? "validé comptable"
+						:	"en cours comptable"
+					: isLastStep(form) ? "validé producteur"
+					: "en cours producteur",
 				);
 				try {
 					await submitDeclarationUpdate(declaration);

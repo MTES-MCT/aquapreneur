@@ -26,6 +26,7 @@
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
+			persona: data.persona,
 			isLastStep: () => false,
 			getNextPage: () => "./2",
 			updateProgress: () => {

@@ -38,6 +38,7 @@
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
+			persona: data.persona,
 			isLastStep: () => false,
 			getNextPage: () => "./3",
 			updateProgress: (statut) => {

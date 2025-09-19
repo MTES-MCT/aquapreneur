@@ -20,7 +20,7 @@
 			data.declaration.donnees.progression.envoi!.globale = "validé comptable";
 			data.declaration.donnees.progression.globale = "validé comptable";
 		} else {
-			data.declaration.donnees.progression.envoi!.globale = "validé comptable";
+			data.declaration.donnees.progression.envoi!.globale = "validé producteur";
 			data.declaration.donnees.progression.globale = "validé producteur";
 		}
 		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);

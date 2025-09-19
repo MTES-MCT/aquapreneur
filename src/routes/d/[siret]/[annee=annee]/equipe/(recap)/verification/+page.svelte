@@ -15,11 +15,25 @@
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();
+		const p = data.progressionEquipe;
 		if (
-			data.persona === "producteur" &&
-			data.progressionEquipe.globale === "préremplissage comptable à valider"
+			data.persona !== "producteur" ||
+			p.globale !== "préremplissage comptable à valider"
 		) {
-			data.progressionEquipe.globale = "en cours producteur";
+			console.error("état incorrect", data.persona, data.progressionEquipe);
+		} else {
+			// On passe le statut global en "en cours", pour ne plus revenir à cet écran
+			// Et on considère chaque étape validée par le comptable comme validée producteur
+
+			p.globale = "en cours producteur";
+			p.permanents =
+				p.permanents === "validé comptable" ? "validé producteur" : null;
+			p.saisonniers =
+				p.saisonniers === "validé comptable" ? "validé producteur" : null;
+			p.dirigeants = p.dirigeants.map((d) => ({
+				id: d.id,
+				statut: d.statut === "validé comptable" ? "validé producteur" : null,
+			}));
 			data.declaration.donnees = await submitDeclarationUpdate(
 				data.declaration,
 			);

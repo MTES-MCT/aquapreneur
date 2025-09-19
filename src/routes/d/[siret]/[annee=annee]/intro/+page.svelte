@@ -1,4 +1,6 @@
 <script lang="ts">
+	import merge from "lodash/merge";
+
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
@@ -28,7 +30,24 @@
 			if (!data.declaration.donnees.progression.globale) {
 				if (data.declarationComptable.donnees.progression.globale) {
 					data.declaration.donnees = data.declarationComptable.donnees;
-					// TODO: update status
+					const progression = data.declaration.donnees.progression;
+					merge(progression, {
+						equipe: {
+							globale: "préremplissage comptable à valider",
+						},
+						production: {
+							globale: "préremplissage comptable à valider",
+						},
+						ventes: {
+							globale: "préremplissage comptable à valider",
+						},
+						retourAnnee: {
+							globale: "préremplissage comptable à valider",
+						},
+						envoi: {
+							globale: null,
+						},
+					});
 				}
 				data.declaration.donnees.progression.globale = "en cours producteur";
 				data.declaration.donnees = await submitDeclarationUpdate(
