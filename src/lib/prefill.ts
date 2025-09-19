@@ -87,7 +87,6 @@ export const prefillDeclaration = async (
 
 	const declaration = DeclarationSchema.parse({
 		progression: {},
-		aProduit: true, // TODO
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,
 		finExercice: bilan?.finExercice ?? null,

@@ -5,9 +5,14 @@
 	let { data } = $props();
 
 	const getNextPage = () => {
-		return data.declaration.donnees.aProduit ?
-				"retour-annee/1"
-			:	"retour-annee/inactif";
+		if (
+			data.persona === "producteur" &&
+			data.progressionRetourAnnee.globale ===
+				"préremplissage comptable à valider"
+		) {
+			return "retour-annee/recapitulatif";
+		}
+		return "retour-annee/1";
 	};
 </script>
 

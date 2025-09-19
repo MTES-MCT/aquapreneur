@@ -20,7 +20,7 @@
 			"validé comptable",
 			"validé producteur",
 		];
-		const p = data.declaration.donnees.progression.equipe;
+		const p = data.progressionEquipe;
 		return (
 			!!p &&
 			statutsFinalises.includes(p.permanents) &&

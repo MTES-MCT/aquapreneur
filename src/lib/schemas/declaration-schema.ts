@@ -173,7 +173,7 @@ export const StatutProgression = z
 	.nullish();
 export type StatutProgression = z.infer<typeof StatutProgression>;
 
-const Progression = z.strictObject({
+export const Progression = z.strictObject({
 	globale: StatutProgressionGlobale.nullish(),
 	equipe: optObject({
 		globale: StatutProgression.nullish(),
@@ -194,15 +194,18 @@ const Progression = z.strictObject({
 	}),
 	retourAnnee: optObject({
 		globale: StatutProgression.nullish(),
+		imprevus: StatutProgression.nullish(),
+		difficultes: StatutProgression.nullish(),
+		suggestions: StatutProgression.nullish(),
 	}),
 	envoi: optObject({
 		globale: StatutProgression.nullish(),
 	}),
 });
+export type Progression = z.infer<typeof Progression>;
 
 export const DeclarationSchema = z.strictObject({
 	progression: Progression,
-	aProduit: z.boolean(),
 	dateBilan: IsoDate.nullish(),
 	debutExercice: IsoDate.nullish(),
 	finExercice: IsoDate.nullish(),

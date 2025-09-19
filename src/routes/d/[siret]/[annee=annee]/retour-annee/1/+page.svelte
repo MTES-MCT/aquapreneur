@@ -15,11 +15,7 @@
 	const { data } = $props();
 
 	const schema = z.object({
-		aleas: z
-			.enum(ALEAS_IDS)
-			.array()
-			.min(1, "Veuillez selectionner au moins une réponse")
-			.default(data.retourAnnee.aleas),
+		aleas: z.enum(ALEAS_IDS).array().default(data.retourAnnee.aleas),
 		aleasDetails: z.string().nullable().default(data.retourAnnee.aleasDetails),
 	});
 
@@ -27,9 +23,10 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
+			isLastStep: () => true,
 			getNextPage: () => "./2",
-			updateProgress: () => {
+			updateProgress: (statut) => {
+				data.progressionRetourAnnee.imprevus = statut;
 				return data.declaration;
 			},
 			updateData: (form) => {
