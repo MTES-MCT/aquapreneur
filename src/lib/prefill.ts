@@ -132,7 +132,7 @@ export const prefillDeclaration = async (
 						// valeurHT: d?.stock.StckValHDElv,
 						stockKg: d?.stock.StckVolHDElv,
 					},
-					adulte: {
+					elevageAdulte: {
 						// valeurHT: d?.stock.StckValHElv,
 						stockKg: d?.stock.StckVolHElv,
 					},
@@ -200,7 +200,7 @@ export const prefillDeclaration = async (
 							},
 						},
 					},
-					adulte: {
+					elevageAdulte: {
 						destination: {
 							france: { valeurHT: d?.production.CAHElvFr },
 							etranger: {
@@ -374,7 +374,7 @@ export const prefillDeclaration = async (
 		// 			quantite: d?.stock.StckVolHDElv,
 		// 			repartition: [],
 		// 		},
-		// 		adulte: {
+		// 		elevageAdulte: {
 		// 			quantite: sumAttrs(d?.stock, ["StckVolHElv", "StckVolHConso"]),
 		// 			repartition: [],
 		// 		},

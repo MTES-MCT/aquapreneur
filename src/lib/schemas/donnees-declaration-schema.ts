@@ -46,7 +46,7 @@ export const DonneesEspece = optObject({
 	// elevage: optObject({
 	// 	pregrossissement: ValeurStock,
 	// 	demiElevage: ValeurStock,
-	// 	adulte: ValeurStock,
+	// 	elevageAdulte: ValeurStock,
 	// }),
 	// origine: optObject({}),
 	// zonesProduction: z
@@ -79,7 +79,7 @@ export const DonneesEspece = optObject({
 		}),
 	}),
 	elevage: optObject({
-		pregrossi: optObject({
+		pregrossissement: optObject({
 			destination: optObject({
 				france: ValeurVente,
 				etranger: ValeurVente,
@@ -91,7 +91,7 @@ export const DonneesEspece = optObject({
 				etranger: ValeurVente,
 			}),
 		}),
-		adulte: optObject({
+		elevageAdulte: optObject({
 			destination: optObject({
 				france: ValeurVente,
 				etranger: ValeurVente,
@@ -145,7 +145,7 @@ export const productionSchema = optObject({
 	elevage: optObject({
 		pregrossissement: ValeurStock,
 		demiElevage: ValeurStock,
-		adulte: ValeurStock,
+		elevageAdulte: ValeurStock,
 	}),
 	origine: optObject({}),
 	zonesProduction: z

@@ -183,57 +183,61 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 			disable: () => {
 				delete d?.elevage;
 			},
-			pregrossi: {
+			pregrossissement: {
 				active: () => {
-					return d?.elevage?.pregrossi != null;
+					return d?.elevage?.pregrossissement != null;
 				},
 				enable: () => {
 					defaultsDeep(donnees, {
 						ventes: {
 							[especeId]: {
-								elevage: { pregrossi: { destination: {} } },
+								elevage: { pregrossissement: { destination: {} } },
 							},
 						},
 					});
 				},
 				disable: () => {
-					delete d?.elevage?.pregrossi;
+					delete d?.elevage?.pregrossissement;
 				},
 				destination: {
 					france: {
 						active: () => {
-							return d?.elevage?.pregrossi?.destination?.france != null;
-						},
-						enable: () => {
-							defaultsDeep(donnees, {
-								ventes: {
-									[especeId]: {
-										elevage: { pregrossi: { destination: { france: {} } } },
-									},
-								},
-							});
-						},
-						disable: () => {
-							delete d?.elevage?.pregrossi?.destination?.france;
-						},
-					},
-					etranger: {
-						active: () => {
-							return d?.elevage?.pregrossi?.destination?.etranger != null;
+							return d?.elevage?.pregrossissement?.destination?.france != null;
 						},
 						enable: () => {
 							defaultsDeep(donnees, {
 								ventes: {
 									[especeId]: {
 										elevage: {
-											pregrossi: { destination: { etranger: {} } },
+											pregrossissement: { destination: { france: {} } },
 										},
 									},
 								},
 							});
 						},
 						disable: () => {
-							delete d?.elevage?.pregrossi?.destination?.etranger;
+							delete d?.elevage?.pregrossissement?.destination?.france;
+						},
+					},
+					etranger: {
+						active: () => {
+							return (
+								d?.elevage?.pregrossissement?.destination?.etranger != null
+							);
+						},
+						enable: () => {
+							defaultsDeep(donnees, {
+								ventes: {
+									[especeId]: {
+										elevage: {
+											pregrossissement: { destination: { etranger: {} } },
+										},
+									},
+								},
+							});
+						},
+						disable: () => {
+							delete d?.elevage?.pregrossissement?.destination?.etranger;
 						},
 					},
 				},
@@ -293,50 +297,50 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 					},
 				},
 			},
-			adulte: {
+			elevageAdulte: {
 				active: () => {
-					return d?.elevage?.adulte != null;
+					return d?.elevage?.elevageAdulte != null;
 				},
 				enable: () => {
 					defaultsDeep(donnees, {
 						ventes: {
 							[especeId]: {
-								elevage: { adulte: { destination: {} } },
+								elevage: { elevageAdulte: { destination: {} } },
 							},
 						},
 					});
 				},
 				disable: () => {
-					delete d?.elevage?.adulte;
+					delete d?.elevage?.elevageAdulte;
 				},
 				destination: {
 					france: {
 						active: () => {
-							return d?.elevage?.adulte?.destination?.france != null;
+							return d?.elevage?.elevageAdulte?.destination?.france != null;
 						},
 						enable: () => {
 							defaultsDeep(donnees, {
 								ventes: {
 									[especeId]: {
-										elevage: { adulte: { destination: { france: {} } } },
+										elevage: { elevageAdulte: { destination: { france: {} } } },
 									},
 								},
 							});
 						},
 						disable: () => {
-							delete d?.elevage?.adulte?.destination?.france;
+							delete d?.elevage?.elevageAdulte?.destination?.france;
 						},
 					},
 					etranger: {
 						active: () => {
-							return d?.elevage?.adulte?.destination?.etranger != null;
+							return d?.elevage?.elevageAdulte?.destination?.etranger != null;
 						},
 						enable: () => {
 							defaultsDeep(donnees, {
 								ventes: {
 									[especeId]: {
 										elevage: {
-											adulte: {
+											elevageAdulte: {
 												destination: { etranger: {} },
 											},
 										},
@@ -345,7 +349,7 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 							});
 						},
 						disable: () => {
-							delete d?.elevage?.adulte?.destination?.etranger;
+							delete d?.elevage?.elevageAdulte?.destination?.etranger;
 						},
 					},
 				},

@@ -120,7 +120,7 @@ export type DestinationVenteConsoFranceId =
 export const STADES_ELEVAGE = [
 	{
 		label: "Prégrossissement (18 mois)",
-		id: "pregrossi",
+		id: "pregrossissement",
 	},
 	{
 		label: "Demi-élevage (24 mois)",
@@ -128,7 +128,7 @@ export const STADES_ELEVAGE = [
 	},
 	{
 		label: "Élevage jusqu’à taille marchande",
-		id: "adulte",
+		id: "elevageAdulte",
 	},
 ] as const;
 
