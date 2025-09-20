@@ -15,7 +15,7 @@
 	const { data } = $props();
 
 	const origine =
-		data.declaration.donnees.ventes[data.espece.id]!.consommation?.origine;
+		data.declaration.donnees.especes[data.espece.id]!.consommation?.origine;
 
 	const schema = z.object({
 		captage: z.object({
@@ -42,7 +42,7 @@
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(data.declaration.donnees.ventes, {
+				merge(data.declaration.donnees.especes, {
 					[data.espece.id]: { consommation: { origine: form.data } },
 				});
 				return data.declaration;
@@ -123,6 +123,6 @@
 <FormDebug
 	{form}
 	{errors}
-	data={data.declaration.donnees.ventes[data.espece.id]}
+	data={data.declaration.donnees.especes[data.espece.id]}
 	progression={data.declaration.donnees.progression}
 ></FormDebug>

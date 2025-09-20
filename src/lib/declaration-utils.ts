@@ -15,7 +15,7 @@ export const aVenduNaissains = (donnees: DonneesDeclaration) => {
 };
 
 export const dProd = (donnees: DonneesDeclaration, especeId: EspeceId) => {
-	const d = donnees.production?.[especeId];
+	const d = donnees.especes?.[especeId];
 
 	return {
 		active: () => {
@@ -25,13 +25,13 @@ export const dProd = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 			defaultsDeep(donnees, { production: { [especeId]: {} } });
 		},
 		disable: () => {
-			delete donnees.production?.[especeId];
+			delete donnees.especes?.[especeId];
 		},
 	};
 };
 
 export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
-	const d = donnees.ventes?.[especeId];
+	const d = donnees.especes?.[especeId];
 	return {
 		active: () => {
 			return d != null;
@@ -40,12 +40,14 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 			defaultsDeep(donnees, { ventes: { [especeId]: {} } });
 		},
 		disable: () => {
-			delete donnees.ventes?.[especeId];
+			delete donnees.especes?.[especeId];
 		},
 
 		consommation: {
 			get validé() {
-				return d?.validation?.consommation != null;
+				return (
+					donnees.progression?.ventes?.especes?.[especeId]?.consommation != null
+				);
 			},
 			set validé(val: boolean) {
 				defaultsDeep(donnees, {
@@ -53,7 +55,9 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 				});
 			},
 			get origineValidé() {
-				return d?.validation?.origine != null;
+				return (
+					donnees.progression?.ventes?.especes?.[especeId]?.origine != null
+				);
 			},
 			set origineValidé(val: boolean) {
 				defaultsDeep(donnees, {
@@ -159,7 +163,9 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 		},
 		elevage: {
 			get validé() {
-				return d?.validation?.elevage != null;
+				return (
+					donnees.progression?.ventes?.especes?.[especeId]?.elevage != null
+				);
 			},
 			set validé(val: boolean) {
 				defaultsDeep(donnees, {
@@ -347,7 +353,9 @@ export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 		},
 		naissain: {
 			get validé() {
-				return d?.validation?.naissain != null;
+				return (
+					donnees.progression?.ventes?.especes?.[especeId]?.naissain != null
+				);
 			},
 			set validé(val: boolean) {
 				defaultsDeep(donnees, {

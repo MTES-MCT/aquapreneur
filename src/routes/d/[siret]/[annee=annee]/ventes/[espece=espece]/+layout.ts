@@ -8,15 +8,15 @@ export const load = async ({ params, parent }) => {
 
 	const espece = ESPECES.find((e) => e.slug === (especeSlug as EspeceSlug))!; // assuré par le ParamsMatcher
 
-	const donneesVentesEspece = declaration.donnees.ventes[espece.id];
-	if (donneesVentesEspece == null) {
+	const donneesEspece = declaration.donnees.especes[espece.id];
+	if (donneesEspece == null) {
 		redirect(307, "../");
 	}
 
 	return {
 		wide: true,
 		espece,
-		donneesVentesEspece,
+		donneesEspece,
 		returnUrl: `/d/${etablissement.siret}/${annee}/ventes/recapitulatif`,
 	};
 };

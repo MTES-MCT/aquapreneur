@@ -79,8 +79,9 @@
 										{#each ORIGINES_NAISSAIN as origine (origine.id)}
 											{#if dVentes(donnees, data.espece.id).naissain[origine.id].active()}
 												{@const d =
-													donnees.ventes[data.espece.id]!.naissain![origine.id]!
-														.destination!}
+													donnees.especes[data.espece.id]!.naissain![
+														origine.id
+													]!.destination!}
 												<tr>
 													<td>{origine.label}</td>
 													{#if ventesFranceActives()}

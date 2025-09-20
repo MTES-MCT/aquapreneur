@@ -14,7 +14,7 @@
 	const { data } = $props();
 
 	const affinage =
-		data.declaration.donnees.ventes[data.espece.id]!.consommation?.affinage;
+		data.declaration.donnees.especes[data.espece.id]!.consommation?.affinage;
 
 	const schema = z.object({
 		claires: z.object({
@@ -37,7 +37,7 @@
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(data.declaration.donnees.ventes, {
+				merge(data.declaration.donnees.especes, {
 					[data.espece.id]: { consommation: { affinage: form.data } },
 				});
 				return data.declaration;
@@ -125,6 +125,6 @@
 <FormDebug
 	{form}
 	{errors}
-	data={data.declaration.donnees.ventes[data.espece.id]}
+	data={data.declaration.donnees.especes[data.espece.id]}
 	progression={data.declaration.donnees.progression}
 ></FormDebug>

@@ -79,7 +79,7 @@
 										{#each STADES_ELEVAGE as stade (stade.id)}
 											{#if dVentes(donnees, data.espece.id).elevage[stade.id].active()}
 												{@const d =
-													donnees.ventes[data.espece.id]!.elevage![stade.id]!
+													donnees.especes[data.espece.id]!.elevage![stade.id]!
 														.destination!}
 												<tr>
 													<th scope="row">{stade.label}</th>

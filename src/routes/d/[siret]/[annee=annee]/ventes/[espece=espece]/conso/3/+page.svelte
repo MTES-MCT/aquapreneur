@@ -74,7 +74,7 @@
 													<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 															 toucher directement à la structure -->
 													{@const value =
-														donnees.ventes[data.espece.id]!.consommation!
+														donnees.especes[data.espece.id]!.consommation!
 															.destination!.france![destination.id]!}
 													<tr>
 														<td>{destination.label}</td>
@@ -114,7 +114,7 @@
 												<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.consommation!
+													donnees.especes[data.espece.id]!.consommation!
 														.destination!.unionEuropeenne!}
 												<tr>
 													<td>Au sein de l’Union Européenne</td>
@@ -143,7 +143,7 @@
 												<!-- TODO. ajouter des getter/setter sur dVentes plutot que de
 										   			 toucher directement à la structure -->
 												{@const value =
-													donnees.ventes[data.espece.id]!.consommation!
+													donnees.especes[data.espece.id]!.consommation!
 														.destination!.horsUnionEuropeenne!}
 												<tr>
 													<td>Hors de l’Union Européenne</td>

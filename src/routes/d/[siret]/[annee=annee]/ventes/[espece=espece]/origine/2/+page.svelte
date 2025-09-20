@@ -14,7 +14,7 @@
 	const { data } = $props();
 
 	const bio =
-		data.declaration.donnees.ventes[data.espece.id]!.consommation?.bio;
+		data.declaration.donnees.especes[data.espece.id]!.consommation?.bio;
 
 	const schema = z.object({
 		part: Percent.default(bio?.part ?? 0),
@@ -30,7 +30,7 @@
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(data.declaration.donnees.ventes, {
+				merge(data.declaration.donnees.especes, {
 					[data.espece.id]: { consommation: { bio: form.data } },
 				});
 				return data.declaration;
@@ -70,5 +70,5 @@
 <FormDebug
 	{form}
 	{errors}
-	data={data.declaration.donnees.ventes[data.espece.id]}
+	data={data.declaration.donnees.especes[data.espece.id]}
 ></FormDebug>
