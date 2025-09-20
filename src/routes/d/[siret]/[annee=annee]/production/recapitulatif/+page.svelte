@@ -7,7 +7,7 @@
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
 	import { dProd } from "$lib/declaration-utils";
-	import { StatutProgression } from "$lib/schemas/declaration-schema";
+	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 
 	const { data } = $props();
 

@@ -7,14 +7,14 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ORIGINES_NAISSAIN, ORIGINES_NAISSAIN_IDS } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
 
 	const { data } = $props();
 
 	let donnees = $state(
 		JSON.parse(JSON.stringify(data.declaration.donnees)),
-	) as DeclarationSchema;
+	) as DonneesDeclaration;
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
 		event.preventDefault();

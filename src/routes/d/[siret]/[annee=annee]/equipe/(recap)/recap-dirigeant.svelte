@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { COUNTRIES, DIPLOMES, REGIMES_SOCIAUX } from "$lib/constants";
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 
 	const {
 		dirigeant,
 	}: {
-		dirigeant: DeclarationSchema["equipe"]["dirigeants"][number];
+		dirigeant: DonneesDeclaration["equipe"]["dirigeants"][number];
 	} = $props();
 </script>
 

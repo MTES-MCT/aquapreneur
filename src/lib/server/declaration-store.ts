@@ -8,7 +8,7 @@ import { declarationsTable } from "$lib/server/db/schema/declaration";
 import { prefillDeclaration } from "$lib/prefill";
 
 import { type DeclarationType } from "../constants";
-import { DeclarationSchema } from "../schemas/declaration-schema";
+import { DonneesDeclaration } from "../schemas/donnees-declaration-schema";
 import { type DeclarationEntry } from "./db/types";
 
 import type { AnneeDeclarative } from "../types";
@@ -53,9 +53,9 @@ export const getOrCreateDeclaration = async (
 
 export const updateDeclaration = async (
 	declarationId: number,
-	donneesDeclaration: DeclarationSchema,
+	donneesDeclaration: DonneesDeclaration,
 ) => {
-	const parsedData = DeclarationSchema.parse(donneesDeclaration);
+	const parsedData = DonneesDeclaration.parse(donneesDeclaration);
 	const currentValue = (
 		await db
 			.select()

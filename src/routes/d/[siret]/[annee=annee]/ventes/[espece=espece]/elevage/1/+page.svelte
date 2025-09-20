@@ -8,7 +8,7 @@
 	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { STADES_ELEVAGE, type STADES_ELEVAGE_ID } from "$lib/constants";
+	import { STADES_ELEVAGE, type StadeElevageId } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
@@ -23,7 +23,7 @@
 		goto("./2");
 	};
 
-	const handleCheck = (checked: boolean, id: STADES_ELEVAGE_ID) => {
+	const handleCheck = (checked: boolean, id: StadeElevageId) => {
 		const v = dVentes(donnees, data.espece.id).elevage[id];
 		if (checked) {
 			v.enable();

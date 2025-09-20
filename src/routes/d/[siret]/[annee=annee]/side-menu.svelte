@@ -3,7 +3,7 @@
 
 	import { dev } from "$app/environment";
 
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 	import type { Persona } from "$lib/types";
 	import { partFilled } from "$lib/utils";
 
@@ -18,7 +18,7 @@
 	}: {
 		step: DeclarationStep;
 		baseUrl: string;
-		donnees: DeclarationSchema;
+		donnees: DonneesDeclaration;
 		nomEtablissement: string;
 		persona: Persona;
 	} = $props();

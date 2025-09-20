@@ -19,7 +19,7 @@ import {
 	optObject,
 } from "$lib/types";
 
-const valeurVente = optObject({
+const ValeurVente = optObject({
 	valeurHT: PositiveNumber.nullish(),
 	quantiteKg: PositiveNumber.nullish(),
 });
@@ -35,40 +35,40 @@ export const venteSchema = optObject({
 	naissain: optObject({
 		captage: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 		ecloserieDiploide: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 		ecloserieTriploide: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 	}),
 	elevage: optObject({
 		pregrossi: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 		demiElevage: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 		adulte: optObject({
 			destination: optObject({
-				france: valeurVente,
-				etranger: valeurVente,
+				france: ValeurVente,
+				etranger: ValeurVente,
 			}),
 		}),
 	}),
@@ -77,11 +77,11 @@ export const venteSchema = optObject({
 			france: z
 				.partialRecord(
 					z.enum(DESTINATIONS_VENTES_CONSO_FRANCE_IDS),
-					valeurVente,
+					ValeurVente,
 				)
 				.optional(),
-			unionEuropeenne: valeurVente,
-			horsUnionEuropeenne: valeurVente,
+			unionEuropeenne: ValeurVente,
+			horsUnionEuropeenne: ValeurVente,
 		}),
 		affinage: optObject({
 			claires: optObject({
@@ -110,12 +110,12 @@ export const venteSchema = optObject({
 	}),
 });
 
-export const StockValues = optObject({
+export const ValeurStock = optObject({
 	stockKg: PositiveNumber.nullish(),
 	stockNmoins1kg: PositiveNumber.nullish(),
 });
 
-export const StockValuesNaissain = optObject({
+export const ValeurStockNaissain = optObject({
 	stockMilliers: PositiveNumber.nullish(),
 	stockM: PositiveNumber.nullish(),
 	stockNmoins1milliers: PositiveNumber.nullish(),
@@ -128,14 +128,14 @@ export const productionSchema = optObject({
 		zones: z.boolean(),
 	}),
 	naissain: optObject({
-		total: StockValuesNaissain,
-		captage: StockValuesNaissain,
-		ecloserie: StockValuesNaissain,
+		total: ValeurStockNaissain,
+		captage: ValeurStockNaissain,
+		ecloserie: ValeurStockNaissain,
 	}),
 	elevage: optObject({
-		pregrossissement: StockValues,
-		demiElevage: StockValues,
-		adulte: StockValues,
+		pregrossissement: ValeurStock,
+		demiElevage: ValeurStock,
+		adulte: ValeurStock,
 	}),
 	origine: optObject({}),
 	zonesProduction: z
@@ -204,7 +204,7 @@ export const Progression = z.strictObject({
 });
 export type Progression = z.infer<typeof Progression>;
 
-export const DeclarationSchema = z.strictObject({
+export const DonneesDeclaration = z.strictObject({
 	progression: Progression,
 	dateBilan: IsoDate.nullish(),
 	debutExercice: IsoDate.nullish(),
@@ -306,4 +306,4 @@ export const DeclarationSchema = z.strictObject({
 	}),
 });
 
-export type DeclarationSchema = z.infer<typeof DeclarationSchema>;
+export type DonneesDeclaration = z.infer<typeof DonneesDeclaration>;

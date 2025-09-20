@@ -5,9 +5,9 @@ import isPlainObject from "lodash/isPlainObject";
 
 import { ANNEES_DECLARATIVES, DSFR_VERSION } from "./constants";
 import {
-	DeclarationSchema,
+	DonneesDeclaration,
 	StatutProgression,
-} from "./schemas/declaration-schema";
+} from "./schemas/donnees-declaration-schema";
 
 import type { DeclarationEntry } from "./server/db/types";
 import type { AnneeDeclarative, Persona } from "./types";
@@ -46,7 +46,7 @@ export const submitDeclarationUpdate = async (
 		body: JSON.stringify(declaration.donnees),
 	});
 	const res = await req.json();
-	return DeclarationSchema.parse(res.donnees);
+	return DonneesDeclaration.parse(res.donnees);
 };
 
 export const deepClean = (obj: object) => {
@@ -112,7 +112,7 @@ export const typeStatut = (statut: StatutProgression) => {
 };
 
 export const partFilled = (
-	donnees: DeclarationSchema,
+	donnees: DonneesDeclaration,
 	part: "equipe" | "production" | "ventes" | "retourAnnee" | "envoi",
 	persona: Persona,
 ) => {

@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { prepareForm } from "$lib/form-utils.js";
+	import { prepareForm } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
 
 	const { data } = $props();

@@ -1,6 +1,6 @@
 import merge from "lodash/merge";
 
-import type { StatutProgression } from "$lib/schemas/declaration-schema";
+import type { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 import { submitDeclarationUpdate, typeStatut } from "$lib/utils";
 
 export const load = async ({ parent, fetch }) => {

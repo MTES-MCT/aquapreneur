@@ -10,8 +10,8 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
 		DESTINATIONS_NAISSAIN,
-		type DESTINATIONS_NAISSAIN_ID,
 		DESTINATIONS_NAISSAIN_IDS,
+		type DestinationNaissainId,
 		ORIGINES_NAISSAIN_IDS,
 	} from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
@@ -25,7 +25,7 @@
 		event.preventDefault();
 		const v = dVentes(donnees, data.espece.id).naissain;
 		for (const key in checkboxStates) {
-			const destId = key as DESTINATIONS_NAISSAIN_ID;
+			const destId = key as DestinationNaissainId;
 			ORIGINES_NAISSAIN_IDS.filter((ori) => v[ori].active()).forEach((s) => {
 				if (checkboxStates[destId]) {
 					v[s].destination[destId].enable();
@@ -38,11 +38,11 @@
 		goto("./3");
 	};
 
-	const handleCheck = (checked: boolean, id: DESTINATIONS_NAISSAIN_ID) => {
+	const handleCheck = (checked: boolean, id: DestinationNaissainId) => {
 		checkboxStates[id] = checked;
 	};
 
-	const destinationActive = (destId: DESTINATIONS_NAISSAIN_ID) => {
+	const destinationActive = (destId: DestinationNaissainId) => {
 		return ORIGINES_NAISSAIN_IDS.some((s) =>
 			dVentes(donnees, data.espece.id).naissain[s].destination?.[
 				destId

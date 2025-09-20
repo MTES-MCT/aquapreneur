@@ -5,7 +5,7 @@
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
-	import type { StatutProgression } from "$lib/schemas/declaration-schema";
+	import type { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
 	import RecapDirigeant from "../recap-dirigeant.svelte";

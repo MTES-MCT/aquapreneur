@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type Snippet } from "svelte";
 
-	import type { StatutProgression } from "$lib/schemas/declaration-schema";
+	import type { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 
 	type RecapLineMode = "edit" | "review";
 

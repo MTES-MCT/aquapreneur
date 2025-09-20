@@ -3,7 +3,7 @@ import { type ZodValidationSchema, zod4 } from "sveltekit-superforms/adapters";
 
 import { goto } from "$app/navigation";
 
-import { type StatutProgression } from "./schemas/declaration-schema";
+import { type StatutProgression } from "./schemas/donnees-declaration-schema";
 import { submitDeclarationUpdate } from "./utils";
 
 import type { DeclarationEntry } from "./server/db/types";

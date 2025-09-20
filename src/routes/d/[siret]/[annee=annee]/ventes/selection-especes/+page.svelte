@@ -10,7 +10,7 @@
 	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { ESPECES, type ESPECES_ID } from "$lib/constants";
+	import { ESPECES, type EspeceId } from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
@@ -24,7 +24,7 @@
 		goto("./naissain");
 	};
 
-	const handleCheck = (checked: boolean, id: ESPECES_ID) => {
+	const handleCheck = (checked: boolean, id: EspeceId) => {
 		const v = dVentes(donnees, id);
 		if (checked) {
 			v.enable();

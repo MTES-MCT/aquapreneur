@@ -9,7 +9,7 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { PositiveInt } from "$lib/types";
 
 	const { data } = $props();

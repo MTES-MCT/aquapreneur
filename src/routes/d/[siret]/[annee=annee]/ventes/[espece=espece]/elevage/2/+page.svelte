@@ -10,8 +10,8 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
 		DESTINATIONS_ELEVAGE,
-		type DESTINATIONS_ELEVAGE_ID,
 		DESTINATIONS_ELEVAGE_IDS,
+		type DestinationElevageId,
 		STADES_ELEVAGE_IDS,
 	} from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
@@ -25,7 +25,7 @@
 		event.preventDefault();
 		const v = dVentes(donnees, data.espece.id).elevage;
 		for (const key in checkboxStates) {
-			const destId = key as DESTINATIONS_ELEVAGE_ID;
+			const destId = key as DestinationElevageId;
 			STADES_ELEVAGE_IDS.filter((s) => v[s].active()).forEach((s) => {
 				if (checkboxStates[destId]) {
 					v[s].destination[destId].enable();
@@ -38,11 +38,11 @@
 		goto("./3");
 	};
 
-	const handleCheck = (checked: boolean, id: DESTINATIONS_ELEVAGE_ID) => {
+	const handleCheck = (checked: boolean, id: DestinationElevageId) => {
 		checkboxStates[id] = checked;
 	};
 
-	const destinationActive = (destId: DESTINATIONS_ELEVAGE_ID) => {
+	const destinationActive = (destId: DestinationElevageId) => {
 		return STADES_ELEVAGE_IDS.some((s) =>
 			dVentes(donnees, data.espece.id).elevage[s].destination?.[
 				destId

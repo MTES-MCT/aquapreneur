@@ -10,7 +10,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
 		DESTINATIONS_VENTES_CONSO_FRANCE,
-		type DESTINATIONS_VENTES_CONSO_FRANCE_ID,
+		type DestinationVenteConsoFranceId,
 	} from "$lib/constants";
 	import { dVentes } from "$lib/declaration-utils";
 	import { submitDeclarationUpdate } from "$lib/utils";
@@ -25,10 +25,7 @@
 		goto("./3");
 	};
 
-	const handleCheck = (
-		checked: boolean,
-		id: DESTINATIONS_VENTES_CONSO_FRANCE_ID,
-	) => {
+	const handleCheck = (checked: boolean, id: DestinationVenteConsoFranceId) => {
 		const v = dVentes(
 			donnees,
 			data.espece.id,

@@ -6,7 +6,7 @@ import { bilans } from "$lib/server/db/schema/api";
 // import { concessionsTable } from "$lib/server/db/schema/atena";
 
 import { type LaxNumValue } from "./schemas/cgo-schema";
-import { DeclarationSchema } from "./schemas/declaration-schema";
+import { DonneesDeclaration } from "./schemas/donnees-declaration-schema";
 import { deepClean } from "./utils";
 
 import type { EtablissementSelect } from "./server/db/types";
@@ -80,12 +80,12 @@ export const getBilan = async (siret: string, annee: number) => {
 export const prefillDeclaration = async (
 	etablissement: EtablissementSelect,
 	annee: number,
-): Promise<DeclarationSchema> => {
+): Promise<DonneesDeclaration> => {
 	const bilan = await getBilan(etablissement.siret, annee);
 	// const concessions = await getConcessions(etablissement.siren);
 	const d = bilan?.donnees;
 
-	const declaration = DeclarationSchema.parse({
+	return DonneesDeclaration.parse({
 		progression: {},
 		dateBilan: bilan?.dateBilan ?? null,
 		debutExercice: bilan?.debutExercice ?? null,
@@ -402,7 +402,4 @@ export const prefillDeclaration = async (
 		// 	dateArrete: c.dateArrete,
 		// })),
 	});
-	// console.dir(deepClean(d?.production ?? {}), { depth: null });
-	// console.dir(declaration.production, { depth: null });
-	return declaration;
 };

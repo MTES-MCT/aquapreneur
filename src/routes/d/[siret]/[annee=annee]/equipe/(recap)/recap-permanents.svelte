@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 
 	import Recap1 from "../details/permanents/1/recap.svelte";
 	import Recap2 from "../details/permanents/2/recap.svelte";
@@ -7,7 +7,7 @@
 	const {
 		permanents,
 	}: {
-		permanents: DeclarationSchema["equipe"]["permanents"];
+		permanents: DonneesDeclaration["equipe"]["permanents"];
 	} = $props();
 </script>
 

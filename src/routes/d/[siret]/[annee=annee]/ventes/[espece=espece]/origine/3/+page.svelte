@@ -9,7 +9,7 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ORIGINES_NAISSAIN } from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils.js";
+	import { prepareForm } from "$lib/form-utils";
 	import { Percent, PositiveNumber } from "$lib/types";
 
 	const { data } = $props();

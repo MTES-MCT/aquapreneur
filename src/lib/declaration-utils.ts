@@ -1,20 +1,20 @@
 import defaultsDeep from "lodash/defaultsDeep";
 
 import {
-	type DESTINATIONS_VENTES_CONSO_FRANCE_ID,
-	type ESPECES_ID,
+	type DestinationVenteConsoFranceId,
 	ESPECES_IDS,
+	type EspeceId,
 } from "./constants";
 
-import type { DeclarationSchema } from "./schemas/declaration-schema";
+import type { DonneesDeclaration } from "./schemas/donnees-declaration-schema";
 
-export const aVenduNaissains = (donnees: DeclarationSchema) => {
+export const aVenduNaissains = (donnees: DonneesDeclaration) => {
 	return ESPECES_IDS.some((especeId) =>
 		dVentes(donnees, especeId).naissain.active(),
 	);
 };
 
-export const dProd = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
+export const dProd = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 	const d = donnees.production?.[especeId];
 
 	return {
@@ -30,7 +30,7 @@ export const dProd = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 	};
 };
 
-export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
+export const dVentes = (donnees: DonneesDeclaration, especeId: EspeceId) => {
 	const d = donnees.ventes?.[especeId];
 	return {
 		active: () => {
@@ -99,7 +99,7 @@ export const dVentes = (donnees: DeclarationSchema, especeId: ESPECES_ID) => {
 					disable: () => {
 						delete d?.consommation?.destination?.france;
 					},
-					detail: (detailId: DESTINATIONS_VENTES_CONSO_FRANCE_ID) => ({
+					detail: (detailId: DestinationVenteConsoFranceId) => ({
 						active: () => {
 							return d?.consommation?.destination?.france?.[detailId] != null;
 						},
