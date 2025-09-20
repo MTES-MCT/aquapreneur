@@ -56,7 +56,10 @@
 			status={statut?.statut}
 			onEdit={async () => {
 				if (statut) {
-					statut.statut = "en cours comptable";
+					statut.statut =
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur";
 				}
 				await submitDeclarationUpdate(data.declaration);
 				goto(`./details/dirigeants/${dir.id}/1`);
@@ -85,7 +88,10 @@
 		icon="fr-icon-group-line"
 		status={data.progressionEquipe.permanents}
 		onEdit={async () => {
-			data.progressionEquipe.permanents = "en cours comptable";
+			data.progressionEquipe.permanents =
+				data.persona === "comptable" ?
+					"en cours comptable"
+				:	"en cours producteur";
 			await submitDeclarationUpdate(data.declaration);
 			goto(`./details/permanents`);
 		}}
@@ -99,7 +105,10 @@
 		icon="fr-icon-group-line"
 		status={data.progressionEquipe.saisonniers}
 		onEdit={async () => {
-			data.progressionEquipe.saisonniers = "en cours comptable";
+			data.progressionEquipe.saisonniers =
+				data.persona === "comptable" ?
+					"en cours comptable"
+				:	"en cours producteur";
 			await submitDeclarationUpdate(data.declaration);
 			goto(`./details/saisonniers`);
 		}}

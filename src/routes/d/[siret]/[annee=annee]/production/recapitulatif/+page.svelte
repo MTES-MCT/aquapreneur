@@ -1,5 +1,6 @@
 <script lang="ts">
 	import capitalize from "lodash/capitalize";
+	import merge from "lodash/merge";
 
 	import type { FormEventHandler } from "svelte/elements";
 
@@ -61,27 +62,54 @@
 	<div data-fr-group="true" class="fr-accordions-group">
 		<RecapLine
 			label="Origine et mode d’élevage"
-			status={null}
+			status={data.progressionProduction.especes[espece.id]?.origine}
 			icon="fr-icon-list-unordered"
-			onEdit={async () => goto(`./${espece.slug}/origine/1`)}
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					origine:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/origine/1`);
+			}}
 		>
 			TODO tableau récap
 		</RecapLine>
 
 		<RecapLine
 			label="Volume en stock"
-			status={null}
+			status={data.progressionProduction.especes[espece.id]?.elevage}
 			icon="fr-icon-list-unordered"
-			onEdit={async () => goto(`./${espece.slug}/elevage/1`)}
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					elevage:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/elevage/1`);
+			}}
 		>
 			TODO tableau récap
 		</RecapLine>
 
 		<RecapLine
 			label="Zones de production et pertes"
-			status={null}
+			status={data.progressionProduction.especes[espece.id]?.zones}
 			icon="fr-icon-list-unordered"
-			onEdit={async () => goto(`./${espece.slug}/zones/1`)}
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					zones:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/zones/1`);
+			}}
 		>
 			TODO tableau récap
 		</RecapLine>
