@@ -41,11 +41,9 @@
 	};
 </script>
 
-<div class="bandeau-titre">
-	<h1 class="fr-h2">Équipe et direction</h1>
-</div>
+<h1 class="fr-h2">Équipe et direction</h1>
 
-<h2 class="fr-h6 fr-mt-10v">Dirigeants et associés</h2>
+<h2 class="fr-h6 fr-mt-10w">Dirigeants et associés</h2>
 
 <div data-fr-group="true" class="fr-accordions-group">
 	{#each data.declaration.donnees.equipe.dirigeants as dir, index (dir.id)}
@@ -116,11 +114,3 @@
 		<NavigationLinks nextIsButton center />
 	</form>
 {/if}
-
-<style>
-	.bandeau-titre {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-	}
-</style>
