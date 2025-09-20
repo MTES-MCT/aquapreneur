@@ -2,13 +2,13 @@ import { and, desc, eq, ne, sql } from "drizzle-orm";
 
 import { db } from "$lib/server/db";
 import { bilans } from "$lib/server/db/schema/api";
+import { concessionsTable } from "$lib/server/db/schema/atena";
 
-// import { concessionsTable } from "$lib/server/db/schema/atena";
-
-import { type LaxNumValue } from "./schemas/cgo-schema";
+// import { type LaxNumValue } from "./schemas/cgo-schema";
 import { DonneesDeclaration } from "./schemas/donnees-declaration-schema";
 import { deepClean } from "./utils";
 
+import type { QuartierImmatriculationId } from "./constants";
 import type { EtablissementSelect } from "./server/db/types";
 
 // import type { ConcessionSelect } from "./server/db/types";
@@ -28,21 +28,21 @@ import type { EtablissementSelect } from "./server/db/types";
 // 	);
 // };
 
-const sumAttrs = (
-	obj: Record<string, LaxNumValue | unknown> | undefined,
-	attrs: string[],
-) => {
-	if (obj == null) {
-		return null;
-	}
-	return attrs.reduce((acc, currentKey) => {
-		const val = obj[currentKey];
-		if (typeof val === "number") {
-			return acc + val;
-		}
-		return acc;
-	}, 0);
-};
+// const sumAttrs = (
+// 	obj: Record<string, LaxNumValue | unknown> | undefined,
+// 	attrs: string[],
+// ) => {
+// 	if (obj == null) {
+// 		return null;
+// 	}
+// 	return attrs.reduce((acc, currentKey) => {
+// 		const val = obj[currentKey];
+// 		if (typeof val === "number") {
+// 			return acc + val;
+// 		}
+// 		return acc;
+// 	}, 0);
+// };
 
 export const getBilan = async (siret: string, annee: number) => {
 	const result = await db
@@ -64,25 +64,43 @@ export const getBilan = async (siret: string, annee: number) => {
 	return null;
 };
 
-// const getConcessions = (siren: string) => {
-// 	return db
-// 		.select()
-// 		.from(concessionsTable)
-// 		.where(eq(concessionsTable.siren, siren))
-// 		.orderBy(
-// 			concessionsTable.quartierParcelle,
-// 			concessionsTable.libLocalite,
-// 			concessionsTable.nomLieuDit,
-// 			concessionsTable.numeroParcelle,
-// 		);
-// };
+const getConcessions = (siren: string) => {
+	return db
+		.select()
+		.from(concessionsTable)
+		.where(eq(concessionsTable.siren, siren))
+		.orderBy(
+			concessionsTable.quartierParcelle,
+			concessionsTable.libLocalite,
+			concessionsTable.nomLieuDit,
+			concessionsTable.numeroParcelle,
+		);
+};
 
 export const prefillDeclaration = async (
 	etablissement: EtablissementSelect,
 	annee: number,
 ): Promise<DonneesDeclaration> => {
 	const bilan = await getBilan(etablissement.siret, annee);
-	// const concessions = await getConcessions(etablissement.siren);
+	const concessions = await getConcessions(etablissement.siren);
+	const quartiers = [
+		...new Set(
+			concessions
+				.map((c) => c.codeQuartierParcelle as QuartierImmatriculationId)
+				.filter((codeQuartier) => codeQuartier != null),
+		),
+	];
+	console.log(quartiers);
+	console.log(
+		Object.fromEntries(
+			quartiers.map((q) => [
+				q,
+				{
+					surfaceHa: 0, // TODO: utiliser getSurfaceHa()
+				},
+			]),
+		),
+	);
 	const d = bilan?.donnees;
 
 	return DonneesDeclaration.parse({
@@ -117,26 +135,41 @@ export const prefillDeclaration = async (
 				nouveauDirigeant: d?.annee_entree === annee,
 			})),
 		},
-		production: deepClean({
+		especes: deepClean({
 			huitreCreuse: {
-				naissain: {
+				// A priori, pas ou peu d’écloserie/nurserie chez les producteurs CGO
+				// Pour simplifier, on met tout dans le captages
+				naissainCaptage: {
 					total: {
 						// valeurHTMi: d?.stock.StckValHNaisMi,
 						// valeurHT: d?.stock.StckValHNaisKg,
+						stockKg: d?.stock.StckVolHNaisKg,
 						stockMilliers: d?.stock.StckVolHNaisMi,
-						// stockKg: d?.stock.StckVolHNaisKg,
 					},
 				},
-				elevage: {
-					demiElevage: {
+
+				demiElevage: {
+					total: {
 						// valeurHT: d?.stock.StckValHDElv,
 						stockKg: d?.stock.StckVolHDElv,
 					},
-					elevageAdulte: {
-						// valeurHT: d?.stock.StckValHElv,
+				},
+				elevageAdulte: {
+					// valeurHT: d?.stock.StckValHElv,
+					total: {
 						stockKg: d?.stock.StckVolHElv,
 					},
 				},
+
+				zonesProduction: Object.fromEntries(
+					quartiers.map((q) => [
+						q,
+						{
+							surfaceHa: 1, // TODO: utiliser getSurfaceHa()
+						},
+					]),
+				),
+
 				// consommation: {
 				// 	// valeurHT: d?.stock.StckValHConso,
 				// 	stockKg: d?.stock.StckVolHConso,
@@ -146,7 +179,7 @@ export const prefillDeclaration = async (
 				naissain: {
 					total: {
 						// valeurHT: d?.stock.StckValMNaiss,
-						stockM: d?.stock.StckVolMNaiss,
+						stockMetres: d?.stock.StckVolMNaiss,
 					},
 				},
 				elevage: {
@@ -177,183 +210,183 @@ export const prefillDeclaration = async (
 				// },
 			},
 		}),
-		ventes: deepClean({
-			huitreCreuse: {
-				naissain: {
-					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
-					// on n’a pas la ventilation par origine
-					captage: {
-						destination: {
-							france: { valeurHT: d?.production.CAHNaissFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAHNaissUE", "CAHNaissAu"]),
-							},
-						},
-					},
-				},
-				elevage: {
-					demiElevage: {
-						destination: {
-							france: { valeurHT: d?.production.CAHDElvFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAHDElvUE", "CAHDElvAU"]),
-							},
-						},
-					},
-					elevageAdulte: {
-						destination: {
-							france: { valeurHT: d?.production.CAHElvFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAHElvUE", "CAHElvAu"]),
-							},
-						},
-					},
-				},
-				consommation: {
-					destination: {
-						france: {
-							degustation: { valeurHT: d?.production.CAHCoFrDeg },
-							autresVentesParticuliers: {
-								valeurHT: d?.production.CAHCoFrDet,
-							},
-							enGros: {
-								valeurHT: d?.production.CAHCoFrPro,
-							},
-							restaurateursTraiteurs: null,
-							poissoniersEcaillers: {
-								valeurHT: d?.production.CAHCoFrPCE,
-							},
-							grandesMoyennesSurfaces: {
-								valeurHT: d?.production.CAHCoFrPGMS,
-							},
-							mareyeursGrossistes: {
-								valeurHT: d?.production.CAHCoFrGros,
-							},
-						},
-						unionEuropeenne: {
-							valeurHT: d?.production.CAHCoUEGros,
-						},
-						horsUnionEuropeenne: {
-							valeurHT: d?.production.CAHCoAuGros,
-						},
-						// TODO: manque CAHCoUEPro et CAHCoAuPro (export en gros, UE et non UE)
-					},
-				},
+		// ventes: deepClean({
+		// 	huitreCreuse: {
+		// 		naissain: {
+		// 			// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+		// 			// on n’a pas la ventilation par origine
+		// 			captage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAHNaissFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAHNaissUE", "CAHNaissAu"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		elevage: {
+		// 			demiElevage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAHDElvFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAHDElvUE", "CAHDElvAU"]),
+		// 					},
+		// 				},
+		// 			},
+		// 			elevageAdulte: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAHElvFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAHElvUE", "CAHElvAu"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		consommation: {
+		// 			destination: {
+		// 				france: {
+		// 					degustation: { valeurHT: d?.production.CAHCoFrDeg },
+		// 					autresVentesParticuliers: {
+		// 						valeurHT: d?.production.CAHCoFrDet,
+		// 					},
+		// 					enGros: {
+		// 						valeurHT: d?.production.CAHCoFrPro,
+		// 					},
+		// 					restaurateursTraiteurs: null,
+		// 					poissoniersEcaillers: {
+		// 						valeurHT: d?.production.CAHCoFrPCE,
+		// 					},
+		// 					grandesMoyennesSurfaces: {
+		// 						valeurHT: d?.production.CAHCoFrPGMS,
+		// 					},
+		// 					mareyeursGrossistes: {
+		// 						valeurHT: d?.production.CAHCoFrGros,
+		// 					},
+		// 				},
+		// 				unionEuropeenne: {
+		// 					valeurHT: d?.production.CAHCoUEGros,
+		// 				},
+		// 				horsUnionEuropeenne: {
+		// 					valeurHT: d?.production.CAHCoAuGros,
+		// 				},
+		// 				// TODO: manque CAHCoUEPro et CAHCoAuPro (export en gros, UE et non UE)
+		// 			},
+		// 		},
 
-				// Manque “Non catégorisées” CAHFrNCat
-			},
-			mouleCommune: {
-				naissain: {
-					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
-					// on n’a pas la ventilation par origine
-					captage: {
-						destination: {
-							france: { valeurHT: d?.production.CAMNaissFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAMNaissUE", "CAMNaissAu"]),
-							},
-						},
-					},
-				},
-				elevage: {
-					demiElevage: {
-						destination: {
-							france: { valeurHT: d?.production.CAMDElvFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAMDElvUE", "CAMDElvAU"]),
-							},
-						},
-					},
-				},
-				consommation: {
-					destination: {
-						france: {
-							degustation: { valeurHT: d?.production.CAMCoFrDeg },
-							autresVentesParticuliers: {
-								valeurHT: d?.production.CAMCoFrDet,
-							},
-							enGros: {
-								valeurHT: d?.production.CAMCoFrPro,
-							},
-							restaurateursTraiteurs: null,
-							poissoniersEcaillers: {
-								valeurHT: d?.production.CAMCoFrPCE,
-							},
-							grandesMoyennesSurfaces: {
-								valeurHT: d?.production.CAMCoFrPGMS,
-							},
-							mareyeursGrossistes: {
-								valeurHT: d?.production.CAMCoFrGros,
-							},
-						},
-						unionEuropeenne: {
-							valeurHT: d?.production.CAMCoUEGros,
-						},
-						horsUnionEuropeenne: {
-							valeurHT: d?.production.CAMCoAuGros,
-						},
-						// TODO: manque CAMCoUEPro et CAMCoAuPro (export en gros, UE et non UE)
-					},
-				},
-				// Manque “Non catégorisées” CAMFrNCat
-			},
-			palourde: {
-				naissain: {
-					// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
-					// on n’a pas la ventilation par origine
-					captage: {
-						destination: {
-							france: { valeurHT: d?.production.CAPNaissFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAPNaissUE", "CAPNaissAu"]),
-							},
-						},
-					},
-				},
-				elevage: {
-					demiElevage: {
-						destination: {
-							france: { valeurHT: d?.production.CAPDElvFr },
-							etranger: {
-								valeurHT: sumAttrs(d?.production, ["CAPDElvUE", "CAPDElvAU"]),
-							},
-						},
-					},
-				},
-				consommation: {
-					destination: {
-						france: {
-							degustation: { valeurHT: d?.production.CAPCoFrDeg },
-							autresVentesParticuliers: {
-								valeurHT: d?.production.CAPCoFrDet,
-							},
-							enGros: {
-								valeurHT: d?.production.CAPCoFrPro,
-							},
-							restaurateursTraiteurs: null,
-							poissoniersEcaillers: {
-								valeurHT: d?.production.CAPCoFrPCE,
-							},
-							grandesMoyennesSurfaces: {
-								valeurHT: d?.production.CAPCoFrPGMS,
-							},
-							mareyeursGrossistes: {
-								valeurHT: d?.production.CAPCoFrGros,
-							},
-						},
-						unionEuropeenne: {
-							valeurHT: d?.production.CAPCoUEGros,
-						},
-						horsUnionEuropeenne: {
-							valeurHT: d?.production.CAPCoAuGros,
-						},
-						// TODO: manque CAPCoUEPro et CAPCoAuPro (export en gros, UE et non UE)
-					},
-				},
+		// 		// Manque “Non catégorisées” CAHFrNCat
+		// 	},
+		// 	mouleCommune: {
+		// 		naissain: {
+		// 			// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+		// 			// on n’a pas la ventilation par origine
+		// 			captage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAMNaissFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAMNaissUE", "CAMNaissAu"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		elevage: {
+		// 			demiElevage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAMDElvFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAMDElvUE", "CAMDElvAU"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		consommation: {
+		// 			destination: {
+		// 				france: {
+		// 					degustation: { valeurHT: d?.production.CAMCoFrDeg },
+		// 					autresVentesParticuliers: {
+		// 						valeurHT: d?.production.CAMCoFrDet,
+		// 					},
+		// 					enGros: {
+		// 						valeurHT: d?.production.CAMCoFrPro,
+		// 					},
+		// 					restaurateursTraiteurs: null,
+		// 					poissoniersEcaillers: {
+		// 						valeurHT: d?.production.CAMCoFrPCE,
+		// 					},
+		// 					grandesMoyennesSurfaces: {
+		// 						valeurHT: d?.production.CAMCoFrPGMS,
+		// 					},
+		// 					mareyeursGrossistes: {
+		// 						valeurHT: d?.production.CAMCoFrGros,
+		// 					},
+		// 				},
+		// 				unionEuropeenne: {
+		// 					valeurHT: d?.production.CAMCoUEGros,
+		// 				},
+		// 				horsUnionEuropeenne: {
+		// 					valeurHT: d?.production.CAMCoAuGros,
+		// 				},
+		// 				// TODO: manque CAMCoUEPro et CAMCoAuPro (export en gros, UE et non UE)
+		// 			},
+		// 		},
+		// 		// Manque “Non catégorisées” CAMFrNCat
+		// 	},
+		// 	palourde: {
+		// 		naissain: {
+		// 			// TODO c’est incorrect, l’API renvoie une valeur totale pour les naissains
+		// 			// on n’a pas la ventilation par origine
+		// 			captage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAPNaissFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAPNaissUE", "CAPNaissAu"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		elevage: {
+		// 			demiElevage: {
+		// 				destination: {
+		// 					france: { valeurHT: d?.production.CAPDElvFr },
+		// 					etranger: {
+		// 						valeurHT: sumAttrs(d?.production, ["CAPDElvUE", "CAPDElvAU"]),
+		// 					},
+		// 				},
+		// 			},
+		// 		},
+		// 		consommation: {
+		// 			destination: {
+		// 				france: {
+		// 					degustation: { valeurHT: d?.production.CAPCoFrDeg },
+		// 					autresVentesParticuliers: {
+		// 						valeurHT: d?.production.CAPCoFrDet,
+		// 					},
+		// 					enGros: {
+		// 						valeurHT: d?.production.CAPCoFrPro,
+		// 					},
+		// 					restaurateursTraiteurs: null,
+		// 					poissoniersEcaillers: {
+		// 						valeurHT: d?.production.CAPCoFrPCE,
+		// 					},
+		// 					grandesMoyennesSurfaces: {
+		// 						valeurHT: d?.production.CAPCoFrPGMS,
+		// 					},
+		// 					mareyeursGrossistes: {
+		// 						valeurHT: d?.production.CAPCoFrGros,
+		// 					},
+		// 				},
+		// 				unionEuropeenne: {
+		// 					valeurHT: d?.production.CAPCoUEGros,
+		// 				},
+		// 				horsUnionEuropeenne: {
+		// 					valeurHT: d?.production.CAPCoAuGros,
+		// 				},
+		// 				// TODO: manque CAPCoUEPro et CAPCoAuPro (export en gros, UE et non UE)
+		// 			},
+		// 		},
 
-				// Manque “Non catégorisées” CAPFrNCat
-			},
-		}),
+		// 		// Manque “Non catégorisées” CAPFrNCat
+		// 	},
+		// }),
 		retourAnnee: {
 			aleas: [],
 			aleasDetails: null,

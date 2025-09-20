@@ -27,11 +27,9 @@ const ValeurVente = optObject({
 export const ValeurStock = optObject({
 	stockKg: PositiveNumber.nullish(),
 	stockNmoins1kg: PositiveNumber.nullish(),
-});
-
-export const ValeurStockNaissain = optObject({
+	// Naissains
 	stockMilliers: PositiveNumber.nullish(),
-	stockM: PositiveNumber.nullish(),
+	stockMetres: PositiveNumber.nullish(),
 	stockNmoins1milliers: PositiveNumber.nullish(),
 });
 
@@ -39,9 +37,9 @@ export const DonneesEspece = optObject({
 	// Ex Production :
 	//
 	// 	naissain: optObject({
-	// 	total: ValeurStockNaissain,
-	// 	captage: ValeurStockNaissain,
-	// 	ecloserie: ValeurStockNaissain,
+	// 	total: ValeurStock,
+	// 	captage: ValeurStock,
+	// 	ecloserie: ValeurStock,
 	// }),
 	// elevage: optObject({
 	// 	pregrossissement: ValeurStock,
@@ -49,15 +47,42 @@ export const DonneesEspece = optObject({
 	// 	elevageAdulte: ValeurStock,
 	// }),
 	// origine: optObject({}),
-	// zonesProduction: z
-	// 	.object({
-	// 		zone: z.enum(QUARTIERS_IMMATRICULATION_IDS),
-	// 		surfaceHa: PositiveInt.nullish(),
-	// 	})
-	// 	.array()
-	// 	.optional(),
+	zonesProduction: z
+		.partialRecord(
+			z.enum(QUARTIERS_IMMATRICULATION_IDS),
+			z.object({
+				surfaceHa: PositiveInt.nullish(),
+				partStockNaissain: Percent.nullish(),
+				pertesNaissain: Percent.nullish(),
+				partStockDemiElevage: Percent.nullish(),
+				pertesDemiElevage: Percent.nullish(),
+				partStockElevageAdulte: Percent.nullish(),
+				pertesElevageAdulte: Percent.nullish(),
+			}),
+		)
+		.optional(),
 	//
 	// Ex Ventes :
+
+	naissainCaptage: optObject({
+		total: ValeurStock,
+	}),
+	naissainEcloserieNurserie: optObject({
+		total: ValeurStock,
+	}),
+	pregrossissement: optObject({
+		total: ValeurStock,
+	}),
+	demiElevage: optObject({
+		total: ValeurStock,
+	}),
+	elevageAdulte: optObject({
+		total: ValeurStock,
+	}),
+	affinage: optObject({
+		total: ValeurStock,
+	}),
+
 	naissain: optObject({
 		captage: optObject({
 			destination: optObject({
@@ -136,27 +161,6 @@ export const DonneesEspece = optObject({
 	}),
 });
 
-export const productionSchema = optObject({
-	naissain: optObject({
-		total: ValeurStockNaissain,
-		captage: ValeurStockNaissain,
-		ecloserie: ValeurStockNaissain,
-	}),
-	elevage: optObject({
-		pregrossissement: ValeurStock,
-		demiElevage: ValeurStock,
-		elevageAdulte: ValeurStock,
-	}),
-	origine: optObject({}),
-	zonesProduction: z
-		.object({
-			zone: z.enum(QUARTIERS_IMMATRICULATION_IDS),
-			surfaceHa: PositiveInt.nullish(),
-		})
-		.array()
-		.optional(),
-});
-
 export const StatutProgressionGlobale = z
 	.literal([
 		// Comptable
@@ -183,7 +187,7 @@ export const StatutProgression = z
 	.nullish();
 export type StatutProgression = z.infer<typeof StatutProgression>;
 
-export const Progression = z.strictObject({
+const Progression = z.strictObject({
 	globale: StatutProgressionGlobale.nullish(),
 	equipe: optObject({
 		globale: StatutProgression.nullish(),
@@ -201,9 +205,9 @@ export const Progression = z.strictObject({
 		especes: z.record(
 			z.enum(ESPECES_IDS),
 			optObject({
-				elevage: z.boolean(),
-				origine: z.boolean(),
-				zones: z.boolean(),
+				elevage: StatutProgression,
+				origine: StatutProgression,
+				zones: StatutProgression,
 			}),
 		),
 	}),
@@ -212,10 +216,10 @@ export const Progression = z.strictObject({
 		especes: z.record(
 			z.enum(ESPECES_IDS),
 			optObject({
-				naissain: z.boolean(),
-				elevage: z.boolean(),
-				consommation: z.boolean(),
-				origine: z.boolean(),
+				naissain: StatutProgression,
+				elevage: StatutProgression,
+				consommation: StatutProgression,
+				origine: StatutProgression,
 			}),
 		),
 	}),
@@ -229,7 +233,6 @@ export const Progression = z.strictObject({
 		globale: StatutProgression.nullish(),
 	}),
 });
-export type Progression = z.infer<typeof Progression>;
 
 export const DonneesDeclaration = z.strictObject({
 	progression: Progression,

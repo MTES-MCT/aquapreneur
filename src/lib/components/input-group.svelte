@@ -9,6 +9,7 @@
 		errors,
 		min,
 		max,
+		placeholder,
 		value = $bindable(),
 		required = false,
 		actionButton,
@@ -19,6 +20,7 @@
 		errors?: string[];
 		min?: number;
 		max?: number;
+		placeholder?: string;
 		value?: number | string | null;
 		required?: boolean;
 		actionButton?: Snippet;
@@ -47,6 +49,7 @@
 				{max}
 				onchange={onChange}
 				autocomplete="off"
+				{placeholder}
 			/>
 			{#if actionButton}
 				{@render actionButton()}

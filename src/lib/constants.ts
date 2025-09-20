@@ -149,6 +149,21 @@ export const DESTINATIONS_ELEVAGE = [
 export const DESTINATIONS_ELEVAGE_IDS = DESTINATIONS_ELEVAGE.map((e) => e.id);
 export type DestinationElevageId = (typeof DESTINATIONS_ELEVAGE_IDS)[number];
 
+export const ORIGINES = [
+	{
+		label: "Captage naturel",
+		id: "captage",
+	},
+	{
+		label: "Diploïde d’écloserie",
+		id: "ecloserieDiploide",
+	},
+	{
+		label: "Triploïde d’écloserie",
+		id: "ecloserieTriploide",
+	},
+] as const;
+
 export const ORIGINES_NAISSAIN = [
 	{
 		label: "Par captage en milieu naturel",
