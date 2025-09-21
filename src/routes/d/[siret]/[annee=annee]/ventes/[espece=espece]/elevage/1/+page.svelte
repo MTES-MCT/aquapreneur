@@ -67,52 +67,50 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl"></p>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.stades?._errors}>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					À quel(s) stade(s) d’élevag(e) les {data.espece.label} ont été vendues ?
-				</h2>
-				<p class="fr-text--light fr-text--sm">
-					Vous pouvez sélectionner une ou plusieurs réponses.
-				</p>
-			{/snippet}
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.stades?._errors}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				À quel(s) stade(s) d’élevag(e) les {data.espece.label} ont été vendues ?
+			</h2>
 
-			{#snippet inputs(id)}
-				{#each STADES_ELEVAGE as stade (stade.id)}
-					{@const destId = stade.id}
-					<CheckboxGroup>
-						{#snippet input(id)}
-							<input
-								type="checkbox"
-								aria-describedby="checkbox-{id}-messages"
-								{id}
-								value={destId}
-								bind:group={$form.stades}
-								autocomplete="off"
-							/>
-						{/snippet}
-						{#snippet label()}{stade.label}{/snippet}
-					</CheckboxGroup>
-				{/each}
-				{#if $errors?.stades?._errors}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.stades._errors}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="../elevage"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			<p class="fr-text--light fr-text--sm">
+				Vous pouvez sélectionner une ou plusieurs réponses.
+			</p>
+		{/snippet}
+
+		{#snippet inputs(id)}
+			{#each STADES_ELEVAGE as stade (stade.id)}
+				{@const destId = stade.id}
+				<CheckboxGroup>
+					{#snippet input(id)}
+						<input
+							type="checkbox"
+							aria-describedby="checkbox-{id}-messages"
+							{id}
+							value={destId}
+							bind:group={$form.stades}
+							autocomplete="off"
+						/>
+					{/snippet}
+					{#snippet label()}{stade.label}{/snippet}
+				</CheckboxGroup>
+			{/each}
+			{#if $errors?.stades?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.stades._errors}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="../elevage"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug
 	{form}

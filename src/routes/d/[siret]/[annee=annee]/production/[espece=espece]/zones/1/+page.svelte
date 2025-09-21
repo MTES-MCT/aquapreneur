@@ -86,14 +86,19 @@
 						</button>
 					</div>
 					<div class="fr-modal__content">
-						<h2 id="modal-zones-edit-title" class="fr-modal__title fr-mb-4w">
+						<h2 id="modal-zones-edit-title" class="fr-modal__title">
 							Sélectionner les zones de production
 						</h2>
 						<div class="fr-ml-3v">
 							<Fieldset>
+								{#snippet legend()}
+									<p class="fr-text--light fr-text--sm fr-mb-2w">
+										Vous pouvez sélectionner une ou plusieurs réponses.
+									</p>
+								{/snippet}
 								{#snippet inputs()}
 									{#each localisations as localisation (localisation)}
-										<h3 class="fr-h6">{localisation}</h3>
+										<h3 class="fr-h6 fr-mt-2w">{localisation}</h3>
 										{#each QUARTIERS_IMMATRICULATION.filter((q) => q.localisation === localisation) as q (q.code)}
 											<CheckboxGroup>
 												{#snippet input(id)}
@@ -141,55 +146,51 @@
 	</div>
 </dialog>
 
-<div>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.zones?._errors}>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">Où est située votre production ?</h2>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.zones?._errors}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">Où est située votre production ?</h2>
 
-				<p class="fr-text--sm fr-text--light">
-					Vous pouvez sélectionner une ou plusieurs réponses.
-				</p>
-			{/snippet}
-			{#snippet inputs(id)}
-				{#each QUARTIERS_IMMATRICULATION.filter( (q) => $form.zones.includes(q.code), ) as q (q.code)}
-					<CheckboxGroup>
-						{#snippet input(id)}
-							<input
-								type="checkbox"
-								aria-describedby="checkbox-{id}-messages"
-								{id}
-								value={q.code}
-								bind:group={$form.zones}
-								autocomplete="off"
-							/>
-						{/snippet}
-						{#snippet label()}{q.nom}{/snippet}
-					</CheckboxGroup>
-				{/each}
-				{#if $errors?.zones?._errors}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.zones._errors}
-						</p>
-					</div>
-				{/if}
-				<button
-					class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-2w fr-icon-add-line fr-btn--icon-right"
-					aria-controls="modal-zones-edit"
-					data-fr-opened="false"
-					type="button"
-				>
-					Ajouter ou retirer une zone
-				</button>
-			{/snippet}
-		</Fieldset>
+			<p class="fr-text--sm fr-text--light">
+				Vous pouvez sélectionner une ou plusieurs réponses.
+			</p>
+		{/snippet}
 
-		<NavigationLinks
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+		{#snippet inputs(id)}
+			{#each QUARTIERS_IMMATRICULATION.filter( (q) => $form.zones.includes(q.code), ) as q (q.code)}
+				<CheckboxGroup>
+					{#snippet input(id)}
+						<input
+							type="checkbox"
+							aria-describedby="checkbox-{id}-messages"
+							{id}
+							value={q.code}
+							bind:group={$form.zones}
+							autocomplete="off"
+						/>
+					{/snippet}
+					{#snippet label()}{q.nom}{/snippet}
+				</CheckboxGroup>
+			{/each}
+			{#if $errors?.zones?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.zones._errors}
+					</p>
+				</div>
+			{/if}
+			<button
+				class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-2w fr-icon-add-line fr-btn--icon-right"
+				aria-controls="modal-zones-edit"
+				data-fr-opened="false"
+				type="button"
+			>
+				Ajouter ou retirer une zone
+			</button>
+		{/snippet}
+	</Fieldset>
+
+	<NavigationLinks nextIsButton cantAnswerBtn={data.persona === "comptable"} />
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>

@@ -65,76 +65,73 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl"></p>
-
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					Comment se répartissent les ventes selon le dernier mode d’élevage
-					utilisé ?
-				</h2>
-				<!-- <p class="fr-text--light fr-text--sm">
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">
+				Comment se répartissent les ventes selon le dernier mode d’élevage
+				utilisé ?
+			</h2>
+			<!-- <p class="fr-text--light fr-text--sm">
 					Vous pouvez répondre en indiquant un montant ou un pourcentage sur les
 					quantités vendues.
 				</p> -->
-			{/snippet}
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
-										<tr>
-											<th>Mode d’élevage</th>
-											<th>
-												Pourcentage <span class="fr-text--regular">(%)</span>
-											</th>
-											<th>
-												Montant des ventes <span class="fr-text--regular">
-													(€ HT)
-												</span>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{#each modesActifs as mode (mode.id)}
-											<tr>
-												<td>{mode.label}</td>
+		{/snippet}
 
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[mode.id].part}
-														errors={$errors?.data?.[mode.id]?.part}
-													></InputGroup>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[mode.id].value}
-														errors={$errors?.data?.[mode.id]?.value}
-													></InputGroup>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell--multiline">
+								<thead>
+									<tr>
+										<th>Mode d’élevage</th>
+										<th>
+											Pourcentage <span class="fr-text--regular">(%)</span>
+										</th>
+										<th>
+											Montant des ventes <span class="fr-text--regular">
+												(€ HT)
+											</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each modesActifs as mode (mode.id)}
+										<tr>
+											<td>{mode.label}</td>
+
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[mode.id].part}
+													errors={$errors?.data?.[mode.id]?.part}
+												></InputGroup>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[mode.id].value}
+													errors={$errors?.data?.[mode.id]?.value}
+												></InputGroup>
+											</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="../origine"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			</div>
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="../origine"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug form={$form.data} {errors} data={data.donneesEspece.modeElevage}
 ></FormDebug>

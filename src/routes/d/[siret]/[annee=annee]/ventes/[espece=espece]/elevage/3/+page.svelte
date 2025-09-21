@@ -95,11 +95,13 @@
 			<h2 class="fr-h4 fr-mb-1w">
 				Comment se répartissent les ventes par stade d’élevage ?
 			</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Indiquez le montant des ventes et la quantité pour chaque stade
 				d’élevage.
 			</p>
 		{/snippet}
+
 		{#snippet inputs()}
 			<div class="fr-table fr-table--lg">
 				<div class="fr-table__wrapper">

@@ -70,98 +70,95 @@
 	};
 </script>
 
-<div>
-	<p class="fr-text--xl"></p>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">
+				Quelle part de la production a été affinée avant la vente ?
+			</h2>
+		{/snippet}
 
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					Quelle part de la production a été affinée avant la vente ?
-				</h2>
-			{/snippet}
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
-										<tr>
-											<th>Mode d’élevage</th>
-											<th>Part de la production vendue (%)</th>
-											<th>Surface d’affinage (ha)</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Affinage en claire</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.claires.part}
-													errors={$errors.claires?.part}
-												></InputGroup>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.claires.surfaceHa}
-													errors={$errors.claires?.surfaceHa}
-												></InputGroup>
-											</td>
-										</tr>
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell--multiline">
+								<thead>
+									<tr>
+										<th>Mode d’élevage</th>
+										<th>Part de la production vendue (%)</th>
+										<th>Surface d’affinage (ha)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Affinage en claire</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.claires.part}
+												errors={$errors.claires?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.claires.surfaceHa}
+												errors={$errors.claires?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
 
-										<tr>
-											<td>Affinage en parcs</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.parcs.part}
-													errors={$errors.parcs?.part}
-												></InputGroup>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.parcs.surfaceHa}
-													errors={$errors.parcs?.surfaceHa}
-												></InputGroup>
-											</td>
-										</tr>
+									<tr>
+										<td>Affinage en parcs</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.parcs.part}
+												errors={$errors.parcs?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.parcs.surfaceHa}
+												errors={$errors.parcs?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
 
-										<tr>
-											<td>Pousse en claire</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.pousseClaire.part}
-													errors={$errors.pousseClaire?.part}
-												></InputGroup>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.pousseClaire.surfaceHa}
-													errors={$errors.pousseClaire?.surfaceHa}
-												></InputGroup>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+									<tr>
+										<td>Pousse en claire</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.pousseClaire.part}
+												errors={$errors.pousseClaire?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.pousseClaire.surfaceHa}
+												errors={$errors.pousseClaire?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			</div>
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece.consommation!.affinage}
 ></FormDebug>

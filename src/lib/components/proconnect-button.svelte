@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Bouton de connexion via ProConnect.
 Basé sur https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/bouton_proconnect
 -->
@@ -15,7 +15,7 @@ Basé sur https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/bouton
 			rel="noopener"
 			title="Qu'est-ce que ProConnect ? - nouvelle fenêtre"
 		>
-			Qu'est-ce que ProConnect ?
+			Qu'est-ce que ProConnect ?
 		</a>
 	</p>
 </div>

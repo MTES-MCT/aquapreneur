@@ -58,6 +58,7 @@
 				Il s’agit des ventes de naissains obtenus au sein de l’entreprise.
 			</p>
 		{/snippet}
+
 		{#snippet inputs(id)}
 			<RadioGroup inline>
 				{#snippet input(id)}

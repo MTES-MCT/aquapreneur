@@ -17,21 +17,23 @@
 
 	const { data } = $props();
 
-	const especes = $derived(
-		ESPECES.filter((e) => data.donneesEspeces[e.id] != null),
-	);
+	const especes = ESPECES.filter((e) => data.donneesEspeces[e.id] != null);
 
+	merge(data.progressionProduction, {
+		especes: Object.fromEntries(especes.map((e) => [e.id, {}])),
+	});
 	const saisieTerminée = $derived.by(() => {
 		const statutsFinalises: StatutProgression[] = [
 			"passage producteur nécessaire",
 			"validé comptable",
 			"validé producteur",
 		];
-		return Object.values(data.progressionProduction?.especes || {}).every(
+		return Object.values(data.progressionProduction.especes || {}).every(
 			(p) =>
-				statutsFinalises.includes(p?.origine) &&
-				statutsFinalises.includes(p?.elevage) &&
-				statutsFinalises.includes(p?.zones),
+				p == null ||
+				(statutsFinalises.includes(p?.origine) &&
+					statutsFinalises.includes(p?.elevage) &&
+					statutsFinalises.includes(p?.zones)),
 		);
 	});
 

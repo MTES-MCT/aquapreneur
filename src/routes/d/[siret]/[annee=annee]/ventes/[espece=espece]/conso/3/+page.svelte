@@ -100,13 +100,15 @@
 	<Fieldset>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
-				Comment le chiffre d’affaires est-il réparti ?
+				Comment le chiffre d’affaires est-il réparti ?
 			</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Renseignez le montant des ventes pour chaque destination, ainsi que la
 				quantité lorsqu’elle est connue.
 			</p>
 		{/snippet}
+
 		{#snippet inputs()}
 			<div class="fr-table fr-table--lg">
 				<div class="fr-table__wrapper">

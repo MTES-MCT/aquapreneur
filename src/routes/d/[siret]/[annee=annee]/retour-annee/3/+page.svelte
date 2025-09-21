@@ -37,7 +37,7 @@
 
 <div class="fr-stepper">
 	<h1 class="fr-stepper__title">
-		Avez-vous des suggestions d’amélioration pour la prochaine enquête ?
+		Avez-vous des suggestions d’amélioration pour la prochaine enquête ?
 		<span class="fr-stepper__state">Question 3 sur 3</span>
 	</h1>
 	<div

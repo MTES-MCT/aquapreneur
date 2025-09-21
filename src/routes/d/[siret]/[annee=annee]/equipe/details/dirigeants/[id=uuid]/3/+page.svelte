@@ -56,152 +56,147 @@
 	);
 </script>
 
-<div>
-	<h2 class="fr-h4 fr-mb-4w">Son statut et ses qualifications</h2>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.statut}>
-			{#snippet legend()}Statut{/snippet}
-			{#snippet inputs(fieldsetId)}
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value="salarie"
-							bind:group={$form.statut}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Salarié{/snippet}
-				</RadioGroup>
+<h2 class="fr-h4 fr-mb-4w">Son statut et ses qualifications</h2>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.statut}>
+		{#snippet legend()}Statut{/snippet}
 
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value="nonSalarie"
-							bind:group={$form.statut}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Non salarié{/snippet}
-				</RadioGroup>
+		{#snippet inputs(fieldsetId)}
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value="salarie"
+						bind:group={$form.statut}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Salarié{/snippet}
+			</RadioGroup>
 
-				{#if $errors?.statut}
-					<div
-						class="fr-messages-group"
-						id="{fieldsetId}-messages"
-						aria-live="polite"
-					>
-						<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
-							{$errors.statut}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value="nonSalarie"
+						bind:group={$form.statut}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Non salarié{/snippet}
+			</RadioGroup>
 
-		<Fieldset>
-			{#snippet inputs()}
-				<InputGroup
-					type="number"
-					bind:value={$form.tempsTravail}
-					errors={$errors?.tempsTravail}
+			{#if $errors?.statut}
+				<div
+					class="fr-messages-group"
+					id="{fieldsetId}-messages"
+					aria-live="polite"
 				>
-					{#snippet label()}Temps de travail (%){/snippet}
-				</InputGroup>
-
-				<div class="fr-fieldset__element">
-					<div
-						class={[
-							"fr-select-group",
-							$errors?.diplome && "fr-select-group--error",
-						]}
-					>
-						<label class="fr-label" for="diplome">
-							Diplôme le plus élevé obtenu
-						</label>
-						<select
-							class="fr-select"
-							aria-describedby="diplome-messages"
-							id="diplome"
-							name="diplome"
-							bind:value={$form.diplome}
-						>
-							<option value="" selected disabled>
-								Sélectionnez une option
-							</option>
-							{#each DIPLOMES as d (d.id)}
-								<option value={d.id}>{d.label}</option>
-							{/each}
-						</select>
-						{#if $errors?.diplome}
-							<div
-								class="fr-messages-group"
-								id="diplome-messages"
-								aria-live="polite"
-							>
-								<p
-									class="fr-message fr-message--error"
-									id="diplome-messages-error"
-								>
-									{$errors.diplome}
-								</p>
-							</div>
-						{/if}
-					</div>
+					<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
+						{$errors.statut}
+					</p>
 				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
 
-				<div class="fr-fieldset__element">
-					<div
-						class={[
-							"fr-select-group",
-							$errors?.regimeSocial && "fr-select-group--error",
-						]}
+	<Fieldset>
+		{#snippet inputs()}
+			<InputGroup
+				type="number"
+				bind:value={$form.tempsTravail}
+				errors={$errors?.tempsTravail}
+			>
+				{#snippet label()}Temps de travail (%){/snippet}
+			</InputGroup>
+
+			<div class="fr-fieldset__element">
+				<div
+					class={[
+						"fr-select-group",
+						$errors?.diplome && "fr-select-group--error",
+					]}
+				>
+					<label class="fr-label" for="diplome">
+						Diplôme le plus élevé obtenu
+					</label>
+					<select
+						class="fr-select"
+						aria-describedby="diplome-messages"
+						id="diplome"
+						name="diplome"
+						bind:value={$form.diplome}
 					>
-						<label class="fr-label" for="regime">Régime social</label>
-						<select
-							class="fr-select"
-							aria-describedby="regime-messages"
-							id="regime"
-							name="regime"
-							bind:value={$form.regimeSocial}
+						<option value="" selected disabled>Sélectionnez une option</option>
+						{#each DIPLOMES as d (d.id)}
+							<option value={d.id}>{d.label}</option>
+						{/each}
+					</select>
+					{#if $errors?.diplome}
+						<div
+							class="fr-messages-group"
+							id="diplome-messages"
+							aria-live="polite"
 						>
-							<option value="" selected disabled>
-								Sélectionnez une option
-							</option>
-							{#each REGIMES_SOCIAUX as r (r.id)}
-								<option value={r.id}>{r.label}</option>
-							{/each}
-						</select>
-						{#if $errors?.regimeSocial}
-							<div
-								class="fr-messages-group"
-								id="regime-messages"
-								aria-live="polite"
+							<p
+								class="fr-message fr-message--error"
+								id="diplome-messages-error"
 							>
-								<p
-									class="fr-message fr-message--error"
-									id="regime-messages-error"
-								>
-									{$errors.regimeSocial}
-								</p>
-							</div>
-						{/if}
-					</div>
+								{$errors.diplome}
+							</p>
+						</div>
+					{/if}
 				</div>
-			{/snippet}
-		</Fieldset>
+			</div>
 
-		<NavigationLinks
-			prevHref="./2"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			<div class="fr-fieldset__element">
+				<div
+					class={[
+						"fr-select-group",
+						$errors?.regimeSocial && "fr-select-group--error",
+					]}
+				>
+					<label class="fr-label" for="regime">Régime social</label>
+					<select
+						class="fr-select"
+						aria-describedby="regime-messages"
+						id="regime"
+						name="regime"
+						bind:value={$form.regimeSocial}
+					>
+						<option value="" selected disabled>Sélectionnez une option</option>
+						{#each REGIMES_SOCIAUX as r (r.id)}
+							<option value={r.id}>{r.label}</option>
+						{/each}
+					</select>
+					{#if $errors?.regimeSocial}
+						<div
+							class="fr-messages-group"
+							id="regime-messages"
+							aria-live="polite"
+						>
+							<p
+								class="fr-message fr-message--error"
+								id="regime-messages-error"
+							>
+								{$errors.regimeSocial}
+							</p>
+						</div>
+					{/if}
+				</div>
+			</div>
+		{/snippet}
+	</Fieldset>
+
+	<NavigationLinks
+		prevHref="./2"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

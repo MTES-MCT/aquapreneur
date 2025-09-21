@@ -4,12 +4,10 @@
 	const { data } = $props();
 </script>
 
-<div>
-	<p>
-		Dans cette partie, les questions portent uniquement sur le volume d’{data
-			.espece.label} vendue à la consommation. Les pourcentages demandés se réfèrent
-		à ce volume.
-	</p>
+<p class="fr-text--lead">
+	Dans cette partie, les questions portent uniquement sur le volume d’{data
+		.espece.label} vendue à la consommation. Les pourcentages demandés se réfèrent
+	à ce volume.
+</p>
 
-	<NavigationLinks nextHref="./origine/1" />
-</div>
+<NavigationLinks nextHref="./origine/1" />

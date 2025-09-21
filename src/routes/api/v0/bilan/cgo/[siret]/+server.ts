@@ -92,7 +92,7 @@ const parseRequest = async (
 		logger.exception(err, "Error de lecture du JSON", {
 			api_token_id: jetonId,
 		});
-		// TODO ajouter une requête d’audit ?
+		// TODO ajouter une requête d’audit ?
 		error(400, "Contenu JSON invalide");
 	}
 

@@ -37,7 +37,7 @@
 
 <div class="fr-stepper">
 	<h1 class="fr-stepper__title">
-		Avez-vous rencontré d’autres défis ou difficultés cette année ?
+		Avez-vous rencontré d’autres défis ou difficultés cette année ?
 		<span class="fr-stepper__state">Question 2 sur 3</span>
 	</h1>
 	<div
@@ -47,7 +47,7 @@
 	></div>
 	<p class="fr-stepper__details">
 		<span class="fr-text--bold">Étape suivante :</span>
-		Avez-vous des suggestions d’amélioration pour la prochaine enquête ?
+		Avez-vous des suggestions d’amélioration pour la prochaine enquête ?
 	</p>
 </div>
 

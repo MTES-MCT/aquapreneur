@@ -29,11 +29,12 @@
 		];
 		return Object.values(data.progressionVentes?.especes || {}).every(
 			(p) =>
-				statutsFinalises.includes(p?.consommation) &&
-				statutsFinalises.includes(p?.elevage) &&
-				statutsFinalises.includes(p?.naissainCaptage) &&
-				statutsFinalises.includes(p?.naissainEcloserieNurserie) &&
-				statutsFinalises.includes(p?.origine),
+				p == null ||
+				(statutsFinalises.includes(p?.consommation) &&
+					statutsFinalises.includes(p?.elevage) &&
+					statutsFinalises.includes(p?.naissainCaptage) &&
+					statutsFinalises.includes(p?.naissainEcloserieNurserie) &&
+					statutsFinalises.includes(p?.origine)),
 		);
 	});
 
@@ -45,7 +46,7 @@
 			data.progressionVentes.globale = "validé producteur";
 		}
 		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("../retourAnnee");
+		goto("../retour-annee");
 	};
 </script>
 

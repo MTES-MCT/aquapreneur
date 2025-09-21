@@ -72,58 +72,59 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl">Combien de femmes travaillent pour l’entreprise ?</p>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell">
-									<thead>
-										<tr style="cell-w:20rem">
-											<th style="min-width: 15rem">Type de contrat</th>
-											<th>Femme salariée</th>
-											<th>Femme non-salariée</th>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">Combien de femmes travaillent pour l’entreprise ?</h2>
+		{/snippet}
+
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell">
+								<thead>
+									<tr style="cell-w:20rem">
+										<th style="min-width: 15rem">Type de contrat</th>
+										<th>Femme salariée</th>
+										<th>Femme non-salariée</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each TYPES_DUREE_TRAVAIL as duree (duree.id)}
+										<tr>
+											<td>{duree.label}</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.salarie[duree.id]}
+													errors={$errors?.salarie?.[duree.id]}
+												/>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.nonSalarie[duree.id]}
+													errors={$errors?.nonSalarie?.[duree.id]}
+												/>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each TYPES_DUREE_TRAVAIL as duree (duree.id)}
-											<tr>
-												<td>{duree.label}</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.salarie[duree.id]}
-														errors={$errors?.salarie?.[duree.id]}
-													/>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.nonSalarie[duree.id]}
-														errors={$errors?.nonSalarie?.[duree.id]}
-													/>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
+			</div>
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			prevHref="../permanents"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks
+		prevHref="../permanents"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.equipe.permanents}></FormDebug>

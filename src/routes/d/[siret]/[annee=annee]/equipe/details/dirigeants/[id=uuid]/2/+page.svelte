@@ -56,117 +56,116 @@
 	);
 </script>
 
-<div>
-	<h2 class="fr-h4 fr-mb-4w">Son identité</h2>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet inputs()}
-				<InputGroup
-					type="text"
-					bind:value={$form.prenomNom}
-					errors={$errors?.prenomNom}
-				>
-					{#snippet label()}Prénom et nom{/snippet}
-				</InputGroup>
+<h2 class="fr-h4 fr-mb-4w">Son identité</h2>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet inputs()}
+			<InputGroup
+				type="text"
+				bind:value={$form.prenomNom}
+				errors={$errors?.prenomNom}
+			>
+				{#snippet label()}Prénom et nom{/snippet}
+			</InputGroup>
 
-				<InputGroup
-					type="number"
-					bind:value={$form.anneeNaissance}
-					errors={$errors?.anneeNaissance}
-				>
-					{#snippet label()}Année de naissance{/snippet}
-				</InputGroup>
+			<InputGroup
+				type="number"
+				bind:value={$form.anneeNaissance}
+				errors={$errors?.anneeNaissance}
+			>
+				{#snippet label()}Année de naissance{/snippet}
+			</InputGroup>
 
-				<div class="fr-fieldset__element">
-					<div
-						class={[
-							"fr-select-group",
-							$errors?.nationalite && "fr-select-group--error",
-						]}
+			<div class="fr-fieldset__element">
+				<div
+					class={[
+						"fr-select-group",
+						$errors?.nationalite && "fr-select-group--error",
+					]}
+				>
+					<label class="fr-label" for="select-1">Nationalité</label>
+					<select
+						class="fr-select"
+						aria-describedby="select-1-messages"
+						id="select-1"
+						bind:value={$form.nationalite}
 					>
-						<label class="fr-label" for="select-1">Nationalité</label>
-						<select
-							class="fr-select"
-							aria-describedby="select-1-messages"
-							id="select-1"
-							bind:value={$form.nationalite}
+						<option value="" selected disabled>Sélectionnez une option</option>
+						{#each COUNTRIES as c (c.iso_alpha2)}
+							<option value={c.iso_alpha2}>{c.label}</option>
+						{/each}
+					</select>
+					{#if $errors?.nationalite}
+						<div
+							class="fr-messages-group"
+							id="select-1-messages"
+							aria-live="polite"
 						>
-							<option value="" selected disabled>
-								Sélectionnez une option
-							</option>
-							{#each COUNTRIES as c (c.iso_alpha2)}
-								<option value={c.iso_alpha2}>{c.label}</option>
-							{/each}
-						</select>
-						{#if $errors?.nationalite}
-							<div
-								class="fr-messages-group"
-								id="select-1-messages"
-								aria-live="polite"
+							<p
+								class="fr-message fr-message--error"
+								id="select-1-message-error"
 							>
-								<p
-									class="fr-message fr-message--error"
-									id="select-1-message-error"
-								>
-									{$errors.nationalite}
-								</p>
-							</div>
-						{/if}
-					</div>
+								{$errors.nationalite}
+							</p>
+						</div>
+					{/if}
 				</div>
-			{/snippet}
-		</Fieldset>
+			</div>
+		{/snippet}
+	</Fieldset>
 
-		<Fieldset hasError={!!$errors?.sexe}>
-			{#snippet legend()}Sexe{/snippet}
-			{#snippet inputs(fieldsetId)}
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value="F"
-							bind:group={$form.sexe}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Féminin{/snippet}
-				</RadioGroup>
+	<Fieldset hasError={!!$errors?.sexe}>
+		{#snippet legend()}Sexe{/snippet}
 
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value="M"
-							bind:group={$form.sexe}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Masculin{/snippet}
-				</RadioGroup>
+		{#snippet inputs(fieldsetId)}
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value="F"
+						bind:group={$form.sexe}
+						autocomplete="off"
+					/>
+				{/snippet}
 
-				{#if $errors?.sexe}
-					<div
-						class="fr-messages-group"
-						id="{fieldsetId}-messages"
-						aria-live="polite"
-					>
-						<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
-							{$errors.sexe}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+				{#snippet label()}Féminin{/snippet}
+			</RadioGroup>
+
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value="M"
+						bind:group={$form.sexe}
+						autocomplete="off"
+					/>
+				{/snippet}
+
+				{#snippet label()}Masculin{/snippet}
+			</RadioGroup>
+
+			{#if $errors?.sexe}
+				<div
+					class="fr-messages-group"
+					id="{fieldsetId}-messages"
+					aria-live="polite"
+				>
+					<p class="fr-message fr-message--error" id="{fieldsetId}-errors">
+						{$errors.sexe}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

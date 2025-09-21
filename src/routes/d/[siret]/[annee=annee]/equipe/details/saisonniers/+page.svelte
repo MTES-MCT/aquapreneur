@@ -47,63 +47,59 @@
 	);
 </script>
 
-<div>
-	<!-- TODO h et déplacer vers legend() -->
-	<p class="fr-text--xl">
-		L’entreprise a-t-elle disposé d’une main d’oeuvre saisonnière ?
-	</p>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.aSaisonniers}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				L’entreprise a-t-elle disposé d’une main d’oeuvre saisonnière ?
+			</h2>
 
-	<p>
-		Tout personnel ayant travaillé pour l’entreprise sur une période limitée,
-		par exemple à Noël. Sont concernés les CDD, intérimaires, stagiaires,
-		personnel de groupements d’employeurs…
-	</p>
+			<p class="fr-text--light fr-text--sm">
+				Tout personnel ayant travaillé pour l’entreprise sur une période
+				limitée, par exemple à Noël. Sont concernés les CDD, intérimaires,
+				stagiaires, personnel de groupements d’employeurs…
+			</p>
+		{/snippet}
 
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.aSaisonniers}>
-			{#snippet inputs(id)}
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={true}
-							bind:group={$form.aSaisonniers}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Oui{/snippet}
-				</RadioGroup>
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={false}
-							bind:group={$form.aSaisonniers}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Non{/snippet}
-				</RadioGroup>
+		{#snippet inputs(id)}
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={true}
+						bind:group={$form.aSaisonniers}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Oui{/snippet}
+			</RadioGroup>
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={false}
+						bind:group={$form.aSaisonniers}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Non{/snippet}
+			</RadioGroup>
 
-				{#if $errors?.aSaisonniers}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.aSaisonniers}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
+			{#if $errors?.aSaisonniers}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.aSaisonniers}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks nextIsButton cantAnswerBtn={data.persona === "comptable"} />
+</form>
 
 <FormDebug {form} {errors} data={data.equipe.saisonniers}></FormDebug>

@@ -70,6 +70,7 @@
 			<h2 class="fr-h4 fr-mb-1w">
 				En France, quels ont été les circuits de distribution ?
 			</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			</p>

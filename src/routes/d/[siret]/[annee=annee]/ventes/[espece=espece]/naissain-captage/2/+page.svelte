@@ -76,10 +76,12 @@
 	<Fieldset>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">À combien s’élèvent les ventes ?</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Indiquez le montant des ventes pour chaque destination.
 			</p>
 		{/snippet}
+
 		{#snippet inputs()}
 			<div class="fr-table fr-table--lg">
 				<div class="fr-table__wrapper">
