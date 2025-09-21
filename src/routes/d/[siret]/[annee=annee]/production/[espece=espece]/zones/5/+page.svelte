@@ -56,86 +56,90 @@
 
 	// @ts-expect-error typage à revoir
 	$form.data = data.donneesEspece.zonesProduction;
+
+	const reminder = $derived.by(() => {
+		return (
+			100 -
+			activeZones
+				.map((z) => $form.data[z.code].partStockElevageAdulte ?? 0)
+				.reduce((acc, cur) => acc + cur, 0)
+		);
+	});
 </script>
 
-<div>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4">
-					Où a été réalisé l’élevage jusqu’à la taille marchande ?
-				</h2>
-				<p class="fr-text--sm fr-text--light">
-					Au 1er juin {data.annee}, vous aviez
-					<strong>
-						{formatNum(data.donneesEspece.elevageAdulte?.stock?.stockKg ?? 0)}
-					</strong>
-					kilos d’huître creuse au stade d’élevage jusqu’à la taille marchande. Veuillez
-					indiquer la part du stock présente chaque zone, et les pertes estimées
-					au cours de l’année. La somme des parts du stock doit être égale à 100 %.
-				</p>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">
+				Où a été réalisé l’élevage jusqu’à la taille marchande ?
+			</h2>
+			<p class="fr-text--sm fr-text--light">
+				Au 1er juin {data.annee}, vous aviez
+				<strong>
+					{formatNum(data.donneesEspece.elevageAdulte?.stock?.stockKg ?? 0)}
+				</strong>
+				kilos d’huître creuse au stade d’élevage jusqu’à la taille marchande. Veuillez
+				indiquer la part du stock présente chaque zone, et les pertes estimées au
+				cours de l’année. La somme des parts du stock doit être égale à 100 %.
+			</p>
 
-				<p class="fr-text--md">
-					Reste :
-					<span class="fr-text--bold">x %</span>
-				</p>
-			{/snippet}
+			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>
+				Reste :
+				<span class="fr-text--bold">{reminder} %</span>
+			</p>
+		{/snippet}
 
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell">
-									<thead>
-										<tr style="cell-w:20rem">
-											<th style="min-width: 15rem">Zone</th>
-											<th class="fr-cell--center">
-												Part du stock (%) <br />
-											</th>
-											<th class="fr-cell--center">Pertes estimées (%)</th>
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell">
+								<thead>
+									<tr style="cell-w:20rem">
+										<th style="min-width: 15rem">Zone</th>
+										<th class="fr-cell--center">
+											Part du stock (%) <br />
+										</th>
+										<th class="fr-cell--center">Pertes estimées (%)</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each activeZones as q (q.code)}
+										<tr>
+											<td>{q.nom}</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[q.code].partStockElevageAdulte}
+													errors={$errors?.data?.[q.code]
+														?.partStockElevageAdulte}
+												/>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[q.code].pertesElevageAdulte}
+													errors={$errors?.data?.[q.code]?.pertesElevageAdulte}
+												/>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each activeZones as q (q.code)}
-											<tr>
-												<td>{q.nom}</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={
-															$form.data[q.code].partStockElevageAdulte
-														}
-														errors={$errors?.data?.[q.code]
-															?.partStockElevageAdulte}
-													/>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[q.code].pertesElevageAdulte}
-														errors={$errors?.data?.[q.code]
-															?.pertesElevageAdulte}
-													/>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
+			</div>
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			prevHref="./3"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks
+		prevHref="./3"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug
 	{form}

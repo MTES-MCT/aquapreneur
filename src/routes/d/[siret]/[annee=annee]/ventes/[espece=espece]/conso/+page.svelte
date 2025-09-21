@@ -57,6 +57,7 @@
 				étape d’élevage supplémentaire.
 			</p>
 		{/snippet}
+
 		{#snippet inputs(id)}
 			<RadioGroup inline>
 				{#snippet input(id)}

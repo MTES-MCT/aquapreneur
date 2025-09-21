@@ -64,6 +64,7 @@
 	<Fieldset hasError={!!$errors?.destination?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">Où a été vendu le naissain ?</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			</p>

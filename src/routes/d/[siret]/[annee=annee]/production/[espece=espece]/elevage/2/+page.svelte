@@ -89,71 +89,70 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl"></p>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					Quels étaient vos volumes en stock au cours de l’année passée ?
-				</h2>
-				<p class="fr-text--light fr-text--sm">
-					Indiquez la quantité pour chaque stade d’élevage.
-				</p>
-			{/snippet}
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				Quels étaient vos volumes en stock au cours de l’année passée ?
+			</h2>
+
+			<p class="fr-text--light fr-text--sm">
+				Indiquez la quantité pour chaque stade d’élevage.
+			</p>
+		{/snippet}
+
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell--multiline">
+								<thead>
+									<tr>
+										<th>Stade d’élevage</th>
+										<th>Stock au 30 juin {data.annee - 1}</th>
+										<th>Stock au 1er juin {data.annee}</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each stadesActifs as stade (stade.id)}
 										<tr>
-											<th>Stade d’élevage</th>
-											<th>Stock au 30 juin {data.annee - 1}</th>
-											<th>Stock au 1er juin {data.annee}</th>
+											<td>
+												{stade.label}
+												<span class="fr-text--light fr-text--xs">
+													({isNaissain(stade.id) ? "milliers" : "kg"})
+												</span>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[stade.id].stockNmoins1}
+													errors={$errors?.data?.[stade.id]?.stockNmoins1}
+												/>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[stade.id].stockN}
+													errors={$errors?.data?.[stade.id]?.stockN}
+												/>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each stadesActifs as stade (stade.id)}
-											<tr>
-												<td>
-													{stade.label}
-													<span class="fr-text--light fr-text--xs">
-														({isNaissain(stade.id) ? "milliers" : "kg"})
-													</span>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[stade.id].stockNmoins1}
-														errors={$errors?.data?.[stade.id]?.stockNmoins1}
-													/>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[stade.id].stockN}
-														errors={$errors?.data?.[stade.id]?.stockN}
-													/>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
+			</div>
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug form={$form.data} {errors} data={data.donneesEspece}></FormDebug>

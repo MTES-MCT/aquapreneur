@@ -58,71 +58,70 @@
 	);
 </script>
 
-<div>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					Comment se répartissent les ventes selon l’origine ?
-				</h2>
-				<!-- <p class="fr-text--light fr-text--sm">
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">
+				Comment se répartissent les ventes selon l’origine ?
+			</h2>
+			<!-- <p class="fr-text--light fr-text--sm">
 					Vous pouvez répondre en indiquant un montant ou un pourcentage sur les quantités vendues.
 				</p> -->
-			{/snippet}
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
+		{/snippet}
+
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell--multiline">
+								<thead>
+									<tr>
+										<th>Origine et ploïdie</th>
+										<th>
+											Pourcentage <span class="fr-text--regular">(%)</span>
+										</th>
+										<th>
+											Montant des ventes <span class="fr-text--regular">
+												(€ HT)
+											</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each ORIGINES_NAISSAIN as origine (origine.id)}
 										<tr>
-											<th>Origine et ploïdie</th>
-											<th>
-												Pourcentage <span class="fr-text--regular">(%)</span>
-											</th>
-											<th>
-												Montant des ventes <span class="fr-text--regular">
-													(€ HT)
-												</span>
-											</th>
+											<td>{origine.label}</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form[origine.id].part}
+													errors={$errors[origine.id]?.part}
+												></InputGroup>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form[origine.id].value}
+													errors={$errors[origine.id]?.value}
+												></InputGroup>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each ORIGINES_NAISSAIN as origine (origine.id)}
-											<tr>
-												<td>{origine.label}</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[origine.id].part}
-														errors={$errors[origine.id]?.part}
-													></InputGroup>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[origine.id].value}
-														errors={$errors[origine.id]?.value}
-													></InputGroup>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
-				</div>{/snippet}
-		</Fieldset>
+				</div>
+			</div>{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			prevHref="./3"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks
+		prevHref="./3"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece.consommation?.origine}
 ></FormDebug>

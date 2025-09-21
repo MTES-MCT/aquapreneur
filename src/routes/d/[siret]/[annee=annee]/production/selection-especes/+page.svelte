@@ -36,8 +36,10 @@
 				ESPECES_IDS.forEach((e) => {
 					if (form.data.especes.includes(e)) {
 						merge(data.donneesEspeces, { [e]: {} });
+						merge(data.progressionProduction, { especes: { [e]: {} } });
 					} else {
 						delete data.donneesEspeces[e];
+						delete data.progressionProduction.especes[e];
 					}
 				});
 				form.data.especes.forEach((e) => {
@@ -58,6 +60,7 @@
 			<p class="fr-text--lead fr-text--bold fr-mb-1w">
 				Quelles espèces de coquillages avez-vous produites ?
 			</p>
+
 			<p class="fr-text--sm fr-text--light">
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			</p>

@@ -46,61 +46,59 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl">
-		L’entreprise dispose-t-elle d’une main d’oeuvre permanente ?
-	</p>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.aPermanents}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				L’entreprise dispose-t-elle d’une main d’oeuvre permanente ?
+			</h2>
 
-	<p>
-		Tout personnel présent au 31 décembre {data.annee - 1}, quel que soit le
-		temps de travail. Attention : exclure CDD, intérimaires et stagiaires, et
-		dirigeants et associés.
-	</p>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.aPermanents}>
-			{#snippet inputs(id)}
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={true}
-							bind:group={$form.aPermanents}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Oui{/snippet}
-				</RadioGroup>
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={false}
-							bind:group={$form.aPermanents}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Non{/snippet}
-				</RadioGroup>
+			<p class="fr-text--light fr-text--sm">
+				Tout personnel présent au 31 décembre {data.annee - 1}, quel que soit le
+				temps de travail. Attention : exclure CDD, intérimaires et stagiaires,
+				et dirigeants et associés.
+			</p>
+		{/snippet}
 
-				{#if $errors?.aPermanents}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.aPermanents}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
+		{#snippet inputs(id)}
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={true}
+						bind:group={$form.aPermanents}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Oui{/snippet}
+			</RadioGroup>
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={false}
+						bind:group={$form.aPermanents}
+						autocomplete="off"
+					/>
+				{/snippet}
+				{#snippet label()}Non{/snippet}
+			</RadioGroup>
 
-		<NavigationLinks
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			{#if $errors?.aPermanents}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.aPermanents}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+
+	<NavigationLinks nextIsButton cantAnswerBtn={data.persona === "comptable"} />
+</form>
 
 <FormDebug {form} {errors} data={data.equipe.permanents}></FormDebug>

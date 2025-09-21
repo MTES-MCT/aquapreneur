@@ -43,51 +43,50 @@
 	);
 </script>
 
-<div>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.origine?._errors}>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">
-					Quelle est l’origine des {data.espece.label} en cours d’élevage ?
-				</h2>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.origine?._errors}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				Quelle est l’origine des {data.espece.label} en cours d’élevage ?
+			</h2>
 
-				<p class="fr-text--sm fr-text--light">
-					Vous pouvez sélectionner une ou plusieurs réponses.
-				</p>
-			{/snippet}
-			{#snippet inputs(id)}
-				{#each ORIGINES as origine (origine.id)}
-					{@const origineId = origine.id}
+			<p class="fr-text--sm fr-text--light">
+				Vous pouvez sélectionner une ou plusieurs réponses.
+			</p>
+		{/snippet}
 
-					<CheckboxGroup>
-						{#snippet input(id)}
-							<input
-								type="checkbox"
-								aria-describedby="checkbox-{id}-messages"
-								{id}
-								value={origineId}
-								bind:group={$form.origine}
-								autocomplete="off"
-							/>
-						{/snippet}
-						{#snippet label()}{origine.label}{/snippet}
-					</CheckboxGroup>
-				{/each}
-				{#if $errors?.origine?._errors}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.origine._errors}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+		{#snippet inputs(id)}
+			{#each ORIGINES as origine (origine.id)}
+				{@const origineId = origine.id}
+
+				<CheckboxGroup>
+					{#snippet input(id)}
+						<input
+							type="checkbox"
+							aria-describedby="checkbox-{id}-messages"
+							{id}
+							value={origineId}
+							bind:group={$form.origine}
+							autocomplete="off"
+						/>
+					{/snippet}
+					{#snippet label()}{origine.label}{/snippet}
+				</CheckboxGroup>
+			{/each}
+			{#if $errors?.origine?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.origine._errors}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>

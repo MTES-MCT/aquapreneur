@@ -60,59 +60,60 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl">
-		Combien d’hommes saisonniers ont travaillé pour l’entreprise ?
-	</p>
-	<form method="POST" use:enhance>
-		<Fieldset>
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell">
-									<thead>
-										<tr style="cell-w:20rem">
-											<th style="min-width: 15rem">Type de contrat</th>
-											<th>Nombre total d’hommes</th>
-											<th>Nombre total de jours travaillés</th>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				Combien d’hommes saisonniers ont travaillé pour l’entreprise ?
+			</h2>
+		{/snippet}
+
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell">
+								<thead>
+									<tr style="cell-w:20rem">
+										<th style="min-width: 15rem">Type de contrat</th>
+										<th>Nombre total d’hommes</th>
+										<th>Nombre total de jours travaillés</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each TYPES_CONTRAT as c (c.id)}
+										<tr>
+											<td>{c.label}</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form[c.id].nbPersonnes}
+													errors={$errors?.[c.id]?.nbPersonnes}
+												/>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form[c.id].nbJours}
+													errors={$errors?.[c.id]?.nbJours}
+												/>
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each TYPES_CONTRAT as c (c.id)}
-											<tr>
-												<td>{c.label}</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[c.id].nbPersonnes}
-														errors={$errors?.[c.id]?.nbPersonnes}
-													/>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[c.id].nbJours}
-														errors={$errors?.[c.id]?.nbJours}
-													/>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/each}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+			</div>
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.equipe.saisonniers}></FormDebug>

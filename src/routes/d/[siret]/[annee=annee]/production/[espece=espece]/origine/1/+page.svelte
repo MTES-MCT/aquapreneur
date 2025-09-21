@@ -66,54 +66,49 @@
 	];
 </script>
 
-<div>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.mode?._errors}>
-			{#snippet legend()}
-				<h2 class="fr-h4 fr-mb-1w">Quels mode d’élevage pratiquez-vous ?</h2>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.mode?._errors}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">Quels mode d’élevage pratiquez-vous ?</h2>
 
-				<p class="fr-text--sm fr-text--light">
-					Vous pouvez sélectionner une ou plusieurs réponses.
-				</p>
-			{/snippet}
+			<p class="fr-text--sm fr-text--light">
+				Vous pouvez sélectionner une ou plusieurs réponses.
+			</p>
+		{/snippet}
 
-			{#snippet inputs(id)}
-				{#each groupes as groupe (groupe.id)}
-					<h3 class="fr-h6 fr-mt-3w">{groupe.label}</h3>
+		{#snippet inputs(id)}
+			{#each groupes as groupe (groupe.id)}
+				<h3 class="fr-h6 fr-mt-3w">{groupe.label}</h3>
 
-					{#each MODE_ELEVAGE.filter((m) => m.groupe === groupe.id && (m.especes == null || (m.especes as ReadonlyArray<string>).includes(data.espece.id))) as mode (mode.id)}
-						{@const modeId = mode.id}
+				{#each MODE_ELEVAGE.filter((m) => m.groupe === groupe.id && (m.especes == null || (m.especes as ReadonlyArray<string>).includes(data.espece.id))) as mode (mode.id)}
+					{@const modeId = mode.id}
 
-						<CheckboxGroup>
-							{#snippet input(id)}
-								<input
-									type="checkbox"
-									aria-describedby="checkbox-{id}-messages"
-									{id}
-									value={modeId}
-									bind:group={$form.mode}
-									autocomplete="off"
-								/>
-							{/snippet}
-							{#snippet label()}{mode.label}{/snippet}
-						</CheckboxGroup>
-					{/each}
+					<CheckboxGroup>
+						{#snippet input(id)}
+							<input
+								type="checkbox"
+								aria-describedby="checkbox-{id}-messages"
+								{id}
+								value={modeId}
+								bind:group={$form.mode}
+								autocomplete="off"
+							/>
+						{/snippet}
+						{#snippet label()}{mode.label}{/snippet}
+					</CheckboxGroup>
 				{/each}
-				{#if $errors?.mode?._errors}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.mode._errors}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
+			{/each}
+			{#if $errors?.mode?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.mode._errors}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks nextIsButton cantAnswerBtn={data.persona === "comptable"} />
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece.modeElevage}></FormDebug>

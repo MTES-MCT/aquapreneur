@@ -40,55 +40,55 @@
 	);
 </script>
 
-<div>
-	<h2 class="fr-h4 fr-mb-4w">
-		Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
-		{data.annee} ?
-	</h2>
-	<form method="POST" use:enhance>
-		<Fieldset hasError={!!$errors?.nouveauDirigeant}>
-			{#snippet inputs(id)}
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={true}
-							bind:group={$form.nouveauDirigeant}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Oui{/snippet}
-				</RadioGroup>
-				<RadioGroup inline>
-					{#snippet input(id)}
-						<input
-							{id}
-							type="radio"
-							aria-describedby="radio-{id}-messages"
-							value={false}
-							bind:group={$form.nouveauDirigeant}
-							autocomplete="off"
-						/>
-					{/snippet}
-					{#snippet label()}Non{/snippet}
-				</RadioGroup>
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.nouveauDirigeant}>
+		{#snippet legend()}
+			<h2 class="fr-h4">
+				Cette personne dirigeante ou associée a-t-elle rejoint l’entreprise en
+				{data.annee} ?
+			</h2>
+		{/snippet}
 
-				{#if $errors?.nouveauDirigeant}
-					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
-						<p class="fr-message fr-message--error" id="{id}-errors">
-							{$errors.nouveauDirigeant}
-						</p>
-					</div>
-				{/if}
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+		{#snippet inputs(id)}
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={true}
+						bind:group={$form.nouveauDirigeant}
+						autocomplete="off"
+					/>
+				{/snippet}
+
+				{#snippet label()}Oui{/snippet}
+			</RadioGroup>
+			<RadioGroup inline>
+				{#snippet input(id)}
+					<input
+						{id}
+						type="radio"
+						aria-describedby="radio-{id}-messages"
+						value={false}
+						bind:group={$form.nouveauDirigeant}
+						autocomplete="off"
+					/>
+				{/snippet}
+
+				{#snippet label()}Non{/snippet}
+			</RadioGroup>
+
+			{#if $errors?.nouveauDirigeant}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.nouveauDirigeant}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks nextIsButton cantAnswerBtn={data.persona === "comptable"} />
+</form>
 
 <FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

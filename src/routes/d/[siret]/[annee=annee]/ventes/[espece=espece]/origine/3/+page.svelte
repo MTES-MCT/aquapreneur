@@ -44,36 +44,33 @@
 	);
 </script>
 
-<div>
-	<p class="fr-text--xl"></p>
-	<form use:enhance>
-		<Fieldset>
-			{#snippet legend()}
-				<h2 class="fr-h4">Quelle part de la production est certifiée Bio ?</h2>
-			{/snippet}
+<form use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4">Quelle part de la production est certifiée Bio ?</h2>
+		{/snippet}
 
-			{#snippet inputs()}
-				<InputGroup
-					type="number"
-					bind:value={$form.part}
-					errors={$errors?.part as string[]}
-					required
-				>
-					{#snippet label()}Part certifiée Agriculture biologique (AB) (%)
-						<span class="fr-hint-text">
-							Sur les quantités vendues à la consommation
-						</span>
-					{/snippet}
-				</InputGroup>
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./2"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+		{#snippet inputs()}
+			<InputGroup
+				type="number"
+				bind:value={$form.part}
+				errors={$errors?.part as string[]}
+				required
+			>
+				{#snippet label()}Part certifiée Agriculture biologique (AB) (%)
+					<span class="fr-hint-text">
+						Sur les quantités vendues à la consommation
+					</span>
+				{/snippet}
+			</InputGroup>
+		{/snippet}
+	</Fieldset>
+	<NavigationLinks
+		prevHref="./2"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
 
 <FormDebug {form} {errors} data={data.donneesEspece.consommation!.bio}
 ></FormDebug>

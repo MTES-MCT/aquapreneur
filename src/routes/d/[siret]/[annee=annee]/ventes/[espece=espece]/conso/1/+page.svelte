@@ -67,6 +67,7 @@
 			<h2 class="fr-h4 fr-mb-1w">
 				Où ont été vendues les {data.espece.label} destinées à la consommation ?
 			</h2>
+
 			<p class="fr-text--light fr-text--sm">
 				Vous pouvez sélectionner une ou plusieurs réponses.
 			</p>

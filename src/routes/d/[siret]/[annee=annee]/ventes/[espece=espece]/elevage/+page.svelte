@@ -68,6 +68,7 @@
 				à l’affinage par d’autres professionnels.
 			</p>
 		{/snippet}
+
 		{#snippet inputs(id)}
 			<RadioGroup inline>
 				{#snippet input(id)}
