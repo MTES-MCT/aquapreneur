@@ -1,7 +1,11 @@
 <script lang="ts">
+	import SuperDebug from "sveltekit-superforms";
+
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
+
+	import { env } from "$env/dynamic/public";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ALEAS } from "$lib/constants";
@@ -153,6 +157,12 @@
 	<form method="POST" onsubmit={handleSubmitRecap}>
 		<NavigationLinks nextIsButton center />
 	</form>
+{/if}
+
+{#if env.PUBLIC_DEBUG_FORM}
+	<div class="fr-mt-10w">
+		<SuperDebug data={data.retourAnnee} label="BDD" />
+	</div>
 {/if}
 
 <style>

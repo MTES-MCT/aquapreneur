@@ -4,7 +4,7 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";

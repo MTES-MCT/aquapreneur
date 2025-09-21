@@ -7,7 +7,7 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 
 	const { data } = $props();
@@ -103,9 +103,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.equipe.permanents}
-	progression={data.progressionEquipe}
-></FormDebug>
+<FormDebug {form} {errors} data={data.equipe.permanents}></FormDebug>

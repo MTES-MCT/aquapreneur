@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { COUNTRIES } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import {
@@ -169,9 +169,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.dirigeant}
-	progression={data.progressionDirigeant}
-></FormDebug>
+<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

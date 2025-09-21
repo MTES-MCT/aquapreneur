@@ -126,9 +126,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.equipe.permanents}
-	progression={data.progressionEquipe}
-></FormDebug>
+<FormDebug {form} {errors} data={data.equipe.permanents}></FormDebug>

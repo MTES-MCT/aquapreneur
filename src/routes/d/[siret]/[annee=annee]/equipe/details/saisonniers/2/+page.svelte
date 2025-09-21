@@ -115,9 +115,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.equipe.saisonniers}
-	progression={data.progressionEquipe}
-></FormDebug>
+<FormDebug {form} {errors} data={data.equipe.saisonniers}></FormDebug>

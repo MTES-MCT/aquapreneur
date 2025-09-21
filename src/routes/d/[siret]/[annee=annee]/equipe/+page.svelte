@@ -18,7 +18,7 @@
 	</p>
 
 	<NavigationLinks
-		nextHref="equipe/recapitulatif"
+		nextHref="./equipe/recapitulatif"
 		nextLabel="Commencer"
 		center
 	/>

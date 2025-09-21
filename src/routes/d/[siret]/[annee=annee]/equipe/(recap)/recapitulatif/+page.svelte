@@ -1,7 +1,11 @@
 <script lang="ts">
+	import SuperDebug from "sveltekit-superforms";
+
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
+
+	import { env } from "$env/dynamic/public";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
@@ -96,8 +100,7 @@
 			goto(`./details/permanents`);
 		}}
 	>
-		<RecapPermanents permanents={data.declaration.donnees.equipe.permanents}
-		></RecapPermanents>
+		<RecapPermanents permanents={data.equipe.permanents}></RecapPermanents>
 	</RecapLine>
 
 	<RecapLine
@@ -113,8 +116,7 @@
 			goto(`./details/saisonniers`);
 		}}
 	>
-		<RecapSaisonniers saisonniers={data.declaration.donnees.equipe.saisonniers}
-		></RecapSaisonniers>
+		<RecapSaisonniers saisonniers={data.equipe.saisonniers}></RecapSaisonniers>
 	</RecapLine>
 </div>
 
@@ -122,4 +124,10 @@
 	<form method="POST" onsubmit={handleSubmit}>
 		<NavigationLinks nextIsButton center />
 	</form>
+{/if}
+
+{#if env.PUBLIC_DEBUG_FORM}
+	<div class="fr-mt-10w">
+		<SuperDebug data={data.equipe} label="BDD" />
+	</div>
 {/if}
