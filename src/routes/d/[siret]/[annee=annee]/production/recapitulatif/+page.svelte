@@ -1,10 +1,13 @@
 <script lang="ts">
 	import capitalize from "lodash/capitalize";
 	import merge from "lodash/merge";
+	import SuperDebug from "sveltekit-superforms";
 
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
+
+	import { env } from "$env/dynamic/public";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
@@ -120,6 +123,12 @@
 	<form method="POST" onsubmit={handleSubmit}>
 		<NavigationLinks nextIsButton center />
 	</form>
+{/if}
+
+{#if env.PUBLIC_DEBUG_FORM}
+	<div class="fr-mt-10w">
+		<SuperDebug data={data.donneesEspeces} label="BDD" />
+	</div>
 {/if}
 
 <style>

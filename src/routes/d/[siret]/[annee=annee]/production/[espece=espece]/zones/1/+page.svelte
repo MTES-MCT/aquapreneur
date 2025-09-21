@@ -4,7 +4,7 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
@@ -39,10 +39,8 @@
 			updateData: (form) => {
 				QUARTIERS_IMMATRICULATION_IDS.forEach((q) => {
 					if (form.data.zones.includes(q)) {
-						// TODO si on part d’une valeur vide, restaurer la valeur préremplie/comptable ?
 						merge(data.donneesEspece.zonesProduction, { [q]: {} });
 					} else {
-						// TODO avertir de la suppression des données
 						delete data.donneesEspece.zonesProduction?.[q];
 					}
 				});
@@ -127,7 +125,6 @@
 								<button
 									class="fr-btn"
 									onclick={() => {
-										// TODO : propager la selection
 										// @ts-expect-error `dsfr` est global
 										window.dsfr(modal).modal.conceal();
 									}}

@@ -18,7 +18,7 @@
 	</p>
 
 	<NavigationLinks
-		nextHref="ventes/selection-especes"
+		nextHref="./ventes/recapitulatif"
 		nextLabel="Commencer"
 		center
 	/>

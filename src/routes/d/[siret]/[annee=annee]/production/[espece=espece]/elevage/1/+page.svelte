@@ -4,7 +4,7 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
@@ -12,6 +12,8 @@
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 
 	const { data } = $props();
+
+	merge(data.donneesEspece, { consommation: {} });
 
 	const stades = [
 		{ id: "naissainCaptage", label: "Naissain – captage" },
@@ -26,7 +28,13 @@
 		stade: z
 			.literal(stadeIds)
 			.array()
-			.default(stadeIds.filter((e) => data.donneesEspece[e] != null)),
+			.default(
+				stadeIds.filter((e) =>
+					e === "affinage" ?
+						data.donneesEspece.consommation?.affinage != null
+					:	data.donneesEspece[e] != null,
+				),
+			),
 	});
 
 	const { form, errors, enhance } = prepareForm(
@@ -43,16 +51,19 @@
 			},
 			updateData: (form) => {
 				stadeIds.forEach((e) => {
-					if (form.data.stade.includes(e)) {
-						// TODO si on part d’une valeur vide, restaurer la valeur préremplie/comptable ?
-						merge(data.donneesEspece, { [e]: {} });
+					if (e === "affinage") {
+						if (form.data.stade.includes("affinage")) {
+							merge(data.donneesEspece.consommation, { affinage: {} });
+						} else {
+							delete data.donneesEspece.consommation?.affinage;
+						}
 					} else {
-						// TODO avertir de la suppression des données
-						delete data.donneesEspece[e];
+						if (form.data.stade.includes(e)) {
+							merge(data.donneesEspece, { [e]: {} });
+						} else {
+							delete data.donneesEspece[e];
+						}
 					}
-				});
-				form.data.stade.forEach((e) => {
-					merge(data.donneesEspece, { [e]: {} });
 				});
 				return data.declaration;
 			},

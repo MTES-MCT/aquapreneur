@@ -4,7 +4,7 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
@@ -35,10 +35,8 @@
 			updateData: (form) => {
 				ESPECES_IDS.forEach((e) => {
 					if (form.data.especes.includes(e)) {
-						// TODO si on part d’une valeur vide, restaurer la valeur préremplie/comptable ?
 						merge(data.donneesEspeces, { [e]: {} });
 					} else {
-						// TODO avertir de la suppression des données
 						delete data.donneesEspeces[e];
 					}
 				});
@@ -58,7 +56,7 @@
 	<Fieldset hasError={!!$errors?.especes?._errors}>
 		{#snippet legend()}
 			<p class="fr-text--lead fr-text--bold fr-mb-1w">
-				Quelles espèces de coquillages avez-vous produit ?
+				Quelles espèces de coquillages avez-vous produites ?
 			</p>
 			<p class="fr-text--sm fr-text--light">
 				Vous pouvez sélectionner une ou plusieurs réponses.

@@ -50,6 +50,7 @@
 				onchange={onChange}
 				autocomplete="off"
 				{placeholder}
+				step="any"
 			/>
 			{#if actionButton}
 				{@render actionButton()}

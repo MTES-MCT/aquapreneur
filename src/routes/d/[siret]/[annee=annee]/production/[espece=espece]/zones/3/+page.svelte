@@ -11,6 +11,7 @@
 	import { QUARTIERS_IMMATRICULATION } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
+	import { formatNum } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -60,20 +61,24 @@
 <div>
 	<form method="POST" use:enhance>
 		<Fieldset>
-			<!-- todo afficher une erreur globale si la somme est differentes de 100% -->
 			{#snippet legend()}
 				<h2 class="fr-h4">Où a été réalisé le captage du naissain ?</h2>
 				<p class="fr-text--sm fr-text--light">
 					Au 1er juin {data.annee}, vous aviez
-					<!-- todo: récupérer la valeur de la page naissain -->
-					<strong>TODO</strong>
+					<strong>
+						{formatNum(
+							((data.donneesEspece.naissainCaptage?.stock?.stockMilliers ?? 0) +
+								(data.donneesEspece.naissainEcloserieNurserie?.stock
+									?.stockMilliers ?? 0)) *
+								10000,
+						)}
+					</strong>
 					unités de naissain en stock. Veuillez indiquer la part du stock présente
 					chaque zone, et les pertes estimées au cours de l’année. La somme des parts
 					du stock doit être égale à 100 %.
 				</p>
 
 				<p class="fr-text--md">
-					<!-- todo: calculer la diff avec 100, afficher en rouge si différent de 100 -->
 					Reste :
 					<span class="fr-text--bold">x %</span>
 				</p>
@@ -131,4 +136,12 @@
 	</form>
 </div>
 
-<FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>
+<FormDebug
+	{form}
+	{errors}
+	data={{
+		zonesProduction: data.donneesEspece.zonesProduction,
+		naissainCaptage: data.donneesEspece.naissainCaptage,
+		naissainEcloserieNurserie: data.donneesEspece.naissainEcloserieNurserie,
+	}}
+></FormDebug>

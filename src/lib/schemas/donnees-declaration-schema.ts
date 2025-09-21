@@ -5,6 +5,7 @@ import {
 	DESTINATIONS_VENTES_CONSO_FRANCE_IDS,
 	DIPLOMES_IDS,
 	ESPECES_IDS,
+	MODES_ELEVAGE_IDS,
 	ORIGINES_NAISSAIN_IDS,
 	QUARTIERS_IMMATRICULATION_IDS,
 	REGIMES_SOCIAUX_IDS,
@@ -19,9 +20,14 @@ import {
 	optObject,
 } from "$lib/types";
 
-const ValeurVente = optObject({
+const ValeurQuantite = optObject({
 	valeurHT: PositiveNumber.nullish(),
 	quantiteKg: PositiveNumber.nullish(),
+});
+
+const ValeurPrixMoy = optObject({
+	valeurHT: PositiveNumber.nullish(),
+	prixMoyenHT: PositiveNumber.nullish(),
 });
 
 export const ValeurStock = optObject({
@@ -34,19 +40,16 @@ export const ValeurStock = optObject({
 });
 
 export const DonneesEspece = optObject({
-	// Ex Production :
-	//
-	// 	naissain: optObject({
-	// 	total: ValeurStock,
-	// 	captage: ValeurStock,
-	// 	ecloserie: ValeurStock,
-	// }),
-	// elevage: optObject({
-	// 	pregrossissement: ValeurStock,
-	// 	demiElevage: ValeurStock,
-	// 	elevageAdulte: ValeurStock,
-	// }),
-	// origine: optObject({}),
+	modeElevage: z
+		.partialRecord(
+			z.enum(MODES_ELEVAGE_IDS),
+			optObject({
+				part: Percent.nullish(),
+				value: PositiveNumber.nullish(),
+			}),
+		)
+		.optional(),
+
 	zonesProduction: z
 		.partialRecord(
 			z.enum(QUARTIERS_IMMATRICULATION_IDS),
@@ -61,78 +64,70 @@ export const DonneesEspece = optObject({
 			}),
 		)
 		.optional(),
-	//
-	// Ex Ventes :
 
 	naissainCaptage: optObject({
-		total: ValeurStock,
+		stock: ValeurStock,
+		destination: optObject({
+			france: ValeurPrixMoy,
+			etranger: ValeurPrixMoy,
+		}),
 	}),
 	naissainEcloserieNurserie: optObject({
-		total: ValeurStock,
+		stock: ValeurStock,
+		destination: optObject({
+			france: optObject({
+				ecloserieNurserieDiploide: ValeurPrixMoy,
+				ecloserieNurserieTriploide: ValeurPrixMoy,
+			}),
+			etranger: optObject({
+				ecloserieNurserieDiploide: ValeurPrixMoy,
+				ecloserieNurserieTriploide: ValeurPrixMoy,
+			}),
+		}),
+		ecloserieNurserieDiploide: optObject({
+			france: ValeurPrixMoy,
+			etranger: ValeurPrixMoy,
+		}),
+		ecloserieNurserieTriploide: optObject({
+			france: ValeurPrixMoy,
+			etranger: ValeurPrixMoy,
+		}),
 	}),
 	pregrossissement: optObject({
-		total: ValeurStock,
+		stock: ValeurStock,
+		destination: optObject({
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
+		}),
 	}),
 	demiElevage: optObject({
-		total: ValeurStock,
+		stock: ValeurStock,
+		destination: optObject({
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
+		}),
 	}),
 	elevageAdulte: optObject({
-		total: ValeurStock,
-	}),
-	affinage: optObject({
-		total: ValeurStock,
-	}),
-
-	naissain: optObject({
-		captage: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
-		}),
-		ecloserieDiploide: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
-		}),
-		ecloserieTriploide: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
-		}),
-	}),
-	elevage: optObject({
-		pregrossissement: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
-		}),
-		demiElevage: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
-		}),
-		elevageAdulte: optObject({
-			destination: optObject({
-				france: ValeurVente,
-				etranger: ValeurVente,
-			}),
+		stock: ValeurStock,
+		destination: optObject({
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
 		}),
 	}),
 	consommation: optObject({
+		stock: ValeurStock,
 		destination: optObject({
 			france: z
 				.partialRecord(
 					z.enum(DESTINATIONS_VENTES_CONSO_FRANCE_IDS),
-					ValeurVente,
+					ValeurQuantite,
 				)
 				.optional(),
-			unionEuropeenne: ValeurVente,
-			horsUnionEuropeenne: ValeurVente,
+			unionEuropeenne: ValeurQuantite,
+			horsUnionEuropeenne: ValeurQuantite,
+		}),
+		bio: optObject({
+			part: Percent.nullish(),
 		}),
 		affinage: optObject({
 			claires: optObject({
@@ -143,12 +138,11 @@ export const DonneesEspece = optObject({
 				part: Percent.nullish(),
 				surfaceHa: PositiveInt.nullish(),
 			}),
+			pousseClaire: optObject({
+				part: Percent.nullish(),
+				surfaceHa: PositiveInt.nullish(),
+			}),
 		}),
-
-		bio: optObject({
-			part: Percent.nullish(),
-		}),
-
 		origine: z
 			.partialRecord(
 				z.enum(ORIGINES_NAISSAIN_IDS),
@@ -216,7 +210,8 @@ const Progression = z.strictObject({
 		especes: z.record(
 			z.enum(ESPECES_IDS),
 			optObject({
-				naissain: StatutProgression,
+				naissainCaptage: StatutProgression,
+				naissainEcloserieNurserie: StatutProgression,
 				elevage: StatutProgression,
 				consommation: StatutProgression,
 				origine: StatutProgression,

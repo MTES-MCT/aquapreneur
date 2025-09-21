@@ -11,5 +11,5 @@
 		à ce volume.
 	</p>
 
-	<NavigationLinks prevHref="../../recapitulatif" nextHref="./1" />
+	<NavigationLinks nextHref="./origine/1" />
 </div>

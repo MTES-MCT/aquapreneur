@@ -156,11 +156,11 @@ export const ORIGINES = [
 	},
 	{
 		label: "Diploïde d’écloserie",
-		id: "ecloserieDiploide",
+		id: "ecloserieNurserieDiploide",
 	},
 	{
 		label: "Triploïde d’écloserie",
-		id: "ecloserieTriploide",
+		id: "ecloserieNurserieTriploide",
 	},
 ] as const;
 
@@ -171,15 +171,25 @@ export const ORIGINES_NAISSAIN = [
 	},
 	{
 		label: "Écloserie/nurserie – diploïde",
-		id: "ecloserieDiploide",
+		id: "ecloserieNurserieDiploide",
 	},
 	{
 		label: "Écloserie/nurserie – triploïde",
-		id: "ecloserieTriploide",
+		id: "ecloserieNurserieTriploide",
 	},
 ] as const;
 export const ORIGINES_NAISSAIN_IDS = ORIGINES_NAISSAIN.map((e) => e.id);
 
+export const ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE = [
+	{
+		label: "Diploïde",
+		id: "ecloserieNurserieDiploide",
+	},
+	{
+		label: "Triploïde",
+		id: "ecloserieNurserieTriploide",
+	},
+] as const;
 export const DESTINATIONS_NAISSAIN = [
 	{
 		label: "En France",
@@ -259,6 +269,8 @@ export const MODE_ELEVAGE = [
 		especes: null,
 	},
 ] as const;
+
+export const MODES_ELEVAGE_IDS = MODE_ELEVAGE.map((e) => e.id);
 
 // https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
 // TODO standardiser les clés: id / label

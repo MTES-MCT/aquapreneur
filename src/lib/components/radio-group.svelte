@@ -1,55 +1,34 @@
 <script lang="ts">
-	import type { ChangeEventHandler } from "svelte/elements";
-
 	import type { Snippet } from "svelte";
 
 	let {
+		input,
 		label,
-		name,
-		id,
+		small = false,
 		inline = false,
-		checked,
-		defaultChecked,
-		disabled,
-		required = false,
-		value,
-		group = $bindable(),
-		onChange,
 	}: {
+		input: Snippet<[string]>;
 		label: Snippet;
-		name: string;
-		id: string;
+		small?: boolean;
 		inline: boolean;
-		checked?: boolean;
-		defaultChecked?: boolean;
-		disabled?: boolean;
-		required?: boolean;
-		value?: string | boolean;
-		group?: string | boolean;
-		onChange?: ChangeEventHandler<HTMLInputElement>;
 	} = $props();
+	const id = $props.id();
 </script>
 
 <div
-	class="fr-fieldset__element {inline ? 'fr-fieldset__element--inline' : ''}"
+	class={[
+		"fr-fieldset__element",
+		inline && "fr-fieldset__element--inline",
+		small && "fr-checkbox-group--sm",
+	]}
 >
 	<div class="fr-radio-group">
-		<input
-			type="radio"
-			class="fr-input"
-			{id}
-			{name}
-			{checked}
-			{disabled}
-			{value}
-			{required}
-			{defaultChecked}
-			bind:group
-			autocomplete="off"
-			onchange={onChange}
-		/>
-		<label class="fr-label" for={id}>
-			{@render label()}
-		</label>
+		{@render input(id)}
+		<label class="fr-label" for={id}>{@render label()}</label>
+		<div
+			class="fr-messages-group"
+			id="radio-{id}-messages"
+			aria-live="polite"
+		></div>
 	</div>
 </div>

@@ -1,138 +1,218 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
-
-	import { goto } from "$app/navigation";
+	import isEmpty from "lodash/isEmpty";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { STADES_ELEVAGE, STADES_ELEVAGE_IDS } from "$lib/constants";
-	import { dVentes } from "$lib/declaration-utils";
-	import { submitDeclarationUpdate, toNumber } from "$lib/utils";
+	import { DESTINATIONS_ELEVAGE, STADES_ELEVAGE } from "$lib/constants";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { PositiveNumber } from "$lib/types";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	merge(data.donneesEspece, {
+		pregrossissement: {},
+		demiElevage: {},
+		elevageAdulte: { destination: {} },
+	});
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("../../recapitulatif");
-	};
+	const stadesActifs = STADES_ELEVAGE.filter(
+		(d) => !isEmpty(data.donneesEspece[d.id]?.destination),
+	);
+	const stadesActifsIds = stadesActifs.map((s) => s.id);
 
-	const ventesFranceActives = () => {
-		return STADES_ELEVAGE_IDS.some((s) =>
-			dVentes(donnees, data.espece.id).elevage[s].destination?.france?.active(),
+	const destActives = DESTINATIONS_ELEVAGE.filter((d) => {
+		return stadesActifs.some(
+			(s) => !isEmpty(data.donneesEspece[s.id]?.destination?.[d.id]),
 		);
-	};
+	});
+	const destActivesIds = destActives.map((d) => d.id);
 
-	const ventesEtrangerActives = () => {
-		return STADES_ELEVAGE_IDS.some((s) =>
-			dVentes(donnees, data.espece.id).elevage[
-				s
-			].destination?.etranger?.active(),
-		);
+	const schema = z.object({
+		data: z.record(
+			z.enum(stadesActifsIds),
+			z.object({
+				destination: z.record(
+					z.enum(destActivesIds),
+					z.object({
+						valeurHT: PositiveNumber,
+						quantiteKg: PositiveNumber,
+					}),
+				),
+			}),
+		),
+	});
+
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			persona: data.persona,
+			isLastStep: () => true,
+			getNextPage: () => "../../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionVentesEspece.elevage)) {
+					data.progressionVentesEspece.elevage = statut;
+				}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.donneesEspece, form.data.data);
+				return data.declaration;
+			},
+		},
+		defaults(zod4(schema)),
+	);
+
+	$form = {
+		// @ts-expect-error typage à revoir
+		data: Object.fromEntries(
+			stadesActifsIds.map((s) => [
+				s,
+				{
+					destination: Object.fromEntries(
+						destActivesIds.map((d) => [
+							d,
+							{
+								valeurHT: data.donneesEspece[s]!.destination![d]?.valeurHT,
+								quantiteKg: data.donneesEspece[s]!.destination![d]?.quantiteKg,
+							},
+						]),
+					),
+				},
+			]),
+		),
 	};
 </script>
 
-<div>
-	<p class="fr-text--xl">Comment le chiffre d’affaires est-il réparti ?</p>
-
-	<p>
-		Indiquez le montant des ventes et le prix moyen pour chaque stade d’élevage.
-	</p>
-
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
+<form method="POST" use:enhance>
+	<Fieldset>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				Comment se répartissent les ventes par stade d’élevage ?
+			</h2>
+			<p class="fr-text--light fr-text--sm">
+				Indiquez le montant des ventes et la quantité pour chaque stade
+				d’élevage.
+			</p>
+		{/snippet}
+		{#snippet inputs()}
+			<div class="fr-table fr-table--lg">
+				<div class="fr-table__wrapper">
+					<div class="fr-table__container">
+						<div class="fr-table__content">
+							<table class="fr-cell--multiline">
+								<thead>
+									<tr>
+										<th>Stade d’élevage</th>
+										<th>
+											Montant des ventes <span class="fr-text--regular">
+												(€ HT)
+											</span>
+										</th>
+										<th>
+											Quantité <span class="fr-text--regular">(kg)</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#if destActivesIds.includes("france")}
 										<tr>
-											<th>Stade d’élevage</th>
-											{#if ventesFranceActives()}
-												<th>
-													Ventes en France <span class="fr-text--regular">
-														(€ HT)
-													</span>
-												</th>
-											{/if}
-											{#if ventesEtrangerActives()}
-												<th>
-													Ventes à l’étranger <span class="fr-text--regular">
-														(€ HT)
-													</span>
-												</th>
-											{/if}
-											<th>
-												Prix moyen au kilo <span class="fr-text--regular">
-													(€)
-												</span>
-											</th>
+											<td
+												colspan="3"
+												class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+											>
+												En France
+											</td>
 										</tr>
-									</thead>
-									<tbody>
-										{#each STADES_ELEVAGE as stade (stade.id)}
-											{#if dVentes(donnees, data.espece.id).elevage[stade.id].active()}
-												{@const d =
-													donnees.especes[data.espece.id]!.elevage![stade.id]!
-														.destination!}
-												<tr>
-													<th scope="row">{stade.label}</th>
-													{#if ventesFranceActives()}
-														<td>
-															<input
-																class="fr-input"
-																type="text"
-																value={d.france?.valeurHT}
-																onchange={(v) =>
-																	(d.france!.valeurHT = toNumber(
-																		v.currentTarget.value,
-																	))}
-																autocomplete="off"
-															/>
-														</td>
-													{/if}
-													{#if ventesEtrangerActives()}
-														<td>
-															<input
-																class="fr-input"
-																type="text"
-																value={d.etranger?.valeurHT}
-																onchange={(v) =>
-																	(d.etranger!.valeurHT = toNumber(
-																		v.currentTarget.value,
-																	))}
-																autocomplete="off"
-															/>
-														</td>
-													{/if}
-													<td>
-														<input
-															class="fr-input"
-															disabled
-															autocomplete="off"
-														/>
-													</td>
-												</tr>
-											{/if}
+										{#each stadesActifs as stade (stade.id)}
+											<tr>
+												<td>{stade.label}</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.data[stade.id].destination.france.valeurHT
+														}
+														errors={$errors?.data?.[stade.id]?.destination
+															?.france?.valeurHT}
+													/>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.data[stade.id].destination.france.quantiteKg
+														}
+														errors={$errors?.data?.[stade.id]?.destination
+															?.france?.quantiteKg}
+													/>
+												</td>
+											</tr>
 										{/each}
-									</tbody>
-								</table>
-							</div>
+									{/if}
+									{#if destActivesIds.includes("etranger")}
+										<tr>
+											<td
+												colspan="3"
+												class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+											>
+												À l’étranger
+											</td>
+										</tr>
+										{#each stadesActifs as stade (stade.id)}
+											<tr>
+												<td>{stade.label}</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.data[stade.id].destination.etranger.valeurHT
+														}
+														errors={$errors?.data?.[stade.id]?.destination
+															?.etranger?.valeurHT}
+													/>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.data[stade.id].destination.etranger
+																.quantiteKg
+														}
+														errors={$errors?.data?.[stade.id]?.destination
+															?.etranger?.quantiteKg}
+													/>
+												</td>
+											</tr>
+										{/each}
+									{/if}
+								</tbody>
+							</table>
 						</div>
 					</div>
-				</div>{/snippet}
-		</Fieldset>
+				</div>
+			</div>
+		{/snippet}
+	</Fieldset>
 
-		<NavigationLinks
-			prevHref="./2"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+	<NavigationLinks
+		prevHref="./2"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
+
+<FormDebug
+	{form}
+	{errors}
+	data={{
+		pregrossissement: data.donneesEspece.pregrossissement,
+		demiElevage: data.donneesEspece.demiElevage,
+		elevageAdulte: data.donneesEspece.elevageAdulte,
+	}}
+></FormDebug>

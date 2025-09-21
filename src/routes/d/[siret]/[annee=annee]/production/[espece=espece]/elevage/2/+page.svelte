@@ -21,7 +21,6 @@
 		{ id: "naissainCaptage", label: "Naissain – captage" },
 		{ id: "naissainEcloserieNurserie", label: "Naissain – écloserie/nurserie" },
 		...STADES_ELEVAGE,
-		{ id: "affinage", label: "Affinage" },
 	] as const;
 
 	const stadesActifs = stades.filter((s) => data.donneesEspece[s.id] != null);
@@ -53,7 +52,7 @@
 				stadesActifsIds.forEach((id) =>
 					merge(data.donneesEspece, {
 						[id]: {
-							total:
+							stock:
 								isNaissain(id) ?
 									{
 										stockMilliers: form.data.data[id].stockN,
@@ -79,12 +78,12 @@
 			id,
 			isNaissain(id) ?
 				{
-					stockN: data.donneesEspece[id]?.total?.stockMilliers,
-					stockNmoins1: data.donneesEspece[id]?.total?.stockNmoins1milliers,
+					stockN: data.donneesEspece[id]?.stock?.stockMilliers,
+					stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1milliers,
 				}
 			:	{
-					stockN: data.donneesEspece[id]?.total?.stockKg,
-					stockNmoins1: data.donneesEspece[id]?.total?.stockNmoins1kg,
+					stockN: data.donneesEspece[id]?.stock?.stockKg,
+					stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1kg,
 				},
 		]),
 	);
