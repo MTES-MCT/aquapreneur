@@ -100,7 +100,7 @@
 	<Fieldset>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
-				Comment le chiffre d’affaires est-il réparti ?
+				Comment le chiffre d’affaires est-il réparti ?
 			</h2>
 
 			<p class="fr-text--light fr-text--sm">

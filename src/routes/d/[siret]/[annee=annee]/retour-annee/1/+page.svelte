@@ -40,7 +40,7 @@
 
 <div class="fr-stepper">
 	<h1 class="fr-stepper__title">
-		La production a-t-elle été perturbée par des imprévus ?
+		La production a-t-elle été perturbée par des imprévus ?
 		<span class="fr-stepper__state">Question 1 sur 3</span>
 	</h1>
 	<div
@@ -50,7 +50,7 @@
 	></div>
 	<p class="fr-stepper__details">
 		<span class="fr-text--bold">Étape suivante :</span>
-		Avez-vous rencontré d’autres défis ou difficultés cette année ?
+		Avez-vous rencontré d’autres défis ou difficultés cette année ?
 	</p>
 </div>
 

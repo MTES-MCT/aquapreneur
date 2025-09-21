@@ -16,13 +16,13 @@
 {:else}
 	{#if permanents?.femmes}
 		<p class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm fr-text--sm">
-			Combien de femmes travaillent pour l’entreprise ?
+			Combien de femmes travaillent pour l’entreprise ?
 		</p>
 		<Recap1 {permanents}></Recap1>
 	{/if}
 	{#if permanents?.hommes}
 		<p class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm fr-text--sm">
-			Combien d’hommes travaillent pour l’entreprise ?
+			Combien d’hommes travaillent pour l’entreprise ?
 		</p>
 		<Recap2 {permanents}></Recap2>
 	{/if}

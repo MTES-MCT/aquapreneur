@@ -271,8 +271,6 @@ export const DonneesDeclaration = z.strictObject({
 		permanents: optObject({
 			femmes: optObject({
 				salarie: optObject({
-					// TODO: remplacer par un record ?
-					// TYPES_DUREE_TRAVAIL
 					tempsPlein: PositiveInt.nullish(),
 					plusDunMiTemps: PositiveInt.nullish(),
 					miTemps: PositiveInt.nullish(),
