@@ -1,5 +1,5 @@
 export const load = async () => {
 	return {
-		currentStep: 6,
+		currentStep: 4,
 	};
 };

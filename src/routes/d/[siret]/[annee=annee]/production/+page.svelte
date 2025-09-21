@@ -18,7 +18,7 @@
 	</p>
 
 	<NavigationLinks
-		nextHref="production/verification-especes"
+		nextHref="./production/verification-especes"
 		nextLabel="Commencer"
 		center
 	/>

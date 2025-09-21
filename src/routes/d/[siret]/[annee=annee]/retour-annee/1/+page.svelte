@@ -4,7 +4,7 @@
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 
-	import CheckboxGroup from "$lib/components/checkbox-group2.svelte";
+	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
@@ -15,11 +15,7 @@
 	const { data } = $props();
 
 	const schema = z.object({
-		aleas: z
-			.enum(ALEAS_IDS)
-			.array()
-			.min(1, "Veuillez selectionner au moins une réponse")
-			.default(data.retourAnnee.aleas),
+		aleas: z.enum(ALEAS_IDS).array().default(data.retourAnnee.aleas),
 		aleasDetails: z.string().nullable().default(data.retourAnnee.aleasDetails),
 	});
 
@@ -27,9 +23,10 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
+			isLastStep: () => true,
 			getNextPage: () => "./2",
-			updateProgress: () => {
+			updateProgress: (statut) => {
+				data.progressionRetourAnnee.imprevus = statut;
 				return data.declaration;
 			},
 			updateData: (form) => {

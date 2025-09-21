@@ -56,9 +56,9 @@ export const ESPECES = [
 ] as const;
 
 export const ESPECES_IDS = ESPECES.map((e) => e.id);
-export type ESPECES_ID = (typeof ESPECES_IDS)[number];
+export type EspeceId = (typeof ESPECES_IDS)[number];
 export const ESPECES_SLUGS = ESPECES.map((e) => e.slug);
-export type ESPECES_SLUG = (typeof ESPECES_SLUGS)[number];
+export type EspeceSlug = (typeof ESPECES_SLUGS)[number];
 
 export const DESTINATIONS_VENTES_CONSO = [
 	{
@@ -78,7 +78,7 @@ export const DESTINATIONS_VENTES_CONSO = [
 export const DESTINATIONS_VENTES_CONSO_IDS = DESTINATIONS_VENTES_CONSO.map(
 	(e) => e.id,
 );
-export type DESTINATIONS_VENTES_CONSO_ID =
+export type DestinationVenteConsoId =
 	(typeof DESTINATIONS_VENTES_CONSO_IDS)[number];
 
 export const DESTINATIONS_VENTES_CONSO_FRANCE = [
@@ -114,13 +114,13 @@ export const DESTINATIONS_VENTES_CONSO_FRANCE = [
 
 export const DESTINATIONS_VENTES_CONSO_FRANCE_IDS =
 	DESTINATIONS_VENTES_CONSO_FRANCE.map((e) => e.id);
-export type DESTINATIONS_VENTES_CONSO_FRANCE_ID =
+export type DestinationVenteConsoFranceId =
 	(typeof DESTINATIONS_VENTES_CONSO_FRANCE_IDS)[number];
 
 export const STADES_ELEVAGE = [
 	{
 		label: "Prégrossissement (18 mois)",
-		id: "pregrossi",
+		id: "pregrossissement",
 	},
 	{
 		label: "Demi-élevage (24 mois)",
@@ -128,12 +128,12 @@ export const STADES_ELEVAGE = [
 	},
 	{
 		label: "Élevage jusqu’à taille marchande",
-		id: "adulte",
+		id: "elevageAdulte",
 	},
 ] as const;
 
 export const STADES_ELEVAGE_IDS = STADES_ELEVAGE.map((e) => e.id);
-export type STADES_ELEVAGE_ID = (typeof STADES_ELEVAGE_IDS)[number];
+export type StadeElevageId = (typeof STADES_ELEVAGE_IDS)[number];
 
 export const DESTINATIONS_ELEVAGE = [
 	{
@@ -147,7 +147,22 @@ export const DESTINATIONS_ELEVAGE = [
 ] as const;
 
 export const DESTINATIONS_ELEVAGE_IDS = DESTINATIONS_ELEVAGE.map((e) => e.id);
-export type DESTINATIONS_ELEVAGE_ID = (typeof DESTINATIONS_ELEVAGE_IDS)[number];
+export type DestinationElevageId = (typeof DESTINATIONS_ELEVAGE_IDS)[number];
+
+export const ORIGINES = [
+	{
+		label: "Captage naturel",
+		id: "captage",
+	},
+	{
+		label: "Diploïde d’écloserie",
+		id: "ecloserieNurserieDiploide",
+	},
+	{
+		label: "Triploïde d’écloserie",
+		id: "ecloserieNurserieTriploide",
+	},
+] as const;
 
 export const ORIGINES_NAISSAIN = [
 	{
@@ -156,15 +171,25 @@ export const ORIGINES_NAISSAIN = [
 	},
 	{
 		label: "Écloserie/nurserie – diploïde",
-		id: "ecloserieDiploide",
+		id: "ecloserieNurserieDiploide",
 	},
 	{
 		label: "Écloserie/nurserie – triploïde",
-		id: "ecloserieTriploide",
+		id: "ecloserieNurserieTriploide",
 	},
 ] as const;
 export const ORIGINES_NAISSAIN_IDS = ORIGINES_NAISSAIN.map((e) => e.id);
 
+export const ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE = [
+	{
+		label: "Diploïde",
+		id: "ecloserieNurserieDiploide",
+	},
+	{
+		label: "Triploïde",
+		id: "ecloserieNurserieTriploide",
+	},
+] as const;
 export const DESTINATIONS_NAISSAIN = [
 	{
 		label: "En France",
@@ -177,8 +202,7 @@ export const DESTINATIONS_NAISSAIN = [
 ] as const;
 
 export const DESTINATIONS_NAISSAIN_IDS = DESTINATIONS_NAISSAIN.map((e) => e.id);
-export type DESTINATIONS_NAISSAIN_ID =
-	(typeof DESTINATIONS_NAISSAIN_IDS)[number];
+export type DestinationNaissainId = (typeof DESTINATIONS_NAISSAIN_IDS)[number];
 
 export const ALEAS = [
 	{
@@ -204,7 +228,7 @@ export const ALEAS = [
 ] as const;
 
 export const ALEAS_IDS = ALEAS.map((e) => e.id);
-export type ALEAS_ID = (typeof ALEAS_IDS)[number];
+export type AleaId = (typeof ALEAS_IDS)[number];
 
 // TODO: pluriel
 export const MODE_ELEVAGE = [
@@ -245,6 +269,8 @@ export const MODE_ELEVAGE = [
 		especes: null,
 	},
 ] as const;
+
+export const MODES_ELEVAGE_IDS = MODE_ELEVAGE.map((e) => e.id);
 
 // https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
 // TODO standardiser les clés: id / label
@@ -304,7 +330,7 @@ export const QUARTIERS_IMMATRICULATION = [
 export const QUARTIERS_IMMATRICULATION_IDS = QUARTIERS_IMMATRICULATION.map(
 	(e) => e.code,
 );
-export type QUARTIERS_IMMATRICULATION_ID =
+export type QuartierImmatriculationId =
 	(typeof QUARTIERS_IMMATRICULATION_IDS)[number];
 
 export const DIPLOMES = [

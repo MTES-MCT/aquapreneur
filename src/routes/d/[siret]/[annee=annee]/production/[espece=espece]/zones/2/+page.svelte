@@ -1,28 +1,69 @@
 <script lang="ts">
-	import type { FormEventHandler } from "svelte/elements";
-
-	import { goto } from "$app/navigation";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { QUARTIERS_IMMATRICULATION } from "$lib/constants";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { PositiveInt } from "$lib/types";
 
 	const { data } = $props();
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("./3");
-	};
+	merge(data.donneesEspece, {
+		zonesProduction: {},
+	});
 
-	const zones = ["AC", "LR", "BL", "LS"];
+	const activeZonesIds = Object.keys(data.donneesEspece.zonesProduction ?? {});
+	const activeZones = QUARTIERS_IMMATRICULATION.filter((q) =>
+		activeZonesIds.includes(q.code),
+	);
+
+	const schema = z.object({
+		data: z.record(
+			z.enum(activeZonesIds),
+			z.object({
+				surfaceHa: PositiveInt,
+			}),
+		),
+	});
+
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			persona: data.persona,
+			isLastStep: () => false,
+			getNextPage: () => "./3",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
+					data.progressionProdEspece.zones = statut;
+				}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.donneesEspece.zonesProduction, form.data.data);
+				return data.declaration;
+			},
+		},
+		defaults(zod4(schema)),
+	);
+
+	// @ts-expect-error typage à revoir
+	$form.data = data.donneesEspece.zonesProduction;
 </script>
 
 <div>
-	<p class="fr-text--xl">Quelle surface détenez-vous dans chaque zone ?</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	<p class="fr-text--xl"></p>
+	<form method="POST" use:enhance>
 		<Fieldset>
+			{#snippet legend()}
+				<h2 class="fr-h4">Quelle surface détenez-vous dans chaque zone ?</h2>
+			{/snippet}
+
 			{#snippet inputs()}
 				<div class="fr-table fr-table--lg">
 					<div class="fr-table__wrapper">
@@ -36,14 +77,14 @@
 										</tr>
 									</thead>
 									<tbody>
-										{#each QUARTIERS_IMMATRICULATION.filter( (q) => zones.includes(q.code), ) as q (q.code)}
+										{#each activeZones as q (q.code)}
 											<tr>
 												<td>{q.nom}</td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														autocomplete="off"
+													<InputGroup
+														type="number"
+														bind:value={$form.data[q.code].surfaceHa}
+														errors={$errors?.data?.[q.code]?.surfaceHa}
 													/>
 												</td>
 											</tr>
@@ -64,3 +105,5 @@
 		/>
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>

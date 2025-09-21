@@ -3,6 +3,8 @@ import { z } from "zod";
 import type { ANNEES_DECLARATIVES } from "./constants";
 
 export const ERR_MUST_CHOOSE_ANSWER = "Veuillez choisir une réponse";
+export const ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER =
+	"Veuillez selectionner au moins une réponse";
 export const ERR_REQUIRED = "Veuillez renseigner ce champ";
 export const ERR_POSITIVE_NUM = "Veuillez renseigner un nombre positif";
 export const ERR_INT = "Veuillez renseigner un nombre entier";

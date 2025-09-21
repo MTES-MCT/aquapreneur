@@ -1,36 +1,84 @@
 <script lang="ts">
-	import type { FormEventHandler } from "svelte/elements";
-
-	import { goto } from "$app/navigation";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
+	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { QUARTIERS_IMMATRICULATION } from "$lib/constants";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { Percent } from "$lib/types";
+	import { formatNum } from "$lib/utils";
 
 	const { data } = $props();
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("./5");
-	};
+	merge(data.donneesEspece, {
+		zonesProduction: {},
+	});
 
-	const zones = ["AC", "LR", "BL", "LS"];
+	const activeZonesIds = Object.keys(data.donneesEspece.zonesProduction ?? {});
+	const activeZones = QUARTIERS_IMMATRICULATION.filter((q) =>
+		activeZonesIds.includes(q.code),
+	);
+
+	const schema = z.object({
+		data: z.record(
+			z.enum(activeZonesIds),
+			z.object({
+				partStockDemiElevage: Percent,
+				pertesDemiElevage: Percent,
+			}),
+		),
+	});
+
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			persona: data.persona,
+			isLastStep: () => false,
+			getNextPage: () => "./5",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
+					data.progressionProdEspece.zones = statut;
+				}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				merge(data.donneesEspece.zonesProduction, form.data.data);
+				return data.declaration;
+			},
+		},
+		defaults(zod4(schema)),
+	);
+
+	// @ts-expect-error typage à revoir
+	$form.data = data.donneesEspece.zonesProduction;
 </script>
 
 <div>
-	<p class="fr-text--xl">Où a été réalisé le captage du naissain ?</p>
-
-	<p>
-		Au 1er juin {data.annee}, vous aviez
-		<strong>TODO</strong>
-		unités de naissain en stock. Veuillez indiquer la part du stock présente chaque
-		zone, et les pertes estimées au cours de l’année. La somme des parts du stock
-		doit être égale à 100 %.
-	</p>
-	<form method="POST" onsubmit={handleSubmit}>
+	<form method="POST" use:enhance>
 		<Fieldset>
+			{#snippet legend()}
+				<h2 class="fr-h4">Où a été réalisé le demi-élevage ?</h2>
+				<p class="fr-text--sm fr-text--light">
+					Au 1er juin {data.annee}, vous aviez
+					<strong>
+						{formatNum(data.donneesEspece.demiElevage?.stock?.stockKg ?? 0)}
+					</strong>
+					kilos d’huître creuse au stade de demi-élevage. Veuillez indiquer la part
+					du stock présente chaque zone, et les pertes estimées au cours de l’année.
+					La somme des parts du stock doit être égale à 100 %.
+				</p>
+
+				<p class="fr-text--md">
+					Reste :
+					<span class="fr-text--bold">x %</span>
+				</p>
+			{/snippet}
+
 			{#snippet inputs()}
 				<div class="fr-table fr-table--lg">
 					<div class="fr-table__wrapper">
@@ -40,26 +88,29 @@
 									<thead>
 										<tr style="cell-w:20rem">
 											<th style="min-width: 15rem">Zone</th>
-											<th>Part du stock (%)</th>
-											<th>Pertes estimées (%)</th>
+											<th class="fr-cell--center">
+												Part du stock (%) <br />
+											</th>
+											<th class="fr-cell--center">Pertes estimées (%)</th>
 										</tr>
 									</thead>
 									<tbody>
-										{#each QUARTIERS_IMMATRICULATION.filter( (q) => zones.includes(q.code), ) as q (q.code)}
+										{#each activeZones as q (q.code)}
 											<tr>
 												<td>{q.nom}</td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														autocomplete="off"
+													<InputGroup
+														type="number"
+														bind:value={$form.data[q.code].partStockDemiElevage}
+														errors={$errors?.data?.[q.code]
+															?.partStockDemiElevage}
 													/>
 												</td>
 												<td>
-													<input
-														class="fr-input"
-														type="text"
-														autocomplete="off"
+													<InputGroup
+														type="number"
+														bind:value={$form.data[q.code].pertesDemiElevage}
+														errors={$errors?.data?.[q.code]?.pertesDemiElevage}
 													/>
 												</td>
 											</tr>
@@ -80,3 +131,12 @@
 		/>
 	</form>
 </div>
+
+<FormDebug
+	{form}
+	{errors}
+	data={{
+		zonesProduction: data.donneesEspece.zonesProduction,
+		demiElevage: data.donneesEspece.demiElevage,
+	}}
+></FormDebug>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 
 	import Recap1 from "../details/saisonniers/1/recap.svelte";
 	import Recap2 from "../details/saisonniers/2/recap.svelte";
@@ -7,7 +7,7 @@
 	const {
 		saisonniers,
 	}: {
-		saisonniers: DeclarationSchema["equipe"]["saisonniers"];
+		saisonniers: DonneesDeclaration["equipe"]["saisonniers"];
 	} = $props();
 </script>
 

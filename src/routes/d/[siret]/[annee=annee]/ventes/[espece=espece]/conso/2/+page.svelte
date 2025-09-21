@@ -1,77 +1,112 @@
 <script lang="ts">
-	import cloneDeep from "lodash/cloneDeep";
-
-	import type { FormEventHandler } from "svelte/elements";
-
-	import { goto } from "$app/navigation";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import {
 		DESTINATIONS_VENTES_CONSO_FRANCE,
-		type DESTINATIONS_VENTES_CONSO_FRANCE_ID,
+		DESTINATIONS_VENTES_CONSO_FRANCE_IDS,
 	} from "$lib/constants";
-	import { dVentes } from "$lib/declaration-utils";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
+	merge(data.donneesEspece, { consommation: { destination: { france: {} } } });
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("./3");
-	};
+	const schema = z.object({
+		destination: z
+			.literal(DESTINATIONS_VENTES_CONSO_FRANCE_IDS)
+			.array()
+			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER)
+			.default(
+				DESTINATIONS_VENTES_CONSO_FRANCE_IDS.filter(
+					(d) =>
+						data.donneesEspece.consommation!.destination!.france![d] != null,
+				),
+			),
+	});
 
-	const handleCheck = (
-		checked: boolean,
-		id: DESTINATIONS_VENTES_CONSO_FRANCE_ID,
-	) => {
-		const v = dVentes(
-			donnees,
-			data.espece.id,
-		).consommation.destination.france.detail(id);
-		if (checked) {
-			v.enable();
-		} else {
-			v.disable();
-		}
-	};
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			persona: data.persona,
+			isLastStep: () => !data.donneesEspece.consommation!.destination,
+			getNextPage: () =>
+				data.donneesEspece.consommation!.destination ?
+					"./3"
+				:	"../recapitulatif",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionVentesEspece.consommation)) {
+					data.progressionVentesEspece.consommation = statut;
+				}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				DESTINATIONS_VENTES_CONSO_FRANCE_IDS.forEach((d) => {
+					if (form.data.destination.includes(d)) {
+						merge(data.donneesEspece.consommation!.destination!.france, {
+							[d]: {},
+						});
+					} else {
+						delete data.donneesEspece.consommation!.destination!.france![d];
+					}
+				});
+				return data.declaration;
+			},
+		},
+		defaults(zod4(schema)),
+	);
 </script>
 
-<div>
-	<p class="fr-text--xl">
-		En France, quels ont été les circuits de distribution ?
-	</p>
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
-			{#snippet legend()}
+<form method="POST" use:enhance>
+	<Fieldset hasError={!!$errors?.destination?._errors}>
+		{#snippet legend()}
+			<h2 class="fr-h4 fr-mb-1w">
+				En France, quels ont été les circuits de distribution ?
+			</h2>
+			<p class="fr-text--light fr-text--sm">
 				Vous pouvez sélectionner une ou plusieurs réponses.
-			{/snippet}
+			</p>
+		{/snippet}
 
-			{#snippet inputs()}
-				{#each DESTINATIONS_VENTES_CONSO_FRANCE as destination (destination.id)}
-					{@const destId = destination.id}
-					<CheckboxGroup
-						name={destId}
-						id={destId}
-						checked={dVentes(donnees, data.espece.id)
-							.consommation.destination.france.detail(destId)
-							.active()}
-						onCheck={(event) =>
-							handleCheck(event.currentTarget.checked, destId)}
-					>
-						{#snippet label()}{destination.label}{/snippet}
-					</CheckboxGroup>
-				{/each}
-			{/snippet}
-		</Fieldset>
-		<NavigationLinks
-			prevHref="./1"
-			nextIsButton
-			cantAnswerBtn={data.persona === "comptable"}
-		/>
-	</form>
-</div>
+		{#snippet inputs(id)}
+			{#each DESTINATIONS_VENTES_CONSO_FRANCE as destination (destination.id)}
+				{@const destId = destination.id}
+				<CheckboxGroup>
+					{#snippet input(id)}
+						<input
+							type="checkbox"
+							aria-describedby="checkbox-{id}-messages"
+							{id}
+							value={destId}
+							bind:group={$form.destination}
+							autocomplete="off"
+						/>
+					{/snippet}
+					{#snippet label()}{destination.label}{/snippet}
+				</CheckboxGroup>
+			{/each}
+			{#if $errors?.destination?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors.destination._errors}
+					</p>
+				</div>
+			{/if}
+		{/snippet}
+	</Fieldset>
+
+	<NavigationLinks
+		prevHref="./1"
+		nextIsButton
+		cantAnswerBtn={data.persona === "comptable"}
+	/>
+</form>
+
+<FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>

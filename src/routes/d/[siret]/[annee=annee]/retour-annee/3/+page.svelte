@@ -20,9 +20,10 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
+			isLastStep: () => true,
 			getNextPage: () => "./recapitulatif",
-			updateProgress: () => {
+			updateProgress: (statut) => {
+				data.progressionRetourAnnee.suggestions = statut;
 				return data.declaration;
 			},
 			updateData: (form) => {

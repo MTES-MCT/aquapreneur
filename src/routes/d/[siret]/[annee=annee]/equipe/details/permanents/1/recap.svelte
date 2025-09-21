@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { TYPES_DUREE_TRAVAIL } from "$lib/constants";
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 
 	const {
 		permanents,
 	}: {
-		permanents: DeclarationSchema["equipe"]["permanents"];
+		permanents: DonneesDeclaration["equipe"]["permanents"];
 	} = $props();
 </script>
 

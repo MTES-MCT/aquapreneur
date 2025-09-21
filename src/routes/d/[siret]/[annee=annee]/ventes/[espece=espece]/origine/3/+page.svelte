@@ -8,28 +8,17 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { ORIGINES_NAISSAIN } from "$lib/constants";
-	import { prepareForm } from "$lib/form-utils.js";
-	import { Percent, PositiveNumber } from "$lib/types";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { Percent } from "$lib/types";
 
 	const { data } = $props();
 
-	const origine =
-		data.declaration.donnees.ventes[data.espece.id]!.consommation?.origine;
+	merge(data.donneesEspece, { consommation: {} });
+
+	const bio = data.donneesEspece.consommation?.bio;
 
 	const schema = z.object({
-		captage: z.object({
-			part: Percent.default(origine?.captage?.part ?? 0),
-			value: PositiveNumber.default(origine?.captage?.value ?? 0),
-		}),
-		ecloserieDiploide: z.object({
-			part: Percent.default(origine?.ecloserieDiploide?.part ?? 0),
-			value: PositiveNumber.default(origine?.ecloserieDiploide?.value ?? 0),
-		}),
-		ecloserieTriploide: z.object({
-			part: Percent.default(origine?.ecloserieTriploide?.part ?? 0),
-			value: PositiveNumber.default(origine?.ecloserieTriploide?.value ?? 0),
-		}),
+		part: Percent.default(bio?.part ?? 0),
 	});
 
 	const { form, errors, enhance } = prepareForm(
@@ -37,13 +26,16 @@
 			schema,
 			persona: data.persona,
 			isLastStep: () => false,
-			getNextPage: () => "../../recapitulatif",
-			updateProgress: () => {
+			getNextPage: () => "./4",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionVentesEspece.origine)) {
+					data.progressionVentesEspece.origine = statut;
+				}
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(data.declaration.donnees.ventes, {
-					[data.espece.id]: { consommation: { origine: form.data } },
+				merge(data.declaration.donnees.especes, {
+					[data.espece.id]: { consommation: { bio: form.data } },
 				});
 				return data.declaration;
 			},
@@ -53,65 +45,28 @@
 </script>
 
 <div>
-	<p class="fr-text--xl">
-		Quelle part des ventes à la consommation est issue du captage ou d’écloserie
-		?
-	</p>
-
-	<p>
-		Vous pouvez répondre en indiquant un montant ou un pourcentage sur les
-		quantités vendues.
-	</p>
-
-	<form method="POST" use:enhance>
+	<p class="fr-text--xl"></p>
+	<form use:enhance>
 		<Fieldset>
-			{#snippet inputs()}
-				<div class="fr-table fr-table--lg">
-					<div class="fr-table__wrapper">
-						<div class="fr-table__container">
-							<div class="fr-table__content">
-								<table class="fr-cell--multiline">
-									<thead>
-										<tr>
-											<th>Origine et ploïdie</th>
-											<th>
-												Pourcentage <span class="fr-text--regular">(%)</span>
-											</th>
-											<th>
-												Montant des ventes <span class="fr-text--regular">
-													(€ HT)
-												</span>
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{#each ORIGINES_NAISSAIN as origine (origine.id)}
-											<tr>
-												<td>{origine.label}</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[origine.id].part}
-														errors={$errors[origine.id]?.part}
-													></InputGroup>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form[origine.id].value}
-														errors={$errors[origine.id]?.value}
-													></InputGroup>
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>{/snippet}
-		</Fieldset>
+			{#snippet legend()}
+				<h2 class="fr-h4">Quelle part de la production est certifiée Bio ?</h2>
+			{/snippet}
 
+			{#snippet inputs()}
+				<InputGroup
+					type="number"
+					bind:value={$form.part}
+					errors={$errors?.part as string[]}
+					required
+				>
+					{#snippet label()}Part certifiée Agriculture biologique (AB) (%)
+						<span class="fr-hint-text">
+							Sur les quantités vendues à la consommation
+						</span>
+					{/snippet}
+				</InputGroup>
+			{/snippet}
+		</Fieldset>
 		<NavigationLinks
 			prevHref="./2"
 			nextIsButton
@@ -120,9 +75,5 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.declaration.donnees.ventes[data.espece.id]}
-	progression={data.declaration.donnees.progression}
+<FormDebug {form} {errors} data={data.donneesEspece.consommation!.bio}
 ></FormDebug>

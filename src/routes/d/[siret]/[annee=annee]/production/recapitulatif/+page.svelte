@@ -1,65 +1,135 @@
 <script lang="ts">
 	import capitalize from "lodash/capitalize";
-	import cloneDeep from "lodash/cloneDeep";
+	import merge from "lodash/merge";
+	import SuperDebug from "sveltekit-superforms";
+
+	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
 
+	import { env } from "$env/dynamic/public";
+
+	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
-	import { dProd } from "$lib/declaration-utils";
-	import { StatutProgression } from "$lib/schemas/declaration-schema";
+	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
-
 	const especes = $derived(
-		ESPECES.filter((e) => dProd(donnees, e.id).active()),
+		ESPECES.filter((e) => data.donneesEspeces[e.id] != null),
 	);
+
+	const saisieTerminée = $derived.by(() => {
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+			"validé producteur",
+		];
+		return Object.values(data.progressionProduction?.especes || {}).every(
+			(p) =>
+				statutsFinalises.includes(p?.origine) &&
+				statutsFinalises.includes(p?.elevage) &&
+				statutsFinalises.includes(p?.zones),
+		);
+	});
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		event.preventDefault();
+		if (data.persona === "comptable") {
+			data.progressionProduction.globale = "validé comptable";
+		} else {
+			data.progressionProduction.globale = "validé producteur";
+		}
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
+		goto("../ventes");
+	};
 </script>
 
-{#snippet recapLine(title: string, status: StatutProgression, link: string)}
-	<RecapLine
-		label={title}
-		{status}
-		icon="fr-icon-list-unordered"
-		onEdit={async () => goto(link)}
+<div class="titre">
+	<h1 class="fr-h4">Production</h1>
+	<button
+		class="fr-btn fr-btn--tertiary fr-btn--sm"
+		onclick={() => {
+			goto(`./selection-especes`);
+		}}
 	>
-		TODO tableau récap
-	</RecapLine>
-{/snippet}
+		Modifier les espèces
+	</button>
+</div>
 
-<div>
-	<div class="titre">
-		<h1 class="fr-h2">Production</h1>
-		<button
-			class="fr-btn fr-btn--tertiary fr-btn--sm"
-			onclick={() => {
-				goto(`./selection-especes`);
+{#each especes as espece (espece.id)}
+	<h2 class="fr-h6 fr-mt-10v fr-mb-2w">{capitalize(espece.label)}</h2>
+
+	<div data-fr-group="true" class="fr-accordions-group">
+		<RecapLine
+			label="Origine et mode d’élevage"
+			status={data.progressionProduction.especes[espece.id]?.origine}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					origine:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/origine/1`);
 			}}
 		>
-			Modifier les espèces
-		</button>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Volume en stock"
+			status={data.progressionProduction.especes[espece.id]?.elevage}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					elevage:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/elevage/1`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Zones de production et pertes"
+			status={data.progressionProduction.especes[espece.id]?.zones}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionProduction.especes[espece.id], {
+					zones:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				await submitDeclarationUpdate(data.declaration);
+				goto(`./${espece.slug}/zones/1`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
 	</div>
+{/each}
 
-	{#each especes as espece (espece.id)}
-		<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
+{#if saisieTerminée}
+	<form method="POST" onsubmit={handleSubmit}>
+		<NavigationLinks nextIsButton center />
+	</form>
+{/if}
 
-		<div data-fr-group="true" class="fr-accordions-group">
-			{@render recapLine(
-				"Origine et mode d’élevage",
-				null,
-				`./${espece.slug}/origine/1`,
-			)}
-			{@render recapLine("Volume en stock", null, `./${espece.slug}/elevage/1`)}
-			{@render recapLine(
-				"Zones de production et pertes",
-				null,
-				`./${espece.slug}/zones/1`,
-			)}
-		</div>
-	{/each}
-</div>
+{#if env.PUBLIC_DEBUG_FORM}
+	<div class="fr-mt-10w">
+		<SuperDebug data={data.donneesEspeces} label="BDD" />
+	</div>
+{/if}
 
 <style>
 	.titre {

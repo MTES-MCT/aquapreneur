@@ -1,9 +1,9 @@
 <script lang="ts">
 	import SuperDebug from "sveltekit-superforms";
 
-	import { dev } from "$app/environment";
+	import { env } from "$env/dynamic/public";
 
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 	import type { Persona } from "$lib/types";
 	import { partFilled } from "$lib/utils";
 
@@ -18,7 +18,7 @@
 	}: {
 		step: DeclarationStep;
 		baseUrl: string;
-		donnees: DeclarationSchema;
+		donnees: DonneesDeclaration;
 		nomEtablissement: string;
 		persona: Persona;
 	} = $props();
@@ -110,8 +110,10 @@
 			</ul>
 		</div>
 
-		{#if dev}
-			<SuperDebug data={donnees.progression} />
+		{#if env.PUBLIC_DEBUG_FORM}
+			<div class="fr-mr-2w">
+				<SuperDebug data={donnees.progression} status={false} label="États" />
+			</div>
 		{/if}
 	</div>
 </nav>

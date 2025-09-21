@@ -7,8 +7,8 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group2.svelte";
-	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
+	import RadioGroup from "$lib/components/radio-group.svelte";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
 
 	const { data } = $props();
@@ -48,6 +48,7 @@
 </script>
 
 <div>
+	<!-- TODO h et déplacer vers legend() -->
 	<p class="fr-text--xl">
 		L’entreprise a-t-elle disposé d’une main d’oeuvre saisonnière ?
 	</p>
@@ -105,9 +106,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.equipe.saisonniers}
-	progression={data.progressionEquipe}
-></FormDebug>
+<FormDebug {form} {errors} data={data.equipe.saisonniers}></FormDebug>

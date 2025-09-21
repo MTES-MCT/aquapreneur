@@ -52,7 +52,6 @@ describe("Tests de manipulation des déclarations", async () => {
 
 	test("`test réel", async () => {
 		const declaration = {
-			aProduit: true,
 			retourAnnee: {
 				aleas: [],
 				aleasDetails: null,
@@ -118,7 +117,6 @@ describe("Tests de manipulation des déclarations", async () => {
 		};
 
 		expect(deepClean(declaration)).toEqual({
-			aProduit: true,
 			etablissement: {
 				siret: "xxx",
 				denomination: "yyy",

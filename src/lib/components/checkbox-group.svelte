@@ -1,38 +1,26 @@
 <script lang="ts">
-	import type { FormEventHandler } from "svelte/elements";
-
 	import type { Snippet } from "svelte";
 
 	let {
+		input,
 		label,
-		name,
-		id,
-		checked,
-		disabled,
-		onCheck,
 		small = false,
 	}: {
+		input: Snippet<[string]>;
 		label: Snippet;
-		name: string;
-		id: string;
-		checked?: boolean;
-		disabled?: boolean;
-		onCheck: FormEventHandler<HTMLInputElement>;
 		small?: boolean;
 	} = $props();
+	const id = $props.id();
 </script>
 
 <div class={["fr-fieldset__element", small && "fr-checkbox-group--sm"]}>
 	<div class="fr-checkbox-group">
-		<input
-			{id}
-			{name}
-			{checked}
-			{disabled}
-			type="checkbox"
-			onchange={(event) => onCheck(event)}
-			autocomplete="off"
-		/>
+		{@render input(id)}
 		<label class="fr-label" for={id}>{@render label()}</label>
+		<div
+			class="fr-messages-group"
+			id="checkbox-{id}-messages"
+			aria-live="polite"
+		></div>
 	</div>
 </div>

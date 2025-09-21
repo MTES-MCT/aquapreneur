@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { TYPES_CONTRAT } from "$lib/constants";
-	import type { DeclarationSchema } from "$lib/schemas/declaration-schema";
+	import type { DonneesDeclaration } from "$lib/schemas/donnees-declaration-schema";
 
 	const {
 		saisonniers,
 	}: {
-		saisonniers: DeclarationSchema["equipe"]["saisonniers"];
+		saisonniers: DonneesDeclaration["equipe"]["saisonniers"];
 	} = $props();
 </script>
 

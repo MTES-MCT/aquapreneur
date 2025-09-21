@@ -9,7 +9,7 @@
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { TYPES_CONTRAT } from "$lib/constants";
-	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils.js";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { PositiveInt } from "$lib/types";
 
 	const { data } = $props();
@@ -117,9 +117,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.equipe.saisonniers}
-	progression={data.progressionEquipe}
-></FormDebug>
+<FormDebug {form} {errors} data={data.equipe.saisonniers}></FormDebug>

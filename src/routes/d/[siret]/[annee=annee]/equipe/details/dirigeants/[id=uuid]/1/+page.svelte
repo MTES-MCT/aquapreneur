@@ -7,7 +7,7 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import RadioGroup from "$lib/components/radio-group2.svelte";
+	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
 
@@ -91,9 +91,4 @@
 	</form>
 </div>
 
-<FormDebug
-	{form}
-	{errors}
-	data={data.dirigeant}
-	progression={data.progressionDirigeant}
-></FormDebug>
+<FormDebug {form} {errors} data={data.dirigeant}></FormDebug>

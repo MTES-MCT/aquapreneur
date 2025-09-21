@@ -20,9 +20,10 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
+			isLastStep: () => true,
 			getNextPage: () => "./3",
-			updateProgress: () => {
+			updateProgress: (statut) => {
+				data.progressionRetourAnnee.difficultes = statut;
 				return data.declaration;
 			},
 			updateData: (form) => {

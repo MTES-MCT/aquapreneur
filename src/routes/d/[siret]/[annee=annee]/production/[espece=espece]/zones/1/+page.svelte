@@ -1,21 +1,54 @@
 <script lang="ts">
-	import type { FormEventHandler } from "svelte/elements";
-
-	import { goto } from "$app/navigation";
+	import merge from "lodash/merge";
+	import { defaults } from "sveltekit-superforms";
+	import { zod4 } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
 
 	import CheckboxGroup from "$lib/components/checkbox-group.svelte";
 	import Fieldset from "$lib/components/fieldset.svelte";
+	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { QUARTIERS_IMMATRICULATION } from "$lib/constants";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import {
+		QUARTIERS_IMMATRICULATION,
+		QUARTIERS_IMMATRICULATION_IDS,
+	} from "$lib/constants";
+	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 
 	const { data } = $props();
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-		event.preventDefault();
-		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
-		goto("./2");
-	};
+	merge(data.donneesEspece, {
+		zonesProduction: {},
+	});
+
+	const schema = z.object({
+		zones: z.literal(QUARTIERS_IMMATRICULATION_IDS).array(),
+	});
+
+	const { form, errors, enhance } = prepareForm(
+		{
+			schema,
+			persona: data.persona,
+			isLastStep: () => false,
+			getNextPage: () => "./2",
+			updateProgress: (statut) => {
+				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
+					data.progressionProdEspece.zones = statut;
+				}
+				return data.declaration;
+			},
+			updateData: (form) => {
+				QUARTIERS_IMMATRICULATION_IDS.forEach((q) => {
+					if (form.data.zones.includes(q)) {
+						merge(data.donneesEspece.zonesProduction, { [q]: {} });
+					} else {
+						delete data.donneesEspece.zonesProduction?.[q];
+					}
+				});
+				return data.declaration;
+			},
+		},
+		defaults(zod4(schema)),
+	);
 
 	const localisations = [
 		"Atlantique",
@@ -27,7 +60,8 @@
 
 	let modal: Node;
 
-	const zones = ["AC", "LR", "BL", "LS"];
+	// @ts-expect-error typage à revoir
+	$form.zones = Object.keys(data.donneesEspece.zonesProduction ?? {});
 </script>
 
 <dialog
@@ -61,13 +95,17 @@
 									{#each localisations as localisation (localisation)}
 										<h3 class="fr-h6">{localisation}</h3>
 										{#each QUARTIERS_IMMATRICULATION.filter((q) => q.localisation === localisation) as q (q.code)}
-											<CheckboxGroup
-												name={q.code}
-												id={q.code}
-												small
-												checked={zones.includes(q.code)}
-												onCheck={() => {}}
-											>
+											<CheckboxGroup>
+												{#snippet input(id)}
+													<input
+														type="checkbox"
+														aria-describedby="checkbox-{id}-messages"
+														{id}
+														value={q.code}
+														bind:group={$form.zones}
+														autocomplete="off"
+													/>
+												{/snippet}
 												{#snippet label()}{q.nom}{/snippet}
 											</CheckboxGroup>
 										{/each}
@@ -75,7 +113,7 @@
 								{/snippet}
 							</Fieldset>
 							<NavigationLinks>
-								<button
+								<!-- <button
 									class="fr-btn fr-btn--secondary fr-mr-3w"
 									onclick={() => {
 										// @ts-expect-error `dsfr` est global
@@ -83,11 +121,10 @@
 									}}
 								>
 									Annuler
-								</button>
+								</button> -->
 								<button
 									class="fr-btn"
 									onclick={() => {
-										// TODO : propager la selection
 										// @ts-expect-error `dsfr` est global
 										window.dsfr(modal).modal.conceal();
 									}}
@@ -95,6 +132,7 @@
 									Confirmer la selection
 								</button>
 							</NavigationLinks>
+							<FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>
 						</div>
 					</div>
 				</div>
@@ -104,16 +142,38 @@
 </dialog>
 
 <div>
-	<p class="fr-text--xl">Où est située votre production ?</p>
-	<form method="POST" onsubmit={handleSubmit}>
-		<Fieldset>
-			{#snippet inputs()}
-				{#each QUARTIERS_IMMATRICULATION.filter( (q) => zones.includes(q.code), ) as q (q.code)}
-					<CheckboxGroup name={q.code} id={q.code} checked onCheck={() => {}}>
+	<form method="POST" use:enhance>
+		<Fieldset hasError={!!$errors?.zones?._errors}>
+			{#snippet legend()}
+				<h2 class="fr-h4 fr-mb-1w">Où est située votre production ?</h2>
+
+				<p class="fr-text--sm fr-text--light">
+					Vous pouvez sélectionner une ou plusieurs réponses.
+				</p>
+			{/snippet}
+			{#snippet inputs(id)}
+				{#each QUARTIERS_IMMATRICULATION.filter( (q) => $form.zones.includes(q.code), ) as q (q.code)}
+					<CheckboxGroup>
+						{#snippet input(id)}
+							<input
+								type="checkbox"
+								aria-describedby="checkbox-{id}-messages"
+								{id}
+								value={q.code}
+								bind:group={$form.zones}
+								autocomplete="off"
+							/>
+						{/snippet}
 						{#snippet label()}{q.nom}{/snippet}
 					</CheckboxGroup>
 				{/each}
-
+				{#if $errors?.zones?._errors}
+					<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+						<p class="fr-message fr-message--error" id="{id}-errors">
+							{$errors.zones._errors}
+						</p>
+					</div>
+				{/if}
 				<button
 					class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-2w fr-icon-add-line fr-btn--icon-right"
 					aria-controls="modal-zones-edit"
@@ -131,3 +191,5 @@
 		/>
 	</form>
 </div>
+
+<FormDebug {form} {errors} data={data.donneesEspece}></FormDebug>

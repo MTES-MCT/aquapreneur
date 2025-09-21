@@ -1,83 +1,156 @@
 <script lang="ts">
 	import capitalize from "lodash/capitalize";
-	import cloneDeep from "lodash/cloneDeep";
+	import merge from "lodash/merge";
+	import SuperDebug from "sveltekit-superforms";
+
+	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
 
+	import { env } from "$env/dynamic/public";
+
+	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
-	import { dVentes } from "$lib/declaration-utils";
-	import { StatutProgression } from "$lib/schemas/declaration-schema";
+	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
+	import { submitDeclarationUpdate } from "$lib/utils";
 
 	const { data } = $props();
 
-	let donnees = $state(cloneDeep(data.declaration.donnees));
-
 	const especes = $derived(
-		ESPECES.filter((e) => dVentes(donnees, e.id).active()),
+		ESPECES.filter((e) => data.donneesEspeces[e.id] != null),
 	);
+
+	const saisieTerminée = $derived.by(() => {
+		const statutsFinalises: StatutProgression[] = [
+			"passage producteur nécessaire",
+			"validé comptable",
+			"validé producteur",
+		];
+		return Object.values(data.progressionVentes?.especes || {}).every(
+			(p) =>
+				statutsFinalises.includes(p?.consommation) &&
+				statutsFinalises.includes(p?.elevage) &&
+				statutsFinalises.includes(p?.naissainCaptage) &&
+				statutsFinalises.includes(p?.naissainEcloserieNurserie) &&
+				statutsFinalises.includes(p?.origine),
+		);
+	});
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+		event.preventDefault();
+		if (data.persona === "comptable") {
+			data.progressionVentes.globale = "validé comptable";
+		} else {
+			data.progressionVentes.globale = "validé producteur";
+		}
+		data.declaration.donnees = await submitDeclarationUpdate(data.declaration);
+		goto("../retourAnnee");
+	};
 </script>
 
-{#snippet recapLine(title: string, status: StatutProgression, link: string)}
-	<RecapLine
-		label={title}
-		{status}
-		icon="fr-icon-list-unordered"
-		onEdit={async () => goto(link)}
-	>
-		TODO tableau récap
-	</RecapLine>
-{/snippet}
+<h1 class="fr-h4">Ventes</h1>
 
-<div>
-	<div class="bandeau-titre">
-		<h1 class="fr-h2">Ventes</h1>
-		<button
-			class="fr-btn fr-btn--tertiary fr-btn--sm"
-			onclick={() => {
-				goto(`./2`);
+{#each especes as espece (espece.id)}
+	<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
+
+	<div data-fr-group="true" class="fr-accordions-group">
+		<RecapLine
+			label="Ventes à la consommation"
+			status={data.progressionVentes.especes[espece.id]?.consommation}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionVentes.especes[espece.id], {
+					consommation:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				goto(`./${espece.slug}/conso/`);
 			}}
 		>
-			Modifier les espèces
-		</button>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Ventes à l’élevage"
+			status={data.progressionVentes.especes[espece.id]?.elevage}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionVentes.especes[espece.id], {
+					elevage:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				goto(`./${espece.slug}/elevage/`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Vente de naissain capté"
+			status={data.progressionVentes.especes[espece.id]?.naissainCaptage}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionVentes.especes[espece.id], {
+					naissainCaptage:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				goto(`./${espece.slug}/naissain-captage/`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Vente de naissain d’écloserie/nurserie"
+			status={data.progressionVentes.especes[espece.id]
+				?.naissainEcloserieNurserie}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionVentes.especes[espece.id], {
+					naissainEcloserieNurserie:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
+
+		<RecapLine
+			label="Finition et traçabilité"
+			status={data.progressionVentes.especes[espece.id]?.origine}
+			icon="fr-icon-list-unordered"
+			onEdit={async () => {
+				merge(data.progressionVentes.especes[espece.id], {
+					origine:
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur",
+				});
+				goto(`./${espece.slug}/origine/`);
+			}}
+		>
+			TODO tableau récap
+		</RecapLine>
 	</div>
+{/each}
 
-	{#each especes as espece (espece.id)}
-		<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
+{#if saisieTerminée}
+	<form method="POST" onsubmit={handleSubmit}>
+		<NavigationLinks nextIsButton center />
+	</form>
+{/if}
 
-		<div data-fr-group="true" class="fr-accordions-group">
-			{@render recapLine(
-				"Ventes à la consommation",
-				null,
-				`./${espece.slug}/conso/`,
-			)}
-
-			{@render recapLine(
-				"Ventes à l’élevage",
-				null,
-				`./${espece.slug}/elevage/`,
-			)}
-
-			{#if dVentes(donnees, espece.id).naissain.active()}
-				{@render recapLine(
-					"Vente de naissain",
-					null,
-					`./${espece.slug}/naissain/`,
-				)}
-			{/if}
-			{@render recapLine(
-				"Origine, finition et certification",
-				null,
-				`./${espece.slug}/origine/`,
-			)}
-		</div>
-	{/each}
-</div>
-
-<style>
-	.bandeau-titre {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-	}
-</style>
+{#if env.PUBLIC_DEBUG_FORM}
+	<div class="fr-mt-10w">
+		<SuperDebug data={data.donneesEspeces} label="BDD" />
+	</div>
+{/if}
