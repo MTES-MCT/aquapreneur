@@ -59,7 +59,6 @@
 	{#each data.declaration.donnees.equipe.dirigeants as dir, index (dir.id)}
 		<VerifLine
 			label={dir.prenomNom ?? `Dirigeant ou associé n° ${index + 1}`}
-			icon="fr-icon-user-line"
 			onEdit={async () => {
 				goto(`./details/dirigeants/${dir.id}/1`);
 			}}
@@ -74,7 +73,6 @@
 <div data-fr-group="true" class="fr-accordions-group">
 	<VerifLine
 		label="Employés permanents"
-		icon="fr-icon-group-line"
 		onEdit={async () => {
 			goto(`./details/permanents`);
 		}}
@@ -85,7 +83,6 @@
 
 	<VerifLine
 		label="Employés saisonniers"
-		icon="fr-icon-group-line"
 		onEdit={async () => {
 			goto(`./details/saisonniers`);
 		}}
