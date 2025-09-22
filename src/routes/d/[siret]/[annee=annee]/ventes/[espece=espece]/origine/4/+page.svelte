@@ -113,7 +113,8 @@
 						</div>
 					</div>
 				</div>
-			</div>{/snippet}
+			</div>
+		{/snippet}
 	</Fieldset>
 
 	<NavigationLinks

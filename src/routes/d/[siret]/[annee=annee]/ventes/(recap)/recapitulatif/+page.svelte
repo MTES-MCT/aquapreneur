@@ -15,6 +15,12 @@
 	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
+	import RecapConso from "../recap-conso.svelte";
+	import RecapElevage from "../recap-elevage.svelte";
+	import RecapNaissainCaptage from "../recap-naissain-captage.svelte";
+	import RecapNaissainEcloserieNurserie from "../recap-naissain-ecloserie-nurserie.svelte";
+	import RecapOrigine from "../recap-origine.svelte";
+
 	const { data } = $props();
 
 	const especes = $derived(
@@ -58,88 +64,103 @@
 	<div data-fr-group="true" class="fr-accordions-group">
 		<RecapLine
 			label="Ventes à la consommation"
-			status={data.progressionVentes.especes[espece.id]?.consommation}
+			status={data.progressionVentes.especes?.[espece.id]?.consommation}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionVentes.especes[espece.id], {
-					consommation:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionVentes.especes, {
+					[espece.id]: {
+						consommation:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				goto(`./${espece.slug}/conso/`);
 			}}
 		>
-			TODO tableau récap
+			<RecapConso donneesEspece={data.donneesEspeces[espece.id]!}></RecapConso>
 		</RecapLine>
 
 		<RecapLine
 			label="Ventes à l’élevage"
-			status={data.progressionVentes.especes[espece.id]?.elevage}
+			status={data.progressionVentes.especes?.[espece.id]?.elevage}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionVentes.especes[espece.id], {
-					elevage:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionVentes.especes, {
+					[espece.id]: {
+						elevage:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				goto(`./${espece.slug}/elevage/`);
 			}}
 		>
-			TODO tableau récap
+			<RecapElevage donneesEspece={data.donneesEspeces[espece.id]!}
+			></RecapElevage>
 		</RecapLine>
 
 		<RecapLine
 			label="Vente de naissain capté"
-			status={data.progressionVentes.especes[espece.id]?.naissainCaptage}
+			status={data.progressionVentes.especes?.[espece.id]?.naissainCaptage}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionVentes.especes[espece.id], {
-					naissainCaptage:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionVentes.especes, {
+					[espece.id]: {
+						naissainCaptage:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				goto(`./${espece.slug}/naissain-captage/`);
 			}}
 		>
-			TODO tableau récap
+			<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
+			></RecapNaissainCaptage>
 		</RecapLine>
 
 		<RecapLine
 			label="Vente de naissain d’écloserie/nurserie"
-			status={data.progressionVentes.especes[espece.id]
+			status={data.progressionVentes.especes?.[espece.id]
 				?.naissainEcloserieNurserie}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionVentes.especes[espece.id], {
-					naissainEcloserieNurserie:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionVentes.especes, {
+					[espece.id]: {
+						naissainEcloserieNurserie:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
 			}}
 		>
-			TODO tableau récap
+			<RecapNaissainEcloserieNurserie
+				donneesEspece={data.donneesEspeces[espece.id]!}
+			></RecapNaissainEcloserieNurserie>
 		</RecapLine>
 
 		<RecapLine
 			label="Finition et traçabilité"
-			status={data.progressionVentes.especes[espece.id]?.origine}
+			status={data.progressionVentes.especes?.[espece.id]?.origine}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionVentes.especes[espece.id], {
-					origine:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionVentes.especes, {
+					[espece.id]: {
+						origine:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				goto(`./${espece.slug}/origine/`);
 			}}
 		>
-			TODO tableau récap
+			<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+			></RecapOrigine>
 		</RecapLine>
 	</div>
 {/each}

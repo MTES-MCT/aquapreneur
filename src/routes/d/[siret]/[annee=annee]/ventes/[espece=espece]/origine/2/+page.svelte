@@ -86,7 +86,7 @@
 							<table class="fr-cell--multiline">
 								<thead>
 									<tr>
-										<th>Mode d’élevage</th>
+										<th>Type d’affinage</th>
 										<th>Part de la production vendue (%)</th>
 										<th>Surface d’affinage (ha)</th>
 									</tr>

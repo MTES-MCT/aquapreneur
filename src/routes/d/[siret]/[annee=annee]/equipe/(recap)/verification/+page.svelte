@@ -27,12 +27,12 @@
 
 			p.globale = "en cours producteur";
 			p.permanents =
-				p.permanents === "validé comptable" ? "validé producteur" : null;
+				p.permanents?.startsWith("validé") ? "validé producteur" : null;
 			p.saisonniers =
-				p.saisonniers === "validé comptable" ? "validé producteur" : null;
+				p.saisonniers?.startsWith("validé") ? "validé producteur" : null;
 			p.dirigeants = p.dirigeants.map((d) => ({
 				id: d.id,
-				statut: d.statut === "validé comptable" ? "validé producteur" : null,
+				statut: d.statut?.startsWith("validé") ? "validé producteur" : null,
 			}));
 			data.declaration.donnees = await submitDeclarationUpdate(
 				data.declaration,

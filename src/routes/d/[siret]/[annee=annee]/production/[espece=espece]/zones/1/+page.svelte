@@ -13,6 +13,7 @@
 		QUARTIERS_IMMATRICULATION_IDS,
 	} from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
 
 	const { data } = $props();
 
@@ -21,7 +22,10 @@
 	});
 
 	const schema = z.object({
-		zones: z.literal(QUARTIERS_IMMATRICULATION_IDS).array(),
+		zones: z
+			.literal(QUARTIERS_IMMATRICULATION_IDS)
+			.array()
+			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER),
 	});
 
 	const { form, errors, enhance } = prepareForm(

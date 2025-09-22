@@ -17,10 +17,12 @@ export const load = async ({ params, parent }) => {
 		redirect(307, "../");
 	}
 
-	merge(progressionProduction.especes, {
-		[especeId]: {},
+	merge(progressionProduction, {
+		especes: {
+			[especeId]: {},
+		},
 	});
-	const progressionProdEspece = progressionProduction.especes[especeId]!;
+	const progressionProdEspece = progressionProduction.especes![especeId]!;
 
 	return {
 		wide: true,
