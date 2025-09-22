@@ -10,6 +10,10 @@
 	import { ESPECES, type EspeceId } from "$lib/constants";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
+	import RecapElevage from "../recap-elevage.svelte";
+	import RecapOrigine from "../recap-origine.svelte";
+	import RecapZones from "../recap-zones.svelte";
+
 	const { data } = $props();
 
 	const especes = ESPECES.filter((e) => data.donneesEspeces[e.id] != null);
@@ -71,38 +75,54 @@
 {#each especes as espece (espece.id)}
 	<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Origine et mode d’élevage"
-			onEdit={async () => {
-				goto(`./${espece.slug}/origine/1`);
-			}}
-		>
-			RecapOrigine
-		</VerifLine>
-	</div>
+	{@const progression = data.progressionProduction.especes?.[espece.id]}
+	{#if progression?.origine?.startsWith("validé") || progression?.elevage?.startsWith("validé") || progression?.zones?.startsWith("validé")}
+		{#if progression?.origine?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Origine et mode d’élevage"
+					onEdit={async () => {
+						goto(`./${espece.slug}/origine/1`);
+					}}
+				>
+					<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapOrigine>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Volume en stock"
-			onEdit={async () => {
-				goto(`./${espece.slug}/elevage/1`);
-			}}
-		>
-			RecapVolume
-		</VerifLine>
-	</div>
+		{#if progression?.elevage?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Volume en stock"
+					onEdit={async () => {
+						goto(`./${espece.slug}/elevage/1`);
+					}}
+				>
+					<RecapElevage
+						donneesEspece={data.donneesEspeces[espece.id]!}
+						annee={data.annee}
+					></RecapElevage>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Zones de production et pertes"
-			onEdit={async () => {
-				goto(`./${espece.slug}/zones/1`);
-			}}
-		>
-			RecapZones
-		</VerifLine>
-	</div>
+		{#if progression?.zones?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Zones de production et pertes"
+					onEdit={async () => {
+						goto(`./${espece.slug}/zones/1`);
+					}}
+				>
+					<RecapZones donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapZones>
+				</VerifLine>
+			</div>
+		{/if}
+	{:else}
+		<p class="">Aucune donnée à valider</p>
+	{/if}
 {/each}
 
 <form method="POST" onsubmit={handleSubmit}>

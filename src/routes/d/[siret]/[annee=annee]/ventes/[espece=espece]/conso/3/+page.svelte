@@ -25,6 +25,7 @@
 		(d) => dest.france?.[d.id] != null,
 	);
 	const destFrActifsIds = destFrActifs.map((d) => d.id);
+
 	const schema = z.object({
 		france: z.record(
 			z.enum(destFrActifsIds),

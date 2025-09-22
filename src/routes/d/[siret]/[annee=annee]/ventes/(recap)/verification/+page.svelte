@@ -10,6 +10,12 @@
 	import { ESPECES, type EspeceId } from "$lib/constants";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
+	import RecapConso from "../recap-conso.svelte";
+	import RecapElevage from "../recap-elevage.svelte";
+	import RecapNaissainCaptage from "../recap-naissain-captage.svelte";
+	import RecapNaissainEcloserieNurserie from "../recap-naissain-ecloserie-nurserie.svelte";
+	import RecapOrigine from "../recap-origine.svelte";
+
 	const { data } = $props();
 
 	const especes = ESPECES.filter((e) => data.donneesEspeces[e.id] != null);
@@ -83,60 +89,81 @@
 {#each especes as espece (espece.id)}
 	<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Ventes à la consommation"
-			onEdit={async () => {
-				goto(`./${espece.slug}/conso/`);
-			}}
-		>
-			RecapVentesConso
-		</VerifLine>
-	</div>
+	{@const progression = data.progressionVentes.especes?.[espece.id]}
+	{#if progression?.consommation?.startsWith("validé") || progression?.elevage?.startsWith("validé") || progression?.naissainCaptage?.startsWith("validé") || progression?.naissainEcloserieNurserie?.startsWith("validé") || progression?.origine?.startsWith("validé")}
+		{#if progression?.consommation?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Ventes à la consommation"
+					onEdit={async () => {
+						goto(`./${espece.slug}/conso/`);
+					}}
+				>
+					<RecapConso donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapConso>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Ventes à l’élevage"
-			onEdit={async () => {
-				goto(`./${espece.slug}/elevage/`);
-			}}
-		>
-			RecapVentesElevage
-		</VerifLine>
-	</div>
+		{#if progression?.elevage?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Ventes à l’élevage"
+					onEdit={async () => {
+						goto(`./${espece.slug}/elevage/`);
+					}}
+				>
+					<RecapElevage donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapElevage>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Vente de naissain capté"
-			onEdit={async () => {
-				goto(`./${espece.slug}/naissain-captage/`);
-			}}
-		>
-			RecapVenteNaissainCaptage
-		</VerifLine>
-	</div>
+		{#if progression?.naissainCaptage?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Vente de naissain capté"
+					onEdit={async () => {
+						goto(`./${espece.slug}/naissain-captage/`);
+					}}
+				>
+					<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapNaissainCaptage>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Vente de naissain d’écloserie/nurserie"
-			onEdit={async () => {
-				goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
-			}}
-		>
-			RecapNaissainEcloserie
-		</VerifLine>
-	</div>
+		{#if progression?.naissainEcloserieNurserie?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Vente de naissain d’écloserie/nurserie"
+					onEdit={async () => {
+						goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
+					}}
+				>
+					<RecapNaissainEcloserieNurserie
+						donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapNaissainEcloserieNurserie>
+				</VerifLine>
+			</div>
+		{/if}
 
-	<div data-fr-group="true" class="fr-accordions-group">
-		<VerifLine
-			label="Finition et traçabilité"
-			onEdit={async () => {
-				goto(`./${espece.slug}/origine/`);
-			}}
-		>
-			RecapFinition
-		</VerifLine>
-	</div>
+		{#if progression?.origine?.startsWith("validé")}
+			<div data-fr-group="true" class="fr-accordions-group">
+				<VerifLine
+					label="Finition et traçabilité"
+					onEdit={async () => {
+						goto(`./${espece.slug}/origine/`);
+					}}
+				>
+					<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+					></RecapOrigine>
+				</VerifLine>
+			</div>
+		{/if}
+	{:else}
+		<p class="">Aucune donnée à valider</p>
+	{/if}
 {/each}
 
 <form method="POST" onsubmit={handleSubmit}>

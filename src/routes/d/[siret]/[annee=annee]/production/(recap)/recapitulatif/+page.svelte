@@ -15,6 +15,10 @@
 	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 	import { submitDeclarationUpdate } from "$lib/utils";
 
+	import RecapElevage from "../recap-elevage.svelte";
+	import RecapOrigine from "../recap-origine.svelte";
+	import RecapZones from "../recap-zones.svelte";
+
 	const { data } = $props();
 
 	const especes = ESPECES.filter((e) => data.donneesEspeces[e.id] != null);
@@ -22,6 +26,7 @@
 	merge(data.progressionProduction, {
 		especes: Object.fromEntries(especes.map((e) => [e.id, {}])),
 	});
+
 	const saisieTerminée = $derived.by(() => {
 		const statutsFinalises: StatutProgression[] = [
 			"passage producteur nécessaire",
@@ -67,56 +72,66 @@
 	<div data-fr-group="true" class="fr-accordions-group">
 		<RecapLine
 			label="Origine et mode d’élevage"
-			status={data.progressionProduction.especes[espece.id]?.origine}
+			status={data.progressionProduction.especes?.[espece.id]?.origine}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionProduction.especes[espece.id], {
-					origine:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionProduction.especes, {
+					[espece.id]: {
+						origine:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				await submitDeclarationUpdate(data.declaration);
 				goto(`./${espece.slug}/origine/1`);
 			}}
 		>
-			TODO tableau récap
+			<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+			></RecapOrigine>
 		</RecapLine>
 
 		<RecapLine
 			label="Volume en stock"
-			status={data.progressionProduction.especes[espece.id]?.elevage}
+			status={data.progressionProduction.especes?.[espece.id]?.elevage}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionProduction.especes[espece.id], {
-					elevage:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionProduction.especes, {
+					[espece.id]: {
+						elevage:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				await submitDeclarationUpdate(data.declaration);
 				goto(`./${espece.slug}/elevage/1`);
 			}}
 		>
-			TODO tableau récap
+			<RecapElevage
+				donneesEspece={data.donneesEspeces[espece.id]!}
+				annee={data.annee}
+			></RecapElevage>
 		</RecapLine>
 
 		<RecapLine
 			label="Zones de production et pertes"
-			status={data.progressionProduction.especes[espece.id]?.zones}
+			status={data.progressionProduction.especes?.[espece.id]?.zones}
 			icon="fr-icon-list-unordered"
 			onEdit={async () => {
-				merge(data.progressionProduction.especes[espece.id], {
-					zones:
-						data.persona === "comptable" ?
-							"en cours comptable"
-						:	"en cours producteur",
+				merge(data.progressionProduction.especes, {
+					[espece.id]: {
+						zones:
+							data.persona === "comptable" ?
+								"en cours comptable"
+							:	"en cours producteur",
+					},
 				});
 				await submitDeclarationUpdate(data.declaration);
 				goto(`./${espece.slug}/zones/1`);
 			}}
 		>
-			TODO tableau récap
+			<RecapZones donneesEspece={data.donneesEspeces[espece.id]!}></RecapZones>
 		</RecapLine>
 	</div>
 {/each}

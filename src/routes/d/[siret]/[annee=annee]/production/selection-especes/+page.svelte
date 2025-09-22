@@ -39,7 +39,7 @@
 						merge(data.progressionProduction, { especes: { [e]: {} } });
 					} else {
 						delete data.donneesEspeces[e];
-						delete data.progressionProduction.especes[e];
+						delete data.progressionProduction.especes?.[e];
 					}
 				});
 				form.data.especes.forEach((e) => {

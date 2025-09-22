@@ -10,6 +10,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { STADES_ELEVAGE } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
+	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
 
 	const { data } = $props();
 
@@ -28,6 +29,7 @@
 		stade: z
 			.literal(stadeIds)
 			.array()
+			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER)
 			.default(
 				stadeIds.filter((e) =>
 					e === "affinage" ?

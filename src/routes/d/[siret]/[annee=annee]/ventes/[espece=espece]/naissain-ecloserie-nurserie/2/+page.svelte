@@ -125,70 +125,78 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td
-											colspan="3"
-											class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
-										>
-											En France
-										</td>
-									</tr>
-									{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
+									{#if $form.destination.france}
 										<tr>
-											<td>{ori.label}</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.destination.france[ori.id].valeurHT}
-													errors={$errors?.destination?.france?.[ori.id]
-														?.valeurHT}
-												/>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={
-														$form.destination.france[ori.id].prixMoyenHT
-													}
-													errors={$errors?.destination?.france?.[ori.id]
-														?.prixMoyenHT}
-												/>
+											<td
+												colspan="3"
+												class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+											>
+												En France
 											</td>
 										</tr>
-									{/each}
-									<tr>
-										<td
-											colspan="3"
-											class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
-										>
-											À l’étranger
-										</td>
-									</tr>
-									{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
+										<!-- TODO: use active states instead -->
+										{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
+											<tr>
+												<td>{ori.label}</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.destination.france[ori.id].valeurHT
+														}
+														errors={$errors?.destination?.france?.[ori.id]
+															?.valeurHT}
+													/>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.destination.france[ori.id].prixMoyenHT
+														}
+														errors={$errors?.destination?.france?.[ori.id]
+															?.prixMoyenHT}
+													/>
+												</td>
+											</tr>
+										{/each}
+									{/if}
+									{#if $form.destination.etranger}
 										<tr>
-											<td>{ori.label}</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={
-														$form.destination.etranger[ori.id].valeurHT
-													}
-													errors={$errors?.destination?.etranger?.[ori.id]
-														?.valeurHT}
-												/>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={
-														$form.destination.etranger[ori.id].prixMoyenHT
-													}
-													errors={$errors?.destination?.etranger?.[ori.id]
-														?.prixMoyenHT}
-												/>
+											<td
+												colspan="3"
+												class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+											>
+												À l’étranger
 											</td>
 										</tr>
-									{/each}
+
+										{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
+											<tr>
+												<td>{ori.label}</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.destination.etranger[ori.id].valeurHT
+														}
+														errors={$errors?.destination?.etranger?.[ori.id]
+															?.valeurHT}
+													/>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={
+															$form.destination.etranger[ori.id].prixMoyenHT
+														}
+														errors={$errors?.destination?.etranger?.[ori.id]
+															?.prixMoyenHT}
+													/>
+												</td>
+											</tr>
+										{/each}
+									{/if}
 								</tbody>
 							</table>
 						</div>

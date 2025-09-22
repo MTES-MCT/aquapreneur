@@ -155,6 +155,10 @@ export const DonneesEspece = optObject({
 	}),
 });
 
+// On veut le type requis
+const _DonneesEspeceReq = DonneesEspece.unwrap();
+export type DonneesEspece = z.infer<typeof _DonneesEspeceReq>;
+
 export const StatutProgressionGlobale = z
 	.literal([
 		// Comptable
@@ -196,27 +200,31 @@ const Progression = z.strictObject({
 	}),
 	production: optObject({
 		globale: StatutProgression.nullish(),
-		especes: z.record(
-			z.enum(ESPECES_IDS),
-			optObject({
-				elevage: StatutProgression,
-				origine: StatutProgression,
-				zones: StatutProgression,
-			}),
-		),
+		especes: z
+			.partialRecord(
+				z.enum(ESPECES_IDS),
+				optObject({
+					elevage: StatutProgression,
+					origine: StatutProgression,
+					zones: StatutProgression,
+				}),
+			)
+			.optional(),
 	}),
 	ventes: optObject({
 		globale: StatutProgression.nullish(),
-		especes: z.record(
-			z.enum(ESPECES_IDS),
-			optObject({
-				naissainCaptage: StatutProgression,
-				naissainEcloserieNurserie: StatutProgression,
-				elevage: StatutProgression,
-				consommation: StatutProgression,
-				origine: StatutProgression,
-			}),
-		),
+		especes: z
+			.partialRecord(
+				z.enum(ESPECES_IDS),
+				optObject({
+					naissainCaptage: StatutProgression,
+					naissainEcloserieNurserie: StatutProgression,
+					elevage: StatutProgression,
+					consommation: StatutProgression,
+					origine: StatutProgression,
+				}),
+			)
+			.optional(),
 	}),
 	retourAnnee: optObject({
 		globale: StatutProgression.nullish(),
