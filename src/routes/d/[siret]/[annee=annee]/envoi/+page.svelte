@@ -28,20 +28,29 @@
 	};
 </script>
 
-<h2 class="fr-h2 fr-mt-6v">
-	{#if data.persona === "comptable"}
-		Envoi à votre adhérent
-	{:else}
-		Envoi de la déclaration
-	{/if}
-</h2>
-
+{#if data.persona === "comptable"}
+	<h2 class="fr-h3 fr-mt-5w">Envoi à l’adhérent</h2>
+	<p class="fr-text--lead">
+		Votre partie de la déclaration est complétée. Vous pouvez à présent la
+		transmettre à votre adhérent afin qu’il complète les données manquantes.
+		Après transmission, il ne sera plus possible de modifier les données
+		saisies.
+	</p>
+{:else}
+	<h2 class="fr-h3 fr-mt-5w">Envoi</h2>
+	<p class="fr-text--lead">
+		Votre déclaration est complète. Merci pour votre contribution à l’enquête
+		annuelle sur l’aquaculture. Veuillez vérifier l’exactitude de vos données
+		avant de la transmettre à l’administration. Après transmission, il ne sera
+		plus possible d’y apporter des modifications.
+	</p>
+{/if}
 <form method="POST" onsubmit={handleSubmit}>
 	<NavigationLinks
 		nextIsButton
 		nextLabel={data.persona === "comptable" ?
-			"Valider et transmettre la déclaration"
-		:	"Je confirme ces données"}
+			"Transmettre la déclaration"
+		:	"Soumettre votre déclaration"}
 		center
 	/>
 </form>
