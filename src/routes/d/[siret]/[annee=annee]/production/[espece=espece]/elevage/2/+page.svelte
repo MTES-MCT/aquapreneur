@@ -21,6 +21,7 @@
 		{ id: "naissainCaptage", label: "Naissain – captage" },
 		{ id: "naissainEcloserieNurserie", label: "Naissain – écloserie/nurserie" },
 		...STADES_ELEVAGE,
+		{ id: "consommation", label: "Taille marchande" },
 	] as const;
 
 	const stadesActifs = stades.filter((s) => data.donneesEspece[s.id] != null);
@@ -118,29 +119,31 @@
 								</thead>
 								<tbody>
 									{#each stadesActifs as stade (stade.id)}
-										<tr>
-											<td>
-												{stade.label}
-												<span class="fr-text--light fr-text--xs">
-													<!-- TODO: gérer les moules -->
-													({isNaissain(stade.id) ? "milliers" : "kg"})
-												</span>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.data[stade.id].stockNmoins1}
-													errors={$errors?.data?.[stade.id]?.stockNmoins1}
-												/>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.data[stade.id].stockN}
-													errors={$errors?.data?.[stade.id]?.stockN}
-												/>
-											</td>
-										</tr>
+										{#if stade.id !== "consommation" || data.donneesEspece.consommation?.stock?.stockKg || data.donneesEspece.consommation?.stock?.stockNmoins1kg}
+											<tr>
+												<td>
+													{stade.label}
+													<span class="fr-text--light fr-text--xs">
+														<!-- TODO: gérer les moules -->
+														({isNaissain(stade.id) ? "milliers" : "kg"})
+													</span>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={$form.data[stade.id].stockNmoins1}
+														errors={$errors?.data?.[stade.id]?.stockNmoins1}
+													/>
+												</td>
+												<td>
+													<InputGroup
+														type="number"
+														bind:value={$form.data[stade.id].stockN}
+														errors={$errors?.data?.[stade.id]?.stockN}
+													/>
+												</td>
+											</tr>
+										{/if}
 									{/each}
 								</tbody>
 							</table>

@@ -78,7 +78,7 @@ export const prefillDeclaration = async (
 	const bilan = await getBilan(etablissement.siret, annee);
 	const bilanPrecedent = await getBilan(etablissement.siret, annee - 1);
 	const concessions = (await getConcessions(etablissement.siren)).filter(
-		(c) => Number.parseInt(c.dateExpiration?.substring(0, 4) ?? "") >= 2024,
+		(c) => Number.parseInt(c.dateExpiration?.substring(0, 4) ?? "") >= annee,
 	);
 
 	const concessionsByEspece = {

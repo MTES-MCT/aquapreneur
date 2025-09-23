@@ -1,4 +1,5 @@
 <script lang="ts">
+	import merge from "lodash/merge";
 	import { defaults } from "sveltekit-superforms";
 	import { zod4 } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
@@ -14,15 +15,20 @@
 
 	const { data } = $props();
 
+	merge(data.donneesEspece, { origines: [] });
+
 	const originesIds = ORIGINES.map((m) => m.id);
+
 	const schema = z.object({
-		origine: z
+		origines: z
 			.literal(originesIds)
 			.array()
-			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER),
-		// .default(stadeIds.filter((e) => data.donneesEspece[e] != null)),
+			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER)
+			.default(
+				originesIds.filter((e) => data.donneesEspece.origines?.includes(e)),
+			),
 	});
-	// TODO: default values
+
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
@@ -35,8 +41,8 @@
 				}
 				return data.declaration;
 			},
-			updateData: () => {
-				// TODO update data
+			updateData: (form) => {
+				data.donneesEspece.origines = form.data.origines;
 				return data.declaration;
 			},
 		},
@@ -45,7 +51,7 @@
 </script>
 
 <form method="POST" use:enhance>
-	<Fieldset hasError={!!$errors?.origine?._errors}>
+	<Fieldset hasError={!!$errors?.origines?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
 				Quelle est l’origine des {nomEspece(data.espece, { plural: true })} en cours
@@ -68,17 +74,17 @@
 							aria-describedby="checkbox-{id}-messages"
 							{id}
 							value={origineId}
-							bind:group={$form.origine}
+							bind:group={$form.origines}
 							autocomplete="off"
 						/>
 					{/snippet}
 					{#snippet label()}{origine.label}{/snippet}
 				</CheckboxGroup>
 			{/each}
-			{#if $errors?.origine?._errors}
+			{#if $errors?.origines?._errors}
 				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
 					<p class="fr-message fr-message--error" id="{id}-errors">
-						{$errors.origine._errors}
+						{$errors.origines._errors}
 					</p>
 				</div>
 			{/if}

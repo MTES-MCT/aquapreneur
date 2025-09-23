@@ -18,6 +18,7 @@
 		{ id: "naissainCaptage", label: "Naissain – captage" },
 		{ id: "naissainEcloserieNurserie", label: "Naissain – écloserie/nurserie" },
 		...STADES_ELEVAGE,
+		{ id: "consommation", label: "Taille marchande" },
 	] as const;
 
 	const stadesActifs = stades.filter((s) => donneesEspece[s.id] != null);
@@ -56,7 +57,7 @@
 						{#each stadesActifs as stade (stade.id)}
 							{@const nMoins1 = data[stade.id].stockNmoins1}
 							{@const n = data[stade.id].stockN}
-							{#if nMoins1 != null || n != null}
+							{#if nMoins1 || n}
 								<tr>
 									<td>
 										{stade.label}

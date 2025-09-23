@@ -33,10 +33,9 @@
 					<tbody>
 						{#each activeZones as q (q.code)}
 							{@const part =
-								donneesEspece.zonesProduction?.[q.code]
-									?.partStockPregrossissement}
+								donneesEspece.zonesProduction?.[q.code]?.partStockElevageAdulte}
 							{@const pertes =
-								donneesEspece.zonesProduction?.[q.code]?.pertesPregrossissement}
+								donneesEspece.zonesProduction?.[q.code]?.pertesElevageAdulte}
 							<tr>
 								<td>{q.nom}</td>
 								<td class="fr-cell--right">

@@ -1,6 +1,6 @@
 export const load = async () => {
 	return {
 		sousTitre: "Zones de production et pertes",
-		numSteps: 5,
+		numSteps: 6,
 	};
 };

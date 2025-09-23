@@ -28,8 +28,8 @@
 		data: z.record(
 			z.enum(activeZonesIds),
 			z.object({
-				partStockPregrossissement: Percent,
-				pertesPregrossissement: Percent,
+				partStockElevageAdulte: Percent,
+				pertesElevageAdulte: Percent,
 			}),
 		),
 	});
@@ -38,8 +38,8 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
-			getNextPage: () => "./5",
+			isLastStep: () => true,
+			getNextPage: () => "../../recapitulatif",
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
 					data.progressionProdEspece.zones = statut;
@@ -64,7 +64,7 @@
 		return (
 			100 -
 			activeZones
-				.map((z) => $form.data[z.code].partStockPregrossissement ?? 0)
+				.map((z) => $form.data[z.code].partStockElevageAdulte ?? 0)
 				.reduce((acc, cur) => acc + cur, 0)
 		);
 	});
@@ -74,18 +74,18 @@
 	<Fieldset>
 		{#snippet legend()}
 			<h2 class="fr-h4">
-				Où a été réalisé le prégrossissement (jusqu’à 18 mois)?
+				Où a été réalisé l’élevage jusqu’à la taille marchande ?
 			</h2>
 			<p class="fr-text--sm fr-text--light">
 				Au 1er juin {data.annee}, vous aviez
 				<strong>
-					{formatNum(data.donneesEspece.pregrossissement?.stock?.stockKg ?? 0)}
+					{formatNum(data.donneesEspece.elevageAdulte?.stock?.stockKg ?? 0)}
 				</strong>
 				kilos {nomEspece(data.espece, {
 					avecArticleUndefini: true,
-				})} au stade de prégrossissement. Veuillez indiquer la part du stock présente
-				dans chaque zone, et les pertes estimées au cours de l’année. La somme des
-				parts du stock doit être égale à 100 %.
+				})} au stade d’élevage jusqu’à la taille marchande. Veuillez indiquer la
+				part du stock présente dans chaque zone, et les pertes estimées au cours
+				de l’année. La somme des parts du stock doit être égale à 100 %.
 			</p>
 
 			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>
@@ -116,19 +116,16 @@
 											<td>
 												<InputGroup
 													type="number"
-													bind:value={
-														$form.data[q.code].partStockPregrossissement
-													}
+													bind:value={$form.data[q.code].partStockElevageAdulte}
 													errors={$errors?.data?.[q.code]
-														?.partStockPregrossissement}
+														?.partStockElevageAdulte}
 												/>
 											</td>
 											<td>
 												<InputGroup
 													type="number"
-													bind:value={$form.data[q.code].pertesPregrossissement}
-													errors={$errors?.data?.[q.code]
-														?.pertesPregrossissement}
+													bind:value={$form.data[q.code].pertesElevageAdulte}
+													errors={$errors?.data?.[q.code]?.pertesElevageAdulte}
 												/>
 											</td>
 										</tr>
@@ -143,7 +140,7 @@
 	</Fieldset>
 
 	<NavigationLinks
-		prevHref="./3"
+		prevHref="./5"
 		nextIsButton
 		cantAnswerBtn={data.persona === "comptable"}
 	/>
@@ -154,6 +151,6 @@
 	{errors}
 	data={{
 		zonesProduction: data.donneesEspece.zonesProduction,
-		demiElevage: data.donneesEspece.demiElevage,
+		elevageAdulte: data.donneesEspece.elevageAdulte,
 	}}
 ></FormDebug>
