@@ -8,30 +8,27 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { ORIGINES_NAISSAIN } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
-	import { Percent, PositiveNumber } from "$lib/types";
+	import { Percent, PositiveInt } from "$lib/types";
 
 	const { data } = $props();
 
-	const origine = data.donneesEspece.consommation?.origine;
+	merge(data.donneesEspece, { consommation: {} });
+
+	const affinage = data.donneesEspece.consommation!.affinage;
 
 	const schema = z.object({
-		captage: z.object({
-			part: Percent.default(origine?.captage?.part ?? 0),
-			value: PositiveNumber.default(origine?.captage?.value ?? 0),
+		claires: z.object({
+			part: Percent,
+			surfaceHa: PositiveInt,
 		}),
-		ecloserieNurserieDiploide: z.object({
-			part: Percent.default(origine?.ecloserieNurserieDiploide?.part ?? 0),
-			value: PositiveNumber.default(
-				origine?.ecloserieNurserieDiploide?.value ?? 0,
-			),
+		parcs: z.object({
+			part: Percent,
+			surfaceHa: PositiveInt,
 		}),
-		ecloserieNurserieTriploide: z.object({
-			part: Percent.default(origine?.ecloserieNurserieTriploide?.part ?? 0),
-			value: PositiveNumber.default(
-				origine?.ecloserieNurserieTriploide?.value ?? 0,
-			),
+		pousseClaire: z.object({
+			part: Percent,
+			surfaceHa: PositiveInt,
 		}),
 	});
 
@@ -49,24 +46,36 @@
 			},
 			updateData: (form) => {
 				merge(data.declaration.donnees.especes, {
-					[data.espece.id]: { consommation: { origine: form.data } },
+					[data.espece.id]: { consommation: { affinage: form.data } },
 				});
 				return data.declaration;
 			},
 		},
 		defaults(zod4(schema)),
 	);
+
+	$form = {
+		claires: {
+			part: affinage?.claires?.part as unknown as number,
+			surfaceHa: affinage?.claires?.surfaceHa as unknown as number,
+		},
+		parcs: {
+			part: affinage?.parcs?.part as unknown as number,
+			surfaceHa: affinage?.parcs?.surfaceHa as unknown as number,
+		},
+		pousseClaire: {
+			part: affinage?.pousseClaire?.part as unknown as number,
+			surfaceHa: affinage?.pousseClaire?.surfaceHa as unknown as number,
+		},
+	};
 </script>
 
 <form method="POST" use:enhance>
 	<Fieldset>
 		{#snippet legend()}
 			<h2 class="fr-h4">
-				Comment se répartissent les ventes selon l’origine ?
+				Quelle part de la production a été affinée avant la vente ?
 			</h2>
-			<!-- <p class="fr-text--light fr-text--sm">
-					Vous pouvez répondre en indiquant un montant ou un pourcentage sur les quantités vendues.
-				</p> -->
 		{/snippet}
 
 		{#snippet inputs()}
@@ -77,37 +86,65 @@
 							<table class="fr-cell--multiline">
 								<thead>
 									<tr>
-										<th>Origine et ploïdie</th>
-										<th>
-											Pourcentage <span class="fr-text--regular">(%)</span>
-										</th>
-										<th>
-											Montant des ventes <span class="fr-text--regular">
-												(€ HT)
-											</span>
-										</th>
+										<th>Type d’affinage</th>
+										<th>Part de la production vendue (%)</th>
+										<th>Surface d’affinage (ha)</th>
 									</tr>
 								</thead>
 								<tbody>
-									{#each ORIGINES_NAISSAIN as origine (origine.id)}
-										<tr>
-											<td>{origine.label}</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form[origine.id].part}
-													errors={$errors[origine.id]?.part}
-												></InputGroup>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form[origine.id].value}
-													errors={$errors[origine.id]?.value}
-												></InputGroup>
-											</td>
-										</tr>
-									{/each}
+									<tr>
+										<td>Affinage en claire</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.claires.part}
+												errors={$errors.claires?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.claires.surfaceHa}
+												errors={$errors.claires?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
+
+									<tr>
+										<td>Affinage en parcs</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.parcs.part}
+												errors={$errors.parcs?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.parcs.surfaceHa}
+												errors={$errors.parcs?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
+
+									<tr>
+										<td>Pousse en claire</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.pousseClaire.part}
+												errors={$errors.pousseClaire?.part}
+											></InputGroup>
+										</td>
+										<td>
+											<InputGroup
+												type="number"
+												bind:value={$form.pousseClaire.surfaceHa}
+												errors={$errors.pousseClaire?.surfaceHa}
+											></InputGroup>
+										</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -116,7 +153,6 @@
 			</div>
 		{/snippet}
 	</Fieldset>
-
 	<NavigationLinks
 		prevHref="./3"
 		nextIsButton
@@ -124,5 +160,5 @@
 	/>
 </form>
 
-<FormDebug {form} {errors} data={data.donneesEspece.consommation?.origine}
+<FormDebug {form} {errors} data={data.donneesEspece.consommation!.affinage}
 ></FormDebug>
