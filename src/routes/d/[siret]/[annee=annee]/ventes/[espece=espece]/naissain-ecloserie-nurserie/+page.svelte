@@ -15,7 +15,7 @@
 
 	const schema = z.object({
 		aVenduNaissain: Bool.default(
-			!!data.donneesEspece.naissainEcloserieNurserie,
+			!!data.donneesEspece.naissainEcloserieNurserie?.destination,
 		),
 	});
 

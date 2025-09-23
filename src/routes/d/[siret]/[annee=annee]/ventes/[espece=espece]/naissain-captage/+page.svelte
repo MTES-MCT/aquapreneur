@@ -14,7 +14,9 @@
 	const { data } = $props();
 
 	const schema = z.object({
-		aVenduNaissainCaptage: Bool.default(!!data.donneesEspece.naissainCaptage),
+		aVenduNaissainCaptage: Bool.default(
+			!!data.donneesEspece.naissainCaptage?.destination,
+		),
 	});
 
 	const { form, errors, enhance } = prepareForm(
