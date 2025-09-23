@@ -73,11 +73,10 @@
 <form method="POST" use:enhance>
 	<Fieldset>
 		{#snippet legend()}
-			<h2 class="fr-h4">Où a été réalisé le captage du naissain ?</h2>
+			<h2 class="fr-h4">Où se situe votre naissain ?</h2>
 			<p class="fr-text--sm fr-text--light">
 				Au 1er juin {data.annee}, vous aviez
 				<strong>
-					<!-- TODO ? Est-ce que l’écloserie doit être enlevée, ou passée sur une page à part ? -->
 					{formatNum(
 						((data.donneesEspece.naissainCaptage?.stock?.stockMilliers ?? 0) +
 							(data.donneesEspece.naissainEcloserieNurserie?.stock
