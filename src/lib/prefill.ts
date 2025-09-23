@@ -82,6 +82,7 @@ export const prefillDeclaration = async (
 	annee: number,
 ): Promise<DonneesDeclaration> => {
 	const bilan = await getBilan(etablissement.siret, annee);
+	const bilanPrecedent = await getBilan(etablissement.siret, annee - 1);
 	const concessions = await getConcessions(etablissement.siren);
 	const quartiers = [
 		...new Set(
@@ -92,6 +93,7 @@ export const prefillDeclaration = async (
 	];
 
 	const d = bilan?.donnees;
+	const dmoins1 = bilanPrecedent?.donnees;
 
 	return DonneesDeclaration.parse({
 		progression: {},
@@ -131,10 +133,10 @@ export const prefillDeclaration = async (
 				// Pour simplifier, on met tout dans le captages
 				naissainCaptage: {
 					stock: {
-						// valeurHTMi: d?.stock.StckValHNaisMi,
-						// valeurHT: d?.stock.StckValHNaisKg,
 						stockKg: d?.stock.StckVolHNaisKg,
+						stockNmoins1kg: dmoins1?.stock.StckVolHNaisKg,
 						stockMilliers: d?.stock.StckVolHNaisMi,
+						stockNmoins1milliers: dmoins1?.stock.StckVolHNaisMi,
 					},
 					destination: {
 						france: { valeurHT: d?.production.CAHNaissFr },
@@ -145,8 +147,8 @@ export const prefillDeclaration = async (
 				},
 				demiElevage: {
 					stock: {
-						// valeurHT: d?.stock.StckValHDElv,
 						stockKg: d?.stock.StckVolHDElv,
+						stockNmoins1kg: dmoins1?.stock.StckVolHDElv,
 					},
 					destination: {
 						france: {
@@ -163,9 +165,9 @@ export const prefillDeclaration = async (
 					},
 				},
 				elevageAdulte: {
-					// valeurHT: d?.stock.StckValHElv,
 					stock: {
 						stockKg: d?.stock.StckVolHElv,
+						stockNmoins1kg: dmoins1?.stock.StckVolHElv,
 					},
 					destination: {
 						france: {
@@ -182,10 +184,9 @@ export const prefillDeclaration = async (
 					},
 				},
 				consommation: {
-					// valeurHT: d?.stock.StckValHConso,
-					// TODO pas utilisé ?
 					stock: {
 						stockKg: d?.stock.StckVolHConso,
+						stockNmoins1kg: dmoins1?.stock.StckVolHConso,
 					},
 					destination: {
 						france: {
