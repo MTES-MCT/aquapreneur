@@ -1,9 +1,10 @@
+import capitalize from "lodash/capitalize";
 import isArray from "lodash/isArray";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
 import isPlainObject from "lodash/isPlainObject";
 
-import { ANNEES_DECLARATIVES, DSFR_VERSION } from "./constants";
+import { ANNEES_DECLARATIVES, DSFR_VERSION, type Espece } from "./constants";
 import {
 	DonneesDeclaration,
 	StatutProgression,
@@ -139,4 +140,17 @@ export const partFilled = (
 		const statutsFinalises: StatutProgression[] = ["validé producteur"];
 		return statutsFinalises.includes(donnees.progression?.[part]?.globale);
 	}
+};
+
+export const nomEspece = (
+	espece: Espece,
+	{ capitalized = false, plural = false, avecArticleUndefini = false },
+) => {
+	let labelStr: string = plural ? espece.labelPlural : espece.label;
+	if (avecArticleUndefini) {
+		const shouldElide = ["a", "e", "i", "o", "u", "h"].includes(labelStr[0]);
+		const article = shouldElide ? "d’" : "de ";
+		labelStr = `${article}${labelStr}`;
+	}
+	return capitalized ? capitalize(labelStr) : labelStr;
 };

@@ -1,10 +1,9 @@
 <script lang="ts">
-	import capitalize from "lodash/capitalize";
-
 	import { goto } from "$app/navigation";
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { ESPECES } from "$lib/constants";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 </script>
@@ -18,7 +17,7 @@
 
 <ul class="fr-list fr-text--lg">
 	{#each ESPECES.filter((e) => data.donneesEspeces[e.id] != null) as espece (espece.id)}
-		<li>{capitalize(espece.label)}</li>
+		<li>{nomEspece(espece, { capitalized: true })}</li>
 	{/each}
 </ul>
 

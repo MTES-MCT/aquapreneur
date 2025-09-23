@@ -10,6 +10,7 @@
 	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -53,8 +54,10 @@
 			</h2>
 
 			<p class="fr-text--light fr-text--sm">
-				Il s’agit des ventes d’{data.espece.label} prêtes à être consommées, sans
-				étape d’élevage supplémentaire.
+				Il s’agit des ventes {nomEspece(data.espece, {
+					avecArticleUndefini: true,
+					plural: true,
+				})} prêtes à être consommées, sans étape d’élevage supplémentaire.
 			</p>
 		{/snippet}
 

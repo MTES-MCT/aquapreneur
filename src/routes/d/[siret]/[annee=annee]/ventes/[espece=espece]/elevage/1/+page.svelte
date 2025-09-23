@@ -12,6 +12,7 @@
 	import { STADES_ELEVAGE, STADES_ELEVAGE_IDS } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 	// TODO preselection à partir de la production
@@ -71,7 +72,9 @@
 	<Fieldset hasError={!!$errors?.stades?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
-				À quel(s) stade(s) d’élevag(e) les {data.espece.label} ont été vendues ?
+				À quel(s) stade(s) d’élevag(e) les {nomEspece(data.espece, {
+					plural: true,
+				})} ont été vendues ?
 			</h2>
 
 			<p class="fr-text--light fr-text--sm">
