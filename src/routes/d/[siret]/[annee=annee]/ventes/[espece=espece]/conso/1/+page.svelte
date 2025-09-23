@@ -14,6 +14,7 @@
 	} from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -65,7 +66,8 @@
 	<Fieldset hasError={!!$errors?.destination?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
-				Où ont été vendues les {data.espece.label} destinées à la consommation ?
+				Où ont été vendues les {nomEspece(data.espece, { plural: true })} destinées
+				à la consommation ?
 			</h2>
 
 			<p class="fr-text--light fr-text--sm">

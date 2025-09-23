@@ -1,6 +1,4 @@
 <script lang="ts">
-	import capitalize from "lodash/capitalize";
-
 	import type { FormEventHandler } from "svelte/elements";
 
 	import { goto } from "$app/navigation";
@@ -8,7 +6,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import VerifLine from "$lib/components/verif-line.svelte";
 	import { ESPECES, type EspeceId } from "$lib/constants";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { nomEspece, submitDeclarationUpdate } from "$lib/utils";
 
 	import RecapConso from "../recap-conso.svelte";
 	import RecapElevage from "../recap-elevage.svelte";
@@ -87,7 +85,7 @@
 </p>
 
 {#each especes as espece (espece.id)}
-	<h2 class="fr-h6 fr-mt-10v">{capitalize(espece.label)}</h2>
+	<h2 class="fr-h6 fr-mt-10v">{nomEspece(espece, { capitalized: true })}</h2>
 
 	{@const progression = data.progressionVentes.especes?.[espece.id]}
 	{#if progression?.consommation?.startsWith("validé") || progression?.elevage?.startsWith("validé") || progression?.naissainCaptage?.startsWith("validé") || progression?.naissainEcloserieNurserie?.startsWith("validé") || progression?.origine?.startsWith("validé")}

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import capitalize from "lodash/capitalize";
 	import merge from "lodash/merge";
 	import SuperDebug from "sveltekit-superforms";
 
@@ -13,7 +12,7 @@
 	import RecapLine from "$lib/components/recap-line.svelte";
 	import { ESPECES } from "$lib/constants";
 	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
-	import { submitDeclarationUpdate } from "$lib/utils";
+	import { nomEspece, submitDeclarationUpdate } from "$lib/utils";
 
 	import RecapElevage from "../recap-elevage.svelte";
 	import RecapOrigine from "../recap-origine.svelte";
@@ -67,7 +66,9 @@
 </div>
 
 {#each especes as espece (espece.id)}
-	<h2 class="fr-h6 fr-mt-10v fr-mb-2w">{capitalize(espece.label)}</h2>
+	<h2 class="fr-h6 fr-mt-10v fr-mb-2w">
+		{nomEspece(espece, { capitalized: true })}
+	</h2>
 
 	<div data-fr-group="true" class="fr-accordions-group">
 		<RecapLine

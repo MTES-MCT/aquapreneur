@@ -19,42 +19,49 @@ export type DeclarationType = (typeof DECLARATION_TYPES)[number];
 export const ESPECES = [
 	{
 		label: "huître creuse",
+		labelPlural: "huîtres creuses",
 		id: "huitreCreuse",
 		slug: "huitre-creuse",
 		scientificName: "Magallana gigas",
 	},
 	{
 		label: "huître plate",
+		labelPlural: "huîtres plates",
 		id: "huitrePlate",
 		slug: "huitre-plate",
 		scientificName: "Ostrea edulis",
 	},
 	{
 		label: "moule commune",
+		labelPlural: "moules communes",
 		id: "mouleCommune",
 		slug: "moule-commune",
 		scientificName: "Mytilus edulis",
 	},
 	{
 		label: "moule méditerranéenne",
+		labelPlural: "moules méditerranéennes",
 		id: "mouleMediterraneenne",
 		slug: "moule-mediterraneenne",
 		scientificName: "Mytilus galloprovincialis",
 	},
 	{
 		label: "palourde",
+		labelPlural: "palourdes",
 		id: "palourde",
 		slug: "palourde",
 		scientificName: "",
 	},
 	{
 		label: "coque",
+		labelPlural: "coques",
 		id: "coque",
 		slug: "coque",
 		scientificName: "",
 	},
 ] as const;
 
+export type Espece = (typeof ESPECES)[number];
 export const ESPECES_IDS = ESPECES.map((e) => e.id);
 export type EspeceId = (typeof ESPECES_IDS)[number];
 export const ESPECES_SLUGS = ESPECES.map((e) => e.slug);

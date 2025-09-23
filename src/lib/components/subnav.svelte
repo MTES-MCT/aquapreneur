@@ -1,7 +1,7 @@
 <script lang="ts">
-	import capitalize from "lodash/capitalize";
-
 	import { page } from "$app/state";
+
+	import { nomEspece } from "$lib/utils";
 
 	let { children } = $props();
 </script>
@@ -11,7 +11,9 @@
 		<div class="fr-grid-row fr-py-6v fr-grid-row--center">
 			{#if page.data.espece}
 				<div class="fr-col-4 fr-col-md-2">
-					<p class="fr-tag">{capitalize(page.data.espece.label)}</p>
+					<p class="fr-tag">
+						{nomEspece(page.data.espece, { capitalized: true })}
+					</p>
 				</div>
 			{/if}
 			{#if !page.data.currentStep}

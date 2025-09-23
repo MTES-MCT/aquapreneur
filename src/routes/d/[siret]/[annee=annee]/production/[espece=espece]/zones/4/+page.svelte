@@ -11,7 +11,7 @@
 	import { QUARTIERS_IMMATRICULATION } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
-	import { formatNum } from "$lib/utils";
+	import { formatNum, nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -79,9 +79,11 @@
 				<strong>
 					{formatNum(data.donneesEspece.demiElevage?.stock?.stockKg ?? 0)}
 				</strong>
-				kilos d’huître creuse au stade de demi-élevage. Veuillez indiquer la part
-				du stock présente chaque zone, et les pertes estimées au cours de l’année.
-				La somme des parts du stock doit être égale à 100 %.
+				kilos {nomEspece(data.espece, {
+					avecArticleUndefini: true,
+				})} au stade de demi-élevage. Veuillez indiquer la part du stock présente
+				chaque zone, et les pertes estimées au cours de l’année. La somme des parts
+				du stock doit être égale à 100 %.
 			</p>
 
 			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>

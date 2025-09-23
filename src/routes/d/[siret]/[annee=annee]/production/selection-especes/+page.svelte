@@ -11,6 +11,7 @@
 	import { ESPECES, ESPECES_IDS } from "$lib/constants";
 	import { prepareForm } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -80,7 +81,10 @@
 							autocomplete="off"
 						/>
 					{/snippet}
-					{#snippet label()}{espece.label}{/snippet}
+					{#snippet label()}{nomEspece(espece, {
+							capitalized: true,
+						})}{#if espece.scientificName}
+							&nbsp;– <em>{espece.scientificName}</em>{/if}{/snippet}
 				</CheckboxGroup>
 			{/each}
 			{#if $errors?.especes?._errors}

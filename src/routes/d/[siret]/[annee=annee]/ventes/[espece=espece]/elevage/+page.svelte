@@ -10,6 +10,7 @@
 	import RadioGroup from "$lib/components/radio-group.svelte";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -64,8 +65,10 @@
 			</h2>
 
 			<p class="fr-text--light fr-text--sm">
-				Il s’agit des ventes de {data.espece.label} destinées au grossissement ou
-				à l’affinage par d’autres professionnels.
+				Il s’agit des ventes {nomEspece(data.espece, {
+					avecArticleUndefini: true,
+					plural: true,
+				})} destinées au grossissement ou à l’affinage par d’autres professionnels.
 			</p>
 		{/snippet}
 

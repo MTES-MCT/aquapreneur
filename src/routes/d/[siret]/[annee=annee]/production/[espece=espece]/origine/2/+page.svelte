@@ -10,6 +10,7 @@
 	import { ORIGINES } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
+	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
 
@@ -47,7 +48,8 @@
 	<Fieldset hasError={!!$errors?.origine?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4 fr-mb-1w">
-				Quelle est l’origine des {data.espece.label} en cours d’élevage ?
+				Quelle est l’origine des {nomEspece(data.espece, { plural: true })} en cours
+				d’élevage ?
 			</h2>
 
 			<p class="fr-text--sm fr-text--light">
