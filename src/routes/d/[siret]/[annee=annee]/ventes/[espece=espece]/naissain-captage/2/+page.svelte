@@ -26,7 +26,8 @@
 			z.enum(destinationsActivesIds),
 			z.object({
 				valeurHT: PositiveNumber,
-				prixMoyenHT: PositiveNumber,
+				// TODO gérer les moules
+				quantiteMilliers: PositiveNumber,
 			}),
 		),
 	});
@@ -63,9 +64,10 @@
 				{
 					valeurHT:
 						data.donneesEspece.naissainCaptage?.destination?.[d.id]?.valeurHT,
-					prixMoyenHT:
+					// TODO gérer le cas des moules
+					quantiteMilliers:
 						data.donneesEspece.naissainCaptage?.destination?.[d.id]
-							?.prixMoyenHT,
+							?.quantiteMilliers,
 				},
 			]),
 		),
@@ -97,9 +99,7 @@
 											</span>
 										</th>
 										<th>
-											Prix moyen au milier <span class="fr-text--regular">
-												(€ HT)
-											</span>
+											Quantité <span class="fr-text--regular">(milliers)</span>
 										</th>
 									</tr>
 								</thead>
@@ -115,10 +115,14 @@
 												/>
 											</td>
 											<td>
+												<!-- TODO: gérer les moules -->
 												<InputGroup
 													type="number"
-													bind:value={$form.destination[dest.id].prixMoyenHT}
-													errors={$errors?.destination?.[dest.id]?.prixMoyenHT}
+													bind:value={
+														$form.destination[dest.id].quantiteMilliers
+													}
+													errors={$errors?.destination?.[dest.id]
+														?.quantiteMilliers}
 												/>
 											</td>
 										</tr>

@@ -21,7 +21,7 @@
 						<tr>
 							<th>Destination</th>
 							<th class="fr-cell--right">Montant des ventes</th>
-							<th class="fr-cell--right">Prix moyen au milier</th>
+							<th class="fr-cell--right">Quantité</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -41,7 +41,11 @@
 										{formatInt(dest.france[ori.id]?.valeurHT, "€")}
 									</td>
 									<td class="fr-cell--right">
-										{formatInt(dest.france[ori.id]?.prixMoyenHT, "€")}
+										<!-- todo : moules -->
+										{formatInt(
+											dest.france[ori.id]?.quantiteMilliers,
+											"milliers",
+										)}
 									</td>
 								</tr>
 							{/each}
@@ -63,7 +67,11 @@
 										{formatInt(dest.etranger[ori.id]?.valeurHT, "€")}
 									</td>
 									<td class="fr-cell--right">
-										{formatInt(dest.etranger[ori.id]?.prixMoyenHT, "€")}
+										<!-- todo moules -->
+										{formatInt(
+											dest.etranger[ori.id]?.quantiteMilliers,
+											"milliers",
+										)}
 									</td>
 								</tr>
 							{/each}
