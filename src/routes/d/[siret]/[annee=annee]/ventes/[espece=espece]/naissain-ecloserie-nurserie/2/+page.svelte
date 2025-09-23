@@ -31,11 +31,12 @@
 			z.object({
 				ecloserieNurserieDiploide: z.object({
 					valeurHT: PositiveNumber,
-					prixMoyenHT: PositiveNumber,
+					// TODO: gérer les moules
+					quantiteMilliers: PositiveNumber,
 				}),
 				ecloserieNurserieTriploide: z.object({
 					valeurHT: PositiveNumber,
-					prixMoyenHT: PositiveNumber,
+					quantiteMilliers: PositiveNumber,
 				}),
 			}),
 		),
@@ -76,14 +77,17 @@
 			destinationsActives.map((d) => [
 				d.id,
 				{
+					// TODO: gérer le cas des moules
 					ecloserieNurserieDiploide: {
 						valeurHT: dest[d.id]?.ecloserieNurserieDiploide?.valeurHT,
-						prixMoyenHT: dest[d.id]?.ecloserieNurserieDiploide?.prixMoyenHT,
+						quantiteMilliers:
+							dest[d.id]?.ecloserieNurserieDiploide?.quantiteMilliers,
 					},
 
 					ecloserieNurserieTriploide: {
 						valeurHT: dest[d.id]?.ecloserieNurserieTriploide?.valeurHT,
-						prixMoyenHT: dest[d.id]?.ecloserieNurserieTriploide?.prixMoyenHT,
+						quantiteMilliers:
+							dest[d.id]?.ecloserieNurserieTriploide?.quantiteMilliers,
 					},
 				},
 			]),
@@ -118,9 +122,7 @@
 											</span>
 										</th>
 										<th>
-											Prix moyen au milier <span class="fr-text--regular">
-												(€ HT)
-											</span>
+											Quantité <span class="fr-text--regular">(milliers)</span>
 										</th>
 									</tr>
 								</thead>
@@ -149,13 +151,14 @@
 													/>
 												</td>
 												<td>
+													<!-- TODO: gérer les moules -->
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.destination.france[ori.id].prixMoyenHT
+															$form.destination.france[ori.id].quantiteMilliers
 														}
 														errors={$errors?.destination?.france?.[ori.id]
-															?.prixMoyenHT}
+															?.quantiteMilliers}
 													/>
 												</td>
 											</tr>
@@ -185,13 +188,15 @@
 													/>
 												</td>
 												<td>
+													<!-- TODO: gérer les moules -->
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.destination.etranger[ori.id].prixMoyenHT
+															$form.destination.etranger[ori.id]
+																.quantiteMilliers
 														}
 														errors={$errors?.destination?.etranger?.[ori.id]
-															?.prixMoyenHT}
+															?.quantiteMilliers}
 													/>
 												</td>
 											</tr>

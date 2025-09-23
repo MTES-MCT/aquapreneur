@@ -28,6 +28,7 @@
 			id,
 			isNaissain(id) ?
 				{
+					// TODO: gérer les moules
 					stockN: donneesEspece[id]?.stock?.stockMilliers,
 					stockNmoins1: donneesEspece[id]?.stock?.stockNmoins1milliers,
 				}
@@ -62,6 +63,7 @@
 									</td>
 									<td class="fr-cell--right">
 										{#if nMoins1}
+											<!--  TODO: gérer les moules -->
 											{formatNum(
 												nMoins1,
 												isNaissain(stade.id) ? "millier(s)" : "kg",

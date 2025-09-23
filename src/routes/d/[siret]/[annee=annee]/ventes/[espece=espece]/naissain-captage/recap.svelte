@@ -23,7 +23,7 @@
 						<tr>
 							<th>Destination</th>
 							<th class="fr-cell--right">Montant des ventes</th>
-							<th class="fr-cell--right">Prix moyen au milier</th>
+							<th class="fr-cell--right">Quantité</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -38,10 +38,11 @@
 									)}
 								</td>
 								<td class="fr-cell--right">
+									<!-- TODO: gérer les moules -->
 									{formatInt(
 										donneesEspece.naissainCaptage?.destination?.[dest.id]
-											?.prixMoyenHT,
-										"€",
+											?.quantiteMilliers,
+										"milliers",
 									)}
 								</td>
 							</tr>

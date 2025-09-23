@@ -23,11 +23,10 @@ import {
 const ValeurQuantite = optObject({
 	valeurHT: PositiveNumber.nullish(),
 	quantiteKg: PositiveNumber.nullish(),
-});
-
-const ValeurPrixMoy = optObject({
-	valeurHT: PositiveNumber.nullish(),
-	prixMoyenHT: PositiveNumber.nullish(),
+	// Naissains
+	quantiteMilliers: PositiveNumber.nullish(),
+	// Naissains moules
+	quantiteMetres: PositiveNumber.nullish(),
 });
 
 export const ValeurStock = optObject({
@@ -35,8 +34,10 @@ export const ValeurStock = optObject({
 	stockNmoins1kg: PositiveNumber.nullish(),
 	// Naissains
 	stockMilliers: PositiveNumber.nullish(),
-	stockMetres: PositiveNumber.nullish(),
 	stockNmoins1milliers: PositiveNumber.nullish(),
+	// Naissains moules
+	stockMetres: PositiveNumber.nullish(),
+	stockNmoins1metres: PositiveNumber.nullish(),
 });
 
 export const DonneesEspece = optObject({
@@ -68,29 +69,29 @@ export const DonneesEspece = optObject({
 	naissainCaptage: optObject({
 		stock: ValeurStock,
 		destination: optObject({
-			france: ValeurPrixMoy,
-			etranger: ValeurPrixMoy,
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
 		}),
 	}),
 	naissainEcloserieNurserie: optObject({
 		stock: ValeurStock,
 		destination: optObject({
 			france: optObject({
-				ecloserieNurserieDiploide: ValeurPrixMoy,
-				ecloserieNurserieTriploide: ValeurPrixMoy,
+				ecloserieNurserieDiploide: ValeurQuantite,
+				ecloserieNurserieTriploide: ValeurQuantite,
 			}),
 			etranger: optObject({
-				ecloserieNurserieDiploide: ValeurPrixMoy,
-				ecloserieNurserieTriploide: ValeurPrixMoy,
+				ecloserieNurserieDiploide: ValeurQuantite,
+				ecloserieNurserieTriploide: ValeurQuantite,
 			}),
 		}),
 		ecloserieNurserieDiploide: optObject({
-			france: ValeurPrixMoy,
-			etranger: ValeurPrixMoy,
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
 		}),
 		ecloserieNurserieTriploide: optObject({
-			france: ValeurPrixMoy,
-			etranger: ValeurPrixMoy,
+			france: ValeurQuantite,
+			etranger: ValeurQuantite,
 		}),
 	}),
 	pregrossissement: optObject({

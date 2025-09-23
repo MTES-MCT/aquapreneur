@@ -53,6 +53,7 @@
 					merge(data.donneesEspece, {
 						[id]: {
 							stock:
+								// TODO: gérer les moules
 								isNaissain(id) ?
 									{
 										stockMilliers: form.data.data[id].stockN,
@@ -78,6 +79,7 @@
 			id,
 			isNaissain(id) ?
 				{
+					// TODO: gérer les moules
 					stockN: data.donneesEspece[id]?.stock?.stockMilliers,
 					stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1milliers,
 				}
@@ -120,6 +122,7 @@
 											<td>
 												{stade.label}
 												<span class="fr-text--light fr-text--xs">
+													<!-- TODO: gérer les moules -->
 													({isNaissain(stade.id) ? "milliers" : "kg"})
 												</span>
 											</td>
