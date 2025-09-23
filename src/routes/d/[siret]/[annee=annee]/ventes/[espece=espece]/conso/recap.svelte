@@ -9,9 +9,9 @@
 		donneesEspece: DonneesEspece;
 	} = $props();
 
-	const dest = donneesEspece.consommation!.destination!;
+	const dest = donneesEspece.consommation?.destination;
 	const destFrActifs = DESTINATIONS_VENTES_CONSO_FRANCE.filter(
-		(d) => dest.france?.[d.id] != null,
+		(d) => dest?.france?.[d.id] != null,
 	);
 </script>
 
@@ -28,7 +28,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#if dest.france}
+						{#if dest?.france}
 							<tr>
 								<td
 									colspan="3"
@@ -38,20 +38,23 @@
 								</td>
 							</tr>
 							{#each destFrActifs as destination (destination.id)}
-								{#if dest.france[destination.id]}
+								{#if dest?.france[destination.id]}
 									<tr>
 										<td>{destination.label}</td>
 										<td class="fr-cell--right">
-											{formatInt(dest.france[destination.id]!.valeurHT, "€")}
+											{formatInt(dest?.france[destination.id]!.valeurHT, "€")}
 										</td>
 										<td class="fr-cell--right">
-											{formatInt(dest.france[destination.id]!.quantiteKg, "kg")}
+											{formatInt(
+												dest?.france[destination.id]!.quantiteKg,
+												"kg",
+											)}
 										</td>
 									</tr>
 								{/if}
 							{/each}
 						{/if}
-						{#if dest.unionEuropeenne || dest.horsUnionEuropeenne}
+						{#if dest?.unionEuropeenne || dest?.horsUnionEuropeenne}
 							<tr>
 								<td
 									colspan="3"
@@ -60,7 +63,7 @@
 									À l’étranger
 								</td>
 							</tr>
-							{#if dest.unionEuropeenne}
+							{#if dest?.unionEuropeenne}
 								<tr>
 									<td>Au sein de l’Union Européenne</td>
 									<td class="fr-cell--right">
@@ -71,7 +74,7 @@
 									</td>
 								</tr>
 							{/if}
-							{#if dest.horsUnionEuropeenne}
+							{#if dest?.horsUnionEuropeenne}
 								<tr>
 									<td>Hors de l’Union Européenne</td>
 									<td class="fr-cell--right">
