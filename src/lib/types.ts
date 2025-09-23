@@ -7,7 +7,7 @@ export const ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER =
 	"Veuillez selectionner au moins une réponse";
 export const ERR_REQUIRED = "Veuillez renseigner ce champ";
 export const ERR_POSITIVE_NUM = "Veuillez renseigner un nombre positif";
-export const ERR_INT = "Veuillez renseigner un nombre entier";
+export const ERR_INT = "Veuillez renseigner un nombre sans virgule";
 export const ERR_POSITIVE_INT = "Veuillez renseigner un nombre entier positif";
 export const ERR_YEAR = "Veuillez renseigner une année (ex : 1981)";
 export const ERR_YEAR_MIN =

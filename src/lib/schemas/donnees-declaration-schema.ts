@@ -58,6 +58,8 @@ export const DonneesEspece = optObject({
 				surfaceHa: PositiveInt.nullish(),
 				partStockNaissain: Percent.nullish(),
 				pertesNaissain: Percent.nullish(),
+				partStockPregrossissement: Percent.nullish(),
+				pertesPregrossissement: Percent.nullish(),
 				partStockDemiElevage: Percent.nullish(),
 				pertesDemiElevage: Percent.nullish(),
 				partStockElevageAdulte: Percent.nullish(),

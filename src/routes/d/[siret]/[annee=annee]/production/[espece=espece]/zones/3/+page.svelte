@@ -77,6 +77,7 @@
 			<p class="fr-text--sm fr-text--light">
 				Au 1er juin {data.annee}, vous aviez
 				<strong>
+					<!-- TODO ? Est-ce que l’écloserie doit être enlevée, ou passée sur une page à part ? -->
 					{formatNum(
 						((data.donneesEspece.naissainCaptage?.stock?.stockMilliers ?? 0) +
 							(data.donneesEspece.naissainEcloserieNurserie?.stock
@@ -85,8 +86,8 @@
 					)}
 				</strong>
 				unités de naissain en stock. Veuillez indiquer la part du stock présente
-				chaque zone, et les pertes estimées au cours de l’année. La somme des parts
-				du stock doit être égale à 100 %.
+				dans chaque zone, et les pertes estimées au cours de l’année. La somme des
+				parts du stock doit être égale à 100 %.
 			</p>
 
 			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>
