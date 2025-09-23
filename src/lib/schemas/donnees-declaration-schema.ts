@@ -50,7 +50,8 @@ export const DonneesEspece = optObject({
 			}),
 		)
 		.optional(),
-
+	// Demande DDTM
+	origines: z.enum(ORIGINES_NAISSAIN_IDS).array().optional(),
 	zonesProduction: z
 		.partialRecord(
 			z.enum(QUARTIERS_IMMATRICULATION_IDS),
@@ -149,7 +150,7 @@ export const DonneesEspece = optObject({
 		origine: z
 			.partialRecord(
 				z.enum(ORIGINES_NAISSAIN_IDS),
-				z.object({
+				optObject({
 					part: Percent.nullish(),
 					value: PositiveNumber.nullish(),
 				}),

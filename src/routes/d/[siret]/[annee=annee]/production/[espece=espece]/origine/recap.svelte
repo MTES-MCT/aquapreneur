@@ -1,7 +1,7 @@
 <script lang="ts">
 	import isEmpty from "lodash/isEmpty";
 
-	import { MODE_ELEVAGE } from "$lib/constants";
+	import { MODE_ELEVAGE, ORIGINES_NAISSAIN } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 
 	const {
@@ -33,20 +33,17 @@
 								</td>
 							</tr>
 						{/if}
-						{#if !isEmpty(donneesEspece.consommation?.origine)}
+						{#if !isEmpty(donneesEspece?.origines)}
 							<tr id="table-0-row-key-2" data-row-key="2">
 								<th>Origine</th>
 								<td>
-									<!-- TODO : à vérifier après branchement -->
-									{donneesEspece.consommation?.origine ?
-										Object.entries(donneesEspece.consommation.origine)
-											.filter(([_key, value]) => !isEmpty(value))
-											.map(
-												([key, _value]) => key,
-												//MODE_ELEVAGE.find((m) => m.id === key)?.label ?? "",
-											)
-											.join(" / ")
-									:	""}
+									{donneesEspece
+										.origines!.map(
+											(oid) =>
+												ORIGINES_NAISSAIN.find((o) => o.id === oid)?.label ??
+												"",
+										)
+										.join(", ")}
 								</td>
 							</tr>
 						{/if}
