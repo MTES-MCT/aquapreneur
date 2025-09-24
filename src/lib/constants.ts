@@ -239,8 +239,7 @@ export const ALEAS = [
 export const ALEAS_IDS = ALEAS.map((e) => e.id);
 export type AleaId = (typeof ALEAS_IDS)[number];
 
-// TODO: pluriel
-export const MODE_ELEVAGE = [
+export const MODES_ELEVAGE = [
 	{
 		label: "À plat",
 		groupe: "decouvrant",
@@ -279,7 +278,7 @@ export const MODE_ELEVAGE = [
 	},
 ] as const;
 
-export const MODES_ELEVAGE_IDS = MODE_ELEVAGE.map((e) => e.id);
+export const MODES_ELEVAGE_IDS = MODES_ELEVAGE.map((e) => e.id);
 
 // https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
 // TODO standardiser les clés: id / label

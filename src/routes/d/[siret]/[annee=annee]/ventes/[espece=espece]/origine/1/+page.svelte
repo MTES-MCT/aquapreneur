@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { MODE_ELEVAGE } from "$lib/constants";
+	import { MODES_ELEVAGE } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
 
@@ -16,7 +16,7 @@
 
 	merge(data.donneesEspece, { modeElevage: {} });
 
-	const modesActifs = MODE_ELEVAGE.filter(
+	const modesActifs = MODES_ELEVAGE.filter(
 		(m) => data.donneesEspece.modeElevage![m.id] != null,
 	);
 
