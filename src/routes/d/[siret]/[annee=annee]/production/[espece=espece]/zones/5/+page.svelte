@@ -34,17 +34,21 @@
 		),
 	});
 
+	const getNextPage = () => {
+		if (data.donneesEspece.elevageAdulte != null) return "./6";
+		return "../../recapitulatif";
+	};
+
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
-			getNextPage: () => "./6",
+			isLastStep: () => getNextPage() === "../../recapitulatif",
+			getNextPage,
 			validate: (form) => {
 				const sum = Object.values(form.data.data)
 					.map((zone) => zone.partStockDemiElevage ?? 0)
 					.reduce((acc, val) => acc + val, 0);
-				console.log(sum);
 				if (sum !== 100)
 					return `La somme de la colonne “Part du stock” devrait faire 100 % ; elle fait ${sum} %`;
 			},
@@ -75,6 +79,16 @@
 				.reduce((acc, cur) => acc + cur, 0)
 		);
 	});
+
+	const getPreviousPage = () => {
+		if (data.donneesEspece.pregrossissement != null) return "./4";
+		if (
+			data.donneesEspece.naissainCaptage != null ||
+			data.donneesEspece.naissainEcloserieNurserie != null
+		)
+			return "./3";
+		return "./2";
+	};
 </script>
 
 <form method="POST" use:enhance>
@@ -153,7 +167,7 @@
 	</Fieldset>
 
 	<NavigationLinks
-		prevHref="./4"
+		prevHref={getPreviousPage()}
 		nextIsButton
 		cantAnswerBtn={data.persona === "comptable"}
 	/>

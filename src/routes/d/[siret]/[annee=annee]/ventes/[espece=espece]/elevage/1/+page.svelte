@@ -15,20 +15,20 @@
 	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
-	// TODO preselection à partir de la production
-	merge(data.donneesEspece, {
-		pregrossissement: { destination: {} },
-		demiElevage: { destination: {} },
-		elevageAdulte: { destination: {} },
-	});
+
+	const activesStades = STADES_ELEVAGE.filter(
+		(s) => data.donneesEspece[s.id] != null,
+	);
+
+	const activesStadesIds = activesStades.map((s) => s.id);
 
 	const schema = z.object({
 		stades: z
-			.literal(STADES_ELEVAGE_IDS)
+			.literal(activesStadesIds)
 			.array()
 			.min(1, ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER)
 			.default(
-				STADES_ELEVAGE_IDS.filter(
+				activesStadesIds.filter(
 					(d) => !isEmpty(data.donneesEspece[d]?.destination),
 				),
 			),
@@ -83,7 +83,7 @@
 		{/snippet}
 
 		{#snippet inputs(id)}
-			{#each STADES_ELEVAGE as stade (stade.id)}
+			{#each activesStades as stade (stade.id)}
 				{@const destId = stade.id}
 				<CheckboxGroup>
 					{#snippet input(id)}

@@ -15,12 +15,6 @@
 
 	const { data } = $props();
 
-	merge(data.donneesEspece, {
-		pregrossissement: {},
-		demiElevage: {},
-		elevageAdulte: { destination: {} },
-	});
-
 	const stadesActifs = STADES_ELEVAGE.filter(
 		(d) => !isEmpty(data.donneesEspece[d.id]?.destination),
 	);
@@ -78,8 +72,10 @@
 						destActivesIds.map((d) => [
 							d,
 							{
-								valeurHT: data.donneesEspece[s]!.destination![d]?.valeurHT,
-								quantiteKg: data.donneesEspece[s]!.destination![d]?.quantiteKg,
+								valeurHT:
+									data.donneesEspece[s]?.destination?.[d]?.valeurHT ?? null,
+								quantiteKg:
+									data.donneesEspece[s]?.destination?.[d]?.quantiteKg ?? null,
 							},
 						]),
 					),

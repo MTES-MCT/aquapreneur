@@ -32,12 +32,24 @@
 		),
 	});
 
+	const getNextPage = () => {
+		if (
+			data.donneesEspece.naissainCaptage != null ||
+			data.donneesEspece.naissainEcloserieNurserie != null
+		)
+			return "./3";
+		if (data.donneesEspece.pregrossissement != null) return "./4";
+		if (data.donneesEspece.demiElevage != null) return "./5";
+		if (data.donneesEspece.elevageAdulte != null) return "./6";
+		return "../../recapitulatif";
+	};
+
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
-			getNextPage: () => "./3",
+			isLastStep: () => getNextPage() === "../../recapitulatif",
+			getNextPage,
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
 					data.progressionProdEspece.zones = statut;

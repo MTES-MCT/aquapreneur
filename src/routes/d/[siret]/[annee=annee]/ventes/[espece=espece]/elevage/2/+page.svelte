@@ -19,17 +19,10 @@
 	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
-	merge(data.donneesEspece, {
-		pregrossissement: {},
-		demiElevage: {},
-		elevageAdulte: { destination: {} },
-	});
 
 	const stadesActifsIds = STADES_ELEVAGE_IDS.filter(
 		(d) => !isEmpty(data.donneesEspece[d]?.destination),
 	);
-
-	console.log(stadesActifsIds);
 
 	const schema = z.object({
 		destination: z
@@ -65,9 +58,9 @@
 								destination: {
 									[d]: {
 										valeurHT:
-											data.donneesEspece[s]!.destination![d]?.valeurHT ?? null,
+											data.donneesEspece[s]?.destination?.[d]?.valeurHT ?? null,
 										quantiteKg:
-											data.donneesEspece[s]!.destination![d]?.quantiteKg ??
+											data.donneesEspece[s]?.destination?.[d]?.quantiteKg ??
 											null,
 									},
 								},

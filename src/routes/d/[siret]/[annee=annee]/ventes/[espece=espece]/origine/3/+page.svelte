@@ -18,7 +18,7 @@
 	const bio = data.donneesEspece.consommation?.bio;
 
 	const schema = z.object({
-		part: Percent.default((bio?.part ?? null) as unknown as number),
+		part: Percent,
 	});
 
 	const { form, errors, enhance } = prepareForm(
@@ -42,6 +42,9 @@
 		},
 		defaults(zod4(schema)),
 	);
+
+	// @ts-expect-error typage à revoir
+	$form.part = bio?.part;
 </script>
 
 <form use:enhance>
@@ -55,7 +58,6 @@
 				type="number"
 				bind:value={$form.part}
 				errors={$errors?.part as string[]}
-				required
 			>
 				{#snippet label()}Part certifiée Agriculture biologique (AB) (%)
 					<span class="fr-hint-text">

@@ -100,47 +100,51 @@
 			></RecapElevage>
 		</RecapLine>
 
-		<RecapLine
-			label="Vente de naissain capté"
-			status={data.progressionVentes.especes?.[espece.id]?.naissainCaptage}
-			icon="fr-icon-list-unordered"
-			onEdit={async () => {
-				merge(data.progressionVentes.especes, {
-					[espece.id]: {
-						naissainCaptage:
-							data.persona === "comptable" ?
-								"en cours comptable"
-							:	"en cours producteur",
-					},
-				});
-				goto(`./${espece.slug}/naissain-captage/`);
-			}}
-		>
-			<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
-			></RecapNaissainCaptage>
-		</RecapLine>
+		{#if data.donneesEspeces[espece.id]?.naissainCaptage != null}
+			<RecapLine
+				label="Vente de naissain capté"
+				status={data.progressionVentes.especes?.[espece.id]?.naissainCaptage}
+				icon="fr-icon-list-unordered"
+				onEdit={async () => {
+					merge(data.progressionVentes.especes, {
+						[espece.id]: {
+							naissainCaptage:
+								data.persona === "comptable" ?
+									"en cours comptable"
+								:	"en cours producteur",
+						},
+					});
+					goto(`./${espece.slug}/naissain-captage/`);
+				}}
+			>
+				<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
+				></RecapNaissainCaptage>
+			</RecapLine>
+		{/if}
 
-		<RecapLine
-			label="Vente de naissain d’écloserie/nurserie"
-			status={data.progressionVentes.especes?.[espece.id]
-				?.naissainEcloserieNurserie}
-			icon="fr-icon-list-unordered"
-			onEdit={async () => {
-				merge(data.progressionVentes.especes, {
-					[espece.id]: {
-						naissainEcloserieNurserie:
-							data.persona === "comptable" ?
-								"en cours comptable"
-							:	"en cours producteur",
-					},
-				});
-				goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
-			}}
-		>
-			<RecapNaissainEcloserieNurserie
-				donneesEspece={data.donneesEspeces[espece.id]!}
-			></RecapNaissainEcloserieNurserie>
-		</RecapLine>
+		{#if data.donneesEspeces[espece.id]?.naissainEcloserieNurserie != null}
+			<RecapLine
+				label="Vente de naissain d’écloserie/nurserie"
+				status={data.progressionVentes.especes?.[espece.id]
+					?.naissainEcloserieNurserie}
+				icon="fr-icon-list-unordered"
+				onEdit={async () => {
+					merge(data.progressionVentes.especes, {
+						[espece.id]: {
+							naissainEcloserieNurserie:
+								data.persona === "comptable" ?
+									"en cours comptable"
+								:	"en cours producteur",
+						},
+					});
+					goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
+				}}
+			>
+				<RecapNaissainEcloserieNurserie
+					donneesEspece={data.donneesEspeces[espece.id]!}
+				></RecapNaissainEcloserieNurserie>
+			</RecapLine>
+		{/if}
 
 		<RecapLine
 			label="Finition et traçabilité"
