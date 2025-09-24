@@ -1,4 +1,4 @@
-import { type SuperValidated, superForm } from "sveltekit-superforms";
+import { type SuperValidated, setError, superForm } from "sveltekit-superforms";
 import { type ZodValidationSchema, zod4 } from "sveltekit-superforms/adapters";
 
 import { goto } from "$app/navigation";
@@ -29,6 +29,7 @@ export function prepareForm<
 		persona,
 		isLastStep,
 		getNextPage,
+		validate,
 		updateProgress,
 		updateData,
 	}: {
@@ -36,6 +37,7 @@ export function prepareForm<
 		persona: Persona;
 		isLastStep: (form: SuperValidated<T, M, In>) => boolean;
 		getNextPage: () => string;
+		validate?: (form: SuperValidated<T, M, In>) => string | undefined;
 		updateProgress: (statut: StatutProgression) => DeclarationEntry;
 		updateData: (form: SuperValidated<T, M, In>) => DeclarationEntry;
 	},
@@ -71,7 +73,10 @@ export function prepareForm<
 		},
 
 		onUpdate: async ({ form }) => {
-			if (form.valid) {
+			const globalValidationError = validate ? validate(form) : null;
+			if (globalValidationError != null) {
+				setError(form, "", globalValidationError);
+			} else if (form.valid) {
 				let declaration = updateData(form);
 				declaration = updateProgress(
 					persona === "comptable" ?

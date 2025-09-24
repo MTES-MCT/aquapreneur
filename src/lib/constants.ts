@@ -171,6 +171,8 @@ export const ORIGINES = [
 	},
 ] as const;
 
+export const ORIGINES_IDS = ORIGINES.map((e) => e.id);
+
 export const ORIGINES_NAISSAIN = [
 	{
 		label: "Par captage en milieu naturel",

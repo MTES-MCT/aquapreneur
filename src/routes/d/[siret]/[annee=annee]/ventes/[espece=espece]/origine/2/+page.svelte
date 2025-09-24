@@ -8,24 +8,23 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { ORIGINES_NAISSAIN } from "$lib/constants";
+	import { ORIGINES, ORIGINES_IDS } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
 
 	const { data } = $props();
 
-	const origine = data.donneesEspece.consommation?.origine;
+	merge(data.donneesEspece, { consommation: { origine: {} } });
+
+	const origine = data.donneesEspece.consommation!.origine;
 
 	const schema = z.object({
-		captage: z.object({
-			part: Percent.default(origine?.captage?.part ?? 0),
-		}),
-		ecloserieNurserieDiploide: z.object({
-			part: Percent.default(origine?.ecloserieNurserieDiploide?.part ?? 0),
-		}),
-		ecloserieNurserieTriploide: z.object({
-			part: Percent.default(origine?.ecloserieNurserieTriploide?.part ?? 0),
-		}),
+		data: z.record(
+			z.enum(ORIGINES_IDS),
+			z.object({
+				part: Percent,
+			}),
+		),
 	});
 
 	const { form, errors, enhance } = prepareForm(
@@ -34,6 +33,14 @@
 			persona: data.persona,
 			isLastStep: () => false,
 			getNextPage: () => "./3",
+			validate: (form) => {
+				const sum = Object.values(form.data.data)
+					.map((origine) => origine.part ?? 0)
+					.reduce((acc, val) => acc + val, 0);
+				console.log(sum);
+				if (sum !== 100)
+					return `La somme de la colonne “Pourcentage” devrait faire 100 % ; elle fait ${sum} %`;
+			},
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionVentesEspece.origine)) {
 					data.progressionVentesEspece.origine = statut;
@@ -41,25 +48,48 @@
 				return data.declaration;
 			},
 			updateData: (form) => {
-				merge(data.declaration.donnees.especes, {
-					[data.espece.id]: { consommation: { origine: form.data } },
-				});
+				merge(data.donneesEspece.consommation!.origine, form.data.data);
 				return data.declaration;
 			},
 		},
 		defaults(zod4(schema)),
 	);
+
+	// @ts-expect-error typage à revoir
+	$form.data = Object.fromEntries(
+		ORIGINES_IDS.map((id) => [
+			id,
+			{
+				part: origine?.[id]?.part,
+			},
+		]),
+	);
+
+	const reminder = $derived.by(() => {
+		return (
+			100 -
+			ORIGINES_IDS.map((m) => $form.data[m].part ?? 0).reduce(
+				(acc, cur) => acc + cur,
+				0,
+			)
+		);
+	});
 </script>
 
 <form method="POST" use:enhance>
-	<Fieldset>
+	<Fieldset hasError={!!$errors?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4">
 				Comment se répartissent les ventes selon l’origine ?
 			</h2>
+
+			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>
+				Reste :
+				<span class="fr-text--bold">{reminder} %</span>
+			</p>
 		{/snippet}
 
-		{#snippet inputs()}
+		{#snippet inputs(id)}
 			<div class="fr-table fr-table--lg">
 				<div class="fr-table__wrapper">
 					<div class="fr-table__container">
@@ -74,14 +104,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									{#each ORIGINES_NAISSAIN as origine (origine.id)}
+									{#each ORIGINES as origine (origine.id)}
 										<tr>
 											<td>{origine.label}</td>
 											<td>
 												<InputGroup
 													type="number"
-													bind:value={$form[origine.id].part}
-													errors={$errors[origine.id]?.part}
+													bind:value={$form.data[origine.id].part}
+													errors={$errors?.data?.[origine.id]?.part}
 												></InputGroup>
 											</td>
 										</tr>
@@ -92,6 +122,13 @@
 					</div>
 				</div>
 			</div>
+			{#if $errors?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors._errors}
+					</p>
+				</div>
+			{/if}
 		{/snippet}
 	</Fieldset>
 
@@ -102,5 +139,8 @@
 	/>
 </form>
 
-<FormDebug {form} {errors} data={data.donneesEspece.consommation?.origine}
+<FormDebug
+	form={$form.data}
+	{errors}
+	data={data.donneesEspece.consommation?.origine}
 ></FormDebug>
