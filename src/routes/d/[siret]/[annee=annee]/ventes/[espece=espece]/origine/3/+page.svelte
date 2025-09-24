@@ -21,13 +21,18 @@
 		part: Percent,
 	});
 
+	const shouldSkipNext = () => {
+		return (
+			data.donneesEspece.consommation?.affinage == null ||
+			data.espece.id === "mouleCommune"
+		);
+	};
 	const { form, errors, enhance } = prepareForm(
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => data.espece.id === "mouleCommune",
-			getNextPage: () =>
-				data.espece.id === "mouleCommune" ? "../../recapitulatif" : "./4",
+			isLastStep: () => shouldSkipNext(),
+			getNextPage: () => (shouldSkipNext() ? "../../recapitulatif" : "./4"),
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionVentesEspece.origine)) {
 					data.progressionVentesEspece.origine = statut;

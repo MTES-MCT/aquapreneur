@@ -153,27 +153,29 @@
 			</RecapLine>
 		{/if}
 
-		<RecapLine
-			label="Finition et traçabilité"
-			status={data.progressionVentes.especes?.[espece.id]?.origine}
-			icon="fr-icon-list-unordered"
-			onEdit={async () => {
-				merge(data.progressionVentes.especes, {
-					[espece.id]: {
-						origine:
-							data.persona === "comptable" ?
-								"en cours comptable"
-							:	"en cours producteur",
-					},
-				});
-				goto(`./${espece.slug}/origine/`);
-			}}
-		>
-			<RecapOrigine
-				especeId={espece.id}
-				donneesEspece={data.donneesEspeces[espece.id]!}
-			></RecapOrigine>
-		</RecapLine>
+		{#if data.donneesEspeces[espece.id]?.consommation?.destination}
+			<RecapLine
+				label="Finition et traçabilité"
+				status={data.progressionVentes.especes?.[espece.id]?.origine}
+				icon="fr-icon-list-unordered"
+				onEdit={async () => {
+					merge(data.progressionVentes.especes, {
+						[espece.id]: {
+							origine:
+								data.persona === "comptable" ?
+									"en cours comptable"
+								:	"en cours producteur",
+						},
+					});
+					goto(`./${espece.slug}/origine/`);
+				}}
+			>
+				<RecapOrigine
+					especeId={espece.id}
+					donneesEspece={data.donneesEspeces[espece.id]!}
+				></RecapOrigine>
+			</RecapLine>
+		{/if}
 	</div>
 {/each}
 
