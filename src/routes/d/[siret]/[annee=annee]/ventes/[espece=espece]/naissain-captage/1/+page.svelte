@@ -39,7 +39,7 @@
 			getNextPage: () => "./2",
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionVentesEspece.naissainCaptage)) {
-					data.progressionVentesEspece.elevage = statut;
+					data.progressionVentesEspece.naissainCaptage = statut;
 				}
 				return data.declaration;
 			},
