@@ -8,9 +8,9 @@
 	const { data } = $props();
 </script>
 
-<h1 class="fr-h3">Production</h1>
+<h1 class="fr-h3 fr-mb-5w">Production</h1>
 
-<p class="fr-text fr-text--lead">
+<p class="fr-text fr-text--lg">
 	Merci de vérifier que vous produisez et vendez les espèces suivantes, ou de
 	les modifier si les informations sont incorrectes :
 </p>
