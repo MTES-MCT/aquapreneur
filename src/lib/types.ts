@@ -12,7 +12,7 @@ export const ERR_INT = "Veuillez saisir un nombre sans virgule";
 export const ERR_YEAR = "Veuillez renseigner une année (ex : 1981)";
 export const ERR_YEAR_MIN =
 	"Veuillez renseigner une année après 1900 (ex : 1981)";
-export const ERR_PCENT = "Veuillez saisir un pourcentage (entre 1 et 100)";
+export const ERR_PCENT = "Veuillez saisir un pourcentage (entre 0 et 100)";
 
 export const optObject = <T extends object>(t: T) =>
 	z.strictObject(t).optional();

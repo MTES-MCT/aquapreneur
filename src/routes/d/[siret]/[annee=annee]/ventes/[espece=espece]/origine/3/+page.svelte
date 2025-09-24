@@ -18,7 +18,7 @@
 	const bio = data.donneesEspece.consommation?.bio;
 
 	const schema = z.object({
-		part: Percent.default(bio?.part ?? 0),
+		part: Percent.default((bio?.part ?? null) as unknown as number),
 	});
 
 	const { form, errors, enhance } = prepareForm(
