@@ -24,7 +24,15 @@
 		{ id: "consommation", label: "Taille marchande" },
 	] as const;
 
-	const stadesActifs = stades.filter((s) => data.donneesEspece[s.id] != null);
+	const stadesActifs = stades.filter((s) => {
+		if (s.id === "consommation")
+			return (
+				data.donneesEspece.consommation?.stock?.stockKg != null ||
+				data.donneesEspece.consommation?.stock?.stockNmoins1kg != null
+			);
+		return data.donneesEspece[s.id] != null;
+	});
+	console.log(stadesActifs);
 	const stadesActifsIds = stadesActifs.map((s) => s.id);
 
 	const schema = z.object({
@@ -119,31 +127,29 @@
 								</thead>
 								<tbody>
 									{#each stadesActifs as stade (stade.id)}
-										{#if stade.id !== "consommation" || data.donneesEspece.consommation?.stock?.stockKg || data.donneesEspece.consommation?.stock?.stockNmoins1kg}
-											<tr>
-												<td>
-													{stade.label}
-													<span class="fr-text--light fr-text--xs">
-														<!-- TODO: gérer les moules -->
-														({isNaissain(stade.id) ? "milliers" : "kg"})
-													</span>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[stade.id].stockNmoins1}
-														errors={$errors?.data?.[stade.id]?.stockNmoins1}
-													/>
-												</td>
-												<td>
-													<InputGroup
-														type="number"
-														bind:value={$form.data[stade.id].stockN}
-														errors={$errors?.data?.[stade.id]?.stockN}
-													/>
-												</td>
-											</tr>
-										{/if}
+										<tr>
+											<td>
+												{stade.label}
+												<span class="fr-text--light fr-text--xs">
+													<!-- TODO: gérer les moules -->
+													({isNaissain(stade.id) ? "milliers" : "kg"})
+												</span>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[stade.id].stockNmoins1}
+													errors={$errors?.data?.[stade.id]?.stockNmoins1}
+												/>
+											</td>
+											<td>
+												<InputGroup
+													type="number"
+													bind:value={$form.data[stade.id].stockN}
+													errors={$errors?.data?.[stade.id]?.stockN}
+												/>
+											</td>
+										</tr>
 									{/each}
 								</tbody>
 							</table>

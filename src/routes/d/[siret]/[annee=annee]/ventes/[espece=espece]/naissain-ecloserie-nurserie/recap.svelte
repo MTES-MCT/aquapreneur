@@ -1,4 +1,6 @@
 <script lang="ts">
+	import isEmpty from "lodash/isEmpty";
+
 	import { ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
@@ -12,7 +14,9 @@
 	const dest = donneesEspece.naissainEcloserieNurserie?.destination;
 </script>
 
-{#if donneesEspece.naissainEcloserieNurserie?.destination}
+{#if isEmpty(donneesEspece.naissainEcloserieNurserie?.destination)}
+	<p>Pas de vente de naissain d’écloserie / nurserie</p>
+{:else if donneesEspece.naissainEcloserieNurserie?.destination}
 	<div class="fr-table fr-table--sm">
 		<div class="fr-table__wrapper">
 			<div class="fr-table__container">

@@ -25,7 +25,7 @@
 			persona: data.persona,
 			isLastStep: (form) => !form.data.aVenduNaissain,
 			getNextPage: () =>
-				data.donneesEspece.naissainEcloserieNurserie ?
+				data.donneesEspece.naissainEcloserieNurserie?.destination ?
 					"./naissain-ecloserie-nurserie/1"
 				:	"../recapitulatif",
 			updateProgress: (statut) => {
@@ -41,10 +41,10 @@
 			updateData: (form) => {
 				if (form.data.aVenduNaissain) {
 					merge(data.donneesEspece, {
-						naissainEcloserieNurserie: {},
+						naissainEcloserieNurserie: { destination: {} },
 					});
 				} else {
-					delete data.donneesEspece.naissainEcloserieNurserie;
+					delete data.donneesEspece.naissainEcloserieNurserie?.destination;
 				}
 				return data.declaration;
 			},

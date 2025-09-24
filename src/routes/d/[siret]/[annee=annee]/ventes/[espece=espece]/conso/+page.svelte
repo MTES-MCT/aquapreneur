@@ -24,7 +24,9 @@
 			persona: data.persona,
 			isLastStep: (form) => !form.data.aVenduConso,
 			getNextPage: () =>
-				data.donneesEspece.consommation ? "./conso/1" : "../recapitulatif",
+				data.donneesEspece.consommation?.destination ?
+					"./conso/1"
+				:	"../recapitulatif",
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionVentesEspece.consommation)) {
 					data.progressionVentesEspece.consommation = statut;
@@ -34,10 +36,10 @@
 			updateData: (form) => {
 				if (form.data.aVenduConso) {
 					merge(data.donneesEspece, {
-						consommation: {},
+						consommation: { destination: {} },
 					});
 				} else {
-					delete data.donneesEspece.consommation;
+					delete data.donneesEspece.consommation?.destination;
 				}
 				return data.declaration;
 			},

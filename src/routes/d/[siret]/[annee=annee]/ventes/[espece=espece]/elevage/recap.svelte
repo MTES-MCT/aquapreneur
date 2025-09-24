@@ -23,70 +23,74 @@
 	const destActivesIds = destActives.map((d) => d.id);
 </script>
 
-<div class="fr-table fr-table--sm">
-	<div class="fr-table__wrapper">
-		<div class="fr-table__container">
-			<div class="fr-table__content">
-				<table class="fr-cell--multiline">
-					<thead>
-						<tr>
-							<th>Stade d’élevage</th>
-							<th class="fr-cell--right">Montant des ventes</th>
-							<th class="fr-cell--right">Quantité</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#if destActivesIds.includes("france")}
+{#if destActives.length == 0}
+	<p>Pas de vente à l’élevage</p>
+{:else}
+	<div class="fr-table fr-table--sm">
+		<div class="fr-table__wrapper">
+			<div class="fr-table__container">
+				<div class="fr-table__content">
+					<table class="fr-cell--multiline">
+						<thead>
 							<tr>
-								<td
-									colspan="3"
-									class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
-								>
-									En France
-								</td>
+								<th>Stade d’élevage</th>
+								<th class="fr-cell--right">Montant des ventes</th>
+								<th class="fr-cell--right">Quantité</th>
 							</tr>
-							{#each stadesActifs as stade (stade.id)}
-								{@const dest = donneesEspece[stade.id]?.destination}
-								{#if dest}
-									<tr>
-										<td>{stade.label}</td>
-										<td class="fr-cell--right">
-											{formatInt(dest.france?.valeurHT, "€")}
-										</td>
-										<td class="fr-cell--right">
-											{formatInt(dest.france?.quantiteKg, "kg")}
-										</td>
-									</tr>
-								{/if}
-							{/each}
-						{/if}
-						{#if destActivesIds.includes("etranger")}
-							<tr>
-								<td
-									colspan="3"
-									class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
-								>
-									À l’étranger
-								</td>
-							</tr>
-							{#each stadesActifs as stade (stade.id)}
-								{@const dest = donneesEspece[stade.id]?.destination}
-								{#if dest}
-									<tr>
-										<td>{stade.label}</td>
-										<td class="fr-cell--right">
-											{formatInt(dest.etranger?.valeurHT, "€")}
-										</td>
-										<td class="fr-cell--right">
-											{formatInt(dest.etranger?.quantiteKg, "kg")}
-										</td>
-									</tr>
-								{/if}
-							{/each}
-						{/if}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{#if destActivesIds.includes("france")}
+								<tr>
+									<td
+										colspan="3"
+										class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+									>
+										En France
+									</td>
+								</tr>
+								{#each stadesActifs as stade (stade.id)}
+									{@const dest = donneesEspece[stade.id]?.destination}
+									{#if dest}
+										<tr>
+											<td>{stade.label}</td>
+											<td class="fr-cell--right">
+												{formatInt(dest.france?.valeurHT, "€")}
+											</td>
+											<td class="fr-cell--right">
+												{formatInt(dest.france?.quantiteKg, "kg")}
+											</td>
+										</tr>
+									{/if}
+								{/each}
+							{/if}
+							{#if destActivesIds.includes("etranger")}
+								<tr>
+									<td
+										colspan="3"
+										class="fr-text--bold fr-icon-arrow-right-line fr-icon--sm"
+									>
+										À l’étranger
+									</td>
+								</tr>
+								{#each stadesActifs as stade (stade.id)}
+									{@const dest = donneesEspece[stade.id]?.destination}
+									{#if dest}
+										<tr>
+											<td>{stade.label}</td>
+											<td class="fr-cell--right">
+												{formatInt(dest.etranger?.valeurHT, "€")}
+											</td>
+											<td class="fr-cell--right">
+												{formatInt(dest.etranger?.quantiteKg, "kg")}
+											</td>
+										</tr>
+									{/if}
+								{/each}
+							{/if}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+{/if}
