@@ -7,6 +7,7 @@ export const ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER =
 	"Veuillez selectionner au moins une réponse";
 export const ERR_REQUIRED = "Veuillez renseigner ce champ";
 export const ERR_POSITIVE_NUM = "Veuillez saisir un nombre plus grand que zéro";
+export const ERR_NUMBER = "Veuillez saisir un nombre";
 export const ERR_INT = "Veuillez saisir un nombre sans virgule";
 export const ERR_YEAR = "Veuillez renseigner une année (ex : 1981)";
 export const ERR_YEAR_MIN =
@@ -23,7 +24,7 @@ export const PositiveNumber = z
 	.nonnegative(ERR_POSITIVE_NUM);
 
 export const PositiveInt = z
-	.number(ERR_INT)
+	.number(ERR_NUMBER)
 	.int(ERR_INT)
 	.nonnegative(ERR_POSITIVE_NUM);
 
