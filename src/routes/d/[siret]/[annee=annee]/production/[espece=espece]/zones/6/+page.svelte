@@ -74,6 +74,17 @@
 				.reduce((acc, cur) => acc + cur, 0)
 		);
 	});
+
+	const getPreviousPage = () => {
+		if (data.donneesEspece.demiElevage != null) return "./5";
+		if (data.donneesEspece.pregrossissement != null) return "./4";
+		if (
+			data.donneesEspece.naissainCaptage != null ||
+			data.donneesEspece.naissainEcloserieNurserie != null
+		)
+			return "./3";
+		return "./2";
+	};
 </script>
 
 <form method="POST" use:enhance>
@@ -153,7 +164,7 @@
 	</Fieldset>
 
 	<NavigationLinks
-		prevHref="./5"
+		prevHref={getPreviousPage()}
 		nextIsButton
 		cantAnswerBtn={data.persona === "comptable"}
 	/>

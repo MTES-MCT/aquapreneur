@@ -8,11 +8,16 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RadioGroup from "$lib/components/radio-group.svelte";
+	import { STADES_ELEVAGE_IDS } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Bool } from "$lib/types";
 	import { nomEspece } from "$lib/utils";
 
 	const { data } = $props();
+
+	const activesStadesIds = STADES_ELEVAGE_IDS.filter(
+		(s) => data.donneesEspece[s] != null,
+	);
 
 	const aVendu = $derived(
 		!!data.donneesEspece.pregrossissement?.destination ||
@@ -39,17 +44,15 @@
 				return data.declaration;
 			},
 			updateData: (form) => {
-				if (form.data.aVenduElevage) {
-					merge(data.donneesEspece, {
-						pregrossissement: { destination: {} },
-						demiElevage: { destination: {} },
-						elevageAdulte: { destination: {} },
-					});
-				} else {
-					delete data.donneesEspece.pregrossissement?.destination;
-					delete data.donneesEspece.demiElevage?.destination;
-					delete data.donneesEspece.elevageAdulte?.destination;
-				}
+				activesStadesIds.forEach((s) => {
+					if (form.data.aVenduElevage) {
+						merge(data.donneesEspece, {
+							[s]: { destination: {} },
+						});
+					} else {
+						delete data.donneesEspece[s]?.destination;
+					}
+				});
 				return data.declaration;
 			},
 		},

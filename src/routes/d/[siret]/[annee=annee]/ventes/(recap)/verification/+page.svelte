@@ -117,33 +117,38 @@
 			</div>
 		{/if}
 
-		{#if progression?.naissainCaptage?.startsWith("validé")}
-			<div data-fr-group="true" class="fr-accordions-group">
-				<VerifLine
-					label="Vente de naissain capté"
-					onEdit={async () => {
-						goto(`./${espece.slug}/naissain-captage/`);
-					}}
-				>
-					<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
-					></RecapNaissainCaptage>
-				</VerifLine>
-			</div>
+		{#if data.donneesEspeces[espece.id]?.naissainCaptage != null}
+			{#if progression?.naissainCaptage?.startsWith("validé")}
+				<div data-fr-group="true" class="fr-accordions-group">
+					<VerifLine
+						label="Vente de naissain capté"
+						onEdit={async () => {
+							goto(`./${espece.slug}/naissain-captage/`);
+						}}
+					>
+						<RecapNaissainCaptage
+							donneesEspece={data.donneesEspeces[espece.id]!}
+						></RecapNaissainCaptage>
+					</VerifLine>
+				</div>
+			{/if}
 		{/if}
 
-		{#if progression?.naissainEcloserieNurserie?.startsWith("validé")}
-			<div data-fr-group="true" class="fr-accordions-group">
-				<VerifLine
-					label="Vente de naissain d’écloserie/nurserie"
-					onEdit={async () => {
-						goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
-					}}
-				>
-					<RecapNaissainEcloserieNurserie
-						donneesEspece={data.donneesEspeces[espece.id]!}
-					></RecapNaissainEcloserieNurserie>
-				</VerifLine>
-			</div>
+		{#if data.donneesEspeces[espece.id]?.naissainEcloserieNurserie != null}
+			{#if progression?.naissainEcloserieNurserie?.startsWith("validé")}
+				<div data-fr-group="true" class="fr-accordions-group">
+					<VerifLine
+						label="Vente de naissain d’écloserie/nurserie"
+						onEdit={async () => {
+							goto(`./${espece.slug}/naissain-ecloserie-nurserie/`);
+						}}
+					>
+						<RecapNaissainEcloserieNurserie
+							donneesEspece={data.donneesEspeces[espece.id]!}
+						></RecapNaissainEcloserieNurserie>
+					</VerifLine>
+				</div>
+			{/if}
 		{/if}
 
 		{#if progression?.origine?.startsWith("validé")}

@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { ORIGINES, ORIGINES_IDS } from "$lib/constants";
+	import { MODES_ELEVAGE_IDS, ORIGINES, ORIGINES_IDS } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
 
@@ -73,6 +73,14 @@
 			)
 		);
 	});
+
+	const getPreviousPage = () => {
+		const modesActifs = MODES_ELEVAGE_IDS.filter(
+			(m) => data.donneesEspece?.modeElevage?.[m] != null,
+		);
+		if (modesActifs.length) return "./1";
+		return "../origine";
+	};
 </script>
 
 <form method="POST" use:enhance>
@@ -132,7 +140,7 @@
 	</Fieldset>
 
 	<NavigationLinks
-		prevHref="./1"
+		prevHref={getPreviousPage()}
 		nextIsButton
 		cantAnswerBtn={data.persona === "comptable"}
 	/>
