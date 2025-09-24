@@ -1,15 +1,21 @@
 <script lang="ts">
 	import isEmpty from "lodash/isEmpty";
 
-	import { ORIGINES_NAISSAIN } from "$lib/constants";
+	import { type EspeceId, ORIGINES_NAISSAIN } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
 
 	const {
+		especeId,
 		donneesEspece,
 	}: {
+		especeId: EspeceId;
 		donneesEspece: DonneesEspece;
 	} = $props();
+
+	const activeOrigines = ORIGINES_NAISSAIN.filter(
+		(o) => especeId !== "mouleCommune" || o.id === "captage",
+	);
 </script>
 
 {#if donneesEspece?.consommation?.origine && Object.values(donneesEspece.consommation.origine).some((origine) => !isEmpty(origine))}
@@ -25,7 +31,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{#each ORIGINES_NAISSAIN as origine (origine.id)}
+							{#each activeOrigines as origine (origine.id)}
 								<tr>
 									<td>{origine.label}</td>
 									<td class="fr-cell--right">

@@ -169,7 +169,9 @@
 				goto(`./${espece.slug}/origine/`);
 			}}
 		>
-			<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+			<RecapOrigine
+				especeId={espece.id}
+				donneesEspece={data.donneesEspeces[espece.id]!}
 			></RecapOrigine>
 		</RecapLine>
 	</div>

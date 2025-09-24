@@ -8,7 +8,7 @@
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import InputGroup from "$lib/components/input-group.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { MODES_ELEVAGE_IDS, ORIGINES, ORIGINES_IDS } from "$lib/constants";
+	import { MODES_ELEVAGE_IDS, ORIGINES } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { Percent } from "$lib/types";
 
@@ -18,9 +18,16 @@
 
 	const origine = data.donneesEspece.consommation!.origine;
 
+	const activeOrigines = ORIGINES.filter(
+		(o) => data.espece.id !== "mouleCommune" || o.id === "captage",
+	);
+
+	const activeOriginesId = activeOrigines.map((o) => o.id);
+	console.log(data.espece.id, activeOriginesId);
+
 	const schema = z.object({
 		data: z.record(
-			z.enum(ORIGINES_IDS),
+			z.enum(activeOriginesId),
 			z.object({
 				part: Percent,
 			}),
@@ -56,7 +63,7 @@
 
 	// @ts-expect-error typage à revoir
 	$form.data = Object.fromEntries(
-		ORIGINES_IDS.map((id) => [
+		activeOriginesId.map((id) => [
 			id,
 			{
 				part: origine?.[id]?.part,
@@ -67,10 +74,9 @@
 	const reminder = $derived.by(() => {
 		return (
 			100 -
-			ORIGINES_IDS.map((m) => $form.data[m].part ?? 0).reduce(
-				(acc, cur) => acc + cur,
-				0,
-			)
+			activeOriginesId
+				.map((m) => $form.data[m].part ?? 0)
+				.reduce((acc, cur) => acc + cur, 0)
 		);
 	});
 
@@ -111,7 +117,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									{#each ORIGINES as origine (origine.id)}
+									{#each activeOrigines as origine (origine.id)}
 										<tr>
 											<td>{origine.label}</td>
 											<td>
