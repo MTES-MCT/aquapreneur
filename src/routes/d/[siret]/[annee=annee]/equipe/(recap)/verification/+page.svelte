@@ -57,9 +57,19 @@
 
 <div data-fr-group="true" class="fr-accordions-group">
 	{#each data.declaration.donnees.equipe.dirigeants as dir, index (dir.id)}
+		{@const statut = data.progressionEquipe.dirigeants.find(
+			(d) => d.id === dir.id,
+		)}
 		<VerifLine
 			label={dir.prenomNom ?? `Dirigeant ou associé n° ${index + 1}`}
 			onEdit={async () => {
+				if (statut) {
+					statut.statut =
+						data.persona === "comptable" ?
+							"en cours comptable"
+						:	"en cours producteur";
+				}
+				await submitDeclarationUpdate(data.declaration);
 				goto(`./details/dirigeants/${dir.id}/1`);
 			}}
 		>

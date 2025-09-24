@@ -45,7 +45,7 @@
 						data.progressionVentesEspece.naissainEcloserieNurserie,
 					)
 				) {
-					data.progressionVentesEspece.elevage = statut;
+					data.progressionVentesEspece.naissainEcloserieNurserie = statut;
 				}
 				return data.declaration;
 			},
