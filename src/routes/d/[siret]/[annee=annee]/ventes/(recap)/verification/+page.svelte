@@ -127,6 +127,7 @@
 						}}
 					>
 						<RecapNaissainCaptage
+							especeId={espece.id}
 							donneesEspece={data.donneesEspeces[espece.id]!}
 						></RecapNaissainCaptage>
 					</VerifLine>
@@ -144,6 +145,7 @@
 						}}
 					>
 						<RecapNaissainEcloserieNurserie
+							especeId={espece.id}
 							donneesEspece={data.donneesEspeces[espece.id]!}
 						></RecapNaissainEcloserieNurserie>
 					</VerifLine>
@@ -159,7 +161,9 @@
 						goto(`./${espece.slug}/origine/`);
 					}}
 				>
-					<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+					<RecapOrigine
+						especeId={espece.id}
+						donneesEspece={data.donneesEspeces[espece.id]!}
 					></RecapOrigine>
 				</VerifLine>
 			</div>

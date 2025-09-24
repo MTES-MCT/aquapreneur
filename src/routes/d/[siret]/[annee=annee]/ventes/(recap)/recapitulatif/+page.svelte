@@ -10,7 +10,7 @@
 
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import RecapLine from "$lib/components/recap-line.svelte";
-	import { ESPECES } from "$lib/constants";
+	import { ESPECES, type EspeceId } from "$lib/constants";
 	import { StatutProgression } from "$lib/schemas/donnees-declaration-schema";
 	import { nomEspece, submitDeclarationUpdate } from "$lib/utils";
 
@@ -32,14 +32,18 @@
 			"validé comptable",
 			"validé producteur",
 		];
-		return Object.values(data.progressionVentes?.especes || {}).every(
-			(p) =>
-				p == null ||
-				(statutsFinalises.includes(p?.consommation) &&
-					statutsFinalises.includes(p?.elevage) &&
-					statutsFinalises.includes(p?.naissainCaptage) &&
-					statutsFinalises.includes(p?.naissainEcloserieNurserie) &&
-					statutsFinalises.includes(p?.origine)),
+
+		return Object.entries(data.progressionVentes?.especes || {}).every(
+			([espId, esp]) =>
+				esp == null ||
+				(statutsFinalises.includes(esp?.consommation) &&
+					statutsFinalises.includes(esp?.elevage) &&
+					(statutsFinalises.includes(esp?.naissainCaptage) ||
+						data.donneesEspeces[espId as EspeceId]?.naissainCaptage == null) &&
+					(statutsFinalises.includes(esp?.naissainEcloserieNurserie) ||
+						data.donneesEspeces[espId as EspeceId]?.naissainEcloserieNurserie ==
+							null) &&
+					statutsFinalises.includes(esp?.origine)),
 		);
 	});
 
@@ -117,7 +121,9 @@
 					goto(`./${espece.slug}/naissain-captage/`);
 				}}
 			>
-				<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
+				<RecapNaissainCaptage
+					especeId={espece.id}
+					donneesEspece={data.donneesEspeces[espece.id]!}
 				></RecapNaissainCaptage>
 			</RecapLine>
 		{/if}
@@ -141,6 +147,7 @@
 				}}
 			>
 				<RecapNaissainEcloserieNurserie
+					especeId={espece.id}
 					donneesEspece={data.donneesEspeces[espece.id]!}
 				></RecapNaissainEcloserieNurserie>
 			</RecapLine>
@@ -162,7 +169,9 @@
 				goto(`./${espece.slug}/origine/`);
 			}}
 		>
-			<RecapOrigine donneesEspece={data.donneesEspeces[espece.id]!}
+			<RecapOrigine
+				especeId={espece.id}
+				donneesEspece={data.donneesEspeces[espece.id]!}
 			></RecapOrigine>
 		</RecapLine>
 	</div>

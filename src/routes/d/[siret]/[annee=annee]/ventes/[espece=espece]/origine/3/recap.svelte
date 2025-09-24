@@ -9,27 +9,29 @@
 	} = $props();
 </script>
 
-<div class="fr-table fr-table--sm" style="width: 100%">
-	<div class="fr-table__wrapper">
-		<div class="fr-table__container">
-			<div class="fr-table__content">
-				<table class="fr-cell--multiline">
-					<thead>
-						<tr>
-							<th>Certification</th>
-							<th class="fr-cell--right">Part des ventes</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Part certifiée Agriculture biologique (AB)</td>
-							<td class="fr-cell--right">
-								{formatInt(donneesEspece.consommation?.bio?.part, "%")}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+{#if donneesEspece.consommation?.bio?.part != null}
+	<div class="fr-table fr-table--sm" style="width: 100%">
+		<div class="fr-table__wrapper">
+			<div class="fr-table__container">
+				<div class="fr-table__content">
+					<table class="fr-cell--multiline">
+						<thead>
+							<tr>
+								<th>Certification</th>
+								<th class="fr-cell--right">Part des ventes</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Part certifiée Agriculture biologique (AB)</td>
+								<td class="fr-cell--right">
+									{formatInt(donneesEspece.consommation?.bio?.part, "%")}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+{/if}

@@ -31,16 +31,16 @@
 			z.enum(destFrActifsIds),
 			z.object({
 				valeurHT: PositiveNumber,
-				quantiteKg: PositiveNumber,
+				quantite: PositiveNumber,
 			}),
 		),
 		unionEuropeenne: optObject({
 			valeurHT: PositiveNumber,
-			quantiteKg: PositiveNumber,
+			quantite: PositiveNumber,
 		}),
 		horsUnionEuropeenne: optObject({
 			valeurHT: PositiveNumber,
-			quantiteKg: PositiveNumber,
+			quantite: PositiveNumber,
 		}),
 	});
 
@@ -75,7 +75,7 @@
 				d,
 				{
 					valeurHT: dest.france![d]?.valeurHT,
-					quantiteKg: dest.france![d]?.quantiteKg,
+					quantite: dest.france![d]?.quantite,
 				},
 			]),
 		);
@@ -86,13 +86,13 @@
 			// du formulaire, mais pas dans le schéma, pour que la validation les refuse lors
 			// de la soumission
 			valeurHT: dest.unionEuropeenne.valeurHT as unknown as number,
-			quantiteKg: dest.unionEuropeenne.quantiteKg as unknown as number,
+			quantite: dest.unionEuropeenne.quantite as unknown as number,
 		};
 	}
 	if (dest.horsUnionEuropeenne != null) {
 		$form.horsUnionEuropeenne = {
 			valeurHT: dest.horsUnionEuropeenne.valeurHT as unknown as number,
-			quantiteKg: dest.horsUnionEuropeenne.quantiteKg as unknown as number,
+			quantite: dest.horsUnionEuropeenne.quantite as unknown as number,
 		};
 	}
 </script>
@@ -157,10 +157,10 @@
 														<InputGroup
 															type="number"
 															bind:value={
-																$form.france![destination.id]!.quantiteKg
+																$form.france![destination.id]!.quantite
 															}
 															errors={$errors?.france?.[destination.id]
-																?.quantiteKg}
+																?.quantite}
 														/>
 													</td>
 												</tr>
@@ -189,8 +189,8 @@
 												<td>
 													<InputGroup
 														type="number"
-														bind:value={$form.unionEuropeenne!.quantiteKg}
-														errors={$errors?.unionEuropeenne?.quantiteKg}
+														bind:value={$form.unionEuropeenne!.quantite}
+														errors={$errors?.unionEuropeenne?.quantite}
 													/>
 												</td>
 											</tr>
@@ -208,8 +208,8 @@
 												<td>
 													<InputGroup
 														type="number"
-														bind:value={$form.horsUnionEuropeenne!.quantiteKg}
-														errors={$errors?.horsUnionEuropeenne?.quantiteKg}
+														bind:value={$form.horsUnionEuropeenne!.quantite}
+														errors={$errors?.horsUnionEuropeenne?.quantite}
 													/>
 												</td>
 											</tr>

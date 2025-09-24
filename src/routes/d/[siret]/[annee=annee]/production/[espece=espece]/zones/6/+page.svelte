@@ -61,8 +61,6 @@
 		defaults(zod4(schema)),
 	);
 
-	// TODO preremplir à 100 % si on n’a qu’une zone
-
 	// @ts-expect-error typage à revoir
 	$form.data = data.donneesEspece.zonesProduction;
 
@@ -96,7 +94,7 @@
 			<p class="fr-text--sm fr-text--light">
 				Au 1er juin {data.annee}, vous aviez
 				<strong>
-					{formatNum(data.donneesEspece.elevageAdulte?.stock?.stockKg ?? 0)}
+					{formatNum(data.donneesEspece.elevageAdulte?.stock?.stockQte ?? 0)}
 				</strong>
 				kilos {nomEspece(data.espece, {
 					avecArticleUndefini: true,

@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { STADES_ELEVAGE } from "$lib/constants";
+	import { type EspeceId, STADES_ELEVAGE } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatNum } from "$lib/utils";
 
 	const {
+		especeId,
 		donneesEspece,
 		annee,
 	}: {
+		especeId: EspeceId;
 		donneesEspece: DonneesEspece;
 		annee: number;
 	} = $props();
@@ -27,16 +29,10 @@
 	const data = Object.fromEntries(
 		stadesActifsIds.map((id) => [
 			id,
-			isNaissain(id) ?
-				{
-					// TODO: gérer les moules
-					stockN: donneesEspece[id]?.stock?.stockMilliers,
-					stockNmoins1: donneesEspece[id]?.stock?.stockNmoins1milliers,
-				}
-			:	{
-					stockN: donneesEspece[id]?.stock?.stockKg,
-					stockNmoins1: donneesEspece[id]?.stock?.stockNmoins1kg,
-				},
+			{
+				stockN: donneesEspece[id]?.stock?.stockQte,
+				stockNmoins1: donneesEspece[id]?.stock?.stockNmoins1Qte,
+			},
 		]),
 	);
 </script>
@@ -64,16 +60,26 @@
 									</td>
 									<td class="fr-cell--right">
 										{#if nMoins1}
-											<!--  TODO: gérer les moules -->
 											{formatNum(
 												nMoins1,
-												isNaissain(stade.id) ? "millier(s)" : "kg",
+												isNaissain(stade.id) ?
+													especeId === "mouleCommune" ?
+														"mètre(s)"
+													:	"millier(s)"
+												:	"kg",
 											)}
 										{/if}
 									</td>
 									<td class="fr-cell--right">
 										{#if n}
-											{formatNum(n, isNaissain(stade.id) ? "millier(s)" : "kg")}
+											{formatNum(
+												n,
+												isNaissain(stade.id) ?
+													especeId === "mouleCommune" ?
+														"mètre(s)"
+													:	"millier(s)"
+												:	"kg",
+											)}
 										{/if}
 									</td>
 								</tr>

@@ -17,7 +17,11 @@
 
 	merge(data.donneesEspece, { origines: [] });
 
-	const originesIds = ORIGINES.map((m) => m.id);
+	const activeOrigines = ORIGINES.filter(
+		(o) => data.espece.id !== "mouleCommune" || o.id === "captage",
+	);
+
+	const originesIds = activeOrigines.map((m) => m.id);
 
 	const schema = z.object({
 		origines: z
@@ -64,7 +68,7 @@
 		{/snippet}
 
 		{#snippet inputs(id)}
-			{#each ORIGINES as origine (origine.id)}
+			{#each activeOrigines as origine (origine.id)}
 				{@const origineId = origine.id}
 
 				<CheckboxGroup>

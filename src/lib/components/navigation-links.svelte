@@ -32,7 +32,10 @@
 {:else}
 	<div
 		class="fr-mt-8w"
-		style="display:flex; justify-content: {prevHref ? 'space-between'
+		style="display:flex; flex-wrap: wrap; row-gap: 1rem; justify-content: {(
+			prevHref
+		) ?
+			'space-between'
 		: center ? 'center'
 		: 'right'};"
 	>
@@ -45,10 +48,12 @@
 				Précédent
 			</a>
 		{/if}
-		<div>
+		<div
+			style="display: flex; flex-wrap: wrap; row-gap: 0.5rem; column-gap: 1rem; justify-content: space-between"
+		>
 			{#if cantAnswerBtn}
 				<button
-					class="fr-btn fr-btn--secondary fr-mx-4v"
+					class="fr-btn fr-btn--secondary"
 					disabled={clicked}
 					name="cantAnswer"
 					type="submit"

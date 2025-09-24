@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { DESTINATIONS_NAISSAIN } from "$lib/constants";
+	import isEmpty from "lodash/isEmpty";
+
+	import { DESTINATIONS_NAISSAIN, type EspeceId } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
 
 	const {
+		especeId,
 		donneesEspece,
 	}: {
+		especeId: EspeceId;
 		donneesEspece: DonneesEspece;
 	} = $props();
 
@@ -14,7 +18,9 @@
 	);
 </script>
 
-{#if donneesEspece.naissainCaptage?.destination}
+{#if isEmpty(donneesEspece.naissainCaptage?.destination)}
+	<p>Pas de vente de naissain de captage</p>
+{:else if donneesEspece.naissainCaptage?.destination}
 	<div class="fr-table fr-table--sm">
 		<div class="fr-table__wrapper">
 			<div class="fr-table__container">
@@ -39,12 +45,17 @@
 										)}
 									</td>
 									<td class="fr-cell--right">
-										<!-- TODO: gérer les moules -->
-										{formatInt(
-											donneesEspece.naissainCaptage?.destination?.[dest.id]
-												?.quantiteMilliers,
-											"milliers",
-										)}
+										{especeId === "mouleCommune" ?
+											formatInt(
+												donneesEspece.naissainCaptage?.destination?.[dest.id]
+													?.quantite,
+												"mètres",
+											)
+										:	formatInt(
+												donneesEspece.naissainCaptage?.destination?.[dest.id]
+													?.quantite,
+												"milliers",
+											)}
 									</td>
 								</tr>
 							{/each}

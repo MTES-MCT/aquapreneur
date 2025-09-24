@@ -31,12 +31,11 @@
 			z.object({
 				ecloserieNurserieDiploide: z.object({
 					valeurHT: PositiveNumber,
-					// TODO: gérer les moules
-					quantiteMilliers: PositiveNumber,
+					quantite: PositiveNumber,
 				}),
 				ecloserieNurserieTriploide: z.object({
 					valeurHT: PositiveNumber,
-					quantiteMilliers: PositiveNumber,
+					quantite: PositiveNumber,
 				}),
 			}),
 		),
@@ -77,17 +76,14 @@
 			destinationsActives.map((d) => [
 				d.id,
 				{
-					// TODO: gérer le cas des moules
 					ecloserieNurserieDiploide: {
 						valeurHT: dest[d.id]?.ecloserieNurserieDiploide?.valeurHT,
-						quantiteMilliers:
-							dest[d.id]?.ecloserieNurserieDiploide?.quantiteMilliers,
+						quantite: dest[d.id]?.ecloserieNurserieDiploide?.quantite,
 					},
 
 					ecloserieNurserieTriploide: {
 						valeurHT: dest[d.id]?.ecloserieNurserieTriploide?.valeurHT,
-						quantiteMilliers:
-							dest[d.id]?.ecloserieNurserieTriploide?.quantiteMilliers,
+						quantite: dest[d.id]?.ecloserieNurserieTriploide?.quantite,
 					},
 				},
 			]),
@@ -122,7 +118,11 @@
 											</span>
 										</th>
 										<th>
-											Quantité <span class="fr-text--regular">(milliers)</span>
+											Quantité <span class="fr-text--regular">
+												({data.espece.id === "mouleCommune" ?
+													"mètres"
+												:	"milliers"})
+											</span>
 										</th>
 									</tr>
 								</thead>
@@ -136,7 +136,6 @@
 												En France
 											</td>
 										</tr>
-										<!-- TODO: use active states instead -->
 										{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
 											<tr>
 												<td>{ori.label}</td>
@@ -151,14 +150,13 @@
 													/>
 												</td>
 												<td>
-													<!-- TODO: gérer les moules -->
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.destination.france[ori.id].quantiteMilliers
+															$form.destination.france[ori.id].quantite
 														}
 														errors={$errors?.destination?.france?.[ori.id]
-															?.quantiteMilliers}
+															?.quantite}
 													/>
 												</td>
 											</tr>
@@ -188,15 +186,13 @@
 													/>
 												</td>
 												<td>
-													<!-- TODO: gérer les moules -->
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.destination.etranger[ori.id]
-																.quantiteMilliers
+															$form.destination.etranger[ori.id].quantite
 														}
 														errors={$errors?.destination?.etranger?.[ori.id]
-															?.quantiteMilliers}
+															?.quantite}
 													/>
 												</td>
 											</tr>

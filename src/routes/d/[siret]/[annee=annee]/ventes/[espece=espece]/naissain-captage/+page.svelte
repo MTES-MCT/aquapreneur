@@ -25,7 +25,7 @@
 			persona: data.persona,
 			isLastStep: (form) => !form.data.aVenduNaissainCaptage,
 			getNextPage: () =>
-				data.donneesEspece.naissainCaptage ?
+				data.donneesEspece.naissainCaptage?.destination ?
 					"./naissain-captage/1"
 				:	"../recapitulatif",
 			updateProgress: (statut) => {
@@ -37,10 +37,10 @@
 			updateData: (form) => {
 				if (form.data.aVenduNaissainCaptage) {
 					merge(data.donneesEspece, {
-						naissainCaptage: {},
+						naissainCaptage: { destination: {} },
 					});
 				} else {
-					delete data.donneesEspece.naissainCaptage;
+					delete data.donneesEspece.naissainCaptage?.destination;
 				}
 				return data.declaration;
 			},

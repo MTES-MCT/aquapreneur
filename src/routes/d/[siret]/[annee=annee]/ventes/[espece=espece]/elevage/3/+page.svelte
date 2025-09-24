@@ -35,7 +35,7 @@
 					z.enum(destActivesIds),
 					z.object({
 						valeurHT: PositiveNumber,
-						quantiteKg: PositiveNumber,
+						quantite: PositiveNumber,
 					}),
 				),
 			}),
@@ -74,8 +74,8 @@
 							{
 								valeurHT:
 									data.donneesEspece[s]?.destination?.[d]?.valeurHT ?? null,
-								quantiteKg:
-									data.donneesEspece[s]?.destination?.[d]?.quantiteKg ?? null,
+								quantite:
+									data.donneesEspece[s]?.destination?.[d]?.quantite ?? null,
 							},
 						]),
 					),
@@ -144,10 +144,10 @@
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.data[stade.id].destination.france.quantiteKg
+															$form.data[stade.id].destination.france.quantite
 														}
 														errors={$errors?.data?.[stade.id]?.destination
-															?.france?.quantiteKg}
+															?.france?.quantite}
 													/>
 												</td>
 											</tr>
@@ -179,11 +179,10 @@
 													<InputGroup
 														type="number"
 														bind:value={
-															$form.data[stade.id].destination.etranger
-																.quantiteKg
+															$form.data[stade.id].destination.etranger.quantite
 														}
 														errors={$errors?.data?.[stade.id]?.destination
-															?.etranger?.quantiteKg}
+															?.etranger?.quantite}
 													/>
 												</td>
 											</tr>

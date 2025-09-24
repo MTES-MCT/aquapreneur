@@ -1,4 +1,6 @@
 <script lang="ts">
+	import isEmpty from "lodash/isEmpty";
+
 	import { MODES_ELEVAGE } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
@@ -14,30 +16,32 @@
 	);
 </script>
 
-<div class="fr-table fr-table--sm">
-	<div class="fr-table__wrapper">
-		<div class="fr-table__container">
-			<div class="fr-table__content">
-				<table class="fr-cell--multiline">
-					<thead>
-						<tr>
-							<th>Mode d’élevage</th>
-							<th class="fr-cell--right">Part de la production vendue</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each modesActifs as mode (mode.id)}
+{#if modesActifs.length && donneesEspece.modeElevage && Object.values(donneesEspece.modeElevage).some((mode) => !isEmpty(mode))}
+	<div class="fr-table fr-table--sm">
+		<div class="fr-table__wrapper">
+			<div class="fr-table__container">
+				<div class="fr-table__content">
+					<table class="fr-cell--multiline">
+						<thead>
 							<tr>
-								<td>{mode.label}</td>
-
-								<td class="fr-cell--right">
-									{formatInt(donneesEspece.modeElevage?.[mode.id]?.part, "%")}
-								</td>
+								<th>Mode d’élevage</th>
+								<th class="fr-cell--right">Part de la production vendue</th>
 							</tr>
-						{/each}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{#each modesActifs as mode (mode.id)}
+								<tr>
+									<td>{mode.label}</td>
+
+									<td class="fr-cell--right">
+										{formatInt(donneesEspece.modeElevage?.[mode.id]?.part, "%")}
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+{/if}

@@ -25,8 +25,9 @@
 		{
 			schema,
 			persona: data.persona,
-			isLastStep: () => false,
-			getNextPage: () => "./4",
+			isLastStep: () => data.espece.id === "mouleCommune",
+			getNextPage: () =>
+				data.espece.id === "mouleCommune" ? "../../recapitulatif" : "./4",
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionVentesEspece.origine)) {
 					data.progressionVentesEspece.origine = statut;

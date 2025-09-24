@@ -21,7 +21,10 @@
 		{ id: "naissainEcloserieNurserie", label: "Naissain – écloserie/nurserie" },
 		...STADES_ELEVAGE,
 		{ id: "affinage", label: "Affinage" },
-	] as const;
+	].filter(
+		(s) =>
+			data.espece.id !== "mouleCommune" || s.id !== "naissainEcloserieNurserie",
+	);
 
 	const stadeIds = stades.map((p) => p.id);
 
@@ -34,6 +37,7 @@
 				stadeIds.filter((e) =>
 					e === "affinage" ?
 						data.donneesEspece.consommation?.affinage != null
+						// @ts-expect-error typage à revoir
 					:	data.donneesEspece[e] != null,
 				),
 			),
@@ -63,6 +67,7 @@
 						if (form.data.stade.includes(e)) {
 							merge(data.donneesEspece, { [e]: {} });
 						} else {
+							// @ts-expect-error typage à revoir
 							delete data.donneesEspece[e];
 						}
 					}

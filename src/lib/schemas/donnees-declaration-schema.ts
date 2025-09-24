@@ -22,22 +22,18 @@ import {
 
 const ValeurQuantite = optObject({
 	valeurHT: PositiveNumber.nullish(),
-	quantiteKg: PositiveNumber.nullish(),
-	// Naissains
-	quantiteMilliers: PositiveNumber.nullish(),
-	// Naissains moules
-	quantiteMetres: PositiveNumber.nullish(),
+	// milliers pour les naissains d’huitre
+	// metres pour les naissains de moule
+	// kg pour le reste
+	quantite: PositiveNumber.nullish(),
 });
 
 export const ValeurStock = optObject({
-	stockKg: PositiveNumber.nullish(),
-	stockNmoins1kg: PositiveNumber.nullish(),
-	// Naissains
-	stockMilliers: PositiveNumber.nullish(),
-	stockNmoins1milliers: PositiveNumber.nullish(),
-	// Naissains moules
-	stockMetres: PositiveNumber.nullish(),
-	stockNmoins1metres: PositiveNumber.nullish(),
+	// milliers pour les naissains d’huitre
+	// metres pour les naissains de moule
+	// kg pour le reste
+	stockQte: PositiveNumber.nullish(),
+	stockNmoins1Qte: PositiveNumber.nullish(),
 });
 
 export const DonneesEspece = optObject({

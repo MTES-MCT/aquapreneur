@@ -110,6 +110,7 @@
 			}}
 		>
 			<RecapElevage
+				especeId={espece.id}
 				donneesEspece={data.donneesEspeces[espece.id]!}
 				annee={data.annee}
 			></RecapElevage>
