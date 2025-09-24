@@ -23,7 +23,6 @@
 	);
 
 	const activeOriginesId = activeOrigines.map((o) => o.id);
-	console.log(data.espece.id, activeOriginesId);
 
 	const schema = z.object({
 		data: z.record(
