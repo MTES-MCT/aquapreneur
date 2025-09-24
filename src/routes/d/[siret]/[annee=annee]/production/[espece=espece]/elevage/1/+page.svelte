@@ -23,7 +23,8 @@
 		{ id: "affinage", label: "Affinage" },
 	].filter(
 		(s) =>
-			data.espece.id !== "mouleCommune" || s.id !== "naissainEcloserieNurserie",
+			data.espece.id !== "mouleCommune" ||
+			(s.id !== "naissainEcloserieNurserie" && s.id !== "affinage"),
 	);
 
 	const stadeIds = stades.map((p) => p.id);

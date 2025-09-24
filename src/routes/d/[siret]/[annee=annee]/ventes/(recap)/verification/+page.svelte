@@ -153,20 +153,22 @@
 			{/if}
 		{/if}
 
-		{#if progression?.origine?.startsWith("validé")}
-			<div data-fr-group="true" class="fr-accordions-group">
-				<VerifLine
-					label="Finition et traçabilité"
-					onEdit={async () => {
-						goto(`./${espece.slug}/origine/`);
-					}}
-				>
-					<RecapOrigine
-						especeId={espece.id}
-						donneesEspece={data.donneesEspeces[espece.id]!}
-					></RecapOrigine>
-				</VerifLine>
-			</div>
+		{#if data.donneesEspeces[espece.id]?.consommation?.destination}
+			{#if progression?.origine?.startsWith("validé")}
+				<div data-fr-group="true" class="fr-accordions-group">
+					<VerifLine
+						label="Finition et traçabilité"
+						onEdit={async () => {
+							goto(`./${espece.slug}/origine/`);
+						}}
+					>
+						<RecapOrigine
+							especeId={espece.id}
+							donneesEspece={data.donneesEspeces[espece.id]!}
+						></RecapOrigine>
+					</VerifLine>
+				</div>
+			{/if}
 		{/if}
 	{:else}
 		<p class="">Aucune donnée à valider</p>
