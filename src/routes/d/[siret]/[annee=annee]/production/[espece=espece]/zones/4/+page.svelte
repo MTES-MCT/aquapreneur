@@ -98,7 +98,7 @@
 			<p class="fr-text--sm fr-text--light">
 				Au 1er juin {data.annee}, vous aviez
 				<strong>
-					{formatNum(data.donneesEspece.pregrossissement?.stock?.stockKg ?? 0)}
+					{formatNum(data.donneesEspece.pregrossissement?.stock?.stockQte ?? 0)}
 				</strong>
 				kilos {nomEspece(data.espece, {
 					avecArticleUndefini: true,

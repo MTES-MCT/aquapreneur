@@ -51,7 +51,7 @@
 											</td>
 											<td class="fr-cell--right">
 												{formatInt(
-													dest?.france[destination.id]!.quantiteKg,
+													dest?.france[destination.id]!.quantite,
 													"kg",
 												)}
 											</td>
@@ -75,7 +75,7 @@
 											{formatInt(dest.unionEuropeenne.valeurHT, "€")}
 										</td>
 										<td class="fr-cell--right">
-											{formatInt(dest.unionEuropeenne.quantiteKg, "kg")}
+											{formatInt(dest.unionEuropeenne.quantite, "kg")}
 										</td>
 									</tr>
 								{/if}
@@ -86,7 +86,7 @@
 											{formatInt(dest.horsUnionEuropeenne.valeurHT, "€")}
 										</td>
 										<td class="fr-cell--right">
-											{formatInt(dest.horsUnionEuropeenne.quantiteKg, "kg")}
+											{formatInt(dest.horsUnionEuropeenne.quantite, "kg")}
 										</td>
 									</tr>
 								{/if}

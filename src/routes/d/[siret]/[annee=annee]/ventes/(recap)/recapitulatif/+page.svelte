@@ -121,7 +121,9 @@
 					goto(`./${espece.slug}/naissain-captage/`);
 				}}
 			>
-				<RecapNaissainCaptage donneesEspece={data.donneesEspeces[espece.id]!}
+				<RecapNaissainCaptage
+					especeId={espece.id}
+					donneesEspece={data.donneesEspeces[espece.id]!}
 				></RecapNaissainCaptage>
 			</RecapLine>
 		{/if}
@@ -145,6 +147,7 @@
 				}}
 			>
 				<RecapNaissainEcloserieNurserie
+					especeId={espece.id}
 					donneesEspece={data.donneesEspeces[espece.id]!}
 				></RecapNaissainEcloserieNurserie>
 			</RecapLine>

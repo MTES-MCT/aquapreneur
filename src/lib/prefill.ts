@@ -156,17 +156,17 @@ export const prefillDeclaration = async (
 				// Pour simplifier, on met tout dans le captages
 				naissainCaptage: {
 					stock: {
-						stockMilliers: d?.stock.StckVolHNaisMi,
-						stockNmoins1milliers: dmoins1?.stock.StckVolHNaisMi,
+						stockQte: d?.stock.StckVolHNaisMi,
+						stockNmoins1Qte: dmoins1?.stock.StckVolHNaisMi,
 					},
 					destination: {
 						france: {
 							valeurHT: d?.production.CAHNaissFr,
-							quantiteMilliers: d?.production.VolVtHNaissFr,
+							quantite: d?.production.VolVtHNaissFr,
 						},
 						etranger: {
 							valeurHT: sumAttrs(d?.production, ["CAHNaissUE", "CAHNaissAu"]),
-							quantiteMilliers: sumAttrs(d?.production, [
+							quantite: sumAttrs(d?.production, [
 								"VolVtHNaissUE",
 								"VolVtHNaissAu",
 							]),
@@ -175,17 +175,17 @@ export const prefillDeclaration = async (
 				},
 				demiElevage: {
 					stock: {
-						stockKg: d?.stock.StckVolHDElv,
-						stockNmoins1kg: dmoins1?.stock.StckVolHDElv,
+						stockQte: d?.stock.StckVolHDElv,
+						stockNmoins1Qte: dmoins1?.stock.StckVolHDElv,
 					},
 					destination: {
 						france: {
 							valeurHT: d?.production.CAHDElvFr,
-							quantiteKg: d?.production.VolVtHDElvFr,
+							quantite: d?.production.VolVtHDElvFr,
 						},
 						etranger: {
 							valeurHT: sumAttrs(d?.production, ["CAHDElvUE", "CAHDElvAU"]),
-							quantiteKg: sumAttrs(d?.production, [
+							quantite: sumAttrs(d?.production, [
 								"VolVtHDElvUE",
 								"VolVtHDElvAu",
 							]),
@@ -194,63 +194,60 @@ export const prefillDeclaration = async (
 				},
 				elevageAdulte: {
 					stock: {
-						stockKg: d?.stock.StckVolHElv,
-						stockNmoins1kg: dmoins1?.stock.StckVolHElv,
+						stockQte: d?.stock.StckVolHElv,
+						stockNmoins1Qte: dmoins1?.stock.StckVolHElv,
 					},
 					destination: {
 						france: {
 							valeurHT: d?.production.CAHElvFr,
-							quantiteKg: d?.production.VolVtHElvFr,
+							quantite: d?.production.VolVtHElvFr,
 						},
 						etranger: {
 							valeurHT: sumAttrs(d?.production, ["CAHElvUE", "CAHElvAu"]),
-							quantiteKg: sumAttrs(d?.production, [
-								"VolVtHElvUE",
-								"VolVtHElvAu",
-							]),
+							quantite: sumAttrs(d?.production, ["VolVtHElvUE", "VolVtHElvAu"]),
 						},
 					},
 				},
 				consommation: {
 					stock: {
-						stockKg: d?.stock.StckVolHConso,
-						stockNmoins1kg: dmoins1?.stock.StckVolHConso,
+						stockQte: d?.stock.StckVolHConso,
+						stockNmoins1Qte: dmoins1?.stock.StckVolHConso,
 					},
 					destination: {
 						france: {
 							degustation: {
 								valeurHT: d?.production.CAHCoFrDeg,
-								quantiteKg: d?.production.VolVtHCoFrDeg,
+								quantite: d?.production.VolVtHCoFrDeg,
 							},
 							autresVentesParticuliers: {
 								valeurHT: d?.production.CAHCoFrDet,
-								quantiteKg: d?.production.VolVtHCoFrDet,
+								quantite: d?.production.VolVtHCoFrDet,
 							},
 							restaurateursTraiteurs: null,
 							poissoniersEcaillers: {
 								valeurHT: d?.production.CAHCoFrPCE,
-								quantiteKg: d?.production.VolVtHCoFrPCE,
+								quantite: d?.production.VolVtHCoFrPCE,
 							},
 							grandesMoyennesSurfaces: {
 								valeurHT: d?.production.CAHCoFrPGMS,
-								quantiteKg: d?.production.VolVtHCoFrPGMS,
+								quantite: d?.production.VolVtHCoFrPGMS,
 							},
 							mareyeursGrossistes: {
 								valeurHT: d?.production.CAHCoFrGros,
-								quantiteKg: d?.production.VolVtHCoFrGros,
+								quantite: d?.production.VolVtHCoFrGros,
 							},
 							enGros: {
 								valeurHT: d?.production.CAHCoFrPro,
-								quantiteKg: d?.production.VolVtHCoFrPro,
+								quantite: d?.production.VolVtHCoFrPro,
 							},
 						},
 						unionEuropeenne: {
 							valeurHT: d?.production.CAHCoUEGros,
-							quantiteKg: d?.production.VolVtHCoUEGros,
+							quantite: d?.production.VolVtHCoUEGros,
 						},
 						horsUnionEuropeenne: {
 							valeurHT: d?.production.CAHCoAuGros,
-							quantiteKg: d?.production.VolVtHCoAuGros,
+							quantite: d?.production.VolVtHCoAuGros,
 						},
 					},
 				},
@@ -270,17 +267,17 @@ export const prefillDeclaration = async (
 			mouleCommune: {
 				naissainCaptage: {
 					stock: {
-						stockMetres: d?.stock.StckVolMNaiss,
-						stockNmoins1metres: dmoins1?.stock.StckVolMNaiss,
+						stockQte: d?.stock.StckVolMNaiss,
+						stockNmoins1Qte: dmoins1?.stock.StckVolMNaiss,
 					},
 					destination: {
 						france: {
 							valeurHT: d?.production.CAMNaissFr,
-							quantiteMetres: d?.production.VolVtMNaissFr,
+							quantite: d?.production.VolVtMNaissFr,
 						},
 						etranger: {
 							valeurHT: sumAttrs(d?.production, ["CAMNaissUE", "CAMNaissAu"]),
-							quantiteMetres: sumAttrs(d?.production, [
+							quantite: sumAttrs(d?.production, [
 								"VolVtMNaissUE",
 								"VolVtMNaissAu",
 							]),
@@ -290,17 +287,17 @@ export const prefillDeclaration = async (
 
 				demiElevage: {
 					stock: {
-						stockKg: d?.stock.StckVolMDElv,
-						stockNmoins1kg: dmoins1?.stock.StckVolMDElv,
+						stockQte: d?.stock.StckVolMDElv,
+						stockNmoins1Qte: dmoins1?.stock.StckVolMDElv,
 					},
 					destination: {
 						france: {
 							valeurHT: d?.production.CAMDElvFr,
-							quantiteKg: d?.production.VolVtMDElvFr,
+							quantite: d?.production.VolVtMDElvFr,
 						},
 						etranger: {
 							valeurHT: sumAttrs(d?.production, ["CAMDElvUE", "CAMDElvAU"]),
-							quantiteKg: sumAttrs(d?.production, [
+							quantite: sumAttrs(d?.production, [
 								"VolVtMDElvUE",
 								"VolVtMDElvAu",
 							]),
@@ -310,44 +307,44 @@ export const prefillDeclaration = async (
 
 				consommation: {
 					stock: {
-						stockKg: d?.stock.StckVolMConso,
-						stockNmoins1kg: dmoins1?.stock.StckVolMConso,
+						stockQte: d?.stock.StckVolMConso,
+						stockNmoins1Qte: dmoins1?.stock.StckVolMConso,
 					},
 					destination: {
 						france: {
 							degustation: {
 								valeurHT: d?.production.CAMCoFrDeg,
-								quantiteKg: d?.production.VolVtMCoFrDeg,
+								quantite: d?.production.VolVtMCoFrDeg,
 							},
 							autresVentesParticuliers: {
 								valeurHT: d?.production.CAMCoFrDet,
-								quantiteKg: d?.production.VolVtMCoFrDet,
+								quantite: d?.production.VolVtMCoFrDet,
 							},
 							restaurateursTraiteurs: null,
 							poissoniersEcaillers: {
 								valeurHT: d?.production.CAMCoFrPCE,
-								quantiteKg: d?.production.VolVtMCoFrPCE,
+								quantite: d?.production.VolVtMCoFrPCE,
 							},
 							grandesMoyennesSurfaces: {
 								valeurHT: d?.production.CAMCoFrPGMS,
-								quantiteKg: d?.production.VolVtMCoFrPGMS,
+								quantite: d?.production.VolVtMCoFrPGMS,
 							},
 							mareyeursGrossistes: {
 								valeurHT: d?.production.CAMCoFrGros,
-								quantiteKg: d?.production.VolVtMCoFrGros,
+								quantite: d?.production.VolVtMCoFrGros,
 							},
 							enGros: {
 								valeurHT: d?.production.CAMCoFrPro,
-								quantiteKg: d?.production.VolVtMCoFrPro,
+								quantite: d?.production.VolVtMCoFrPro,
 							},
 						},
 						unionEuropeenne: {
 							valeurHT: d?.production.CAMCoUEGros,
-							quantiteKg: d?.production.VolVtMCoUEGros,
+							quantite: d?.production.VolVtMCoUEGros,
 						},
 						horsUnionEuropeenne: {
 							valeurHT: d?.production.CAMCoAuGros,
-							quantiteKg: d?.production.VolVtMCoAuGros,
+							quantite: d?.production.VolVtMCoAuGros,
 						},
 					},
 				},

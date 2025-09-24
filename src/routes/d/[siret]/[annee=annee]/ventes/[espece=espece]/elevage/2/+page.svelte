@@ -59,9 +59,8 @@
 									[d]: {
 										valeurHT:
 											data.donneesEspece[s]?.destination?.[d]?.valeurHT ?? null,
-										quantiteKg:
-											data.donneesEspece[s]?.destination?.[d]?.quantiteKg ??
-											null,
+										quantite:
+											data.donneesEspece[s]?.destination?.[d]?.quantite ?? null,
 									},
 								},
 							});

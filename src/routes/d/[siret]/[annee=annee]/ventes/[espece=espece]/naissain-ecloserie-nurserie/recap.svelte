@@ -1,13 +1,18 @@
 <script lang="ts">
 	import isEmpty from "lodash/isEmpty";
 
-	import { ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE } from "$lib/constants";
+	import {
+		type EspeceId,
+		ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE,
+	} from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
 
 	const {
+		especeId,
 		donneesEspece,
 	}: {
+		especeId: EspeceId;
 		donneesEspece: DonneesEspece;
 	} = $props();
 
@@ -46,11 +51,9 @@
 											{formatInt(dest.france[ori.id]?.valeurHT, "€")}
 										</td>
 										<td class="fr-cell--right">
-											<!-- todo : moules -->
-											{formatInt(
-												dest.france[ori.id]?.quantiteMilliers,
-												"milliers",
-											)}
+											{especeId === "mouleCommune" ?
+												formatInt(dest.france[ori.id]?.quantite, "mètres")
+											:	formatInt(dest.france[ori.id]?.quantite, "milliers")}
 										</td>
 									</tr>
 								{/each}
@@ -64,7 +67,6 @@
 										À l’étranger
 									</td>
 								</tr>
-								<!-- filter active states -->
 								{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
 									<tr>
 										<td>{ori.label}</td>
@@ -72,11 +74,9 @@
 											{formatInt(dest.etranger[ori.id]?.valeurHT, "€")}
 										</td>
 										<td class="fr-cell--right">
-											<!-- todo moules -->
-											{formatInt(
-												dest.etranger[ori.id]?.quantiteMilliers,
-												"milliers",
-											)}
+											{especeId === "mouleCommune" ?
+												formatInt(dest.etranger[ori.id]?.quantite, "mètres")
+											:	formatInt(dest.etranger[ori.id]?.quantite, "milliers")}
 										</td>
 									</tr>
 								{/each}

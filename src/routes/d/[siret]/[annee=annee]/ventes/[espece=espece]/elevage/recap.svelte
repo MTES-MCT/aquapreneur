@@ -57,7 +57,7 @@
 												{formatInt(dest.france?.valeurHT, "€")}
 											</td>
 											<td class="fr-cell--right">
-												{formatInt(dest.france?.quantiteKg, "kg")}
+												{formatInt(dest.france?.quantite, "kg")}
 											</td>
 										</tr>
 									{/if}
@@ -81,7 +81,7 @@
 												{formatInt(dest.etranger?.valeurHT, "€")}
 											</td>
 											<td class="fr-cell--right">
-												{formatInt(dest.etranger?.quantiteKg, "kg")}
+												{formatInt(dest.etranger?.quantite, "kg")}
 											</td>
 										</tr>
 									{/if}

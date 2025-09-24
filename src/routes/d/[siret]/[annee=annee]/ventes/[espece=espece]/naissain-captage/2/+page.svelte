@@ -26,8 +26,7 @@
 			z.enum(destinationsActivesIds),
 			z.object({
 				valeurHT: PositiveNumber,
-				// TODO gérer les moules
-				quantiteMilliers: PositiveNumber,
+				quantite: PositiveNumber,
 			}),
 		),
 	});
@@ -64,10 +63,8 @@
 				{
 					valeurHT:
 						data.donneesEspece.naissainCaptage?.destination?.[d.id]?.valeurHT,
-					// TODO gérer le cas des moules
-					quantiteMilliers:
-						data.donneesEspece.naissainCaptage?.destination?.[d.id]
-							?.quantiteMilliers,
+					quantite:
+						data.donneesEspece.naissainCaptage?.destination?.[d.id]?.quantite,
 				},
 			]),
 		),
@@ -99,7 +96,11 @@
 											</span>
 										</th>
 										<th>
-											Quantité <span class="fr-text--regular">(milliers)</span>
+											Quantité <span class="fr-text--regular">
+												({data.espece.id === "mouleCommune" ?
+													"mètres"
+												:	"milliers"})
+											</span>
 										</th>
 									</tr>
 								</thead>
@@ -115,14 +116,10 @@
 												/>
 											</td>
 											<td>
-												<!-- TODO: gérer les moules -->
 												<InputGroup
 													type="number"
-													bind:value={
-														$form.destination[dest.id].quantiteMilliers
-													}
-													errors={$errors?.destination?.[dest.id]
-														?.quantiteMilliers}
+													bind:value={$form.destination[dest.id].quantite}
+													errors={$errors?.destination?.[dest.id]?.quantite}
 												/>
 											</td>
 										</tr>

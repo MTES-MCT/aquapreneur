@@ -27,12 +27,11 @@
 	const stadesActifs = stades.filter((s) => {
 		if (s.id === "consommation")
 			return (
-				data.donneesEspece.consommation?.stock?.stockKg != null ||
-				data.donneesEspece.consommation?.stock?.stockNmoins1kg != null
+				data.donneesEspece.consommation?.stock?.stockQte != null ||
+				data.donneesEspece.consommation?.stock?.stockNmoins1Qte != null
 			);
 		return data.donneesEspece[s.id] != null;
 	});
-	console.log(stadesActifs);
 	const stadesActifsIds = stadesActifs.map((s) => s.id);
 
 	const schema = z.object({
@@ -61,17 +60,10 @@
 				stadesActifsIds.forEach((id) =>
 					merge(data.donneesEspece, {
 						[id]: {
-							stock:
-								// TODO: gérer les moules
-								isNaissain(id) ?
-									{
-										stockMilliers: form.data.data[id].stockN,
-										stockNmoins1milliers: form.data.data[id].stockNmoins1,
-									}
-								:	{
-										stockKg: form.data.data[id].stockN,
-										stockNmoins1kg: form.data.data[id].stockNmoins1,
-									},
+							stock: {
+								stockQte: form.data.data[id].stockN,
+								stockNmoins1Qte: form.data.data[id].stockNmoins1,
+							},
 						},
 					}),
 				);
@@ -86,16 +78,10 @@
 	$form.data = Object.fromEntries(
 		stadesActifsIds.map((id) => [
 			id,
-			isNaissain(id) ?
-				{
-					// TODO: gérer les moules
-					stockN: data.donneesEspece[id]?.stock?.stockMilliers,
-					stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1milliers,
-				}
-			:	{
-					stockN: data.donneesEspece[id]?.stock?.stockKg,
-					stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1kg,
-				},
+			{
+				stockN: data.donneesEspece[id]?.stock?.stockQte,
+				stockNmoins1: data.donneesEspece[id]?.stock?.stockNmoins1Qte,
+			},
 		]),
 	);
 </script>
@@ -131,8 +117,11 @@
 											<td>
 												{stade.label}
 												<span class="fr-text--light fr-text--xs">
-													<!-- TODO: gérer les moules -->
-													({isNaissain(stade.id) ? "milliers" : "kg"})
+													({isNaissain(stade.id) ?
+														data.espece.id === "mouleCommune" ?
+															"mètres"
+														:	"milliers"
+													:	"kg"})
 												</span>
 											</td>
 											<td>

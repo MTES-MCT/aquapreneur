@@ -127,6 +127,7 @@
 						}}
 					>
 						<RecapNaissainCaptage
+							especeId={espece.id}
 							donneesEspece={data.donneesEspeces[espece.id]!}
 						></RecapNaissainCaptage>
 					</VerifLine>
@@ -144,6 +145,7 @@
 						}}
 					>
 						<RecapNaissainEcloserieNurserie
+							especeId={espece.id}
 							donneesEspece={data.donneesEspeces[espece.id]!}
 						></RecapNaissainEcloserieNurserie>
 					</VerifLine>
