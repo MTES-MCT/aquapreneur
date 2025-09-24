@@ -67,8 +67,6 @@
 		defaults(zod4(schema)),
 	);
 
-	// TODO preremplir à 100 % si on n’a qu’une zone
-
 	// @ts-expect-error typage à revoir
 	$form.data = data.donneesEspece.zonesProduction;
 

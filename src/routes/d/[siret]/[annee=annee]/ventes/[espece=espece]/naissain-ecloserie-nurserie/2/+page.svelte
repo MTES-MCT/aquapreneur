@@ -136,7 +136,6 @@
 												En France
 											</td>
 										</tr>
-										<!-- TODO: use active states instead -->
 										{#each ORIGINES_NAISSAIN_ECLOSERIE_NURSERIE as ori (ori.id)}
 											<tr>
 												<td>{ori.label}</td>

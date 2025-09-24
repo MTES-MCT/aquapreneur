@@ -49,9 +49,7 @@ export const load = async ({ params, parent }) => {
 		persona === "comptable" ? declarationComptable : declarationProducteur;
 
 	return {
-		// TODO supprimer
 		annee: anneeNum,
-		// TODO supprimer
 		etablissement,
 		declarationAPI,
 		declarationComptable,
