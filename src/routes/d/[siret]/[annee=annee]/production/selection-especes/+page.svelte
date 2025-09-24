@@ -58,9 +58,9 @@
 <form method="POST" use:enhance>
 	<Fieldset hasError={!!$errors?.especes?._errors}>
 		{#snippet legend()}
-			<p class="fr-text--lead fr-text--bold fr-mb-1w">
+			<h2 class="fr-text--xl fr-text--bold fr-mb-1w">
 				Quelles espèces de coquillages avez-vous produites ?
-			</p>
+			</h2>
 
 			<p class="fr-text--sm fr-text--light">
 				Vous pouvez sélectionner une ou plusieurs réponses.

@@ -15,7 +15,7 @@
 </script>
 
 {#if donneesEspece.naissainCaptage?.destination}
-	<div class="fr-table fr-table--lg">
+	<div class="fr-table fr-table--sm">
 		<div class="fr-table__wrapper">
 			<div class="fr-table__container">
 				<div class="fr-table__content">
