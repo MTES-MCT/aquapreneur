@@ -63,7 +63,6 @@
 	);
 
 	// TODO preremplir à 100 % si on n’a qu’une zone
-	// TODO refuser validation si total != 100%
 
 	// @ts-expect-error typage à revoir
 	$form.data = data.donneesEspece.zonesProduction;

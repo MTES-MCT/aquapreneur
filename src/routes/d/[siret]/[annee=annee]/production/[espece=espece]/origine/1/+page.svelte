@@ -8,7 +8,7 @@
 	import Fieldset from "$lib/components/fieldset.svelte";
 	import FormDebug from "$lib/components/form-debug.svelte";
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
-	import { MODES_ELEVAGE_IDS, MODE_ELEVAGE } from "$lib/constants";
+	import { MODES_ELEVAGE, MODES_ELEVAGE_IDS } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
 	import { ERR_MUST_CHOOSE_AT_LEAST_ONE_ANSWER } from "$lib/types";
 
@@ -80,7 +80,7 @@
 			{#each groupes as groupe (groupe.id)}
 				<h3 class="fr-h6 fr-mt-3w">{groupe.label}</h3>
 
-				{#each MODE_ELEVAGE.filter((m) => m.groupe === groupe.id && (m.especes == null || (m.especes as ReadonlyArray<string>).includes(data.espece.id))) as mode (mode.id)}
+				{#each MODES_ELEVAGE.filter((m) => m.groupe === groupe.id && (m.especes == null || (m.especes as ReadonlyArray<string>).includes(data.espece.id))) as mode (mode.id)}
 					{@const modeId = mode.id}
 
 					<CheckboxGroup>

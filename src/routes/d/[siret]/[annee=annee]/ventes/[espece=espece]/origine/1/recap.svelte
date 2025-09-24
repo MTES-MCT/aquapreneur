@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MODE_ELEVAGE } from "$lib/constants";
+	import { MODES_ELEVAGE } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 	import { formatInt } from "$lib/utils";
 
@@ -9,7 +9,7 @@
 		donneesEspece: DonneesEspece;
 	} = $props();
 
-	const modesActifs = MODE_ELEVAGE.filter(
+	const modesActifs = MODES_ELEVAGE.filter(
 		(m) => donneesEspece.modeElevage?.[m.id] != null,
 	);
 </script>

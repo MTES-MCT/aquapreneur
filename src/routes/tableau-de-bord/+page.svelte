@@ -101,6 +101,13 @@
 													action="/d/{etablissement.siret}/{CURRENT_YEAR}"
 												>
 													<button
+														onclick={(event) => {
+															const result = confirm(
+																"Attention : la réinitialisation entraîne la suppression définitive de toutes les données saisies. Souhaitez-vous confirmer cette opération ?",
+															);
+
+															if (!result) event.preventDefault();
+														}}
 														class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
 													>
 														Réinitialiser

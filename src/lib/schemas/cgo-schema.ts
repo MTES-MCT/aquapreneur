@@ -17,12 +17,6 @@ export const LaxNumValue = z
 	.optional();
 
 export type LaxNumValue = z.infer<typeof LaxNumValue>;
-// TODO add unit tests
-
-// export const laxNumValue = type(
-// 	"'' | string.numeric.parse | number | null",
-// ).pipe((v) => (v == "" ? null : v));
-// export type laxNumValue = typeof laxNumValue.infer;
 
 // Documentation : https://docs.numerique.gouv.fr/docs/497b674d-abd9-4941-8d72-3e0428b853ee/
 

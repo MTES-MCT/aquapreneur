@@ -1,7 +1,7 @@
 <script lang="ts">
 	import isEmpty from "lodash/isEmpty";
 
-	import { MODE_ELEVAGE, ORIGINES_NAISSAIN } from "$lib/constants";
+	import { MODES_ELEVAGE, ORIGINES_NAISSAIN } from "$lib/constants";
 	import type { DonneesEspece } from "$lib/schemas/donnees-declaration-schema";
 
 	const {
@@ -23,13 +23,14 @@
 								<td>
 									{donneesEspece.modeElevage ?
 										Object.entries(donneesEspece.modeElevage)
-											.filter(([_key, value]) => !!value)
-											.map(
-												([key, _value]) =>
-													MODE_ELEVAGE.find((m) => m.id === key)?.label ?? "",
-											)
-											.join(" / ")
-									:	""}
+												.filter(([_key, value]) => !!value)
+												.map(
+													([key, _value]) =>
+														MODES_ELEVAGE.find((m) => m.id === key)?.label ??
+														"",
+												)
+												.join(" / ")
+										:	""}
 								</td>
 							</tr>
 						{/if}
