@@ -55,7 +55,7 @@
 	<div class="fr-grid-row">
 		<div
 			id="contenu"
-			class="fr-col-12 fr-col-md-8 fr-col-lg-7 fr-mx-auto fr-pt-md-12v fr-pt-8v fr-pb-12v"
+			class="fr-col-12 fr-col-md-9 fr-mx-auto fr-pt-md-12v fr-pt-8v fr-pb-12v"
 			style="min-height: 100vh;"
 		>
 			{@render children()}
