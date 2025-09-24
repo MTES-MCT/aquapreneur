@@ -68,29 +68,36 @@
 	{/each}
 </div>
 
-<h2 class="fr-h6 fr-mt-10v">Main d’œuvre</h2>
+{#if data.progressionEquipe?.permanents?.startsWith("validé") || data.progressionEquipe?.saisonniers?.startsWith("validé")}
+	<h2 class="fr-h6 fr-mt-10v">Main d’œuvre</h2>
 
-<div data-fr-group="true" class="fr-accordions-group">
-	<VerifLine
-		label="Employés permanents"
-		onEdit={async () => {
-			goto(`./details/permanents`);
-		}}
-	>
-		<RecapPermanents permanents={data.declaration.donnees.equipe.permanents}
-		></RecapPermanents>
-	</VerifLine>
+	<div data-fr-group="true" class="fr-accordions-group">
+		{#if data.progressionEquipe?.permanents?.startsWith("validé")}
+			<VerifLine
+				label="Employés permanents"
+				onEdit={async () => {
+					goto(`./details/permanents`);
+				}}
+			>
+				<RecapPermanents permanents={data.declaration.donnees.equipe.permanents}
+				></RecapPermanents>
+			</VerifLine>
+		{/if}
 
-	<VerifLine
-		label="Employés saisonniers"
-		onEdit={async () => {
-			goto(`./details/saisonniers`);
-		}}
-	>
-		<RecapSaisonniers saisonniers={data.declaration.donnees.equipe.saisonniers}
-		></RecapSaisonniers>
-	</VerifLine>
-</div>
+		{#if data.progressionEquipe?.saisonniers?.startsWith("validé")}
+			<VerifLine
+				label="Employés saisonniers"
+				onEdit={async () => {
+					goto(`./details/saisonniers`);
+				}}
+			>
+				<RecapSaisonniers
+					saisonniers={data.declaration.donnees.equipe.saisonniers}
+				></RecapSaisonniers>
+			</VerifLine>
+		{/if}
+	</div>
+{/if}
 
 <form method="POST" onsubmit={handleSubmit}>
 	<NavigationLinks nextIsButton nextLabel="Confirmer ces données" center />
