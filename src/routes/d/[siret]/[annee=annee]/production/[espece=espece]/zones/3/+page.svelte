@@ -40,6 +40,14 @@
 			persona: data.persona,
 			isLastStep: () => false,
 			getNextPage: () => "./4",
+			validate: (form) => {
+				const sum = Object.values(form.data.data)
+					.map((zone) => zone.partStockNaissain ?? 0)
+					.reduce((acc, val) => acc + val, 0);
+				console.log(sum);
+				if (sum !== 100)
+					return `La somme de la colonne “Part du stock” devrait faire 100 % ; elle fait ${sum} %`;
+			},
 			updateProgress: (statut) => {
 				if (shouldUpdateStatus(data.progressionProdEspece.zones)) {
 					data.progressionProdEspece.zones = statut;
@@ -71,7 +79,7 @@
 </script>
 
 <form method="POST" use:enhance>
-	<Fieldset>
+	<Fieldset hasError={!!$errors?._errors}>
 		{#snippet legend()}
 			<h2 class="fr-h4">Où se situe votre naissain ?</h2>
 			<p class="fr-text--sm fr-text--light">
@@ -88,14 +96,13 @@
 				dans chaque zone, et les pertes estimées au cours de l’année. La somme des
 				parts du stock doit être égale à 100 %.
 			</p>
-
 			<p class="fr-text--md" style={`${reminder !== 0 ? "color: red" : ""}`}>
 				Reste :
 				<span class="fr-text--bold">{reminder} %</span>
 			</p>
 		{/snippet}
 
-		{#snippet inputs()}
+		{#snippet inputs(id)}
 			<div class="fr-table fr-table--lg">
 				<div class="fr-table__wrapper">
 					<div class="fr-table__container">
@@ -136,6 +143,13 @@
 					</div>
 				</div>
 			</div>
+			{#if $errors?._errors}
+				<div class="fr-messages-group" id="{id}-messages" aria-live="polite">
+					<p class="fr-message fr-message--error" id="{id}-errors">
+						{$errors._errors}
+					</p>
+				</div>
+			{/if}
 		{/snippet}
 	</Fieldset>
 
