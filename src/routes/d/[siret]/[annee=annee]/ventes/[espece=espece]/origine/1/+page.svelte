@@ -10,7 +10,7 @@
 	import NavigationLinks from "$lib/components/navigation-links.svelte";
 	import { MODE_ELEVAGE } from "$lib/constants";
 	import { prepareForm, shouldUpdateStatus } from "$lib/form-utils";
-	import { Percent, PositiveNumber } from "$lib/types";
+	import { Percent } from "$lib/types";
 
 	const { data } = $props();
 
@@ -27,7 +27,6 @@
 			z.enum(modesActifsIds),
 			z.object({
 				part: Percent,
-				value: PositiveNumber,
 			}),
 		),
 	});
@@ -59,7 +58,6 @@
 			id,
 			{
 				part: data.donneesEspece.modeElevage![id]?.part,
-				value: data.donneesEspece.modeElevage![id]?.value,
 			},
 		]),
 	);
@@ -72,10 +70,6 @@
 				Comment se répartissent les ventes selon le dernier mode d’élevage
 				utilisé ?
 			</h2>
-			<!-- <p class="fr-text--light fr-text--sm">
-					Vous pouvez répondre en indiquant un montant ou un pourcentage sur les
-					quantités vendues.
-				</p> -->
 		{/snippet}
 
 		{#snippet inputs()}
@@ -90,11 +84,6 @@
 										<th>
 											Pourcentage <span class="fr-text--regular">(%)</span>
 										</th>
-										<th>
-											Montant des ventes <span class="fr-text--regular">
-												(€ HT)
-											</span>
-										</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -107,13 +96,6 @@
 													type="number"
 													bind:value={$form.data[mode.id].part}
 													errors={$errors?.data?.[mode.id]?.part}
-												></InputGroup>
-											</td>
-											<td>
-												<InputGroup
-													type="number"
-													bind:value={$form.data[mode.id].value}
-													errors={$errors?.data?.[mode.id]?.value}
 												></InputGroup>
 											</td>
 										</tr>
