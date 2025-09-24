@@ -41,7 +41,6 @@
 				const sum = Object.values(form.data.data)
 					.map((mode) => mode.part ?? 0)
 					.reduce((acc, val) => acc + val, 0);
-				console.log(sum);
 				if (sum !== 100)
 					return `La somme de la colonne “Pourcentage” devrait faire 100 % ; elle fait ${sum} %`;
 			},

@@ -23,14 +23,13 @@
 								<td>
 									{donneesEspece.modeElevage ?
 										Object.entries(donneesEspece.modeElevage)
-												.filter(([_key, value]) => !!value)
-												.map(
-													([key, _value]) =>
-														MODES_ELEVAGE.find((m) => m.id === key)?.label ??
-														"",
-												)
-												.join(" / ")
-										:	""}
+											.filter(([_key, value]) => !!value)
+											.map(
+												([key, _value]) =>
+													MODES_ELEVAGE.find((m) => m.id === key)?.label ?? "",
+											)
+											.join(" / ")
+									:	""}
 								</td>
 							</tr>
 						{/if}
