@@ -281,7 +281,6 @@ export const MODES_ELEVAGE = [
 export const MODES_ELEVAGE_IDS = MODES_ELEVAGE.map((e) => e.id);
 
 // https://fr.wikipedia.org/wiki/Liste_des_quartiers_d%27immatriculation_des_navires_en_France
-// TODO standardiser les clés: id / label
 export const QUARTIERS_IMMATRICULATION = [
 	{ code: "AC", nom: "Arcachon", localisation: "Atlantique" },
 	{ code: "AD", nom: "Audierne", localisation: "Atlantique" },

@@ -15,6 +15,11 @@
 
 	const schema = z.object({
 		nouveauDirigeant: Bool.default(
+			// On utilise à plusieurs endroits ce pattern `as unknown as`
+			// Il s’agit du pattern recommandé par Superforms pour permettre d’avoir
+			// une validation forte sur le formulaire soumis, sans l’imposer aux valeurs
+			// par défaut. Ici par exemple, cela permet de ne cocher aucun de boutons radio.
+			// Voir https://superforms.rocks/default-values#changing-a-default-value
 			data.dirigeant.nouveauDirigeant ?? (null as unknown as boolean),
 		),
 	});

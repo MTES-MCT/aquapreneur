@@ -13,8 +13,8 @@ import { createBilanEntry } from "$lib/server/utils/convert-bilan";
 import * as logger from "$lib/server/utils/logger";
 import { getOrCreateEtablissement } from "$lib/server/utils/sirene";
 
-// TODO : utiliser l’algorithme de vérification complet
-// TODO: à mettre directement dans le type
+// TODO : utiliser un algorithme de vérification plus complet, et tester la validité
+// directement dans le type Zod
 const siretIsValid = (siret: string | undefined): siret is string =>
 	!!(siret && siret.match(/^\d{14}$/));
 

@@ -28,11 +28,11 @@ export const CGODonneesBilan = z.strictObject({
 			annee_naissance: Year.nullish(), // format YYYY.
 			genre: z.literal(["M", "F", "A"]).nullish(), // M, F ou A (autre). Peut être vide en l’absence d’information.
 			annee_entree: Year.nullish(), // la date d’entrée dans l’entreprise, au format YYYY.
-			// TODO documenter les valeurs
+			// TODO documenter les valeurs : voir `DIPLOMES` dans src/lib/constants.ts
 			diplome: z.string().nullish(), // diplome le plus élevé
 			// TODO cette valeur n’est pas utilisée ?
 			diplome_aquacole: z.string().nullish(), // diplome aquacole le plus élevé
-			// TODO documenter les valeurs
+			// TODO documenter les valeurs: voir `REGIMES_SOCIAUX` dans src/lib/constants.ts
 			regime_social: z.string().nullish(),
 			taux_travail: Percent.nullish(),
 		})

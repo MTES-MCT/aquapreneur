@@ -1,4 +1,4 @@
-.PHONY: init clean atena
+.PHONY: init clean atena nafv2
 
 init:
 	Rscript -e "renv::restore()"

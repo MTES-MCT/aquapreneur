@@ -21,21 +21,34 @@
   La base de donnée renseignée sera remise à zéro à chaque lancement.
 - lancez les tests en exécutant `npm run test`
 
-## Créer un jeton d’authentification à l’API
+## Préparation des données
 
-- exécutez `npm run create-api-token`, _sur le serveur de production_  
-  Le jeton généré va être ajouté à la base de donnée.
-- renseignez le nom et le siret du partenaire
-- transmettez-lui le jeton renvoyé
+Voir [data-tools/README.md](data-tools/README.md)
 
-## Importer les données de concessions ATENA en BDD
+## Scripts utilitaires
 
-- éditer les noms de chemin dans le fichier `data-tools/R/import-atena.R`
-- dans le répertoire `data-tools`, lancer la commande `make atena`
+Voir [scripts/README.md](scripts/README.md)
 
-## Mise à jour des codes NAFv2
+## Comptes utilisateurs
 
-- dans le répertoire `data-tools`, lancer la commande `make nafv2`
+Les comptes utilisateurs sont créés automatiquement après une première connexion ProConnect, mais ils sont marqués comme
+non valides. Il faut pour l’instant aller éditer manuellement l’entrée dans la BDD pour la valider, et éventuellement lui
+donner des droits de superutilisateur.
+
+Pour le serveur de développement, il faut utiliser un des comptes test Proconnect.
+Voir : https://partenaires.proconnect.gouv.fr/docs/fournisseur-service/identifiants-fi-test
+
+## Migrations de la BDD
+
+Suite à une modification du schema de la base de donnée, il faut créer une migration :
+`npm run db:make-migration <description_sans_espace>`
+puis la faire tourner
+`npm run db:migrate`.
+
+Ne pas oublier de la faire tourner également sur la base de donnée de test
+`npm run db:migrate-test`.
+
+Après déploiement du code en production, il faut là aussi l’appliquer manuellement.
 
 ## Documentation utile
 
@@ -44,6 +57,10 @@
 - [Lucia](https://lucia-auth.com/) : l’inspiration pour l’implémentation OIDC
 - [Drizzle](https://orm.drizzle.team) : la documentation de l’ORM
 - [Playwright](https://playwright.dev/) : le framework de tests e2e
+- [Vitest](https://vitest.dev/) : le framework des tests unitaires, et de l’API
+- [Zod](https://zod.dev/) : pour le typage dynamique
+- [Superforms](https://superforms.rocks/) : gestion des formulaires
+- [L’API Sirene](https://portail-api.insee.fr/catalog/api/2ba0e549-5587-3ef1-9082-99cd865de66f/doc?page=6548510e-c3e1-3099-be96-6edf02870699) : utilisée pour préremplir les informations des entreprises
 
 ## Mise à jour du DSFR
 
